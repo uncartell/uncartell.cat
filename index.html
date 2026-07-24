@@ -1621,7 +1621,7 @@
                   <input class="logo-file-input" type="file" id="pLogo" accept="image/*">
                   <span class="field-hint">Substitueix la marca uncartell.cat al filet inferior</span>
                 </div>
-                <label class="brand-visibility-toggle"><input type="checkbox" id="pHideBrand"> Elimina el peu del cartell</label>
+                <label class="brand-visibility-toggle" style="display:none;"><input type="checkbox" id="pHideBrand" disabled> Elimina el peu del cartell</label>
               </div>
               <div class="kit-grid">
                 <div><label>Color principal</label><div class="kit-color"><input type="color" id="kitPrimary" value="#E5372A"><span id="kitPrimaryHex">#E5372A</span></div></div>
@@ -2437,7 +2437,7 @@ let activeSubcategory = categoryTaxonomy[activeCategory][0];
 
 function posterSVG(def, opts={}){
   const isPremiumPoster = opts.premium === true;
-  const hidePremiumBrand = isPremiumPoster && opts.hideBrand === true;
+  const hidePremiumBrand = false;
   const footerFill = isPremiumPoster ? '#FFFFFF' : '#EFEFEF';
   const titleColor = opts.titleColor || '#181614';
   const backgroundColor = opts.background || '#FAFAF8';
@@ -2484,7 +2484,7 @@ function posterSVG(def, opts={}){
     <svg x="114" y="28" width="69" height="69" viewBox="${iconViewBox}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:${iconColor}">${icon}</svg>
     ${titleMarkup}
     ${isPremiumPoster ? (safeSubLines.length > 1 ? `<text text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f"><tspan x="148.5" y="${subtitleY}">${safeSubLines[0]}</tspan><tspan x="148.5" y="${subtitleY + 11}">${safeSubLines[1]}</tspan></text>` : `<text x="148.5" y="${subtitleY}" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f">${safeSubLines[0] || ''}</text>`) : ''}
-    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" ${isPremiumPoster ? 'stroke="#3D3B36" stroke-width="0.48"' : ''}/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">UNCARTELL.CAT</text>`}`}
+    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" ${isPremiumPoster ? 'stroke="#3D3B36" stroke-width="0.48"' : ''}/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">UNCARTELL.CAT</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">UNCARTELL.CAT</text>`}`}
   </svg>`;
 }
 
