@@ -1342,9 +1342,10 @@
     main{padding:0 14px;}
     .header-inner{padding:11px 14px; gap:10px; flex-wrap:nowrap;}
     .logo{font-size:23px;}
+    .header-actions{margin-left:auto;}
     .account-btn{display:none;}
     .mobile-menu-toggle{
-      display:flex; width:36px; height:36px; margin-left:auto; flex:none; align-items:center; justify-content:center;
+      display:flex; width:36px; height:36px; margin-left:0; flex:none; align-items:center; justify-content:center;
       border:1.5px solid var(--stone-line); border-radius:50%; background:var(--paper); color:var(--ink); cursor:pointer;
     }
     .mobile-menu-toggle svg{width:18px; height:18px;}
@@ -4634,10 +4635,11 @@ const avatarColorOptions = ['#73F172','#FF6C93','#FFD7E3','#D9A404','#1D4E8F','#
 
 function renderAvatar(){
   const circle = document.getElementById('avatarCircle');
-  circle.style.background = '#d9fbdd url("avatar-uncartell.png") center/cover no-repeat';
+  const avatarSrc = currentLanguage === 'es' ? 'profile-es.png' : 'profile-ca.png';
+  circle.style.background = `#fff url("${avatarSrc}") center/cover no-repeat`;
   circle.innerHTML = '';
   circle.setAttribute('role', 'img');
-  circle.setAttribute('aria-label', 'Avatar uncartell.cat');
+  circle.setAttribute('aria-label', currentLanguage === 'es' ? 'Avatar uncartel.es' : 'Avatar uncartell.cat');
 }
 function renderAvatarColors(){
   const wrap = document.getElementById('avatarColors');
