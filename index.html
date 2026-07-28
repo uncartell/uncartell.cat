@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uncartell.cat</title>
+<title>Cartells gratuïts per imprimir | uncartell.cat</title>
+<meta id="metaDescription" name="description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF. Troba senyalització per a comerços, equipaments i espais públics.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link id="canonicalUrl" rel="canonical" href="https://uncartell.cat/">
+<link rel="alternate" hreflang="ca" href="https://uncartell.cat/">
+<link rel="alternate" hreflang="es" href="https://uncartel.es/">
+<link rel="alternate" hreflang="x-default" href="https://uncartell.cat/">
+<meta id="ogLocale" property="og:locale" content="ca_ES">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="uncartell.cat">
+<meta id="ogTitle" property="og:title" content="Cartells gratuïts per imprimir | uncartell.cat">
+<meta id="ogDescription" property="og:description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF.">
+<meta id="ogUrl" property="og:url" content="https://uncartell.cat/">
+<meta name="twitter:card" content="summary">
+<meta id="twitterTitle" name="twitter:title" content="Cartells gratuïts per imprimir | uncartell.cat">
+<meta id="twitterDescription" name="twitter:description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF.">
 <style>
   :root{
     --paper:#FAFAF8;
@@ -2305,11 +2320,15 @@ const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const authRedirectUrl = `${window.location.origin}${window.location.pathname}`;
 const LANGUAGE_STORE = 'uncartell-language';
-const domainLanguage = location.hostname.endsWith('uncartel.es') ? 'es' : 'ca';
+const isCatalanDomain = location.hostname === 'uncartell.cat' || location.hostname === 'www.uncartell.cat';
+const isSpanishDomain = location.hostname === 'uncartel.es' || location.hostname === 'www.uncartel.es';
+const domainLanguage = isSpanishDomain ? 'es' : 'ca';
 const requestedLanguage = new URLSearchParams(location.search).get('lang');
-let currentLanguage = requestedLanguage === 'es' || requestedLanguage === 'ca'
-  ? requestedLanguage
-  : (localStorage.getItem(LANGUAGE_STORE) || domainLanguage);
+let currentLanguage = (isCatalanDomain || isSpanishDomain)
+  ? domainLanguage
+  : (requestedLanguage === 'es' || requestedLanguage === 'ca'
+    ? requestedLanguage
+    : (localStorage.getItem(LANGUAGE_STORE) || domainLanguage));
 if(!['ca','es'].includes(currentLanguage)) currentLanguage = 'ca';
 document.documentElement.lang = currentLanguage;
 document.documentElement.dataset.lang = currentLanguage;
@@ -2608,7 +2627,30 @@ function translateDom(root=document.body){
 function applyLanguage(){
   document.documentElement.lang = currentLanguage;
   document.documentElement.dataset.lang = currentLanguage;
-  document.title = currentLanguage === 'es' ? 'uncartel.es' : 'uncartell.cat';
+  const seo = currentLanguage === 'es'
+    ? {
+        title:'Carteles gratis para imprimir | uncartel.es',
+        description:'Carteles gratuitos, claros y bien diseñados para imprimir en PDF. Encuentra señalización para comercios, equipamientos y espacios públicos.',
+        shortDescription:'Carteles gratuitos, claros y bien diseñados para imprimir en PDF.',
+        url:'https://uncartel.es/',
+        locale:'es_ES'
+      }
+    : {
+        title:'Cartells gratuïts per imprimir | uncartell.cat',
+        description:'Cartells gratuïts, clars i ben dissenyats per imprimir en PDF. Troba senyalització per a comerços, equipaments i espais públics.',
+        shortDescription:'Cartells gratuïts, clars i ben dissenyats per imprimir en PDF.',
+        url:'https://uncartell.cat/',
+        locale:'ca_ES'
+      };
+  document.title = seo.title;
+  document.getElementById('metaDescription').content = seo.description;
+  document.getElementById('canonicalUrl').href = seo.url;
+  document.getElementById('ogLocale').content = seo.locale;
+  document.getElementById('ogTitle').content = seo.title;
+  document.getElementById('ogDescription').content = seo.shortDescription;
+  document.getElementById('ogUrl').content = seo.url;
+  document.getElementById('twitterTitle').content = seo.title;
+  document.getElementById('twitterDescription').content = seo.shortDescription;
   document.getElementById('logoHome').innerHTML = currentLanguage === 'es'
     ? 'uncartel<span class="dot">.</span>es'
     : 'uncartell<span class="dot">.</span>cat';
@@ -3676,7 +3718,15 @@ languageToggle.addEventListener('click', () => {
 });
 document.querySelectorAll('[data-language]').forEach(button => {
   button.addEventListener('click', () => {
-    currentLanguage = button.dataset.language;
+    const nextLanguage = button.dataset.language;
+    const destinationDomain = nextLanguage === 'es' ? 'uncartel.es' : 'uncartell.cat';
+    if((isCatalanDomain || isSpanishDomain) && nextLanguage !== domainLanguage){
+      const destination = new URL(`https://${destinationDomain}/`);
+      destination.hash = location.hash;
+      location.assign(destination.href);
+      return;
+    }
+    currentLanguage = nextLanguage;
     localStorage.setItem(LANGUAGE_STORE,currentLanguage);
     languageMenu.classList.remove('show');
     languageToggle.setAttribute('aria-expanded','false');
