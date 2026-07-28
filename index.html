@@ -3044,7 +3044,7 @@ const posterDisplayTag = def => currentLanguage === 'es' ? (def.subEs || t(def.t
 function posterSVG(def, opts={}){
   const isPremiumPoster = opts.premium === true;
   const hidePremiumBrand = false;
-  const footerFill = 'none';
+  const footerFill = '#FFFFFF';
   const titleColor = opts.titleColor || '#181614';
   const backgroundColor = opts.background || '#FAFAF8';
   const iconColor = opts.iconColor || def.iconColor || '#E5372A';
@@ -4628,7 +4628,9 @@ async function sendMailboxForm(form, type){
     headers:{Accept:'application/json'},
     body:formData
   });
-  if(!response.ok) throw new Error('mail_failed');
+  const result = await response.json().catch(() => null);
+  if(!response.ok || result?.success === false) throw new Error('mail_failed');
+  return result;
 }
 document.getElementById('contactForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -4640,7 +4642,7 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
   note.classList.add('show');
   try{
     await sendMailboxForm(e.target, 'contact');
-    note.textContent = currentLanguage === 'es' ? 'Mensaje enviado. Te responderemos en 1–2 días.' : 'Missatge enviat. Et respondrem en 1–2 dies.';
+    note.textContent = currentLanguage === 'es' ? '¡Mensaje enviado! Te responderemos en 1–2 días.' : 'Missatge enviat! Et respondrem en 1–2 dies.';
     e.target.reset();
   }catch(error){
     note.classList.add('is-error');
