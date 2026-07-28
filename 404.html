@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Pàgina no trobada · uncartell</title>
+  <style>
+    :root{--accent:#73f172;--soft:#e4ffe3;--ink:#181614;--paper:#fafaf8}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--paper);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+    main{width:min(520px,100%);padding:48px 38px;border:1px solid #d8d8d8;border-radius:22px;background:#fff;text-align:center}
+    .code{display:inline-grid;place-items:center;width:74px;height:74px;margin-bottom:22px;border-radius:50%;background:var(--soft);font-size:22px;font-weight:700}
+    h1{margin:0 0 10px;font-size:clamp(30px,6vw,46px);letter-spacing:-1.4px}
+    p{margin:0 0 28px;color:#6b675f;font-size:17px;line-height:1.45}
+    a{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:0 24px;border-radius:12px;background:var(--accent);color:var(--ink);font-weight:700;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main>
+    <span class="code">404</span>
+    <h1 id="title">Aquesta pàgina no existeix.</h1>
+    <p id="copy">Potser l’enllaç ha canviat o hi has arribat per error.</p>
+    <a id="home" href="https://uncartell.cat/">Torna a l’inici</a>
+  </main>
+  <script>
+    const spanish = location.hostname === 'uncartel.es' || location.hostname === 'www.uncartel.es';
+    const knownRoutes = new Set(['cartells','personalitza','manifest','contacte','faqs','legal','privacitat','cookies','admin']);
+    const requestedRoute = location.pathname.replace(/^\/+|\/+$/g,'');
+    if(knownRoutes.has(requestedRoute)){
+      const destination = new URL('/', location.origin);
+      destination.searchParams.set('route', requestedRoute);
+      location.replace(destination.href);
+    }
+    if(spanish){
+      document.documentElement.lang = 'es';
+      document.documentElement.style.setProperty('--accent','#71DEFF');
+      document.documentElement.style.setProperty('--soft','#C0F3FF');
+      document.title = 'Página no encontrada · uncartel';
+      document.getElementById('title').textContent = 'Esta página no existe.';
+      document.getElementById('copy').textContent = 'Puede que el enlace haya cambiado o que hayas llegado aquí por error.';
+      document.getElementById('home').textContent = 'Volver al inicio';
+      document.getElementById('home').href = 'https://uncartel.es/';
+    }
+  </script>
+</body>
+</html>

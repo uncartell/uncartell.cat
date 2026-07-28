@@ -7,9 +7,9 @@
 <meta id="metaDescription" name="description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF. Troba senyalització per a comerços, equipaments i espais públics.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link id="canonicalUrl" rel="canonical" href="https://uncartell.cat/">
-<link rel="alternate" hreflang="ca" href="https://uncartell.cat/">
-<link rel="alternate" hreflang="es" href="https://uncartel.es/">
-<link rel="alternate" hreflang="x-default" href="https://uncartell.cat/">
+<link id="alternateCa" rel="alternate" hreflang="ca" href="https://uncartell.cat/">
+<link id="alternateEs" rel="alternate" hreflang="es" href="https://uncartel.es/">
+<link id="alternateDefault" rel="alternate" hreflang="x-default" href="https://uncartell.cat/">
 <meta id="ogLocale" property="og:locale" content="ca_ES">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="uncartell.cat">
@@ -261,10 +261,10 @@
   nav button:hover{opacity:1; border-color:var(--ink);}
   nav button.active{opacity:1; background:var(--green); border-color:var(--green); color:var(--ink);}
   nav button.nav-premium{
-    border-color:rgba(217,164,4,.52); background:rgba(217,164,4,.14); opacity:1; font-weight:700;
+    border-color:#FFCF6E; background:#FFF2CC; opacity:1; font-weight:700;
   }
-  nav button.nav-premium:hover{background:rgba(217,164,4,.22); border-color:rgba(217,164,4,.68);}
-  nav button.nav-premium.active{background:rgba(217,164,4,.14); border-color:rgba(217,164,4,.52); color:var(--ink);}
+  nav button.nav-premium:hover{background:#FFE9A8; border-color:#F7B93E;}
+  nav button.nav-premium.active{background:#FFF2CC; border-color:#FFCF6E; color:var(--ink);}
   nav button.nav-premium.premium-active,
   nav button.nav-premium.premium-active.active{background:color-mix(in srgb,var(--green) 12%,transparent); border-color:color-mix(in srgb,var(--green) 48%,transparent);}
   nav button.nav-premium.premium-active:hover{background:color-mix(in srgb,var(--green) 20%,transparent); border-color:color-mix(in srgb,var(--green) 64%,transparent);}
@@ -326,7 +326,7 @@
   .hero{
     display:grid; grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr); align-items:center; gap:44px;
     padding:38px 44px; max-width:none; margin:32px auto 0;
-    background:#EDEDED; border-radius:14px;
+    background:var(--paper); border:1px solid #D8D8D8; border-radius:14px;
   }
   .hero-copy{max-width:760px; text-align:left;}
   .hero-visual{
@@ -374,11 +374,11 @@
   }
   .hero-btn-premium{
     display:inline-flex; align-items:center; gap:7px; padding:12px 22px; border-radius:24px;
-    border:1.5px solid rgba(217,164,4,.52); background:rgba(217,164,4,.14); color:var(--ink);
+    border:1.5px solid #FFCF6E; background:#FFF2CC; color:var(--ink);
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; font-weight:700; cursor:pointer;
     transition:background .15s,border-color .15s;
   }
-  .hero-btn-premium:hover{background:rgba(217,164,4,.22); border-color:rgba(217,164,4,.68);}
+  .hero-btn-premium:hover{background:#FFE9A8; border-color:#F7B93E;}
   .hero-btn-premium.premium-active{background:color-mix(in srgb,var(--green) 12%,transparent); border-color:color-mix(in srgb,var(--green) 48%,transparent);}
   .hero-btn-premium.premium-active:hover{background:color-mix(in srgb,var(--green) 20%,transparent); border-color:color-mix(in srgb,var(--green) 64%,transparent);}
   .hero-btn-premium svg{width:13px; height:13px; flex:none;}
@@ -502,9 +502,21 @@
   .manifest h1.display{margin-bottom:34px;}
   .manifest p{font-size:18px; line-height:1.65; margin-bottom:22px; color:#33312c;}
   .manifest p.lede{font-size:22px; font-weight:600; color:var(--ink); line-height:1.45;}
-  .manifest .sign{margin-top:44px; padding-top:24px; border-top:1px solid var(--stone-line);}
-  .manifest .sign .display{font-size:20px;}
-  .manifest .sign span{display:block; font-size:13px; color:var(--gray-text); margin-top:4px;}
+  .manifest .sign{display:flex; align-items:center; gap:15px; margin-top:44px; padding-top:24px; border-top:1px solid var(--stone-line);}
+  .manifest-author-photo{
+    width:66px; height:66px; flex:none; border-radius:50%; object-fit:cover; object-position:50% 32%;
+    border:1px solid #D8D8D8;
+  }
+  .manifest-author-copy{min-width:0;}
+  .manifest-author-copy .display{font-size:18px; line-height:1.15; color:var(--gray-text);}
+  .manifest-author-copy > span{display:block; margin-top:5px; color:var(--gray-text); font-size:13px;}
+  .manifest-sign-name{display:flex; align-items:center; gap:8px;}
+  .manifest-linkedin{
+    display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px;
+    border:0; color:var(--gray-text); transition:color .15s,transform .15s;
+  }
+  .manifest-linkedin:hover{color:var(--ink); transform:translateY(-1px);}
+  .manifest-linkedin svg{width:15px; height:15px; fill:currentColor;}
 
   /* ---- PERSONALITZA ---- */
   .picker-block{margin-bottom:40px;}
@@ -699,13 +711,13 @@
   body.mode-launch.signup-gate-open #accountModalBg{inset:68px 0 0; background:rgba(250,250,248,.18); backdrop-filter:none; z-index:39;}
   body.mode-premium.signup-gate-open #accountModalBg{inset:68px 0 0; background:rgba(250,250,248,.18); backdrop-filter:none; z-index:39;}
   body.mode-premium.signup-gate-open #accountModal{
-    width:min(570px,calc(100vw - 48px)); height:380px;
-    max-width:570px !important; padding:22px 24px 26px !important; box-sizing:border-box; overflow-y:auto;
+    width:min(860px,calc(100vw - 48px)); min-height:380px;
+    max-width:860px !important; padding:22px 24px 26px !important; box-sizing:border-box; overflow-y:auto;
     border:1px solid #cfccc5;
   }
   body.mode-premium:not(.signup-gate-open) #accountModal:not(.dashboard-mode){
-    width:min(570px,calc(100vw - 48px)); height:380px;
-    max-width:570px !important; padding:22px 24px 26px !important; box-sizing:border-box;
+    width:min(860px,calc(100vw - 48px)); min-height:380px;
+    max-width:860px !important; padding:22px 24px 26px !important; box-sizing:border-box;
     overflow-y:auto; border:1px solid #cfccc5;
   }
   body.mode-premium.signup-gate-open #accountLoginView{
@@ -759,7 +771,7 @@
   body.mode-premium #accountModal:not(.dashboard-mode) #accountLoginCopy{
     max-width:430px; margin:0 auto 17px; font-size:13px; line-height:1.35;
   }
-  .signup-plan-grid{display:none; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:0; text-align:left;}
+  .signup-plan-grid{display:none; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0; text-align:left;}
   body.mode-launch .signup-plan-grid{display:grid;}
   body.mode-premium.signup-gate-open .signup-plan-grid{display:grid;}
   .signup-plan-card{position:relative; overflow:hidden; display:flex; flex-direction:column; min-height:270px; padding:35px 19px 17px; border:1px solid #d9d7d2; border-radius:11px; background:#fff;}
@@ -770,6 +782,16 @@
   .signup-plan-card.featured::before{
     content:''; position:absolute; top:0; left:0; right:0; height:25px; background:#19ef63;
   }
+  .signup-plan-card.ultra{border-style:dashed; background:#fafafa;}
+  .signup-plan-card.ultra::before{background:#33312e;}
+  .signup-plan-card.ultra .signup-plan-badge{color:#fff;}
+  .ultra-notify{width:100%; min-height:36px; padding:9px 11px; border:1px solid #33312e; border-radius:8px; background:#33312e; color:#fff; font-size:11px; font-weight:700; cursor:pointer;}
+  .ultra-email-wrap{display:none; gap:6px; margin-top:0;}
+  .ultra-email-wrap.show{display:flex;}
+  .ultra-email-wrap input{min-width:0; width:100%; padding:8px 9px; border:1px solid #d8d8d5; border-radius:8px; font:inherit;}
+  .ultra-email-wrap button{flex:none; padding:8px 10px; border:0; border-radius:8px; background:#33312e; color:#fff; font-weight:700; cursor:pointer;}
+  .ultra-feedback{margin:5px 0 0; color:#66615b; font-size:9px; line-height:1.3;}
+  .ultra-feedback:empty{display:none;}
   .signup-plan-card h4{font-size:17px; letter-spacing:-.2px; margin-bottom:6px;}
   .signup-plan-desc{display:none;}
   .signup-plan-card .plan-price{display:block; margin:auto 0 6px; font-size:31px; line-height:1; font-weight:700; letter-spacing:-1px;}
@@ -996,6 +1018,7 @@
   .gf-left{flex:1 1 320px;}
   .gf-left h3.display{font-size:22px; margin-bottom:8px;}
   .gf-left p{font-size:14px; color:#57534c; max-width:420px; line-height:1.5;}
+  .agency-budget-note{display:block; margin-top:7px; color:var(--gray-text); font-size:11px; font-style:italic;}
   .gf-right{display:flex; flex-direction:column; gap:10px; flex:0 1 280px; min-width:240px;}
   .cta-agency{
     font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight:700; font-size:13.5px;
@@ -1044,8 +1067,14 @@
     border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; margin-top:6px;
   }
   .btn-send:hover{background:var(--green); color:var(--ink);}
-  .contact-note{margin-top:16px; font-size:13px; color:var(--gray-text); display:none;}
-  .contact-note.show{display:block;}
+  .contact-note{
+    display:none; margin-top:16px; padding:14px 16px; border:1px solid #73F172;
+    border-radius:10px; background:#E4FFE3; color:#17612f; font-size:14px; font-weight:700;
+  }
+  .contact-note.show{display:flex; align-items:center; gap:9px;}
+  .contact-note.show::before{content:'✓'; display:grid; flex:none; place-items:center; width:23px; height:23px; border-radius:50%; background:#73F172; color:#174825; font-size:14px;}
+  .contact-note.is-error{border-color:#efaaa4; background:#fff0ef; color:#9d2f27;}
+  .contact-note.is-error::before{content:'!'; background:#e5372a; color:#fff;}
 
   /* ---- MODAL mida ---- */
   .modal-bg{
@@ -1586,7 +1615,7 @@
           Cartells gratuïts <span class="hero-icon-pill"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><br>
           per un món millor <span class="hero-icon-circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.1" fill="currentColor"/><circle cx="15.5" cy="10" r="1.1" fill="currentColor"/><path d="M7.5 14c1 1.8 3 2.8 4.5 2.8s3.5-1 4.5-2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
         </h1>
-        <p class="hero-purpose">uncartell.cat és una eina per crear i descarregar cartells gratuïts, clars i preparats per imprimir.</p>
+        <p class="hero-purpose">Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.</p>
         <div class="hero-ctas">
           <button class="hero-btn-premium" id="heroPersonalitza"><svg id="heroLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Personalitza</button>
           <a class="hero-btn-outline" href="#filterTabs">Explora cartells</a>
@@ -1608,7 +1637,8 @@
     </div>
 
     <div class="grid" id="posterGrid"></div>
-    <aside class="catalog-ad" id="catalogAd">PUBLICITAT · espai discret reservat per sostenir el catàleg gratuït</aside>
+    <!-- V2: espai publicitari del catàleg, desactivat durant la beta V1. -->
+    <aside class="catalog-ad" id="catalogAd" hidden>PUBLICITAT · espai discret reservat per sostenir el catàleg gratuït</aside>
   </section>
 
   <!-- MANIFEST -->
@@ -1616,13 +1646,24 @@
     <div class="manifest-grid">
       <div class="manifest">
         <span class="eyebrow">Manifest</span>
-        <h1 class="display">Creiem que el món no ha de ser lleig perquè una cosa sigui gratuïta.</h1>
-        <p class="lede">Cada dia convivim amb centenars de cartells. Alguns ens orienten, altres ens informen, altres ens conviden a participar. Formen part del paisatge dels nostres carrers i, sense adonar-nos-en, també de la qualitat del nostre entorn.</p>
-        <p>A <strong>uncartell.cat</strong> pensem que un bon disseny no és un luxe. És una eina pública. Fa la informació més clara, els espais més amables i les ciutats més coherents.</p>
-        <p>Per això posem a disposició de tothom cartells ben dissenyats, gratuïts i fàcils d&#39;utilitzar. Sense artificis. Sense soroll. Només allò que cal perquè el missatge arribi.</p>
-        <p>La versió gratuïta sempre existirà. La versió Premium només ens ajuda a mantenir el projecte i a continuar ampliant-lo.</p>
-        <p>No volem canviar el disseny dels carrers amb un únic cartell. Volem demostrar que, si entre tots elevem una mica el nivell de cada petit detall, també podem millorar la vida quotidiana de les persones.</p>
-        <p>Perquè un entorn visual més digne també és una manera de cuidar-nos.</p>
+        <h1 class="display">Crec que el bon disseny no hauria de dependre dels diners.</h1>
+        <p class="lede">Fa anys que em dedico a dissenyar informació perquè les persones s’orientin, entenguin millor els espais i es moguin amb més facilitat.</p>
+        <p>Un cartell també forma part d’aquesta experiència.</p>
+        <p>Per això vaig crear <strong>uncartell.cat</strong>: una col·lecció de cartells gratuïts, clars i cuidats, perquè qualsevol persona els pugui descarregar i imprimir en segons.</p>
+        <p>La versió gratuïta sempre existirà. Si algun dia decideixes fer-te Premium, m’ajudaràs a mantenir aquest projecte i a continuar fent-lo créixer.</p>
+        <p><strong>M’acompanyes en aquesta aventura?</strong></p>
+        <div class="sign">
+          <img class="manifest-author-photo" src="marti-ruiz.jpg" width="66" height="66" alt="Martí Ruiz">
+          <div class="manifest-author-copy">
+            <div class="manifest-sign-name">
+              <span class="display">Martí Ruiz</span>
+              <a class="manifest-linkedin" href="https://es.linkedin.com/in/marti-ruiz" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Martí Ruiz" title="LinkedIn de Martí Ruiz">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.3V19h3.2V8.5ZM4.9 3A1.9 1.9 0 1 0 5 6.8 1.9 1.9 0 0 0 4.9 3ZM12 8.5H8.9V19H12v-5.2c0-1.4.3-2.7 2-2.7s1.7 1.6 1.7 2.8V19H19v-5.8c0-2.9-.6-5-3.9-5a3.4 3.4 0 0 0-3.1 1.7V8.5Z"/></svg>
+              </a>
+            </div>
+            <span>Creador d’uncartell.cat</span>
+          </div>
+        </div>
       </div>
       <div class="manifest-image">
         <span>Imatge pendent</span>
@@ -1635,8 +1676,8 @@
     <div class="personalize-wrap premium-locked" id="personalizeWrap">
       <div class="page-head" style="padding-top:0;">
         <span class="eyebrow">Personalitza</span>
-        <h1 class="display">El teu cartell, amb el teu peu de pàgina.</h1>
-        <p class="page-sub">Logo propi al faldó, color del títol i color de les icones.</p>
+        <h1 class="display">Personalitza els teus cartells</h1>
+        <p class="page-sub">Crea i edita cartells per a cada ocasió.</p>
       </div>
 
       <div class="mobile-premium-gate" id="mobilePremiumGate">
@@ -1650,7 +1691,7 @@
       </div>
 
       <div class="picker-block">
-        <span class="picker-step">Pas 1 — tria el cartell base</span>
+        <span class="picker-step">Tria un cartell base</span>
         <div class="filter-system">
           <div class="filter-tabs category-tabs personalize-filters" id="personalizeFilterTabs"></div>
           <div class="subcategory-bar" id="personalizeSubcategoryBar">
@@ -1761,8 +1802,9 @@
           <button class="service-unlock-btn" id="serviceUnlockBtn" type="button">Veure els plans</button>
         </div>
         <div class="gf-left">
-          <h3 class="display">Necessites un cartell fet a mida?</h3>
-          <p>Explica’ns el projecte i prepararem una proposta específica per al teu estudi, agència o organització.</p>
+          <h3 class="display">Necessites un cartell a mida?</h3>
+          <p>Explica’ns el projecte i crearem un cartell únic per a tu o la teva empresa.</p>
+          <small class="agency-budget-note">*Subjecte a pressupost</small>
         </div>
         <div class="gf-right">
           <button class="cta-agency" id="ctaAgency">Necessito un cartell personalitzat <span>(estudi/agència)</span></button>
@@ -1777,20 +1819,20 @@
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Contacte</span>
         <h1 class="display" style="font-size:38px;">Escriu-nos.</h1>
-        <p class="page-sub">Dubtes, col·laboracions, o vols que afegim el teu cartell al repositori.</p>
+        <p class="page-sub">Tens dubtes, suggeriments o simplement vols que afegim el teu cartell al repositori?</p>
       </div>
       <form id="contactForm">
         <div class="field-full">
           <label>Nom</label>
-          <input type="text" required placeholder="El teu nom">
+          <input type="text" name="name" required placeholder="El teu nom">
         </div>
         <div class="field-full">
           <label>Correu</label>
-          <input type="email" required placeholder="tu@exemple.cat">
+          <input type="email" name="email" required placeholder="tu@exemple.cat">
         </div>
         <div class="field-full">
           <label>Missatge</label>
-          <textarea required placeholder="Explica'ns-ho..."></textarea>
+          <textarea name="message" required placeholder="Explica'ns-ho..."></textarea>
         </div>
         <button class="btn-send" type="submit">Envia el missatge</button>
         <p class="contact-note" id="contactNote">Missatge enviat. Et respondrem en 1–2 dies.</p>
@@ -1809,43 +1851,43 @@
       <div class="faq-list">
         <details class="faq-item">
           <summary>Què puc fer sense registrar-me?</summary>
-          <p>Consultar tot el catàleg, editar el títol dels cartells disponibles i descarregar fins a 10 PDF al dia en format A4 o A3.</p>
+          <p>Pots consultar tot el catàleg i descarregar fins a 10 cartells al dia en PDF d’alta qualitat, preparats per imprimir en A4 o A3.</p>
         </details>
         <details class="faq-item">
           <summary>Què inclou Premium?</summary>
-          <p>Permet editar títol, subtítol i colors, i descarregar cartells sense límit. Les funcionalitats que encara estiguin marcades com a “Properament” no formen part de la versió actual.</p>
+          <p>Pots personalitzar el títol, el subtítol i els colors dels cartells, descarregar-ne tants com vulguis i accedir a totes les funcions disponibles del pla Premium. Les funcionalitats marcades com a “Properament” encara no estan incloses.</p>
         </details>
         <details class="faq-item">
-          <summary>Premium és realment gratuït durant 6 mesos?</summary>
-          <p>Sí. L’activació promocional costa 0&nbsp;€, no demana targeta i no genera cap renovació automàtica. Abans d’introduir pagaments informarem clarament de les condicions.</p>
+          <summary>Premium és realment gratuït durant 12 mesos?</summary>
+          <p>Sí. L’activació és completament gratuïta, no et demanarem cap targeta i no hi ha renovació automàtica. Quan el servei passi a ser de pagament, t’ho comunicarem amb antelació perquè puguis decidir què vols fer.</p>
         </details>
         <details class="faq-item">
           <summary>Per què necessito un compte?</summary>
-          <p>El compte permet identificar el teu pla i mantenir la sessió i les preferències entre dispositius. Només et demanem les dades imprescindibles.</p>
+          <p>Per identificar el teu pla, conservar les teves preferències i oferir-te una millor experiència entre dispositius. Només et demanem les dades imprescindibles.</p>
         </details>
         <details class="faq-item">
-          <summary>En quin format es descarreguen els cartells?</summary>
-          <p>En PDF d’alta qualitat, preparat per imprimir en A4 o A3. El document descarregat té el fons blanc per evitar problemes d’impressió.</p>
+          <summary>En quin format puc descarregar els cartells?</summary>
+          <p>El pla gratuït permet descarregar els cartells en PDF d’alta qualitat, preparats per imprimir en A4 o A3. Els plans Premium i Ultra també permeten descarregar-los en SVG i PNG.</p>
         </details>
         <details class="faq-item">
           <summary>Què passa si esgoto les 10 descàrregues diàries?</summary>
-          <p>El comptador es reinicia automàticament l’endemà. Amb Premium, les descàrregues són il·limitades mentre el pla estigui actiu.</p>
+          <p>El límit es reinicia automàticament cada dia. Amb Premium i Ultra, les descàrregues són il·limitades.</p>
         </details>
         <details class="faq-item">
-          <summary>Puc utilitzar els cartells al meu negoci o equipament?</summary>
-          <p>Sí, els pots imprimir i utilitzar per senyalitzar el teu espai. No pots revendre les plantilles, redistribuir-ne el catàleg ni presentar-lo com un projecte propi.</p>
+          <summary>Puc utilitzar els cartells al meu negoci?</summary>
+          <p>Sí. Pots imprimir-los i utilitzar-los lliurement al teu comerç, oficina, escola o equipament. L’únic que no està permès és revendre’ls, redistribuir el catàleg o presentar-los com un projecte propi.</p>
         </details>
         <details class="faq-item">
-          <summary>Els meus cartells i logotips queden desats?</summary>
-          <p>Només es desen les dades necessàries per oferir les funcions que activis. Abans de pujar un logotip, comprova que en tens els drets d’ús.</p>
+          <summary>Es desen els meus cartells personalitzats?</summary>
+          <p>Només amb el pla Ultra. També podràs desar el teu logotip, els colors corporatius i altres preferències per reutilitzar-les en futurs cartells.</p>
         </details>
         <details class="faq-item">
-          <summary>Com puc suggerir un cartell nou per al catàleg?</summary>
-          <p>Escriu-nos des de Contacte amb el text, la categoria i l’ús que en faries. Prioritzem propostes curtes, universals i útils per a molta gent.</p>
+          <summary>Puc proposar un cartell nou?</summary>
+          <p>Sí. M’encantarà rebre propostes. Escriu-me des de Contacte explicant quin cartell necessites, en quina categoria encaixaria i per a què el faries servir. Prioritzaré aquells que siguin útils per a molta gent.</p>
         </details>
         <details class="faq-item">
           <summary>Com puc gestionar o eliminar les meves dades?</summary>
-          <p>Des de l’àrea de compte pots canviar el nom, tancar la sessió o iniciar la sol·licitud d’eliminació. També pots escriure’ns des de Contacte per exercir els teus drets.</p>
+          <p>Des de l’àrea de compte pots modificar les teves dades o sol·licitar l’eliminació del compte. Si ho prefereixes, també em pots escriure des de Contacte.</p>
         </details>
       </div>
     </div>
@@ -2051,16 +2093,16 @@
 
 <footer>
   <div class="foot-row">
-    <span>uncartell.cat — repositori de cartells catalans</span>
+    <span>uncartell.cat – cartells gratuïts a punt per imprimir</span>
     <nav class="foot-links">
-      <a href="#contacte" data-page="contacte">Contacte</a>
-      <a href="#faqs" id="footFaq">FAQs</a>
-      <a href="#legal" id="footLegal">Avís legal</a>
-      <a href="#privacitat" id="footPrivacy">Política de privacitat</a>
-      <a href="#cookies" id="footCookies">Cookies</a>
+      <a href="/contacte" data-page="contacte">Contacte</a>
+      <a href="/faqs" id="footFaq">FAQs</a>
+      <a href="/legal" id="footLegal">Avís legal</a>
+      <a href="/privacitat" id="footPrivacy">Política de privacitat</a>
+      <a href="/cookies" id="footCookies">Cookies</a>
       <button class="cookie-manage-link" id="footCookieSettings" type="button">Configura les cookies</button>
     </nav>
-    <a class="footer-admin-link" id="footAdmin" href="#admin" aria-label="Accés a l’administració">© 2026</a>
+    <a class="footer-admin-link" id="footAdmin" href="/admin" aria-label="Accés a l’administració">© 2026</a>
   </div>
 </footer>
 
@@ -2133,7 +2175,8 @@
 </div>
 
 <!-- Donation drawer -->
-<div class="drawer" id="drawer">
+<!-- V2: donatius conservats però desactivats durant la beta V1. -->
+<div class="drawer" id="drawer" hidden>
   <button class="drawer-toggle" id="drawerToggle" aria-controls="donationDrawerBody">
     Fes un donatiu 💚
     <svg class="chev" width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="1.6"/></svg>
@@ -2156,7 +2199,7 @@
 </div>
 
 <!-- Modal: donatiu -->
-<div class="modal-bg" id="donationModalBg">
+<div class="modal-bg" id="donationModalBg" hidden>
   <div class="modal" style="max-width:400px; text-align:left;">
     <button class="modal-x" id="donationModalX" type="button" aria-label="Tanca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <div id="donationPaymentView">
@@ -2197,9 +2240,9 @@
       <h3 style="margin-bottom:4px;">Cartell a mida per a estudi o agència</h3>
       <p>Explica&#39;ns el projecte i et responem amb una proposta i pressupost.</p>
       <form id="agencyForm">
-        <div class="field-full"><label>Estudi / agència</label><input type="text" required placeholder="Nom"></div>
-        <div class="field-full"><label>Correu de contacte</label><input type="email" required placeholder="tu@estudi.cat"></div>
-        <div class="field-full"><label>Breu del projecte</label><textarea required placeholder="Format, quantitat, terminis..."></textarea></div>
+        <div class="field-full"><label>Estudi / agència</label><input type="text" name="name" required placeholder="Nom"></div>
+        <div class="field-full"><label>Correu de contacte</label><input type="email" name="email" required placeholder="tu@estudi.cat"></div>
+        <div class="field-full"><label>Breu del projecte</label><textarea name="message" required placeholder="Format, quantitat, terminis..."></textarea></div>
         <button class="btn-send" type="submit" style="width:100%;">Envia el briefing</button>
       </form>
     </div>
@@ -2237,6 +2280,19 @@
           <div class="google-price"><strong>0 €</strong><span><del>29,99 €</del></span></div>
           <span class="plan-price-note">Gratis durant 6 mesos · Sense targeta</span>
           <button class="premium-continue" id="choosePremium" type="button">Activa Premium gratis</button>
+        </article>
+        <article class="signup-plan-card ultra">
+          <span class="signup-plan-badge">PROPERAMENT</span>
+          <h4>Ultra</h4>
+          <ul><li>Logotip de l’empresa al cartell</li><li>Sense marca d’aigua</li><li>Desa colors i logotips</li></ul>
+          <div class="google-price"><strong>69,99 €</strong><span>/ any</span></div>
+          <span class="plan-price-note">Kit d’empresa · pagament anual</span>
+          <button class="ultra-notify" id="ultraNotify" type="button">Avisa’m quan estigui disponible</button>
+          <div class="ultra-email-wrap" id="ultraEmailWrap">
+            <input id="ultraEmail" type="email" autocomplete="email" placeholder="El teu correu">
+            <button id="ultraEmailSubmit" type="button" aria-label="Envia">→</button>
+          </div>
+          <p class="ultra-feedback" id="ultraFeedback" role="status"></p>
         </article>
       </div>
       <div class="signup-auth-block">
@@ -2372,6 +2428,10 @@ const ES_TRANSLATIONS = {
   "Catàleg complet":"Catálogo completo","Personalitza títol i subtítol":"Personaliza título y subtítulo",
   "Colors i logotip propi":"Colores y logotipo propio","Descàrregues il·limitades":"Descargas ilimitadas",
   "Gratis per sempre":"Gratis para siempre","Gratis durant 6 mesos · Sense targeta":"Gratis durante 6 meses · Sin tarjeta",
+  "PROPERAMENT":"PRÓXIMAMENTE","Logotip de l’empresa al cartell":"Logotipo de empresa en el cartel",
+  "Sense marca d’aigua":"Sin marca de agua","Desa colors i logotips":"Guarda colores y logotipos",
+  "Kit d’empresa · pagament anual":"Kit de empresa · pago anual",
+  "Avisa’m quan estigui disponible":"Avísame cuando esté disponible","/ any":"/ año",
   "Activa Premium gratis":"Activa Premium gratis","Darreres factures":"Últimas facturas","No hi ha factures":"No hay facturas",
   "Canvia de pla":"Cambiar de plan","Tanca sessió":"Cerrar sesión","Elimina el compte":"Eliminar la cuenta",
   "Descàrregues":"Descargas","il·limitades":"ilimitadas","disponibles avui":"disponibles hoy",
@@ -2567,6 +2627,42 @@ Object.assign(ES_TRANSLATIONS,{
   "Correu de contacte":"Correo de contacto","Envia el briefing":"Envía el briefing",
   "Hem rebut el teu projecte. Et respondrem amb una primera valoració en un màxim de 3 dies laborables.":"Hemos recibido tu proyecto. Te responderemos con una primera valoración en un máximo de 3 días laborables.",
   "PLA ACTUAL":"PLAN ACTUAL","Torna als plans":"Volver a los planes","Pla gratuït":"Plan gratuito",
+  "Crec que el bon disseny no hauria de dependre dels diners.":"Creo que el buen diseño no debería depender del dinero.",
+  "Fa anys que em dedico a dissenyar informació perquè les persones s’orientin, entenguin millor els espais i es moguin amb més facilitat.":"Desde hace años me dedico a diseñar información para ayudar a las personas a orientarse, comprender mejor los espacios y moverse con más facilidad.",
+  "Un cartell també forma part d’aquesta experiència.":"Un cartel también forma parte de esa experiencia.",
+  "Per això vaig crear":"Por eso creé",
+  ": una col·lecció de cartells gratuïts, clars i cuidats, perquè qualsevol persona els pugui descarregar i imprimir en segons.":": una colección de carteles gratuitos, claros y cuidados para que cualquier persona pueda descargarlos e imprimirlos en segundos.",
+  "Per això vaig crear uncartell.cat: una col·lecció de cartells gratuïts, clars i cuidats, perquè qualsevol persona els pugui descarregar i imprimir en segons.":"Por eso creé uncartel.es: una colección de carteles gratuitos, claros y cuidados para que cualquier persona pueda descargarlos e imprimirlos en segundos.",
+  "La versió gratuïta sempre existirà. Si algun dia decideixes fer-te Premium, m’ajudaràs a mantenir aquest projecte i a continuar-lo fent créixer.":"La versión gratuita siempre existirá. Si algún día decides hacerte Premium, me ayudarás a mantener este proyecto y a seguir ampliándolo.",
+  "M’acompanyes en aquesta aventura?":"¿Me acompañas en esta aventura?",
+  "Creador d’uncartell.cat":"Creador de uncartel.es",
+  "LinkedIn de Martí Ruiz":"LinkedIn de Martí Ruiz",
+  "Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.":"Crea, personaliza y descarga carteles gratuitos preparados para imprimir.",
+  "uncartell.cat – cartells gratuïts a punt per imprimir":"uncartel.es – carteles gratis listos para ser impresos",
+  "Personalitza els teus cartells":"Personaliza tus carteles",
+  "Crea i edita cartells per a cada ocasió.":"Crea y edita carteles para cada ocasión.",
+  "Tria un cartell base":"Elige un cartel base",
+  "Necessites un cartell a mida?":"¿Necesitas un cartel a medida?",
+  "Explica’ns el projecte i crearem un cartell únic per a tu o la teva empresa.":"Explícanos el proyecto y crearemos un cartel único para ti o tu empresa.",
+  "*Subjecte a pressupost":"*Sujeto a presupuesto",
+  "La versió gratuïta sempre existirà. Si algun dia decideixes fer-te Premium, m’ajudaràs a mantenir aquest projecte i a continuar fent-lo créixer.":"La versión gratuita siempre existirá. Si algún día decides hacerte Premium, me ayudarás a mantener este proyecto y a seguir haciéndolo crecer.",
+  "Tens dubtes, suggeriments o simplement vols que afegim el teu cartell al repositori?":"¿Tienes dudas, sugerencias o simplemente quieres que añadamos tu cartel al repositorio?",
+  "Pots consultar tot el catàleg i descarregar fins a 10 cartells al dia en PDF d’alta qualitat, preparats per imprimir en A4 o A3.":"Puedes consultar todo el catálogo y descargar hasta 10 carteles al día en PDF de alta calidad, listos para imprimir en A4 o A3.",
+  "Pots personalitzar el títol, el subtítol i els colors dels cartells, descarregar-ne tants com vulguis i accedir a totes les funcions disponibles del pla Premium. Les funcionalitats marcades com a “Properament” encara no estan incloses.":"Puedes personalizar el título, el subtítulo y los colores de cada cartel, descargar tantos como quieras y acceder a todas las funciones disponibles del plan Premium. Las funcionalidades marcadas como “Próximamente” todavía no están incluidas.",
+  "Premium és realment gratuït durant 12 mesos?":"¿Premium es realmente gratuito durante 12 meses?",
+  "Sí. L’activació és completament gratuïta, no et demanarem cap targeta i no hi ha renovació automàtica. Quan el servei passi a ser de pagament, t’ho comunicarem amb antelació perquè puguis decidir què vols fer.":"Sí. La activación es completamente gratuita, no te pediremos ninguna tarjeta y no existe renovación automática. Cuando el servicio pase a ser de pago, te informaremos con antelación para que puedas decidir qué hacer.",
+  "Per identificar el teu pla, conservar les teves preferències i oferir-te una millor experiència entre dispositius. Només et demanem les dades imprescindibles.":"La cuenta permite identificar tu plan, guardar tus preferencias y ofrecerte una mejor experiencia entre dispositivos. Solo te pediremos los datos imprescindibles.",
+  "En quin format puc descarregar els cartells?":"¿En qué formato puedo descargar los carteles?",
+  "El pla gratuït permet descarregar els cartells en PDF d’alta qualitat, preparats per imprimir en A4 o A3. Els plans Premium i Ultra també permeten descarregar-los en SVG i PNG.":"El plan gratuito permite descargar los carteles en PDF de alta calidad, listos para imprimir en A4 o A3. Los planes Premium y Ultra también permiten descargarlos en SVG y PNG.",
+  "Què passa si esgoto les 10 descàrregues diàries?":"¿Qué ocurre si agoto las 10 descargas diarias?",
+  "El límit es reinicia automàticament cada dia. Amb Premium i Ultra, les descàrregues són il·limitades.":"El límite se reinicia automáticamente cada día. Con Premium y Ultra, las descargas son ilimitadas.",
+  "Puc utilitzar els cartells al meu negoci?":"¿Puedo utilizar los carteles en mi negocio?",
+  "Sí. Pots imprimir-los i utilitzar-los lliurement al teu comerç, oficina, escola o equipament. L’únic que no està permès és revendre’ls, redistribuir el catàleg o presentar-los com un projecte propi.":"Sí. Puedes imprimirlos y utilizarlos libremente en tu comercio, oficina, centro educativo o cualquier otro espacio. Lo único que no está permitido es revenderlos, redistribuir el catálogo o presentarlo como un proyecto propio.",
+  "Es desen els meus cartells personalitzats?":"¿Se guardan mis carteles personalizados?",
+  "Només amb el pla Ultra. També podràs desar el teu logotip, els colors corporatius i altres preferències per reutilitzar-les en futurs cartells.":"Solo con el plan Ultra. También podrás guardar tu logotipo, los colores corporativos y otras preferencias para reutilizarlas en futuros carteles.",
+  "Puc proposar un cartell nou?":"¿Puedo proponer un cartel nuevo?",
+  "Sí. M’encantarà rebre propostes. Escriu-me des de Contacte explicant quin cartell necessites, en quina categoria encaixaria i per a què el faries servir. Prioritzaré aquells que siguin útils per a molta gent.":"Sí. Me encantará recibir tus propuestas. Escríbeme desde Contacto explicando qué cartel necesitas, en qué categoría encajaría y para qué lo utilizarías. Daré prioridad a aquellas propuestas que puedan ser útiles para muchas personas.",
+  "Des de l’àrea de compte pots modificar les teves dades o sol·licitar l’eliminació del compte. Si ho prefereixes, també em pots escriure des de Contacte.":"Desde el área de tu cuenta puedes modificar tus datos o solicitar la eliminación de tu cuenta. Si lo prefieres, también puedes escribirme desde Contacto en uncartel.es.",
   "Consulta i descarrega les factures del teu compte.":"Consulta y descarga las facturas de tu cuenta.",
   "Límit diari assolit":"Límite diario alcanzado",
   "Has fet servir les 10 descàrregues gratuïtes d’avui. Tria un passi per tenir-ne d’il·limitades.":"Has utilizado las 10 descargas gratuitas de hoy. Elige un pase para obtener descargas ilimitadas.",
@@ -2667,6 +2763,7 @@ function applyLanguage(){
     button.classList.toggle('active',button.dataset.language === currentLanguage);
   });
   translateDom();
+  updatePageSeo(pageFromLocation());
 }
 const requestedMode = new URLSearchParams(window.location.search).get('mode');
 const PRODUCT_MODE = requestedMode === 'free' ? 'free' : requestedMode === 'launch' ? 'launch' : 'premium';
@@ -2941,14 +3038,14 @@ const posterDisplayTag = def => currentLanguage === 'es' ? (def.subEs || t(def.t
 function posterSVG(def, opts={}){
   const isPremiumPoster = opts.premium === true;
   const hidePremiumBrand = false;
-  const footerFill = isPremiumPoster ? '#FFFFFF' : '#EFEFEF';
+  const footerFill = 'none';
   const titleColor = opts.titleColor || '#181614';
   const backgroundColor = opts.background || '#FAFAF8';
   const iconColor = opts.iconColor || def.iconColor || '#E5372A';
   const fontFamily = opts.fontFamily || 'Helvetica Neue, Helvetica, Arial, sans-serif';
   const word = opts.word || (currentLanguage === 'es' ? (def.wordEs || t(def.word)) : def.word);
   const sub = opts.sub !== undefined ? opts.sub : (currentLanguage === 'es' ? (def.subEs || t(def.sub)) : def.sub);
-  const posterBrand = currentLanguage === 'es' ? 'UNCARTEL.ES' : 'UNCARTELL.CAT';
+  const posterBrand = currentLanguage === 'es' ? 'uncartel.es' : 'uncartell.cat';
   const icon = lucideIcons[def.icon] || lucideIcons['info'];
   const iconViewBox = iconViewBoxes[def.icon] || '0 0 24 24';
   const titleSize = 20;
@@ -2988,7 +3085,7 @@ function posterSVG(def, opts={}){
     <svg x="114" y="28" width="69" height="69" viewBox="${iconViewBox}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:${iconColor}">${icon}</svg>
     ${titleMarkup}
     ${isPremiumPoster ? (safeSubLines.length > 1 ? `<text text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f"><tspan x="148.5" y="${subtitleY}">${safeSubLines[0]}</tspan><tspan x="148.5" y="${subtitleY + 11}">${safeSubLines[1]}</tspan></text>` : `<text x="148.5" y="${subtitleY}" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f">${safeSubLines[0] || ''}</text>`) : ''}
-    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" ${isPremiumPoster ? 'stroke="#3D3B36" stroke-width="0.48"' : ''}/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">${posterBrand}</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">${posterBrand}</text>`}`}
+    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" stroke="#D8D8D8" stroke-width="0.25pt"/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="300" font-size="6.5" fill="#C6C6C6">${posterBrand}</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="300" font-size="6.5" fill="#C6C6C6">${posterBrand}</text>`}`}
   </svg>`;
 }
 
@@ -3618,6 +3715,73 @@ const mainNav = document.getElementById('mainNav');
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const mobileMenuClose = document.getElementById('mobileMenuClose');
 const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+const PAGE_PATHS = {
+  cartells:'/',
+  personalitza:'/personalitza',
+  manifest:'/manifest',
+  contacte:'/contacte',
+  faqs:'/faqs',
+  legal:'/legal',
+  privacitat:'/privacitat',
+  cookies:'/cookies',
+  admin:'/admin'
+};
+const PATH_PAGES = Object.fromEntries(Object.entries(PAGE_PATHS).map(([page,path]) => [path,page]));
+const PAGE_SEO = {
+  ca: {
+    cartells:['Cartells gratuïts per imprimir','Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.'],
+    personalitza:['Personalitza els teus cartells','Crea i edita cartells per a cada ocasió, preparats per imprimir.'],
+    manifest:['Manifest','Coneix la idea i les persones que hi ha darrere d’uncartell.cat.'],
+    contacte:['Contacte','Contacta amb uncartell.cat per fer consultes o proposar nous cartells.'],
+    faqs:['Preguntes freqüents','Respostes sobre descàrregues, formats, plans i ús dels cartells.'],
+    legal:['Avís legal','Informació legal d’uncartell.cat.'],
+    privacitat:['Política de privacitat','Informació sobre el tractament i la protecció de dades a uncartell.cat.'],
+    cookies:['Política de cookies','Informació sobre les cookies utilitzades a uncartell.cat.'],
+    admin:['Administració','Accés privat a l’administració d’uncartell.cat.']
+  },
+  es: {
+    cartells:['Carteles gratis para imprimir','Crea, personaliza y descarga carteles gratis listos para imprimir.'],
+    personalitza:['Personaliza tus carteles','Crea y edita carteles para cada ocasión, listos para imprimir.'],
+    manifest:['Manifiesto','Conoce la idea y las personas que hay detrás de uncartel.es.'],
+    contacte:['Contacto','Contacta con uncartel.es para hacer consultas o proponer nuevos carteles.'],
+    faqs:['Preguntas frecuentes','Respuestas sobre descargas, formatos, planes y uso de los carteles.'],
+    legal:['Aviso legal','Información legal de uncartel.es.'],
+    privacitat:['Política de privacidad','Información sobre el tratamiento y la protección de datos en uncartel.es.'],
+    cookies:['Política de cookies','Información sobre las cookies utilizadas en uncartel.es.'],
+    admin:['Administración','Acceso privado a la administración de uncartel.es.']
+  }
+};
+function updatePageSeo(page){
+  const language = currentLanguage === 'es' ? 'es' : 'ca';
+  const domain = language === 'es' ? 'uncartel.es' : 'uncartell.cat';
+  const [heading,description] = PAGE_SEO[language][page] || PAGE_SEO[language].cartells;
+  const title = `${heading} | ${domain}`;
+  const path = PAGE_PATHS[page] || '/';
+  const canonical = `https://${domain}${path}`;
+  document.title = title;
+  document.getElementById('metaDescription').content = description;
+  document.getElementById('canonicalUrl').href = canonical;
+  document.getElementById('alternateCa').href = `https://uncartell.cat${path}`;
+  document.getElementById('alternateEs').href = `https://uncartel.es${path}`;
+  document.getElementById('alternateDefault').href = `https://uncartell.cat${path}`;
+  document.getElementById('ogTitle').content = title;
+  document.getElementById('ogDescription').content = description;
+  document.getElementById('ogUrl').content = canonical;
+  document.getElementById('twitterTitle').content = title;
+  document.getElementById('twitterDescription').content = description;
+}
+function pageFromLocation(){
+  const path = location.pathname.replace(/\/+$/,'') || '/';
+  return PATH_PAGES[path] || 'cartells';
+}
+function updatePageUrl(page, replace=false){
+  const path = PAGE_PATHS[page] || '/';
+  const url = new URL(location.href);
+  url.pathname = path;
+  url.hash = '';
+  url.searchParams.delete('route');
+  history[replace ? 'replaceState' : 'pushState']({page},'',url.pathname + url.search);
+}
 
 function setMobileMenu(open){
   mainNav.classList.toggle('mobile-open', open);
@@ -3634,8 +3798,9 @@ mobileMenuToggle.addEventListener('click', () => setMobileMenu(true));
 mobileMenuClose.addEventListener('click', () => setMobileMenu(false));
 mobileNavBackdrop.addEventListener('click', () => setMobileMenu(false));
 
-function goTo(page){
+function goTo(page, updateHistory=true){
   if(PRODUCT_MODE === 'free' && page === 'personalitza') page = 'cartells';
+  if(updateHistory && pageFromLocation() !== page) updatePageUrl(page);
   const requiresSignup = PRODUCT_MODE !== 'free' && page === 'personalitza' && !hasPremiumAccess();
   if(page !== 'personalitza' || !requiresSignup){
     document.body.classList.remove('signup-gate-open');
@@ -3647,6 +3812,7 @@ function goTo(page){
   document.getElementById('page-' + page).classList.add('active');
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
   document.getElementById('quotaFloat').classList.toggle('hide', page !== 'cartells');
+  updatePageSeo(page);
   setMobileMenu(false);
   window.scrollTo({top:0});
   syncPersonalizeScrollLock();
@@ -3667,7 +3833,6 @@ document.querySelector('.foot-links a[data-page="contacte"]').addEventListener('
   openPublicPage('contacte');
 });
 function openPublicPage(page){
-  if(location.hash !== `#${page}`) history.pushState(null, '', `#${page}`);
   goTo(page);
 }
 document.getElementById('footFaq').addEventListener('click', (e) => { e.preventDefault(); openPublicPage('faqs'); });
@@ -3735,7 +3900,8 @@ document.querySelectorAll('[data-language]').forEach(button => {
     const destinationDomain = nextLanguage === 'es' ? 'uncartel.es' : 'uncartell.cat';
     if((isCatalanDomain || isSpanishDomain) && nextLanguage !== domainLanguage){
       const destination = new URL(`https://${destinationDomain}/`);
-      destination.hash = location.hash;
+      destination.pathname = location.pathname;
+      destination.search = location.search;
       location.assign(destination.href);
       return;
     }
@@ -3776,7 +3942,6 @@ applyLanguage();
 
 document.getElementById('footAdmin').addEventListener('click', (e) => {
   e.preventDefault();
-  if(location.hash !== '#admin') history.pushState(null, '', '#admin');
   goTo('admin');
 });
 const hashPages = {
@@ -3789,17 +3954,37 @@ const hashPages = {
 };
 window.addEventListener('hashchange', () => {
   const hashPage = hashPages[location.hash];
-  if(hashPage) goTo(hashPage);
+  if(hashPage){
+    updatePageUrl(hashPage,true);
+    goTo(hashPage,false);
+  }
 });
-if(hashPages[location.hash]) requestAnimationFrame(() => goTo(hashPages[location.hash]));
+window.addEventListener('popstate', () => goTo(pageFromLocation(),false));
+const routeQuery = new URL(location.href).searchParams.get('route');
+const routeQueryPage = routeQuery && PAGE_PATHS[routeQuery] ? routeQuery : null;
+if(routeQueryPage){
+  updatePageUrl(routeQueryPage,true);
+}
+const legacyHashPage = hashPages[location.hash];
+if(legacyHashPage) updatePageUrl(legacyHashPage,true);
+const initialRoutePage = legacyHashPage || routeQueryPage || pageFromLocation();
+if(initialRoutePage !== 'cartells') requestAnimationFrame(() => goTo(initialRoutePage,false));
 const adminPage = document.getElementById('page-admin');
 if(sessionStorage.getItem('uncartell-admin-auth') === 'ok') adminPage.classList.add('admin-authenticated');
-document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const error = document.getElementById('adminLoginError');
+  const submit = e.target.querySelector('[type="submit"]');
   const user = document.getElementById('adminLoginUser').value.trim().toLocaleLowerCase();
   const password = document.getElementById('adminLoginPassword').value;
-  if((user === 'admin' || user === 'uncartell') && password === 'Badalona_02'){
+  submit.disabled = true;
+  error.textContent = currentLanguage === 'es' ? 'Comprobando…' : 'Comprovant…';
+  const { data: valid, error: verifyError } = await supabaseClient.rpc('verify_admin_credentials', {
+    p_username:user,
+    p_password:password
+  });
+  submit.disabled = false;
+  if(!verifyError && valid === true){
     sessionStorage.setItem('uncartell-admin-auth','ok');
     adminPage.classList.add('admin-authenticated');
     error.textContent = '';
@@ -4422,10 +4607,41 @@ renderPersonalizeSubcategoryTabs();
 selectPoster(selectedPosterIndex);
 
 /* ---------- contact form ---------- */
-document.getElementById('contactForm').addEventListener('submit', (e) => {
+const mailboxForLanguage = () => currentLanguage === 'es' ? 'hola@uncartel.es' : 'hola@uncartell.cat';
+async function sendMailboxForm(form, type){
+  const recipient = mailboxForLanguage();
+  const formData = new FormData(form);
+  formData.append('_subject', type === 'custom'
+    ? `${currentLanguage === 'es' ? 'Solicitud de cartel a medida' : 'Sol·licitud de cartell a mida'} · ${location.hostname}`
+    : `${currentLanguage === 'es' ? 'Nuevo mensaje de contacto' : 'Nou missatge de contacte'} · ${location.hostname}`);
+  formData.append('_template', 'table');
+  formData.append('_captcha', 'false');
+  formData.append('_honey', '');
+  const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipient)}`, {
+    method:'POST',
+    headers:{Accept:'application/json'},
+    body:formData
+  });
+  if(!response.ok) throw new Error('mail_failed');
+}
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  document.getElementById('contactNote').classList.add('show');
-  e.target.reset();
+  const note = document.getElementById('contactNote');
+  const button = e.target.querySelector('[type="submit"]');
+  button.disabled = true;
+  note.classList.remove('is-error');
+  note.textContent = currentLanguage === 'es' ? 'Enviando…' : 'Enviant…';
+  note.classList.add('show');
+  try{
+    await sendMailboxForm(e.target, 'contact');
+    note.textContent = currentLanguage === 'es' ? 'Mensaje enviado. Te responderemos en 1–2 días.' : 'Missatge enviat. Et respondrem en 1–2 dies.';
+    e.target.reset();
+  }catch(error){
+    note.classList.add('is-error');
+    note.textContent = currentLanguage === 'es' ? 'No se ha podido enviar. Escríbenos a hola@uncartel.es.' : 'No s’ha pogut enviar. Escriu-nos a hola@uncartell.cat.';
+  }finally{
+    button.disabled = false;
+  }
 });
 
 /* ---------- donation drawer ---------- */
@@ -4503,11 +4719,20 @@ document.getElementById('agencyModalX').addEventListener('click', () => closeMod
 [['agencyModalBg']].forEach(([id]) => {
   document.getElementById(id).addEventListener('click', (e) => { if(e.target.id === id) closeModal(id); });
 });
-document.getElementById('agencyForm').addEventListener('submit', (e) => {
+document.getElementById('agencyForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  document.getElementById('agencyFormView').style.display = 'none';
-  document.getElementById('agencySuccessView').style.display = 'block';
-  e.target.reset();
+  const button = e.target.querySelector('[type="submit"]');
+  button.disabled = true;
+  try{
+    await sendMailboxForm(e.target, 'custom');
+    document.getElementById('agencyFormView').style.display = 'none';
+    document.getElementById('agencySuccessView').style.display = 'block';
+    e.target.reset();
+  }catch(error){
+    button.textContent = currentLanguage === 'es' ? 'No se ha podido enviar. Inténtalo de nuevo.' : 'No s’ha pogut enviar. Torna-ho a provar.';
+  }finally{
+    button.disabled = false;
+  }
 });
 document.getElementById('agencyDone').addEventListener('click', () => closeModal('agencyModalBg'));
 
@@ -4604,6 +4829,71 @@ document.getElementById('choosePremium').addEventListener('click', () => {
   requestAnimationFrame(() => document.getElementById('loginGoogle').focus());
 });
 
+async function addUltraWaitlist(email){
+  const feedback = document.getElementById('ultraFeedback');
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)){
+    feedback.textContent = currentLanguage === 'es' ? 'Escribe un correo válido.' : 'Escriu un correu vàlid.';
+    return;
+  }
+  feedback.textContent = currentLanguage === 'es' ? 'Guardando…' : 'Desant…';
+  const interestData = new FormData();
+  interestData.append('name', document.getElementById('accountNameInput')?.value || (currentLanguage === 'es' ? 'Usuario registrado' : 'Usuari registrat'));
+  interestData.append('email', normalizedEmail);
+  interestData.append('message', `${normalizedEmail} ${currentLanguage === 'es' ? 'se ha interesado por el plan Ultra' : 's’ha interessat pel pla Ultra'}.`);
+  interestData.append('user_id', accountUserId || 'sense registre');
+  interestData.append('language', currentLanguage);
+  interestData.append('source_domain', location.hostname);
+  interestData.append('_subject', currentLanguage === 'es' ? 'Interés en el plan Ultra' : 'Interès pel pla Ultra');
+  interestData.append('_template', 'table');
+  interestData.append('_captcha', 'false');
+  const [databaseResult, emailResult] = await Promise.allSettled([
+    supabaseClient.from('ultra_waitlist').insert({
+      email:normalizedEmail,
+      user_id:accountUserId,
+      language:currentLanguage,
+      source_domain:location.hostname
+    }),
+    fetch(`https://formsubmit.co/ajax/${encodeURIComponent(mailboxForLanguage())}`, {
+      method:'POST',
+      headers:{Accept:'application/json'},
+      body:interestData
+    }).then(response => {
+      if(!response.ok) throw new Error('mail_failed');
+      return response;
+    })
+  ]);
+  const databaseError = databaseResult.status === 'fulfilled' ? databaseResult.value.error : databaseResult.reason;
+  const emailFailed = emailResult.status === 'rejected';
+  if(emailFailed && databaseError && databaseError.code !== '23505'){
+    feedback.textContent = currentLanguage === 'es' ? 'No se ha podido guardar. Inténtalo de nuevo.' : 'No s’ha pogut desar. Torna-ho a provar.';
+    return;
+  }
+  document.getElementById('ultraEmailWrap').classList.remove('show');
+  document.getElementById('ultraNotify').hidden = false;
+  document.getElementById('ultraNotify').disabled = true;
+  document.getElementById('ultraNotify').textContent = currentLanguage === 'es' ? 'Te avisaremos ✓' : 'T’avisarem ✓';
+  feedback.textContent = currentLanguage === 'es' ? 'Ya estás en la lista.' : 'Ja ets a la llista.';
+}
+document.getElementById('ultraNotify').addEventListener('click', () => {
+  if(accountLoggedIn && accountEmail){
+    addUltraWaitlist(accountEmail);
+    return;
+  }
+  document.getElementById('ultraNotify').hidden = true;
+  document.getElementById('ultraEmailWrap').classList.add('show');
+  document.getElementById('ultraEmail').focus();
+});
+document.getElementById('ultraEmailSubmit').addEventListener('click', () => {
+  addUltraWaitlist(document.getElementById('ultraEmail').value);
+});
+document.getElementById('ultraEmail').addEventListener('keydown', (event) => {
+  if(event.key === 'Enter'){
+    event.preventDefault();
+    document.getElementById('ultraEmailSubmit').click();
+  }
+});
+
 function updateAccountPlanBadge(){
   const badge = document.getElementById('accountPlanBadge');
   const manageBtn = document.getElementById('accountManageSub');
@@ -4636,7 +4926,7 @@ function updateAccountPlanBadge(){
   businessKit.classList.remove('logo-only');
   document.getElementById('businessKitTitle').textContent = 'Kit del negoci';
   document.getElementById('businessKitPlan').textContent = 'Properament';
-  document.getElementById('catalogAd').classList.toggle('hide', personalizationUnlocked);
+  document.getElementById('catalogAd')?.classList.toggle('hide', personalizationUnlocked);
   syncPersonalizeScrollLock();
   premiumNav.classList.toggle('premium-active', personalizationUnlocked);
   premiumHero.classList.toggle('premium-active', personalizationUnlocked);
@@ -4975,8 +5265,29 @@ document.getElementById('accountInlineConfirm').addEventListener('click', async 
     return;
   }
   if(pendingAccountAction === 'delete'){
-    document.getElementById('accountInlineActionCopy').textContent =
-      'Per seguretat, l’eliminació completa del compte s’activarà amb el servei de suport. Les teves dades no s’han eliminat.';
+    const confirmButton = document.getElementById('accountInlineConfirm');
+    confirmButton.disabled = true;
+    document.getElementById('accountInlineActionCopy').textContent = currentLanguage === 'es' ? 'Eliminando tu cuenta…' : 'Eliminant el teu compte…';
+    const { error } = await supabaseClient.rpc('delete_own_account');
+    if(error){
+      confirmButton.disabled = false;
+      document.getElementById('accountInlineActionCopy').textContent = currentLanguage === 'es'
+        ? 'No se ha podido eliminar la cuenta. Inténtalo de nuevo.'
+        : 'No s’ha pogut eliminar el compte. Torna-ho a provar.';
+      return;
+    }
+    await supabaseClient.auth.signOut({ scope:'local' });
+    accountLoggedIn = false;
+    accountEmail = '';
+    accountUserId = null;
+    accountPlan = 'free';
+    planExpiresAt = null;
+    localStorage.removeItem('uncartell-pending-premium');
+    sessionStorage.removeItem('uncartell-admin-auth');
+    closeModal('accountModalBg');
+    document.body.classList.remove('signup-gate-open');
+    updateAccountPlanBadge();
+    goTo('cartells');
   }
 });
 </script>
