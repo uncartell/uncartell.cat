@@ -13,8 +13,10 @@
     --stone:#E7E4DC;
     --stone-line:#D6D2C6;
     --gray-text:#6b675f;
-    --green:#1CF45E;
+    --green:#73F172;
+    --soft-accent:#FF6C93;
   }
+  html[data-lang="es"]{--green:#71DEFF;--soft-accent:#C0F3FF;}
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -33,7 +35,9 @@
     position:sticky; top:0; z-index:40;
     background:var(--paper);
     border-bottom:2px solid var(--ink);
+    transition:border-color .2s ease;
   }
+  header:has(.language-menu.show){border-bottom-color:transparent}
   .header-inner{
     max-width:1180px; margin:0 auto;
     display:flex; align-items:center; justify-content:space-between;
@@ -50,6 +54,7 @@
   }
   .logo .dot{color:var(--green);}
   nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; flex:1;}
+  .header-actions{display:flex; align-items:center; gap:10px; flex:none;}
   .account-btn{
     flex:none; width:36px; height:36px; border-radius:50%;
     border:1.5px solid var(--stone-line); background:none; cursor:pointer;
@@ -58,6 +63,34 @@
   }
   .account-btn:hover{border-color:var(--ink);}
   .account-btn svg{width:18px; height:18px;}
+  .language-wrap{position:relative;flex:none}
+  .language-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--stone-line);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+  .language-btn:hover,.language-btn[aria-expanded="true"]{border-color:var(--ink);background:color-mix(in srgb,var(--green) 32%,white)}
+  .language-btn svg{width:18px;height:18px}
+  .language-menu{
+    position:relative; z-index:55; display:block; max-height:0; overflow:hidden;
+    background:var(--green);
+    opacity:0; transform:translateY(-4px); pointer-events:none;
+    box-shadow:0 10px 24px rgba(24,22,20,0);
+    transition:max-height .28s ease,opacity .2s ease,transform .28s ease,box-shadow .28s ease;
+  }
+  .language-menu.show{
+    max-height:68px; opacity:1; transform:translateY(0);
+    pointer-events:auto; box-shadow:0 10px 24px rgba(24,22,20,.08);
+  }
+  .language-menu-inner{
+    max-width:1180px; min-height:52px; margin:0 auto; padding:8px 24px;
+    display:flex; align-items:center; justify-content:flex-end; gap:8px;
+  }
+  .language-menu button{
+    min-width:58px; min-height:34px; border:1px solid rgba(24,22,20,.55); background:transparent;
+    border-radius:999px; padding:7px 14px; display:flex; align-items:center; justify-content:center;
+    color:var(--ink); font-weight:700; cursor:pointer; text-align:center;
+  }
+  .language-menu button:hover,.language-menu button.active{
+    border-color:var(--ink); background:var(--ink); color:#fff;
+  }
+  .language-menu small{font-size:10px;color:var(--gray-text);font-weight:700}
   .account-social{display:flex; flex-direction:column; gap:10px; margin:18px 0 16px;}
   .acc-btn{
     display:flex; align-items:center; gap:10px; justify-content:center;
@@ -73,7 +106,7 @@
     display:inline-block; font-size:12px; font-weight:700; padding:6px 12px; border-radius:16px;
     background:var(--stone); color:var(--ink); margin-bottom:12px;
   }
-  .plan-badge.promo{background:#E4FFE3; color:#008865;}
+  .plan-badge.promo{background:color-mix(in srgb,var(--green) 22%,white); color:var(--ink);}
   .account-plan{margin-bottom:12px; text-align:center;}
   .avatar-block{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:10px;}
   .avatar-circle{
@@ -218,8 +251,8 @@
   nav button.nav-premium:hover{background:rgba(217,164,4,.22); border-color:rgba(217,164,4,.68);}
   nav button.nav-premium.active{background:rgba(217,164,4,.14); border-color:rgba(217,164,4,.52); color:var(--ink);}
   nav button.nav-premium.premium-active,
-  nav button.nav-premium.premium-active.active{background:rgba(28,244,94,.12); border-color:rgba(28,244,94,.48);}
-  nav button.nav-premium.premium-active:hover{background:rgba(28,244,94,.2); border-color:rgba(28,244,94,.64);}
+  nav button.nav-premium.premium-active.active{background:color-mix(in srgb,var(--green) 12%,transparent); border-color:color-mix(in srgb,var(--green) 48%,transparent);}
+  nav button.nav-premium.premium-active:hover{background:color-mix(in srgb,var(--green) 20%,transparent); border-color:color-mix(in srgb,var(--green) 64%,transparent);}
   nav button .nav-lock{width:12px; height:12px; flex:none;}
   .mobile-menu-toggle,.mobile-menu-close,.mobile-nav-heading,.mobile-nav-watermark,.mobile-account-nav{display:none;}
   .mobile-nav-backdrop{display:none;}
@@ -236,7 +269,7 @@
   }
   .status-dot{
     width:10px; height:10px; flex:none; align-self:center; border-radius:50%; background:var(--green);
-    box-shadow:0 0 0 0 rgba(28,244,94,.38);
+    box-shadow:0 0 0 0 color-mix(in srgb,var(--green) 38%,transparent);
     animation:quota-heartbeat 2.4s ease-in-out infinite;
   }
   .quota-float.warning .status-dot{background:#F2A93B; box-shadow:0 0 0 0 rgba(242,169,59,.4);}
@@ -284,6 +317,11 @@
   .hero-visual{
     min-width:0; aspect-ratio:4/3; overflow:hidden; border-radius:11px;
     background:#F8F8F6; border:1px solid rgba(24,22,20,.12);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-visual-placeholder{
+    color:var(--gray-text); font-size:13px; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase;
   }
   .hero-visual svg{display:block; width:100%; height:100%;}
   .hero-title{
@@ -295,7 +333,7 @@
     vertical-align:middle; margin:0 4px;
   }
   .hero-icon-pill{
-    width:1.6em; height:0.95em; border-radius:1em; background:rgba(28,244,94,.18); color:var(--ink);
+    width:1.6em; height:0.95em; border-radius:1em; background:color-mix(in srgb,var(--green) 18%,transparent); color:var(--ink);
     padding:0 .3em;
   }
   .hero-icon-pill svg{width:0.55em; height:0.55em;}
@@ -323,8 +361,8 @@
     transition:background .15s,border-color .15s;
   }
   .hero-btn-premium:hover{background:rgba(217,164,4,.22); border-color:rgba(217,164,4,.68);}
-  .hero-btn-premium.premium-active{background:rgba(28,244,94,.12); border-color:rgba(28,244,94,.48);}
-  .hero-btn-premium.premium-active:hover{background:rgba(28,244,94,.2); border-color:rgba(28,244,94,.64);}
+  .hero-btn-premium.premium-active{background:color-mix(in srgb,var(--green) 12%,transparent); border-color:color-mix(in srgb,var(--green) 48%,transparent);}
+  .hero-btn-premium.premium-active:hover{background:color-mix(in srgb,var(--green) 20%,transparent); border-color:color-mix(in srgb,var(--green) 64%,transparent);}
   .hero-btn-premium svg{width:13px; height:13px; flex:none;}
   .hero-btn-outline{background:none; color:var(--ink); border:1.5px solid var(--stone-line);}
   .hero-btn-outline:hover{border-color:var(--ink);}
@@ -522,7 +560,7 @@
     font-weight:700; font-size:13px; color:var(--ink);
   }
   .plan-opt small{display:block; font-weight:500; font-size:11px; color:var(--gray-text); margin-top:2px;}
-  .plan-opt.active{border-color:var(--green); background:rgba(28,244,94,.14);}
+  .plan-opt.active{border-color:var(--green); background:color-mix(in srgb,var(--green) 14%,transparent);}
   .plan-opt.active small{color:var(--ink);}
   .access-plans{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:min(620px,100%); margin:2px auto 25px;}
   .access-plan{
@@ -532,7 +570,7 @@
   }
   .access-plan strong{display:block; font-size:18px; margin:5px 0 9px;}
   .access-plan small{display:block; color:var(--gray-text); font-weight:500; font-size:11px; line-height:1.3;}
-  .access-plan.active{border-color:var(--green); box-shadow:0 0 0 2px rgba(28,244,94,.18); background:#f5fff7;}
+  .access-plan.active{border-color:var(--green); box-shadow:0 0 0 2px color-mix(in srgb,var(--green) 18%,transparent); background:color-mix(in srgb,var(--green) 8%,#fff);}
   .access-plan.recommended::before{content:'50% OFF'; position:absolute; left:10px; top:9px; color:#087329; font-size:9px; letter-spacing:.45px; text-align:left;}
   .access-plan del{color:#8b8881; font-size:11px; font-weight:500; margin-left:3px;}
   .plan-helper{font-size:11px !important; margin:-5px auto 13px !important; max-width:520px !important;}
@@ -1088,7 +1126,7 @@
   .send-success{text-align:center; padding:12px 4px 4px;}
   .send-success-icon{
     width:54px; height:54px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center;
-    border-radius:50%; background:rgba(28,244,94,.18); color:#0b9e39;
+    border-radius:50%; background:color-mix(in srgb,var(--green) 18%,transparent); color:var(--ink);
   }
   .send-success-icon svg{width:26px; height:26px;}
   .send-success h3{font-size:22px; margin-bottom:9px;}
@@ -1196,7 +1234,7 @@
   }
   .admin-editor-overlay.open{display:flex;}
   .admin-editor{
-    width:min(820px,96vw); height:100%; background:#F4F3F0; padding:24px; overflow:auto;
+    width:min(1040px,96vw); height:100%; background:#F4F3F0; padding:24px; overflow:auto;
     box-shadow:-16px 0 60px rgba(24,22,20,.15);
   }
   .admin-editor-head{display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:24px;}
@@ -1214,15 +1252,23 @@
   .admin-field textarea{min-height:120px; resize:vertical; line-height:1.5;}
   .admin-field small{display:block; margin-top:6px; color:var(--gray-text); font-size:10px; line-height:1.4;}
   .admin-assignment-head,.admin-assignment-row{
-    display:grid; grid-template-columns:24px minmax(190px,1.25fr) minmax(150px,.9fr) minmax(150px,.9fr) 34px;
+    display:grid; grid-template-columns:24px minmax(250px,1.5fr) minmax(170px,.9fr) minmax(170px,.9fr) 34px;
     gap:9px; align-items:center;
   }
+  .admin-bilingual-field{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+  .admin-bilingual-input{position:relative;}
+  .admin-bilingual-input span{
+    position:absolute; z-index:1; top:50%; left:10px; transform:translateY(-50%);
+    font-size:8px; font-weight:800; letter-spacing:.45px; color:#77736c; pointer-events:none;
+  }
+  .admin-bilingual-input input{padding-left:32px;}
   .admin-assignment-head{padding:0 2px 7px; color:#706c65; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.55px;}
   .admin-assignment-row{margin-bottom:9px;}
   .admin-assignment-row input,.admin-assignment-row select{
     width:100%; min-width:0; height:42px; border:1px solid #d8d4cc; border-radius:11px;
     background:var(--paper); padding:0 11px; font-family:inherit; font-size:12px; color:var(--ink); outline:none;
   }
+  .admin-assignment-row .admin-bilingual-input input{padding-left:35px;}
   .admin-assignment-row input:focus,.admin-assignment-row select:focus{border-color:#8b877f; box-shadow:0 0 0 3px rgba(24,22,20,.06);}
   .admin-assignment-remove{
     width:34px; height:34px; border:1px solid #d8d4cc; border-radius:50%; background:var(--paper);
@@ -1242,7 +1288,9 @@
   .admin-assignment-add{margin-top:3px;}
   .admin-taxonomy-list{display:grid; gap:12px;}
   .admin-taxonomy-row{padding:14px; border:1px solid #d8d4cc; border-radius:15px; background:var(--paper);}
-  .admin-taxonomy-category{display:grid; grid-template-columns:1fr 34px; gap:9px; align-items:center;}
+  .admin-taxonomy-category{display:grid; grid-template-columns:1fr 1fr 34px; gap:9px; align-items:center;}
+  .admin-taxonomy-languages{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
+  .admin-taxonomy-language label{display:block; margin:9px 0 5px; font-size:9px; font-weight:800; letter-spacing:.55px; color:#706c65;}
   .admin-taxonomy-category input,.admin-taxonomy-row textarea{
     width:100%; border:1px solid #d8d4cc; border-radius:11px; background:#fff; padding:10px 11px;
     font-family:inherit; color:var(--ink); outline:none;
@@ -1315,7 +1363,7 @@
       font-size:29px; line-height:1; font-weight:700; letter-spacing:-1px; color:rgba(24,22,20,.18);
       user-select:none; pointer-events:none;
     }
-    .mobile-nav-watermark .dot{color:rgba(28,190,75,.42);}
+    .mobile-nav-watermark .dot{color:color-mix(in srgb,var(--green) 55%,transparent);}
     .mobile-nav-watermark small{
       display:block; margin-top:9px; max-width:190px; font-size:10px; line-height:1.4;
       font-weight:600; letter-spacing:.25px; color:rgba(24,22,20,.32);
@@ -1452,13 +1500,25 @@
     .admin-assignment-head{display:none;}
     .admin-assignment-row{grid-template-columns:24px 1fr 34px; padding:10px; border:1px solid #d8d4cc; border-radius:14px; background:rgba(255,255,255,.5);}
     .admin-assignment-row input,.admin-assignment-row select{grid-column:2;}
+    .admin-bilingual-field{grid-template-columns:1fr;}
+    .admin-assignment-row .admin-bilingual-field{grid-column:2;}
     .admin-assignment-row .admin-assignment-drag{grid-column:1; grid-row:1; align-self:center;}
     .admin-assignment-row .admin-assignment-remove{grid-column:3; grid-row:1; align-self:center;}
+    .admin-taxonomy-category{grid-template-columns:1fr 34px;}
+    .admin-taxonomy-category .admin-taxonomy-name,.admin-taxonomy-category .admin-taxonomy-name-es{grid-column:1;}
+    .admin-taxonomy-category .admin-taxonomy-remove{grid-column:2; grid-row:1;}
+    .admin-taxonomy-languages{grid-template-columns:1fr;}
 
     footer{padding:22px 14px 0;}
     footer .foot-row{align-items:flex-start; flex-direction:column;}
     .foot-links{gap:10px 16px;}
   }
+  .cookie-banner{position:fixed;z-index:1500;right:20px;bottom:20px;width:min(620px,calc(100vw - 40px));padding:22px;background:#fff;border:1px solid var(--stone-line);border-radius:22px;box-shadow:0 18px 60px rgba(24,22,20,.16);display:none;}
+  .cookie-close{position:absolute;top:13px;right:13px;width:34px;height:34px;border:0;border-radius:50%;background:#ededed;color:var(--ink);display:grid;place-items:center;cursor:pointer}.cookie-close:hover{background:#e3e3e1}.cookie-close svg{width:15px;height:15px}
+  .cookie-banner.show{display:block;animation:fade .22s ease}.cookie-banner h2{font-size:20px;margin:0 0 7px}.cookie-banner p{font-size:14px;line-height:1.5;color:var(--gray-text);margin:0}
+  .cookie-actions{display:flex;gap:8px;margin-top:17px;flex-wrap:nowrap}.cookie-actions button{flex:1;min-width:0;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--stone-line);background:#fff;font-weight:700;white-space:nowrap;cursor:pointer}.cookie-actions .cookie-primary{background:var(--ink);border-color:var(--ink);color:#fff}.cookie-actions .cookie-settings{margin-left:0}
+  .cookie-panel{display:none;padding-top:17px}.cookie-panel.show{display:block}.cookie-option{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:13px 0;border-top:1px solid var(--stone-line)}.cookie-option strong,.cookie-option span{display:block}.cookie-option span{font-size:13px;color:var(--gray-text);margin-top:3px}.cookie-toggle{width:46px;height:26px;accent-color:#00a57e}.legal-note{padding:16px 18px;border-radius:14px;background:#ededed;margin:18px 0}.legal-body ul{padding-left:20px;line-height:1.65}.cookie-manage-link{border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer}.cookie-manage-link:hover{text-decoration:underline}
+  @media(max-width:640px){.cookie-banner{right:10px;bottom:10px;width:calc(100vw - 20px);padding:18px;border-radius:18px}.cookie-actions{display:grid;grid-template-columns:1fr 1fr}.cookie-actions button{padding:0 12px}.cookie-actions .cookie-settings{grid-column:1/-1;margin-left:0}}
 </style>
 </head>
 <body>
@@ -1476,10 +1536,23 @@
       <button class="mobile-account-nav" id="mobileAccountOpenBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>El meu compte</button>
       <div class="mobile-nav-watermark">uncartell<span class="dot">.</span>cat<small>Cartells clars per fer els espais una mica més amables.</small></div>
     </nav>
-    <button class="account-btn" id="accountOpenBtn" aria-label="El meu compte">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>
-    </button>
+    <div class="header-actions">
+      <div class="language-wrap">
+        <button class="language-btn" id="languageToggle" type="button" aria-label="Canvia l’idioma" aria-expanded="false" aria-controls="languageMenu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <button class="account-btn" id="accountOpenBtn" aria-label="El meu compte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>
+      </button>
+    </div>
     <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Obre el menú" aria-controls="mainNav" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="language-menu" id="languageMenu">
+    <div class="language-menu-inner">
+      <button type="button" data-language="ca"><span>CA</span></button>
+      <button type="button" data-language="es"><span>ES</span></button>
+    </div>
   </div>
 </header>
 <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
@@ -1491,32 +1564,16 @@
     <div class="hero">
       <div class="hero-copy">
         <h1 class="hero-title">
-          Un món visualment millor <span class="hero-icon-pill"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><br>
-          És possible <span class="hero-icon-circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.1" fill="currentColor"/><circle cx="15.5" cy="10" r="1.1" fill="currentColor"/><path d="M7.5 14c1 1.8 3 2.8 4.5 2.8s3.5-1 4.5-2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+          Cartells gratuïts <span class="hero-icon-pill"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><br>
+          per un món millor <span class="hero-icon-circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.1" fill="currentColor"/><circle cx="15.5" cy="10" r="1.1" fill="currentColor"/><path d="M7.5 14c1 1.8 3 2.8 4.5 2.8s3.5-1 4.5-2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
         </h1>
         <div class="hero-ctas">
           <button class="hero-btn-premium" id="heroPersonalitza"><svg id="heroLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Personalitza</button>
           <a class="hero-btn-outline" href="#filterTabs">Explora cartells</a>
         </div>
       </div>
-      <div class="hero-visual" aria-label="Comparativa visual entre un cartell antic i un cartell nou">
-        <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-          <rect width="480" height="360" fill="#F8F8F6"/>
-          <rect x="24" y="24" width="206" height="312" rx="8" fill="#E7E4DC"/>
-          <rect x="250" y="24" width="206" height="312" rx="8" fill="#FFFFFF"/>
-          <text x="43" y="52" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="700" fill="#77736C" letter-spacing="1">ABANS</text>
-          <text x="269" y="52" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="700" fill="#77736C" letter-spacing="1">ARA</text>
-          <rect x="43" y="75" width="168" height="188" rx="3" fill="#FFFFFF" stroke="#BDB8AD" stroke-width="2"/>
-          <text x="127" y="129" text-anchor="middle" font-family="Arial,sans-serif" font-size="35" font-weight="900" fill="#181614">SORTIDA</text>
-          <path d="M66 172h122M66 190h96M66 208h112" stroke="#8E8980" stroke-width="7"/>
-          <rect x="269" y="75" width="168" height="188" rx="4" fill="#FAFAF8"/>
-          <path d="M330 137h43m0 0-14-14m14 14-14 14" fill="none" stroke="#E5372A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="353" y="190" text-anchor="middle" font-family="Helvetica Neue,Arial,sans-serif" font-size="27" font-weight="700" fill="#181614">SORTIDA</text>
-          <rect x="278" y="242" width="150" height="11" rx="5.5" fill="#EFEFEF"/>
-          <text x="288" y="250" font-family="Helvetica Neue,Arial,sans-serif" font-size="5.5" font-weight="700" fill="#3D3B36">UNCARTELL.CAT</text>
-          <path d="M230 180h20" stroke="#1CF45E" stroke-width="4" stroke-linecap="round"/>
-          <path d="m243 173 7 7-7 7" fill="none" stroke="#1CF45E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <div class="hero-visual" aria-label="Espai reservat per a una imatge">
+        <span class="hero-visual-placeholder">Imatge</span>
       </div>
     </div>
 
@@ -1730,44 +1787,44 @@
       </div>
       <div class="faq-list">
         <details class="faq-item">
-          <summary>Què inclou la versió gratuïta d&#39;uncartell.cat?</summary>
-          <p>Accés als cartells bàsics del catàleg i fins a 10 descàrregues en PDF (A4 o A3) cada dia, sense necessitat de compte ni targeta.</p>
+          <summary>Què puc fer sense registrar-me?</summary>
+          <p>Consultar tot el catàleg, editar el títol dels cartells disponibles i descarregar fins a 10 PDF al dia en format A4 o A3.</p>
         </details>
         <details class="faq-item">
-          <summary>Què guanyo amb Premium?</summary>
-          <p>Premium desbloqueja descàrregues il·limitades, personalització completa, logotip propi i el kit del negoci durant 6 mesos.</p>
+          <summary>Què inclou Premium?</summary>
+          <p>Permet editar títol, subtítol i colors, i descarregar cartells sense límit. Les funcionalitats que encara estiguin marcades com a “Properament” no formen part de la versió actual.</p>
         </details>
         <details class="faq-item">
-          <summary>Quant costa Premium?</summary>
-          <p>Durant la promoció, Premium costa 0&nbsp;€ durant 6 mesos, sense targeta. El preu de referència posterior és de 29,99&nbsp;€.</p>
+          <summary>Premium és realment gratuït durant 6 mesos?</summary>
+          <p>Sí. L’activació promocional costa 0&nbsp;€, no demana targeta i no genera cap renovació automàtica. Abans d’introduir pagaments informarem clarament de les condicions.</p>
         </details>
         <details class="faq-item">
-          <summary>Puc cancel·lar la subscripció quan vulgui?</summary>
-          <p>Sí. Des de l&#39;àrea de compte, a "Cancel·la la subscripció". El pla es desactiva a la data de renovació, no a l&#39;instant.</p>
+          <summary>Per què necessito un compte?</summary>
+          <p>El compte permet identificar el teu pla i mantenir la sessió i les preferències entre dispositius. Només et demanem les dades imprescindibles.</p>
         </details>
         <details class="faq-item">
-          <summary>En quins formats puc descarregar els cartells?</summary>
-          <p>Light inclou PDF. Premium manté la descàrrega en PDF A4 o A3 amb totes les opcions de personalització.</p>
+          <summary>En quin format es descarreguen els cartells?</summary>
+          <p>En PDF d’alta qualitat, preparat per imprimir en A4 o A3. El document descarregat té el fons blanc per evitar problemes d’impressió.</p>
         </details>
         <details class="faq-item">
           <summary>Què passa si esgoto les 10 descàrregues diàries?</summary>
-          <p>El comptador es reinicia automàticament cada dia. Si en necessites més, qualsevol passi elimina aquest límit mentre sigui vigent.</p>
+          <p>El comptador es reinicia automàticament l’endemà. Amb Premium, les descàrregues són il·limitades mentre el pla estigui actiu.</p>
         </details>
         <details class="faq-item">
-          <summary>Com puc ajudar a mantenir el projecte?</summary>
-          <p>Pots fer una aportació puntual des de “Fes un donatiu 💚” al peu de qualsevol pàgina, o donar suport al projecte amb una subscripció Premium.</p>
+          <summary>Puc utilitzar els cartells al meu negoci o equipament?</summary>
+          <p>Sí, els pots imprimir i utilitzar per senyalitzar el teu espai. No pots revendre les plantilles, redistribuir-ne el catàleg ni presentar-lo com un projecte propi.</p>
         </details>
         <details class="faq-item">
-          <summary>Feu cartells a mida per a estudis o agències?</summary>
-          <p>Sí. A Personalitza trobaràs "Necessito un cartell personalitzat (estudi/agència)" per explicar-nos el projecte i rebre una proposta.</p>
+          <summary>Els meus cartells i logotips queden desats?</summary>
+          <p>Només es desen les dades necessàries per oferir les funcions que activis. Abans de pujar un logotip, comprova que en tens els drets d’ús.</p>
         </details>
         <details class="faq-item">
           <summary>Com puc suggerir un cartell nou per al catàleg?</summary>
-          <p>Escriu-nos des de Contacte explicant la temàtica; anem afegint cartells nous regularment.</p>
+          <p>Escriu-nos des de Contacte amb el text, la categoria i l’ús que en faries. Prioritzem propostes curtes, universals i útils per a molta gent.</p>
         </details>
         <details class="faq-item">
-          <summary>Com es manté econòmicament uncartell.cat?</summary>
-          <p>Amb les subscripcions Premium i les aportacions voluntàries des de “Fes un donatiu 💚” al peu de la pàgina.</p>
+          <summary>Com puc gestionar o eliminar les meves dades?</summary>
+          <p>Des de l’àrea de compte pots canviar el nom, tancar la sessió o iniciar la sol·licitud d’eliminació. També pots escriure’ns des de Contacte per exercir els teus drets.</p>
         </details>
       </div>
     </div>
@@ -1779,23 +1836,30 @@
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Legal</span>
         <h1 class="display" style="font-size:38px;">Política de privacitat</h1>
-        <p class="page-sub">Última actualització: juliol de 2026. Aquest text és una plantilla estàndard, pendent de revisió legal definitiva.</p>
+        <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
       </div>
       <div class="legal-body">
-        <h3>1. Qui és el responsable de les dades</h3>
-        <p>uncartell.cat n&#39;és el responsable del tractament de les dades personals que recollim a través d&#39;aquest lloc web.</p>
-        <h3>2. Quines dades recollim</h3>
-        <p>Nom i correu electrònic si crees un compte o ens escrius; dades de pagament si et fas Premium (processades per un proveïdor extern de pagaments, no emmagatzemem el número de targeta); i dades d&#39;ús bàsic (com el nombre de descàrregues diàries) per fer funcionar el servei.</p>
-        <h3>3. Per a què les fem servir</h3>
-        <p>Per gestionar el teu compte i la subscripció, respondre consultes, complir obligacions legals i millorar el servei. No venem dades a tercers.</p>
-        <h3>4. Amb qui les compartim</h3>
-        <p>Amb proveïdors necessaris per operar (processador de pagaments, allotjament web) sota els seus propis compromisos de confidencialitat.</p>
-        <h3>5. Quant de temps les conservem</h3>
-        <p>Mentre el teu compte estigui actiu, i el temps addicional exigit per obligacions legals o fiscals (per exemple, factures).</p>
-        <h3>6. Els teus drets</h3>
-        <p>Pots accedir, rectificar, eliminar o portar les teves dades, i oposar-te o limitar-ne el tractament, escrivint-nos des de la pàgina de Contacte o eliminant el teu compte directament des de l&#39;àrea d&#39;usuari.</p>
-        <h3>7. Canvis en aquesta política</h3>
-        <p>Podem actualitzar aquest text; els canvis rellevants es notificaran a la pàgina web.</p>
+        <div class="legal-note"><strong>Informació pendent de completar abans del llançament definitiu:</strong> nom i cognoms o raó social del titular, NIF, domicili i correu electrònic de privacitat.</div>
+        <h3>1. Responsable del tractament</h3>
+        <p>Responsable: titular d’uncartell.cat. Canal provisional per a qüestions de privacitat: formulari de Contacte. No s’ha designat delegat de protecció de dades perquè, per la naturalesa actual del projecte, no és obligatori.</p>
+        <h3>2. Dades que tractem</h3>
+        <ul><li>Compte: nom, correu electrònic, identificador d’usuari, pla i dates d’activació.</li><li>Contacte: nom, correu i contingut del missatge.</li><li>Funcionament: preferències, consentiment de cookies i recompte de descàrregues.</li><li>Personalització: textos, colors i fitxers que decideixis incorporar quan aquesta funció estigui disponible.</li></ul>
+        <h3>3. Finalitats i base jurídica</h3>
+        <ul><li>Crear el compte, iniciar sessió i prestar el servei: execució de la relació amb l’usuari.</li><li>Respondre consultes i protegir la plataforma: interès legítim i mesures precontractuals, segons el cas.</li><li>Enviar avisos imprescindibles sobre seguretat, servei o canvis legals: execució del servei i compliment d’obligacions legals.</li><li>Enviar novetats comercials: només amb consentiment específic, opcional i revocable.</li></ul>
+        <h3>4. Destinataris i proveïdors</h3>
+        <p>No venem les dades. Utilitzem GitHub Pages per publicar el web i Supabase per a autenticació i base de dades. Aquests proveïdors poden tractar dades per compte nostre d’acord amb les seves condicions i mesures de seguretat. Si s’incorporen nous proveïdors —per exemple, correu transaccional o pagaments— actualitzarem aquesta política abans d’activar-los.</p>
+        <h3>5. Transferències internacionals</h3>
+        <p>Alguns proveïdors tecnològics poden operar fora de l’Espai Econòmic Europeu. Quan sigui aplicable, el tractament s’empararà en una decisió d’adequació o en garanties reconegudes pel RGPD, com les clàusules contractuals tipus.</p>
+        <h3>6. Conservació</h3>
+        <p>Les dades del compte es conserven mentre estigui actiu i, després, durant el temps imprescindible per resoldre responsabilitats. Les consultes es conserven fins a 24 mesos. El consentiment de màrqueting es conserva fins que el retiris, juntament amb la prova necessària del consentiment. Les dades subjectes a obligació legal es conservaran durant el termini exigible.</p>
+        <h3>7. Drets</h3>
+        <p>Pots sol·licitar accés, rectificació, supressió, portabilitat, limitació o oposició, i retirar qualsevol consentiment, mitjançant Contacte. Podrem demanar informació raonable per verificar la identitat. També pots presentar una reclamació davant l’Agència Espanyola de Protecció de Dades.</p>
+        <h3>8. Seguretat i menors</h3>
+        <p>Apliquem mesures proporcionades per evitar accessos no autoritzats. El servei no s’adreça específicament a menors de 14 anys ni pretén recollir-ne dades.</p>
+        <h3>9. Comunicacions</h3>
+        <p>Els avisos estrictament necessaris per al compte o per canvis de privacitat no són publicitat. Les novetats del projecte només s’enviaran si marques la casella corresponent, que estarà desmarcada per defecte i inclourà una opció senzilla de baixa.</p>
+        <h3>10. Canvis</h3>
+        <p>Publicarem aquí la versió vigent. Si un canvi afecta de manera rellevant el tractament de les dades, també ho comunicarem al correu associat al compte.</p>
       </div>
     </div>
   </section>
@@ -1806,19 +1870,56 @@
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Legal</span>
         <h1 class="display" style="font-size:38px;">Política de cookies</h1>
-        <p class="page-sub">Última actualització: juliol de 2026. Aquest text és una plantilla estàndard, pendent de revisió legal definitiva.</p>
+        <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
       </div>
       <div class="legal-body">
         <h3>1. Què són les cookies</h3>
         <p>Petits fitxers que es guarden al teu navegador i permeten que la web recordi informació sobre la teva visita.</p>
-        <h3>2. Cookies tècniques (necessàries)</h3>
-        <p>Fan possible el funcionament bàsic del lloc: mantenir la sessió iniciada, recordar les teves preferències de personalització i comptar les descàrregues diàries. No es poden desactivar sense afectar el funcionament del servei.</p>
-        <h3>3. Cookies analítiques</h3>
-        <p>Si en fem servir, ens ajuden a entendre com s&#39;utilitza la web de manera agregada i anònima, per millorar-la.</p>
-        <h3>4. Cookies de tercers</h3>
-        <p>Alguns serveis externs necessaris, com el processador de pagaments, poden establir les seves pròpies cookies segons les seves polítiques.</p>
-        <h3>5. Com gestionar-les</h3>
-        <p>Pots eliminar o bloquejar les cookies des de la configuració del teu navegador en qualsevol moment; tingues en compte que això pot afectar algunes funcions del lloc.</p>
+        <h3>2. Què utilitza ara mateix uncartell.cat</h3>
+        <p>Fem servir emmagatzematge local i elements tècnics necessaris per conservar la sessió de Supabase, la preferència de cookies i el recompte diari de descàrregues. Són imprescindibles per prestar les funcions sol·licitades i no s’utilitzen per fer publicitat ni perfils.</p>
+        <h3>3. Categories</h3>
+        <ul><li><strong>Necessàries:</strong> sessió, seguretat, preferències i límit de descàrregues. Sempre actives.</li><li><strong>Analítiques:</strong> permetrien mesurar l’ús del web. Actualment no n’hi ha cap d’activa.</li><li><strong>Publicitàries:</strong> permetrien mostrar o mesurar anuncis. Actualment no n’hi ha cap d’activa.</li></ul>
+        <h3>4. Consentiment</h3>
+        <p>Les cookies no necessàries només es carregaran després d’una acceptació expressa. “Accepta” i “Rebutja” es mostren amb la mateixa jerarquia. No considerem que continuar navegant sigui consentiment.</p>
+        <h3>5. Preferències i durada</h3>
+        <p>La selecció es desa al navegador durant un màxim de 12 mesos, o fins que la canviïs. Pots retirar el consentiment en qualsevol moment des de “Configura les cookies” al peu del web. Retirar-lo no afecta la licitud del tractament anterior.</p>
+        <h3>6. Relació d’elements tècnics</h3>
+        <ul><li><strong>uncartell-cookie-consent</strong>: recorda la selecció; 12 mesos.</li><li><strong>download-quota-v3</strong>: controla el límit diari; fins que s’elimina l’emmagatzematge local.</li><li><strong>Supabase Auth</strong>: manté la sessió iniciada; fins a tancar sessió o caducar.</li></ul>
+        <h3>7. Navegador</h3>
+        <p>També pots eliminar o bloquejar l’emmagatzematge des del navegador. Si bloqueges els elements necessaris, l’inici de sessió o el recompte de descàrregues poden deixar de funcionar.</p>
+        <button class="cookie-manage-link" id="openCookieSettings" type="button"><strong>Configura les cookies</strong></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVÍS LEGAL -->
+  <section class="page" id="page-legal">
+    <div class="legal-wrap">
+      <div class="page-head" style="padding-top:48px;">
+        <span class="eyebrow">Legal</span>
+        <h1 class="display" style="font-size:38px;">Avís legal i condicions d’ús</h1>
+        <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
+      </div>
+      <div class="legal-body">
+        <div class="legal-note"><strong>Abans del llançament definitiu cal completar:</strong> titular, NIF, domicili, correu de contacte i, si escau, dades registrals.</div>
+        <h3>1. Titularitat</h3>
+        <p>uncartell.cat és un servei digital dedicat a facilitar cartells i recursos de senyalització. El titular i responsable legal del lloc és la persona o entitat identificada en aquest apartat quan se’n completin les dades.</p>
+        <h3>2. Objecte del servei</h3>
+        <p>El web permet consultar, personalitzar i descarregar cartells. Les funcions, límits i plans vigents són els que es mostren en cada moment a la interfície.</p>
+        <h3>3. Ús permès</h3>
+        <p>Pots imprimir i utilitzar els cartells per al teu negoci, equipament, activitat o ús personal. No pots revendre les plantilles, redistribuir massivament el catàleg, automatitzar-ne l’extracció ni presentar el servei o els dissenys com a propis.</p>
+        <h3>4. Continguts aportats per l’usuari</h3>
+        <p>Conserves els drets sobre textos, logotips i fitxers que incorporis. En pujar-los declares que en tens autorització suficient i ens permets tractar-los únicament per prestar la funció sol·licitada.</p>
+        <h3>5. Propietat intel·lectual</h3>
+        <p>La marca, la interfície, la selecció del catàleg i els dissenys originals estan protegits per la normativa aplicable. Les icones de tercers es regeixen per les llicències corresponents, inclosa la llicència de Lucide quan sigui aplicable.</p>
+        <h3>6. Disponibilitat i responsabilitat</h3>
+        <p>Treballem perquè el servei sigui fiable, però no garantim disponibilitat ininterrompuda. Abans d’imprimir o instal·lar un cartell, l’usuari ha de revisar-ne el text, la mida, els colors i l’adequació normativa, especialment en seguretat, accessibilitat o emergències.</p>
+        <h3>7. Comptes</h3>
+        <p>Ets responsable de mantenir les credencials segures i d’avisar-nos si detectes un ús no autoritzat. Podem limitar comptes que facin un ús abusiu o contrari a aquestes condicions.</p>
+        <h3>8. Canvis</h3>
+        <p>Podem modificar el catàleg o aquestes condicions. Els canvis rellevants s’anunciaran al web i, quan afectin un compte, es podran comunicar per correu.</p>
+        <h3>9. Legislació aplicable</h3>
+        <p>S’aplica la legislació espanyola i europea. Qualsevol controvèrsia se sotmetrà als jutjats competents d’acord amb la normativa de consumidors i usuaris que resulti aplicable.</p>
       </div>
     </div>
   </section>
@@ -1897,7 +1998,7 @@
         </div>
         <div class="admin-field full">
           <label>Cartells associats</label>
-          <div class="admin-assignment-head"><span></span><span>Títol</span><span>Categoria</span><span>Subcategoria</span><span></span></div>
+          <div class="admin-assignment-head"><span></span><span>Títol · CAT / ES</span><span>Categoria · CAT / ES</span><span>Subcategoria · CAT / ES</span><span></span></div>
           <div id="adminAssignments"></div>
           <button class="admin-btn admin-assignment-add" id="adminAddAssignment" type="button">+ Afegeix un títol</button>
           <small>Cada fila crea un cartell amb aquesta icona i la seva classificació pròpia.</small>
@@ -1918,7 +2019,7 @@
       <div><span class="eyebrow">Organització del catàleg</span><h2 id="adminTaxonomyTitle">Categories i subcategories</h2></div>
       <button class="admin-editor-close" id="adminTaxonomyClose" type="button" aria-label="Tanca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
-    <p style="font-size:12px; color:var(--gray-text); line-height:1.5; margin:-10px 0 18px;">Edita els noms directament. Escriu una subcategoria per línia; els canvis també actualitzaran els cartells vinculats.</p>
+    <p style="font-size:12px; color:var(--gray-text); line-height:1.5; margin:-10px 0 18px;">Cada categoria i subcategoria té una versió CAT i ES vinculada. Mantén el mateix ordre a les dues llistes de subcategories.</p>
     <form id="adminTaxonomyForm">
       <div class="admin-taxonomy-list" id="adminTaxonomyList"></div>
       <button class="admin-btn admin-assignment-add" id="adminAddCategory" type="button">+ Nova categoria</button>
@@ -1935,12 +2036,30 @@
     <nav class="foot-links">
       <a href="#" data-page="contacte">Contacte</a>
       <a href="#" id="footFaq">FAQs</a>
+      <a href="#" id="footLegal">Avís legal</a>
       <a href="#" id="footPrivacy">Política de privacitat</a>
       <a href="#" id="footCookies">Cookies</a>
+      <button class="cookie-manage-link" id="footCookieSettings" type="button">Configura les cookies</button>
     </nav>
     <a class="footer-admin-link" id="footAdmin" href="#admin" aria-label="Accés a l’administració">© 2026</a>
   </div>
 </footer>
+
+<aside class="cookie-banner" id="cookieBanner" aria-labelledby="cookieTitle" aria-live="polite">
+  <button class="cookie-close" id="closeCookieBanner" type="button" aria-label="Tanca i rebutja les cookies opcionals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></svg></button>
+  <h2 id="cookieTitle">Tu decideixes les cookies</h2>
+  <p>Utilitzem elements necessaris perquè el web funcioni. Les cookies analítiques són opcionals i ara mateix no n’activem cap.</p>
+  <div class="cookie-panel" id="cookiePanel">
+    <div class="cookie-option"><div><strong>Necessàries</strong><span>Sessió, seguretat, preferències i descàrregues.</span></div><input class="cookie-toggle" type="checkbox" checked disabled aria-label="Cookies necessàries sempre actives"></div>
+    <div class="cookie-option"><div><strong>Analítiques</strong><span>Mesura agregada de l’ús. Actualment sense proveïdor actiu.</span></div><input class="cookie-toggle" id="analyticsCookies" type="checkbox" aria-label="Permet cookies analítiques"></div>
+  </div>
+  <div class="cookie-actions">
+    <button id="rejectCookies" type="button">Rebutja opcionals</button>
+    <button class="cookie-primary" id="acceptCookies" type="button">Accepta opcionals</button>
+    <button class="cookie-settings" id="configureCookies" type="button">Configura</button>
+    <button class="cookie-primary" id="saveCookieSettings" type="button" hidden>Desa la selecció</button>
+  </div>
+</aside>
 
 <div class="quota-float" id="quotaFloat">
   <span class="status-dot"></span>
@@ -2104,7 +2223,7 @@
       <div class="signup-auth-block">
       <div class="account-social">
         <button class="acc-btn" id="loginGoogle"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M22.5 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9c-.3 1.4-1 2.5-2.2 3.3v2.7h3.6c2.1-2 3.2-4.8 3.2-8.1z"/><path fill="#34A853" d="M12 23c3 0 5.4-1 7.2-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.6 1.1-2.8 0-5.1-1.9-6-4.4H2.3v2.8C4.1 20.6 7.8 23 12 23z"/><path fill="#FBBC05" d="M6 14.3c-.2-.7-.3-1.4-.3-2.3s.1-1.6.3-2.3V6.9H2.3C1.5 8.5 1 10.2 1 12s.5 3.5 1.3 5.1L6 14.3z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.4 2.1 15 1 12 1 7.8 1 4.1 3.4 2.3 6.9L6 9.7c.9-2.5 3.2-4.3 6-4.3z"/></svg>Continua amb Google</button>
-        <button class="acc-btn" id="loginApple"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16.4 1c.1 1.2-.4 2.4-1.1 3.3-.7.9-1.9 1.6-3 1.5-.1-1.2.4-2.5 1.1-3.3.8-.9 2-1.5 3-1.5zM19.9 17.2c-.5 1.2-.8 1.7-1.5 2.8-1 1.5-2.3 3.3-4 3.3-1.5 0-1.9-1-3.9-1s-2.5 1-4 1c-1.7 0-3-1.6-4-3.1C.6 17.4-.6 12.9 1 9.8c.8-1.6 2.2-2.6 3.7-2.6 1.5 0 2.5 1 3.8 1s2.6-1.2 4.4-1c.7 0 2.7.3 4 2.1-3.5 2-2.9 6.9 2 7.9z"/></svg>Continua amb Apple</button>
+        <button class="acc-btn" id="loginApple" type="button" disabled title="Properament"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16.4 1c.1 1.2-.4 2.4-1.1 3.3-.7.9-1.9 1.6-3 1.5-.1-1.2.4-2.5 1.1-3.3.8-.9 2-1.5 3-1.5zM19.9 17.2c-.5 1.2-.8 1.7-1.5 2.8-1 1.5-2.3 3.3-4 3.3-1.5 0-1.9-1-3.9-1s-2.5 1-4 1c-1.7 0-3-1.6-4-3.1C.6 17.4-.6 12.9 1 9.8c.8-1.6 2.2-2.6 3.7-2.6 1.5 0 2.5 1 3.8 1s2.6-1.2 4.4-1c.7 0 2.7.3 4 2.1-3.5 2-2.9 6.9 2 7.9z"/></svg>Apple · Properament</button>
         <button class="acc-btn" id="loginEmail" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Continua amb correu</button>
       </div>
       <button class="auth-methods-back" id="authMethodsBack" type="button">Torna als plans</button>
@@ -2113,6 +2232,7 @@
         <div class="field-full"><input type="email" required placeholder="El teu correu"></div>
         <div class="field-full account-password-field"><input type="password" required placeholder="Contrasenya"></div>
         <label class="marketing-consent"><input type="checkbox" id="marketingConsent"> <span>Vull rebre novetats del projecte i saber quan hi hagi noves funcionalitats.</span></label>
+        <p id="accountAuthFeedback" role="status" aria-live="polite" style="min-height:20px;margin:8px 0 0;color:#5c5954;font-size:14px;"></p>
         <div class="signup-auth-actions">
           <button class="account-back-catalog" id="accountBackToCatalog" type="button">Torna als plans</button>
           <button class="btn-send" id="accountEmailSubmit" type="submit">Entra</button>
@@ -2178,7 +2298,325 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = 'https://glaqcsvbnuowabsovvto.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const authRedirectUrl = `${window.location.origin}${window.location.pathname}`;
+const LANGUAGE_STORE = 'uncartell-language';
+const domainLanguage = location.hostname.endsWith('uncartel.es') ? 'es' : 'ca';
+const requestedLanguage = new URLSearchParams(location.search).get('lang');
+let currentLanguage = requestedLanguage === 'es' || requestedLanguage === 'ca'
+  ? requestedLanguage
+  : (localStorage.getItem(LANGUAGE_STORE) || domainLanguage);
+if(!['ca','es'].includes(currentLanguage)) currentLanguage = 'ca';
+document.documentElement.lang = currentLanguage;
+document.documentElement.dataset.lang = currentLanguage;
+
+const ES_TRANSLATIONS = {
+  "Cartells":"Carteles","Personalitza":"Personaliza","Manifest":"Manifiesto","Contacte":"Contacto",
+  "El meu compte":"Mi cuenta","Menú":"Menú","Explora cartells":"Explora carteles",
+  "Un món visualment millor":"Un mundo visualmente mejor","És possible":"Es posible",
+  "Per un món millor :)":"Por un mundo mejor :)","Imatge":"Imagen",
+  "Cartells gratuïts":"Carteles gratuitos","per un món millor":"por un mundo mejor",
+  "Cartells clars per fer els espais una mica més amables.":"Carteles claros para hacer los espacios un poco más amables.",
+  "ABANS":"ANTES","ARA":"AHORA","Ajuda":"Ayuda","Preguntes freqüents":"Preguntas frecuentes",
+  "Si no trobes la resposta aquí, escriu-nos des de Contacte.":"Si no encuentras la respuesta aquí, escríbenos desde Contacto.",
+  "Escriu-nos.":"Escríbenos.","Dubtes, col·laboracions, o vols que afegim el teu cartell al repositori.":"Dudas, colaboraciones o propuestas para ampliar el catálogo.",
+  "Nom":"Nombre","Correu":"Correo","Missatge":"Mensaje","Envia el missatge":"Envía el mensaje",
+  "Política de cookies":"Política de cookies","Avís legal i condicions d’ús":"Aviso legal y condiciones de uso",
+  "Tu decideixes les cookies":"Tú decides las cookies",
+  "Utilitzem elements necessaris perquè el web funcioni. Les cookies analítiques són opcionals i ara mateix no n’activem cap.":"Utilizamos elementos necesarios para que la web funcione. Las cookies analíticas son opcionales y actualmente no activamos ninguna.",
+  "Rebutja opcionals":"Rechaza opcionales","Accepta opcionals":"Acepta opcionales","Configura":"Configura",
+  "Necessàries":"Necesarias","Sessió, seguretat, preferències i descàrregues.":"Sesión, seguridad, preferencias y descargas.",
+  "Analítiques":"Analíticas","Mesura agregada de l’ús. Actualment sense proveïdor actiu.":"Medición agregada del uso. Actualmente sin proveedor activo.",
+  "Desa la selecció":"Guarda la selección","Tanca i rebutja les cookies opcionals":"Cierra y rechaza las cookies opcionales",
+  "Subcategories":"Subcategorías","Descarrega":"Descarga","Descarrega'l":"Descárgalo",
+  "Vista prèvia en directe":"Vista previa en directo","Personalitza el teu cartell":"Personaliza tu cartel",
+  "TÍTOL":"TÍTULO","SUBTÍTOL":"SUBTÍTULO","NOTA DE COLOR":"COLOR DEL TÍTULO","COLOR DE LA ICONA":"COLOR DEL ICONO",
+  "Tria un logo":"Elige un logotipo","Properament":"Próximamente","Kit del negoci":"Kit del negocio",
+  "Fes un donatiu 💚":"Haz un donativo 💚","Configura les cookies":"Configura las cookies",
+  "FAQs":"Preguntas frecuentes","Avís legal":"Aviso legal","Política de privacitat":"Política de privacidad","Cookies":"Cookies",
+  "Torna enrere":"Volver","Continua":"Continuar","Confirma":"Confirmar","Torna al perfil":"Volver al perfil",
+  "Inicia sessió o registra’t":"Inicia sesión o regístrate","Accedeix al teu compte per continuar.":"Accede a tu cuenta para continuar.",
+  "Continua amb Google":"Continuar con Google","Apple · Properament":"Apple · Próximamente","Continua amb correu":"Continuar con correo",
+  "Segueix sense registrar-te":"Continuar sin registrarte","El teu nom":"Tu nombre","El teu correu":"Tu correo",
+  "Contrasenya":"Contraseña","Vull rebre novetats del projecte i saber quan hi hagi noves funcionalitats.":"Quiero recibir novedades del proyecto y saber cuándo haya nuevas funcionalidades.",
+  "Tria com vols continuar":"Elige cómo quieres continuar","Premium és gratis durant 6 mesos. Sense targeta.":"Premium es gratis durante 6 meses. Sin tarjeta.",
+  "Pla actual":"Plan actual","RECOMANAT":"RECOMENDADO","Sense registre":"Sin registro","10 PDF al dia":"10 PDF al día",
+  "Catàleg complet":"Catálogo completo","Personalitza títol i subtítol":"Personaliza título y subtítulo",
+  "Colors i logotip propi":"Colores y logotipo propio","Descàrregues il·limitades":"Descargas ilimitadas",
+  "Gratis per sempre":"Gratis para siempre","Gratis durant 6 mesos · Sense targeta":"Gratis durante 6 meses · Sin tarjeta",
+  "Activa Premium gratis":"Activa Premium gratis","Darreres factures":"Últimas facturas","No hi ha factures":"No hay facturas",
+  "Canvia de pla":"Cambiar de plan","Tanca sessió":"Cerrar sesión","Elimina el compte":"Eliminar la cuenta",
+  "Descàrregues":"Descargas","il·limitades":"ilimitadas","disponibles avui":"disponibles hoy",
+  "GENERAL":"GENERAL","RESTAURACIÓ":"RESTAURACIÓN","COMERÇ":"COMERCIO","ALLOTJAMENT":"ALOJAMIENTO",
+  "SALUT":"SALUD","EDUCACIÓ":"EDUCACIÓN","OFICINES":"OFICINAS","ESPORT":"DEPORTE",
+  "MOBILITAT":"MOVILIDAD","ESPAI PÚBLIC":"ESPACIO PÚBLICO","SOSTENIBILITAT":"SOSTENIBILIDAD","SEGURETAT":"SEGURIDAD",
+  "Entrada":"Entrada","Sortida":"Salida","Serveis":"Servicios","Transport":"Transporte","Informació":"Información","Normes":"Normas",
+  "Espais":"Espacios","Menjar i beguda":"Comida y bebida","Al·lèrgies":"Alergias","Pagament":"Pago","Horaris":"Horarios",
+  "Compra":"Compra","Atenció":"Atención","Alimentació":"Alimentación","Emergències":"Emergencias","Higiene":"Higiene",
+  "Vida escolar":"Vida escolar","Accessos":"Accesos","Reciclatge":"Reciclaje","Energia":"Energía","Aigua":"Agua",
+  "Natura":"Naturaleza","Prohibicions":"Prohibiciones","Obligacions":"Obligaciones","Riscos":"Riesgos",
+  "Accés PMR":"Acceso PMR","Accés restringit":"Acceso restringido","Accessos i sortides":"Accesos y salidas",
+  "Admetem mascotes":"Admitimos mascotas","Aigua potable":"Agua potable","Alarma":"Alarma","Alta tensió":"Alta tensión",
+  "Ambulància":"Ambulancia","Apagueu el llum":"Apaga la luz","Apagueu la TV":"Apaga la TV","Apagueu la pantalla":"Apaga la pantalla",
+  "Aparador":"Escaparate","Aparcament":"Aparcamiento","Armilla obligatòria":"Chaleco obligatorio","Ascensor":"Ascensor",
+  "Aula":"Aula","Aula de música":"Aula de música","Aula virtual":"Aula virtual","Autobús":"Autobús","Bar":"Bar","Barra":"Barra",
+  "Biblioteca":"Biblioteca","Bicicleta":"Bicicleta","Bitllets":"Billetes","Bizum":"Bizum","Botiga online":"Tienda online",
+  "Caducitat pròxima":"Caducidad próxima","Cafè":"Café","Caixa":"Caja","Calçat de seguretat":"Calzado de seguridad",
+  "Canvis":"Cambios","Carnisseria":"Carnicería","Casc obligatori":"Casco obligatorio","Casquet obligatori":"Gorro obligatorio",
+  "Cita":"Cita","Cita prèvia":"Cita previa","Consergeria":"Conserjería","Consigna":"Consigna","Consulta":"Consulta",
+  "Cuina":"Cocina","Desfibril·lador":"Desfibrilador","Devolucions":"Devoluciones","Dret d'admissió":"Derecho de admisión",
+  "Dutxa":"Ducha","Dutxeu-vos abans d'entrar":"Dúchate antes de entrar","Efectiu":"Efectivo","Emergència":"Emergencia",
+  "Emportar":"Para llevar","Entrepans":"Bocadillos","Envasos":"Envases","Enviament de paqueteria":"Envío de paquetería",
+  "Escales":"Escaleras","Esmorzar":"Desayuno","Esmorzars":"Desayunos","Espai lliure de fum":"Espacio libre de humo",
+  "Estalvieu aigua":"Ahorra agua","Estalvieu energia":"Ahorra energía","Estalvieu paper":"Ahorra papel","Evacuació":"Evacuación",
+  "Extintor":"Extintor","Factura":"Factura","Farmàcia":"Farmacia","Fauna":"Fauna","Flora":"Flora","Font":"Fuente",
+  "Font d'aigua":"Fuente de agua","Fora de servei":"Fuera de servicio","Fruita i verdura":"Fruta y verdura",
+  "Garantia":"Garantía","Gel hidroalcohòlic":"Gel hidroalcohólico","Gelats":"Helados","Gimnàs":"Gimnasio",
+  "Gossos benvinguts":"Perros bienvenidos","Gossos lligats":"Perros atados","Graduació":"Graduación","Guants":"Guantes",
+  "Guants obligatoris":"Guantes obligatorios","Habitació":"Habitación","Horari":"Horario","Hort":"Huerto",
+  "Impressora":"Impresora","Infermeria":"Enfermería","Inflador":"Inflador","Jardí":"Jardín","Laboratori":"Laboratorio",
+  "Lavabo":"Aseo","Liquidació":"Liquidación","Lloguer de material":"Alquiler de material","Magatzem":"Almacén",
+  "Mantingueu la porta tancada":"Mantén la puerta cerrada","Material inflamable":"Material inflamable","Menjador":"Comedor",
+  "Menú":"Menú","Mirador":"Mirador","No córrer":"No correr","No donar menjar a la fauna":"No alimentar a la fauna",
+  "No fumar":"No fumar","No jugar a pilota":"No jugar a pelota","No menjar":"No comer","No molesteu":"No molestar",
+  "No potable":"No potable","No s'accepta efectiu":"No se acepta efectivo","No s'accepta targeta":"No se acepta tarjeta",
+  "No tocar":"No tocar","No toqueu la fruita":"No tocar la fruta","No trepitgeu la gespa":"No pisar el césped",
+  "Només clients":"Solo clientes","Només efectiu":"Solo efectivo","Només personal":"Solo personal",
+  "Només targeta":"Solo tarjeta","Només un acompanyant":"Solo un acompañante","Novetat":"Novedad","Obert":"Abierto",
+  "Obert 24 h":"Abierto 24 h","Obres":"Obras","Oferta del dia":"Oferta del día","Oli":"Aceite","Orgànica":"Orgánica",
+  "Pa acabat de fer":"Pan recién hecho","Paper":"Papel","Parc":"Parque","Pastisseria":"Pastelería","Peixateria":"Pescadería",
+  "Piscina":"Piscina","Pista":"Pista","Platja":"Playa","Poseu-vos la mascareta":"Ponte la mascarilla",
+  "Primers auxilis":"Primeros auxilios","Producte congelat":"Producto congelado","Producte ecològic":"Producto ecológico",
+  "Producte local":"Producto local","Producte refrigerat":"Producto refrigerado","Prohibit el pas":"Prohibido el paso",
+  "Prohibit fer foc":"Prohibido hacer fuego","Prohibit fer fotos":"Prohibido hacer fotos","Prohibit flash":"Prohibido el flash",
+  "Prohibit fotografiar":"Prohibido fotografiar","Prohibit fumar":"Prohibido fumar","Prohibit menjar":"Prohibido comer",
+  "Protecció auditiva":"Protección auditiva","Provador":"Probador","Proveïdors":"Proveedores","Punt de càrrega":"Punto de carga",
+  "Punt de trobada":"Punto de encuentro","Rebaixes":"Rebajas","Rebuig":"Resto","Recepció":"Recepción",
+  "Recepció de paqueteria":"Recepción de paquetería","Recicleu":"Recicla","Recollida":"Recogida",
+  "Recolliu els residus":"Recoge los residuos","Regal":"Regalo","Renteu-vos les mans":"Lávate las manos",
+  "Reparació":"Reparación","Reserva":"Reserva","Sala d'espera":"Sala de espera","Sala de material":"Sala de material",
+  "Sala de professors":"Sala de profesores","Sala de reunions":"Sala de reuniones","Secretaria":"Secretaría",
+  "Sense gluten":"Sin gluten","Sense lactosa":"Sin lactosa","Silenci":"Silencio","Sortida d'emergència":"Salida de emergencia",
+  "Tancat":"Cerrado","Tanqueu la nevera":"Cierra la nevera","Targeta":"Tarjeta","Telèfon":"Teléfono",
+  "Terra relliscadís":"Suelo resbaladizo","Terrassa":"Terraza","Tornem aviat":"Volvemos pronto","Tramvia":"Tranvía",
+  "Teatre":"Teatro","Tren":"Tren","Ulleres de protecció":"Gafas de protección","Urgències":"Urgencias","Vacunació":"Vacunación",
+  "Vegetarià":"Vegetariano","Vegà":"Vegano","Vehicle elèctric":"Vehículo eléctrico","Venda a granel":"Venta a granel",
+  "Vestidor":"Vestuario","Videotrucada":"Videollamada","Videovigilància":"Videovigilancia","Vidre":"Vidrio","Xarcuteria":"Charcutería"
+};
+Object.assign(ES_TRANSLATIONS,{
+  "PUBLICITAT · espai discret reservat per sostenir el catàleg gratuït":"PUBLICIDAD · espacio discreto reservado para sostener el catálogo gratuito",
+  "Creiem que el món no ha de ser lleig perquè una cosa sigui gratuïta.":"Creemos que el mundo no tiene que ser feo porque algo sea gratuito.",
+  "Cada dia convivim amb centenars de cartells. Alguns ens orienten, altres ens informen, altres ens conviden a participar. Formen part del paisatge dels nostres carrers i, sense adonar-nos-en, també de la qualitat del nostre entorn.":"Cada día convivimos con cientos de carteles. Algunos nos orientan, otros nos informan y otros nos invitan a participar. Forman parte del paisaje de nuestras calles y, sin darnos cuenta, también de la calidad de nuestro entorno.",
+  "A":"En","uncartell.cat":"uncartel.es",
+  "pensem que un bon disseny no és un luxe. És una eina pública. Fa la informació més clara, els espais més amables i les ciutats més coherents.":"pensamos que un buen diseño no es un lujo. Es una herramienta pública. Hace la información más clara, los espacios más amables y las ciudades más coherentes.",
+  "Per això posem a disposició de tothom cartells ben dissenyats, gratuïts i fàcils d'utilitzar. Sense artificis. Sense soroll. Només allò que cal perquè el missatge arribi.":"Por eso ponemos a disposición de todo el mundo carteles bien diseñados, gratuitos y fáciles de utilizar. Sin artificios. Sin ruido. Solo lo necesario para que el mensaje llegue.",
+  "La versió gratuïta sempre existirà. La versió Premium només ens ajuda a mantenir el projecte i a continuar ampliant-lo.":"La versión gratuita siempre existirá. La versión Premium solo nos ayuda a mantener el proyecto y a seguir ampliándolo.",
+  "No volem canviar el disseny dels carrers amb un únic cartell. Volem demostrar que, si entre tots elevem una mica el nivell de cada petit detall, també podem millorar la vida quotidiana de les persones.":"No queremos cambiar el diseño de las calles con un único cartel. Queremos demostrar que, si entre todos elevamos un poco el nivel de cada pequeño detalle, también podemos mejorar la vida cotidiana de las personas.",
+  "Perquè un entorn visual més digne també és una manera de cuidar-nos.":"Porque un entorno visual más digno también es una forma de cuidarnos.",
+  "Imatge pendent":"Imagen pendiente",
+  "El teu cartell, amb el teu peu de pàgina.":"Tu cartel, con tu pie de página.",
+  "Logo propi al faldó, color del títol i color de les icones.":"Logotipo propio en el pie, color del título y color de los iconos.",
+  "Desbloqueja Personalitza":"Desbloquea Personaliza","Tria Light o activa Premium gratis durant 6 mesos.":"Elige Light o activa Premium gratis durante 6 meses.",
+  "Durant 6 mesos":"Durante 6 meses","Continua amb el passi de 7 dies":"Continúa con el pase de 7 días",
+  "Pas 1 — tria el cartell base":"Paso 1 — elige el cartel base","Com ho necessites?":"¿Cómo lo necesitas?",
+  "Els tres plans desbloquegen la personalització i PDF, PNG i SVG sense marca.":"Los planes desbloquean la personalización completa.",
+  "Premium és gratuït durant 6 mesos i no requereix targeta.":"Premium es gratuito durante 6 meses y no requiere tarjeta.",
+  "Torna sense desar":"Volver sin guardar","Recorda el logotip i dos colors corporatius per aplicar-los a qualsevol cartell.":"Guarda el logotipo y dos colores corporativos para aplicarlos a cualquier cartel.",
+  "Logo al faldó":"Logotipo en el pie","Esborra el logo":"Borra el logotipo",
+  "Substitueix la marca uncartell.cat al filet inferior":"Sustituye la marca uncartel.es en el pie inferior",
+  "Elimina el peu del cartell":"Elimina el pie del cartel","Color principal":"Color principal","Color secundari":"Color secundario",
+  "Previsualitza":"Previsualiza","Desa el kit":"Guarda el kit","Títol":"Título","Subtítol":"Subtítulo",
+  "Segueix la indicació":"Sigue la indicación","Admet un únic salt de línia":"Admite un único salto de línea",
+  "Personalització Premium":"Personalización Premium","Subtítol i colors":"Subtítulo y colores",
+  "Color del títol":"Color del título","Color del text principal":"Color del texto principal",
+  "Color de la icona":"Color del icono","La icona ve fixada per cada cartell":"El icono viene definido para cada cartel",
+  "Servei Premium":"Servicio Premium","Activa Premium per demanar un cartell a mida.":"Activa Premium para pedir un cartel a medida.",
+  "Veure els plans":"Ver los planes","Necessites un cartell fet a mida?":"¿Necesitas un cartel a medida?",
+  "Explica’ns el projecte i prepararem una proposta específica per al teu estudi, agència o organització.":"Explícanos el proyecto y prepararemos una propuesta específica para tu estudio, agencia u organización.",
+  "Necessito un cartell personalitzat":"Necesito un cartel personalizado","(estudi/agència)":"(estudio/agencia)",
+  "Explica'ns-ho...":"Cuéntanoslo...","Missatge enviat. Et respondrem en 1–2 dies.":"Mensaje enviado. Te responderemos en 1–2 días.",
+  "Què puc fer sense registrar-me?":"¿Qué puedo hacer sin registrarme?",
+  "Consultar tot el catàleg, editar el títol dels cartells disponibles i descarregar fins a 10 PDF al dia en format A4 o A3.":"Consultar todo el catálogo, editar el título de los carteles disponibles y descargar hasta 10 PDF al día en formato A4 o A3.",
+  "Què inclou Premium?":"¿Qué incluye Premium?",
+  "Permet editar títol, subtítol i colors, i descarregar cartells sense límit. Les funcionalitats que encara estiguin marcades com a “Properament” no formen part de la versió actual.":"Permite editar título, subtítulo y colores, y descargar carteles sin límite. Las funciones marcadas como «Próximamente» todavía no forman parte de la versión actual.",
+  "Premium és realment gratuït durant 6 mesos?":"¿Premium es realmente gratuito durante 6 meses?",
+  "Sí. L’activació promocional costa 0 € , no demana targeta i no genera cap renovació automàtica. Abans d’introduir pagaments informarem clarament de les condicions.":"Sí. La activación promocional cuesta 0 €, no solicita tarjeta y no genera ninguna renovación automática. Antes de introducir pagos informaremos claramente de las condiciones.",
+  "Per què necessito un compte?":"¿Por qué necesito una cuenta?",
+  "El compte permet identificar el teu pla i mantenir la sessió i les preferències entre dispositius. Només et demanem les dades imprescindibles.":"La cuenta permite identificar tu plan y mantener la sesión y las preferencias entre dispositivos. Solo te pedimos los datos imprescindibles.",
+  "En quin format es descarreguen els cartells?":"¿En qué formato se descargan los carteles?",
+  "En PDF d’alta qualitat, preparat per imprimir en A4 o A3. El document descarregat té el fons blanc per evitar problemes d’impressió.":"En PDF de alta calidad, preparado para imprimir en A4 o A3. El documento descargado tiene fondo blanco para evitar problemas de impresión.",
+  "Què passa si esgoto les 10 descàrregues diàries?":"¿Qué ocurre si agoto las 10 descargas diarias?",
+  "El comptador es reinicia automàticament l’endemà. Amb Premium, les descàrregues són il·limitades mentre el pla estigui actiu.":"El contador se reinicia automáticamente al día siguiente. Con Premium, las descargas son ilimitadas mientras el plan esté activo.",
+  "Puc utilitzar els cartells al meu negoci o equipament?":"¿Puedo utilizar los carteles en mi negocio o equipamiento?",
+  "Sí, els pots imprimir i utilitzar per senyalitzar el teu espai. No pots revendre les plantilles, redistribuir-ne el catàleg ni presentar-lo com un projecte propi.":"Sí, puedes imprimirlos y utilizarlos para señalizar tu espacio. No puedes revender las plantillas, redistribuir el catálogo ni presentarlo como un proyecto propio.",
+  "Els meus cartells i logotips queden desats?":"¿Se guardan mis carteles y logotipos?",
+  "Només es desen les dades necessàries per oferir les funcions que activis. Abans de pujar un logotip, comprova que en tens els drets d’ús.":"Solo se guardan los datos necesarios para ofrecer las funciones que actives. Antes de subir un logotipo, comprueba que tienes los derechos de uso.",
+  "Com puc suggerir un cartell nou per al catàleg?":"¿Cómo puedo proponer un cartel nuevo para el catálogo?",
+  "Escriu-nos des de Contacte amb el text, la categoria i l’ús que en faries. Prioritzem propostes curtes, universals i útils per a molta gent.":"Escríbenos desde Contacto con el texto, la categoría y el uso previsto. Priorizamos propuestas breves, universales y útiles para muchas personas.",
+  "Com puc gestionar o eliminar les meves dades?":"¿Cómo puedo gestionar o eliminar mis datos?",
+  "Des de l’àrea de compte pots canviar el nom, tancar la sessió o iniciar la sol·licitud d’eliminació. També pots escriure’ns des de Contacte per exercir els teus drets.":"Desde el área de cuenta puedes cambiar el nombre, cerrar la sesión o iniciar la solicitud de eliminación. También puedes escribirnos desde Contacto para ejercer tus derechos.",
+  "Última actualització: 28 de juliol de 2026.":"Última actualización: 28 de julio de 2026.",
+  "1. Responsable del tractament":"1. Responsable del tratamiento","2. Dades que tractem":"2. Datos que tratamos",
+  "3. Finalitats i base jurídica":"3. Finalidades y base jurídica","4. Destinataris i proveïdors":"4. Destinatarios y proveedores",
+  "5. Transferències internacionals":"5. Transferencias internacionales","6. Conservació":"6. Conservación",
+  "7. Drets":"7. Derechos","8. Seguretat i menors":"8. Seguridad y menores","9. Comunicacions":"9. Comunicaciones",
+  "10. Canvis":"10. Cambios","1. Què són les cookies":"1. Qué son las cookies",
+  "2. Què utilitza ara mateix uncartell.cat":"2. Qué utiliza actualmente uncartel.es","3. Categories":"3. Categorías",
+  "4. Consentiment":"4. Consentimiento","5. Preferències i durada":"5. Preferencias y duración",
+  "6. Relació d’elements tècnics":"6. Relación de elementos técnicos","7. Navegador":"7. Navegador",
+  "1. Titularitat":"1. Titularidad","2. Objecte del servei":"2. Objeto del servicio","3. Ús permès":"3. Uso permitido",
+  "4. Continguts aportats per l’usuari":"4. Contenidos aportados por el usuario","5. Propietat intel·lectual":"5. Propiedad intelectual",
+  "6. Disponibilitat i responsabilitat":"6. Disponibilidad y responsabilidad","7. Comptes":"7. Cuentas",
+  "8. Canvis":"8. Cambios","9. Legislació aplicable":"9. Legislación aplicable",
+  "Accés restringit":"Acceso restringido","Administració":"Administración","Identifica’t per gestionar la biblioteca d’icones.":"Identifícate para gestionar la biblioteca de iconos.",
+  "Usuari":"Usuario","Entra":"Entrar","Prototip local":"Prototipo local","Biblioteca d’icones":"Biblioteca de iconos",
+  "UNCARTELL.CAT":"UNCARTEL.ES","uncartell.cat — repositori de cartells catalans":"uncartel.es — repositorio de carteles",
+  "uncartell.cat es manté amb subscripcions i amb gent com tu. Si el fas servir, considera fer una aportació puntual.":"uncartel.es se mantiene con suscripciones y con gente como tú. Si lo utilizas, considera hacer una aportación puntual.",
+  "Amb gestos com el teu, uncartell.cat pot continuar obert i útil per a tothom.":"Con gestos como el tuyo, uncartel.es puede seguir abierto y ser útil para todo el mundo.",
+  "Canvia l’idioma":"Cambiar idioma","Català":"Catalán","Castellà":"Castellano"
+});
+Object.assign(ES_TRANSLATIONS,{
+  "Sí. L’activació promocional costa 0\u00a0€, no demana targeta i no genera cap renovació automàtica. Abans d’introduir pagaments informarem clarament de les condicions.":"Sí. La activación promocional cuesta 0 €, no solicita tarjeta y no genera ninguna renovación automática. Antes de introducir pagos informaremos claramente de las condiciones.",
+  "SORTIDA":"SALIDA","Continua amb 5 €":"Continúa con 5 €","Altra quantitat":"Otra cantidad",
+  "Informació pendent de completar abans del llançament definitiu:":"Información pendiente de completar antes del lanzamiento definitivo:",
+  "nom i cognoms o raó social del titular, NIF, domicili i correu electrònic de privacitat.":"nombre y apellidos o razón social del titular, NIF, domicilio y correo electrónico de privacidad.",
+  "Responsable: titular d’uncartell.cat. Canal provisional per a qüestions de privacitat: formulari de Contacte. No s’ha designat delegat de protecció de dades perquè, per la naturalesa actual del projecte, no és obligatori.":"Responsable: titular de uncartel.es. Canal provisional para cuestiones de privacidad: formulario de Contacto. No se ha designado delegado de protección de datos porque, por la naturaleza actual del proyecto, no es obligatorio.",
+  "Compte: nom, correu electrònic, identificador d’usuari, pla i dates d’activació.":"Cuenta: nombre, correo electrónico, identificador de usuario, plan y fechas de activación.",
+  "Contacte: nom, correu i contingut del missatge.":"Contacto: nombre, correo y contenido del mensaje.",
+  "Funcionament: preferències, consentiment de cookies i recompte de descàrregues.":"Funcionamiento: preferencias, consentimiento de cookies y recuento de descargas.",
+  "Personalització: textos, colors i fitxers que decideixis incorporar quan aquesta funció estigui disponible.":"Personalización: textos, colores y archivos que decidas incorporar cuando esta función esté disponible.",
+  "Crear el compte, iniciar sessió i prestar el servei: execució de la relació amb l’usuari.":"Crear la cuenta, iniciar sesión y prestar el servicio: ejecución de la relación con el usuario.",
+  "Respondre consultes i protegir la plataforma: interès legítim i mesures precontractuals, segons el cas.":"Responder consultas y proteger la plataforma: interés legítimo y medidas precontractuales, según el caso.",
+  "Enviar avisos imprescindibles sobre seguretat, servei o canvis legals: execució del servei i compliment d’obligacions legals.":"Enviar avisos imprescindibles sobre seguridad, servicio o cambios legales: ejecución del servicio y cumplimiento de obligaciones legales.",
+  "Enviar novetats comercials: només amb consentiment específic, opcional i revocable.":"Enviar novedades comerciales: solo con consentimiento específico, opcional y revocable.",
+  "No venem les dades. Utilitzem GitHub Pages per publicar el web i Supabase per a autenticació i base de dades. Aquests proveïdors poden tractar dades per compte nostre d’acord amb les seves condicions i mesures de seguretat. Si s’incorporen nous proveïdors —per exemple, correu transaccional o pagaments— actualitzarem aquesta política abans d’activar-los.":"No vendemos los datos. Utilizamos GitHub Pages para publicar la web y Supabase para la autenticación y la base de datos. Estos proveedores pueden tratar datos por cuenta nuestra de acuerdo con sus condiciones y medidas de seguridad. Si incorporamos nuevos proveedores —por ejemplo, correo transaccional o pagos— actualizaremos esta política antes de activarlos.",
+  "Alguns proveïdors tecnològics poden operar fora de l’Espai Econòmic Europeu. Quan sigui aplicable, el tractament s’empararà en una decisió d’adequació o en garanties reconegudes pel RGPD, com les clàusules contractuals tipus.":"Algunos proveedores tecnológicos pueden operar fuera del Espacio Económico Europeo. Cuando corresponda, el tratamiento se amparará en una decisión de adecuación o en garantías reconocidas por el RGPD, como las cláusulas contractuales tipo.",
+  "Les dades del compte es conserven mentre estigui actiu i, després, durant el temps imprescindible per resoldre responsabilitats. Les consultes es conserven fins a 24 mesos. El consentiment de màrqueting es conserva fins que el retiris, juntament amb la prova necessària del consentiment. Les dades subjectes a obligació legal es conservaran durant el termini exigible.":"Los datos de la cuenta se conservan mientras esté activa y, después, durante el tiempo imprescindible para resolver responsabilidades. Las consultas se conservan hasta 24 meses. El consentimiento de marketing se conserva hasta que lo retires, junto con la prueba necesaria del consentimiento. Los datos sujetos a obligación legal se conservarán durante el plazo exigible.",
+  "Pots sol·licitar accés, rectificació, supressió, portabilitat, limitació o oposició, i retirar qualsevol consentiment, mitjançant Contacte. Podrem demanar informació raonable per verificar la identitat. També pots presentar una reclamació davant l’Agència Espanyola de Protecció de Dades.":"Puedes solicitar acceso, rectificación, supresión, portabilidad, limitación u oposición, y retirar cualquier consentimiento, mediante Contacto. Podremos pedir información razonable para verificar la identidad. También puedes presentar una reclamación ante la Agencia Española de Protección de Datos.",
+  "Apliquem mesures proporcionades per evitar accessos no autoritzats. El servei no s’adreça específicament a menors de 14 anys ni pretén recollir-ne dades.":"Aplicamos medidas proporcionadas para evitar accesos no autorizados. El servicio no se dirige específicamente a menores de 14 años ni pretende recoger sus datos.",
+  "Els avisos estrictament necessaris per al compte o per canvis de privacitat no són publicitat. Les novetats del projecte només s’enviaran si marques la casella corresponent, que estarà desmarcada per defecte i inclourà una opció senzilla de baixa.":"Los avisos estrictamente necesarios para la cuenta o por cambios de privacidad no son publicidad. Las novedades del proyecto solo se enviarán si marcas la casilla correspondiente, que estará desmarcada por defecto e incluirá una opción sencilla de baja.",
+  "Publicarem aquí la versió vigent. Si un canvi afecta de manera rellevant el tractament de les dades, també ho comunicarem al correu associat al compte.":"Publicaremos aquí la versión vigente. Si un cambio afecta de forma relevante al tratamiento de los datos, también lo comunicaremos al correo asociado a la cuenta.",
+  "Petits fitxers que es guarden al teu navegador i permeten que la web recordi informació sobre la teva visita.":"Pequeños archivos que se guardan en tu navegador y permiten que la web recuerde información sobre tu visita.",
+  "Fem servir emmagatzematge local i elements tècnics necessaris per conservar la sessió de Supabase, la preferència de cookies i el recompte diari de descàrregues. Són imprescindibles per prestar les funcions sol·licitades i no s’utilitzen per fer publicitat ni perfils.":"Utilizamos almacenamiento local y elementos técnicos necesarios para conservar la sesión de Supabase, la preferencia de cookies y el recuento diario de descargas. Son imprescindibles para prestar las funciones solicitadas y no se utilizan para publicidad ni perfiles.",
+  "sessió, seguretat, preferències i límit de descàrregues. Sempre actives.":"sesión, seguridad, preferencias y límite de descargas. Siempre activas.",
+  "permetrien mesurar l’ús del web. Actualment no n’hi ha cap d’activa.":"permitirían medir el uso de la web. Actualmente no hay ninguna activa.",
+  "Publicitàries:":"Publicitarias:","permetrien mostrar o mesurar anuncis. Actualment no n’hi ha cap d’activa.":"permitirían mostrar o medir anuncios. Actualmente no hay ninguna activa.",
+  "Les cookies no necessàries només es carregaran després d’una acceptació expressa. “Accepta” i “Rebutja” es mostren amb la mateixa jerarquia. No considerem que continuar navegant sigui consentiment.":"Las cookies no necesarias solo se cargarán después de una aceptación expresa. «Aceptar» y «Rechazar» se muestran con la misma jerarquía. No consideramos que seguir navegando sea consentimiento.",
+  "La selecció es desa al navegador durant un màxim de 12 mesos, o fins que la canviïs. Pots retirar el consentiment en qualsevol moment des de “Configura les cookies” al peu del web. Retirar-lo no afecta la licitud del tractament anterior.":"La selección se guarda en el navegador durante un máximo de 12 meses, o hasta que la cambies. Puedes retirar el consentimiento en cualquier momento desde «Configura las cookies» en el pie de la web. Retirarlo no afecta a la licitud del tratamiento anterior.",
+  "recorda la selecció; 12 mesos.":"recuerda la selección; 12 meses.","controla el límit diari; fins que s’elimina l’emmagatzematge local.":"controla el límite diario; hasta que se elimina el almacenamiento local.",
+  "manté la sessió iniciada; fins a tancar sessió o caducar.":"mantiene la sesión iniciada; hasta cerrar sesión o caducar.",
+  "També pots eliminar o bloquejar l’emmagatzematge des del navegador. Si bloqueges els elements necessaris, l’inici de sessió o el recompte de descàrregues poden deixar de funcionar.":"También puedes eliminar o bloquear el almacenamiento desde el navegador. Si bloqueas los elementos necesarios, el inicio de sesión o el recuento de descargas pueden dejar de funcionar.",
+  "Abans del llançament definitiu cal completar:":"Antes del lanzamiento definitivo hay que completar:",
+  "titular, NIF, domicili, correu de contacte i, si escau, dades registrals.":"titular, NIF, domicilio, correo de contacto y, si corresponde, datos registrales.",
+  "uncartell.cat és un servei digital dedicat a facilitar cartells i recursos de senyalització. El titular i responsable legal del lloc és la persona o entitat identificada en aquest apartat quan se’n completin les dades.":"uncartel.es es un servicio digital dedicado a facilitar carteles y recursos de señalización. El titular y responsable legal del sitio es la persona o entidad identificada en este apartado cuando se completen los datos.",
+  "El web permet consultar, personalitzar i descarregar cartells. Les funcions, límits i plans vigents són els que es mostren en cada moment a la interfície.":"La web permite consultar, personalizar y descargar carteles. Las funciones, límites y planes vigentes son los que se muestran en cada momento en la interfaz.",
+  "Pots imprimir i utilitzar els cartells per al teu negoci, equipament, activitat o ús personal. No pots revendre les plantilles, redistribuir massivament el catàleg, automatitzar-ne l’extracció ni presentar el servei o els dissenys com a propis.":"Puedes imprimir y utilizar los carteles para tu negocio, equipamiento, actividad o uso personal. No puedes revender las plantillas, redistribuir masivamente el catálogo, automatizar su extracción ni presentar el servicio o los diseños como propios.",
+  "Conserves els drets sobre textos, logotips i fitxers que incorporis. En pujar-los declares que en tens autorització suficient i ens permets tractar-los únicament per prestar la funció sol·licitada.":"Conservas los derechos sobre los textos, logotipos y archivos que incorpores. Al subirlos declaras que tienes autorización suficiente y nos permites tratarlos únicamente para prestar la función solicitada.",
+  "La marca, la interfície, la selecció del catàleg i els dissenys originals estan protegits per la normativa aplicable. Les icones de tercers es regeixen per les llicències corresponents, inclosa la llicència de Lucide quan sigui aplicable.":"La marca, la interfaz, la selección del catálogo y los diseños originales están protegidos por la normativa aplicable. Los iconos de terceros se rigen por las licencias correspondientes, incluida la licencia de Lucide cuando sea aplicable.",
+  "Treballem perquè el servei sigui fiable, però no garantim disponibilitat ininterrompuda. Abans d’imprimir o instal·lar un cartell, l’usuari ha de revisar-ne el text, la mida, els colors i l’adequació normativa, especialment en seguretat, accessibilitat o emergències.":"Trabajamos para que el servicio sea fiable, pero no garantizamos una disponibilidad ininterrumpida. Antes de imprimir o instalar un cartel, el usuario debe revisar el texto, el tamaño, los colores y la adecuación normativa, especialmente en seguridad, accesibilidad o emergencias.",
+  "Ets responsable de mantenir les credencials segures i d’avisar-nos si detectes un ús no autoritzat. Podem limitar comptes que facin un ús abusiu o contrari a aquestes condicions.":"Eres responsable de mantener seguras tus credenciales y de avisarnos si detectas un uso no autorizado. Podemos limitar cuentas que hagan un uso abusivo o contrario a estas condiciones.",
+  "Podem modificar el catàleg o aquestes condicions. Els canvis rellevants s’anunciaran al web i, quan afectin un compte, es podran comunicar per correu.":"Podemos modificar el catálogo o estas condiciones. Los cambios relevantes se anunciarán en la web y, cuando afecten a una cuenta, se podrán comunicar por correo.",
+  "S’aplica la legislació espanyola i europea. Qualsevol controvèrsia se sotmetrà als jutjats competents d’acord amb la normativa de consumidors i usuaris que resulti aplicable.":"Se aplica la legislación española y europea. Cualquier controversia se someterá a los juzgados competentes de acuerdo con la normativa de consumidores y usuarios que resulte aplicable."
+});
+Object.assign(ES_TRANSLATIONS,{
+  ": recorda la selecció; 12 mesos.":": recuerda la selección; 12 meses.",
+  ": controla el límit diari; fins que s’elimina l’emmagatzematge local.":": controla el límite diario; hasta que se elimina el almacenamiento local.",
+  ": manté la sessió iniciada; fins a tancar sessió o caducar.":": mantiene la sesión iniciada; hasta cerrar sesión o caducar.",
+  "Obre el menú":"Abrir el menú","Tanca el menú":"Cerrar el menú","Accés a l’administració":"Acceso a la administración",
+  "Gestiona les icones i els textos del catàleg. Els canvis es desen només en aquest navegador i no es publica res.":"Gestiona los iconos y los textos del catálogo. Los cambios se guardan solo en este navegador y no se publica nada.",
+  "+ Nova icona":"+ Nuevo icono","Totes les categories":"Todas las categorías","Tots els estats":"Todos los estados",
+  "Actives":"Activos","Inactives":"Inactivos","Cerca per nom, icona o text…":"Buscar por nombre, icono o texto…"
+});
+Object.assign(ES_TRANSLATIONS,{
+  "Quina mida vols?":"¿Qué tamaño quieres?","Confirma el teu pla":"Confirma tu plan",
+  "El teu gest manté viu el projecte 💚":"Tu gesto mantiene vivo el proyecto 💚",
+  "És una aportació puntual, sense subscripció ni renovació automàtica.":"Es una aportación puntual, sin suscripción ni renovación automática.",
+  "Torna als cartells":"Volver a los carteles","Cartell a mida per a estudi o agència":"Cartel a medida para estudio o agencia",
+  "Correu de contacte":"Correo de contacto","Envia el briefing":"Envía el briefing",
+  "Hem rebut el teu projecte. Et respondrem amb una primera valoració en un màxim de 3 dies laborables.":"Hemos recibido tu proyecto. Te responderemos con una primera valoración en un máximo de 3 días laborables.",
+  "PLA ACTUAL":"PLAN ACTUAL","Torna als plans":"Volver a los planes","Pla gratuït":"Plan gratuito",
+  "Consulta i descarrega les factures del teu compte.":"Consulta y descarga las facturas de tu cuenta.",
+  "Límit diari assolit":"Límite diario alcanzado",
+  "Has fet servir les 10 descàrregues gratuïtes d’avui. Tria un passi per tenir-ne d’il·limitades.":"Has utilizado las 10 descargas gratuitas de hoy. Elige un pase para obtener descargas ilimitadas.",
+  "Generant…":"Generando…","No s’ha pogut generar el PDF.":"No se ha podido generar el PDF.",
+  "Tria com vols continuar":"Elige cómo quieres continuar","Pla actual":"Plan actual","Torna a Basic":"Volver a Basic",
+  "Crea el compte i gaudeix-ne durant 6 mesos. Sense targeta.":"Crea la cuenta y disfrútala durante 6 meses. Sin tarjeta.",
+  "Introdueix les teves dades per accedir o crear el compte.":"Introduce tus datos para acceder o crear la cuenta.",
+  "Continua amb correu":"Continuar con correo","Logo del kit":"Logotipo del kit",
+  "Previsualització aplicada sense desar.":"Previsualización aplicada sin guardar.",
+  "Kit desat i preparat per als pròxims cartells.":"Kit guardado y preparado para los próximos carteles.",
+  "Introdueix un import":"Introduce un importe","Pla Basic":"Plan Basic","Basic · sense registre":"Basic · sin registro",
+  "Vols tornar a Basic?":"¿Quieres volver a Basic?",
+  "Perdràs les descàrregues il·limitades i les opcions de personalització Premium.":"Perderás las descargas ilimitadas y las opciones de personalización Premium.",
+  "Sí, torna a Basic":"Sí, volver a Basic","Vols deixar Premium?":"¿Quieres dejar Premium?",
+  "Cancel·la la subscripció":"Cancelar la suscripción","Confirma la cancel·lació":"Confirma la cancelación",
+  "Eliminarem el compte i totes les dades associades. Aquesta acció no es pot desfer.":"Eliminaremos la cuenta y todos los datos asociados. Esta acción no se puede deshacer.",
+  "Sí, elimina el compte":"Sí, eliminar la cuenta",
+  "Perdràs la personalització i les descàrregues il·limitades. El teu compte continuarà actiu amb el pla Light.":"Perderás la personalización y las descargas ilimitadas. Tu cuenta seguirá activa con el plan Light.",
+  "Mantindràs l’accés fins al final del període vigent. Després, el compte tornarà al pla Light.":"Mantendrás el acceso hasta el final del período vigente. Después, la cuenta volverá al plan Light.",
+  "Sí, passa’m a Light":"Sí, cambiar a Light","Restaura la demo":"Restaurar la demo",
+  "Categories":"Categorías","Arxivades":"Archivadas","icones visibles":"iconos visibles",
+  "Editar icona":"Editar icono","Nova icona":"Nuevo icono","Afegeix una icona":"Añade un icono",
+  "Pots substituir el dibuix sense perdre els textos vinculats.":"Puedes sustituir el dibujo sin perder los textos vinculados.",
+  "Per crear-la, selecciona un fitxer SVG.":"Para crearla, selecciona un archivo SVG.",
+  "Fitxer SVG":"Archivo SVG","Penja o substitueix l’SVG":"Sube o sustituye el SVG","Nom visible":"Nombre visible",
+  "Cartells associats":"Carteles asociados","Títol · CAT / ES":"Título · CAT / ES","Categoria · CAT / ES":"Categoría · CAT / ES",
+  "Subcategoria · CAT / ES":"Subcategoría · CAT / ES","+ Afegeix un títol":"+ Añadir un título",
+  "Cada fila crea un cartell amb aquesta icona i la seva classificació pròpia.":"Cada fila crea un cartel con este icono y su clasificación.",
+  "Elimina":"Eliminar","Desa els canvis":"Guardar los cambios","Organització del catàleg":"Organización del catálogo",
+  "Categories i subcategories":"Categorías y subcategorías",
+  "Cada categoria i subcategoria té una versió CAT i ES vinculada. Mantén el mateix ordre a les dues llistes de subcategories.":"Cada categoría y subcategoría tiene una versión CAT y ES vinculada. Mantén el mismo orden en las dos listas de subcategorías.",
+  "+ Nova categoria":"+ Nueva categoría","Desa l’organització":"Guardar la organización",
+  "Usuari o contrasenya incorrectes.":"Usuario o contraseña incorrectos."
+});
+let catalogI18n = {categories:{},subcategories:{}};
+const translatedCatalogValue = value =>
+  catalogI18n.categories[value] ||
+  Object.values(catalogI18n.subcategories).find(group => group?.[value])?.[value] ||
+  value;
+const spanishValue = value => ES_TRANSLATIONS[value] || translatedCatalogValue(value);
+const t = value => currentLanguage === 'es' ? spanishValue(value) : value;
+const originalTextNodes = new WeakMap();
+const originalAttributes = new WeakMap();
+function translateDom(root=document.body){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node;
+  while((node = walker.nextNode())){
+    if(node.parentElement?.closest('script,style')) continue;
+    if(!originalTextNodes.has(node)) originalTextNodes.set(node,node.nodeValue);
+    const source = originalTextNodes.get(node);
+    const clean = source.trim();
+    if(!clean) continue;
+    const translated = t(clean);
+    node.nodeValue = source.replace(clean,translated);
+  }
+  const elements = root.querySelectorAll ? root.querySelectorAll('[placeholder],[aria-label],[title]') : [];
+  elements.forEach(element => {
+    if(!originalAttributes.has(element)){
+      originalAttributes.set(element,Object.fromEntries(['placeholder','aria-label','title'].map(name => [name,element.getAttribute(name)])));
+    }
+    const originals = originalAttributes.get(element);
+    Object.entries(originals).forEach(([name,value]) => {
+      if(value !== null) element.setAttribute(name,t(value));
+    });
+  });
+}
+function applyLanguage(){
+  document.documentElement.lang = currentLanguage;
+  document.documentElement.dataset.lang = currentLanguage;
+  document.title = currentLanguage === 'es' ? 'uncartel.es' : 'uncartell.cat';
+  document.getElementById('logoHome').innerHTML = currentLanguage === 'es'
+    ? 'uncartel<span class="dot">.</span>es'
+    : 'uncartell<span class="dot">.</span>cat';
+  document.querySelectorAll('[data-language]').forEach(button => {
+    button.classList.toggle('active',button.dataset.language === currentLanguage);
+  });
+  translateDom();
+}
 const requestedMode = new URLSearchParams(window.location.search).get('mode');
 const PRODUCT_MODE = requestedMode === 'free' ? 'free' : requestedMode === 'launch' ? 'launch' : 'premium';
 document.body.classList.add(`mode-${PRODUCT_MODE}`);
@@ -2366,12 +2804,24 @@ const DEFAULT_CATEGORY_TAXONOMY = Object.fromEntries(
   Object.entries(PROJECT_CATALOG_V2).map(([category,subcategories]) => [category,Object.keys(subcategories)])
 );
 const CATEGORY_TAXONOMY_STORE = 'uncartell_category_taxonomy_v4';
+const CATEGORY_I18N_STORE = 'uncartell_category_i18n_v1';
 let savedCategoryTaxonomy = null;
 try{ savedCategoryTaxonomy = JSON.parse(localStorage.getItem(CATEGORY_TAXONOMY_STORE) || 'null'); }catch(error){}
 const categoryTaxonomy = savedCategoryTaxonomy && typeof savedCategoryTaxonomy === 'object'
   ? savedCategoryTaxonomy
   : JSON.parse(JSON.stringify(DEFAULT_CATEGORY_TAXONOMY));
 const categories = Object.keys(categoryTaxonomy);
+try{
+  const savedCatalogI18n = JSON.parse(localStorage.getItem(CATEGORY_I18N_STORE) || 'null');
+  if(savedCatalogI18n?.categories && savedCatalogI18n?.subcategories) catalogI18n = savedCatalogI18n;
+}catch(error){}
+categories.forEach(category => {
+  catalogI18n.categories[category] ||= ES_TRANSLATIONS[category] || category;
+  catalogI18n.subcategories[category] ||= {};
+  categoryTaxonomy[category].forEach(subcategory => {
+    catalogI18n.subcategories[category][subcategory] ||= ES_TRANSLATIONS[subcategory] || subcategory;
+  });
+});
 
 function classifyPoster(source, word){
   const value = word.toLocaleUpperCase('ca');
@@ -2434,6 +2884,8 @@ const posterDefs = selectedIconCatalog.flatMap((entry, iconIndex) =>
 
 let activeCategory = categories[0];
 let activeSubcategory = categoryTaxonomy[activeCategory][0];
+const posterDisplayName = def => currentLanguage === 'es' ? (def.nameEs || t(def.name)) : def.name;
+const posterDisplayTag = def => currentLanguage === 'es' ? (def.subEs || t(def.tag)) : def.tag;
 
 function posterSVG(def, opts={}){
   const isPremiumPoster = opts.premium === true;
@@ -2443,8 +2895,9 @@ function posterSVG(def, opts={}){
   const backgroundColor = opts.background || '#FAFAF8';
   const iconColor = opts.iconColor || def.iconColor || '#E5372A';
   const fontFamily = opts.fontFamily || 'Helvetica Neue, Helvetica, Arial, sans-serif';
-  const word = opts.word || def.word;
-  const sub = opts.sub !== undefined ? opts.sub : def.sub;
+  const word = opts.word || (currentLanguage === 'es' ? (def.wordEs || t(def.word)) : def.word);
+  const sub = opts.sub !== undefined ? opts.sub : (currentLanguage === 'es' ? (def.subEs || t(def.sub)) : def.sub);
+  const posterBrand = currentLanguage === 'es' ? 'UNCARTEL.ES' : 'UNCARTELL.CAT';
   const icon = lucideIcons[def.icon] || lucideIcons['info'];
   const iconViewBox = iconViewBoxes[def.icon] || '0 0 24 24';
   const titleSize = 20;
@@ -2484,7 +2937,7 @@ function posterSVG(def, opts={}){
     <svg x="114" y="28" width="69" height="69" viewBox="${iconViewBox}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:${iconColor}">${icon}</svg>
     ${titleMarkup}
     ${isPremiumPoster ? (safeSubLines.length > 1 ? `<text text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f"><tspan x="148.5" y="${subtitleY}">${safeSubLines[0]}</tspan><tspan x="148.5" y="${subtitleY + 11}">${safeSubLines[1]}</tspan></text>` : `<text x="148.5" y="${subtitleY}" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f">${safeSubLines[0] || ''}</text>`) : ''}
-    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" ${isPremiumPoster ? 'stroke="#3D3B36" stroke-width="0.48"' : ''}/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">UNCARTELL.CAT</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">UNCARTELL.CAT</text>`}`}
+    ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" ${isPremiumPoster ? 'stroke="#3D3B36" stroke-width="0.48"' : ''}/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">${posterBrand}</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="6.5" fill="#3D3B36">${posterBrand}</text>`}`}
   </svg>`;
 }
 
@@ -2508,7 +2961,7 @@ function renderCategoryTabs(){
   filterTabs.innerHTML = '';
   categories.forEach(cat => {
     const btn = document.createElement('button');
-    btn.textContent = cat;
+    btn.textContent = t(cat);
     btn.classList.toggle('active', cat === activeCategory);
     btn.addEventListener('click', () => {
       activeCategory = cat;
@@ -2524,10 +2977,10 @@ function renderCategoryTabs(){
 
 function renderSubcategoryTabs(){
   subcategoryTabs.innerHTML = '';
-  subcategoryCurrent.textContent = activeSubcategory;
+  subcategoryCurrent.textContent = t(activeSubcategory);
   categoryTaxonomy[activeCategory].forEach(subcat => {
     const btn = document.createElement('button');
-    btn.textContent = subcat;
+    btn.textContent = t(subcat);
     btn.classList.toggle('active', subcat === activeSubcategory);
     btn.setAttribute('aria-pressed', subcat === activeSubcategory ? 'true' : 'false');
     btn.addEventListener('click', () => {
@@ -2550,14 +3003,14 @@ function renderGrid(){
     const realIndex = posterDefs.indexOf(def);
     const card = document.createElement('div');
     card.className = 'poster-card';
-    const personalizeAction = PRODUCT_MODE === 'free' ? '' : `<button class="quicklink-btn personalize-quicklink" data-idx="${realIndex}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 0 20c1.4 0 2-1 2-2 0-.6-.3-1.1-.6-1.5-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-5-4-9.5-9-9.5z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="7" r="1.1" fill="currentColor" stroke="none"/><circle cx="14" cy="6.5" r="1.1" fill="currentColor" stroke="none"/><path d="M16 15.5l3 3.2c.5.5.5 1.4 0 1.9s-1.4.5-1.9 0L14 17.4" stroke-linecap="round"/></svg>Personalitza</button>`;
+    const personalizeAction = PRODUCT_MODE === 'free' ? '' : `<button class="quicklink-btn personalize-quicklink" data-idx="${realIndex}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 0 20c1.4 0 2-1 2-2 0-.6-.3-1.1-.6-1.5-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-5-4-9.5-9-9.5z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="7" r="1.1" fill="currentColor" stroke="none"/><circle cx="14" cy="6.5" r="1.1" fill="currentColor" stroke="none"/><path d="M16 15.5l3 3.2c.5.5.5 1.4 0 1.9s-1.4.5-1.9 0L14 17.4" stroke-linecap="round"/></svg>${t('Personalitza')}</button>`;
     card.innerHTML = `<div class="poster-paper"><div class="poster-frame">${posterSVG(def)}
         <div class="quicklink-row">
-          <button class="quicklink-btn download-quicklink" data-idx="${realIndex}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Descarrega</button>
+          <button class="quicklink-btn download-quicklink" data-idx="${realIndex}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>${t('Descarrega')}</button>
           ${personalizeAction}
         </div>
       </div></div>
-      <div class="poster-meta"><span class="poster-name">${def.name}</span><span class="poster-tag">${def.tag}</span></div>`;
+      <div class="poster-meta"><span class="poster-name">${posterDisplayName(def)}</span><span class="poster-tag">${posterDisplayTag(def)}</span></div>`;
     card.querySelector('.poster-frame').addEventListener('click', (e) => {
       if(e.target.closest('.quicklink-row')) return;
       openSizeModal(def);
@@ -2582,7 +3035,7 @@ renderGrid();
 const ADMIN_ICON_STORE = 'uncartell_admin_icons_v6';
 const adminBaseCatalog = [...PROJECT_CATALOG_ENTRIES.reduce((groups,entry) => {
   if(!groups.has(entry.icon)) groups.set(entry.icon,{icon:entry.icon,assignments:[]});
-  groups.get(entry.icon).assignments.push({text:entry.text,category:entry.category,subcategory:entry.subcategory,order:entry.order,color:entry.color});
+  groups.get(entry.icon).assignments.push({text:entry.text,textEs:spanishValue(entry.text),category:entry.category,subcategory:entry.subcategory,order:entry.order,color:entry.color});
   return groups;
 },new Map()).values()];
 let adminIcons = [];
@@ -2621,6 +3074,7 @@ function normalizeAdminIcon(item){
     const validSubcategories = categoryTaxonomy[category] || [];
     return {
       text:String(assignment.text || '').trim(),
+      textEs:String(assignment.textEs || spanishValue(String(assignment.text || '').trim())).trim(),
       category,
       subcategory:validSubcategories.includes(assignment.subcategory) ? assignment.subcategory : (validSubcategories[0] || ''),
       order:Number.isFinite(assignment.order) ? assignment.order : Number.MAX_SAFE_INTEGER,
@@ -2677,11 +3131,15 @@ function syncAdminCatalog(){
   const rebuilt = activeItems.flatMap((item, iconIndex) =>
     item.assignments.map((assignment, textIndex) => ({
       word:assignment.text,
+      wordEs:assignment.textEs || spanishValue(assignment.text),
       name:assignment.text.charAt(0) + assignment.text.slice(1).toLocaleLowerCase('ca'),
+      nameEs:(assignment.textEs || spanishValue(assignment.text)).charAt(0) + (assignment.textEs || spanishValue(assignment.text)).slice(1).toLocaleLowerCase('es'),
       tag:assignment.subcategory,
       color:(iconIndex + textIndex) % palette.length,
       sub:assignment.subcategory,
+      subEs:catalogI18n.subcategories[assignment.category]?.[assignment.subcategory] || spanishValue(assignment.subcategory),
       cat:assignment.category,
+      catEs:catalogI18n.categories[assignment.category] || spanishValue(assignment.category),
       subcat:assignment.subcategory,
       icon:item.key,
       order:assignment.order,
@@ -2701,14 +3159,14 @@ function syncAdminCatalog(){
 function adminPopulateCategoryControls(){
   const filter = document.getElementById('adminCategoryFilter');
   const filterValue = filter.value;
-  filter.innerHTML = '<option value="">Totes les categories</option>' + categories.map(category => `<option value="${escapeAdminHtml(category)}">${escapeAdminHtml(category)}</option>`).join('');
+  filter.innerHTML = '<option value="">Totes les categories</option>' + categories.map(category => `<option value="${escapeAdminHtml(category)}">${escapeAdminHtml(category)} · ${escapeAdminHtml(catalogI18n.categories[category] || spanishValue(category))}</option>`).join('');
   filter.value = filterValue;
 }
 
 function adminSubcategoryOptions(category, selected=''){
   const options = categoryTaxonomy[category] || [];
   const value = options.includes(selected) ? selected : (options[0] || '');
-  return options.map(subcategory => `<option value="${escapeAdminHtml(subcategory)}" ${subcategory === value ? 'selected' : ''}>${escapeAdminHtml(subcategory)}</option>`).join('');
+  return options.map(subcategory => `<option value="${escapeAdminHtml(subcategory)}" ${subcategory === value ? 'selected' : ''}>${escapeAdminHtml(subcategory)} · ${escapeAdminHtml(catalogI18n.subcategories[category]?.[subcategory] || spanishValue(subcategory))}</option>`).join('');
 }
 
 function adminAssignmentRow(assignment={}){
@@ -2716,8 +3174,11 @@ function adminAssignmentRow(assignment={}){
   return `
     <div class="admin-assignment-row" data-order="${Number.isFinite(assignment.order) ? assignment.order : ''}" data-color="${escapeAdminHtml(assignment.color || '')}">
       <span class="admin-assignment-drag" draggable="true" role="button" tabindex="0" aria-label="Arrossega per reordenar" title="Arrossega per reordenar">⠿</span>
-      <input class="admin-assignment-text" type="text" required maxlength="36" placeholder="Títol del cartell" value="${escapeAdminHtml(assignment.text || '')}" aria-label="Títol">
-      <select class="admin-assignment-category" aria-label="Categoria">${categories.map(option => `<option value="${escapeAdminHtml(option)}" ${option === category ? 'selected' : ''}>${escapeAdminHtml(option)}</option>`).join('')}</select>
+      <div class="admin-bilingual-field">
+        <label class="admin-bilingual-input"><span>CAT</span><input class="admin-assignment-text" type="text" required maxlength="36" placeholder="Títol català" value="${escapeAdminHtml(assignment.text || '')}" aria-label="Títol en català"></label>
+        <label class="admin-bilingual-input"><span>ES</span><input class="admin-assignment-text-es" type="text" required maxlength="36" placeholder="Título castellano" value="${escapeAdminHtml(assignment.textEs || spanishValue(assignment.text || ''))}" aria-label="Títol en castellà"></label>
+      </div>
+      <select class="admin-assignment-category" aria-label="Categoria">${categories.map(option => `<option value="${escapeAdminHtml(option)}" ${option === category ? 'selected' : ''}>${escapeAdminHtml(option)} · ${escapeAdminHtml(catalogI18n.categories[option] || spanishValue(option))}</option>`).join('')}</select>
       <select class="admin-assignment-subcategory" aria-label="Subcategoria">${adminSubcategoryOptions(category, assignment.subcategory)}</select>
       <button class="admin-assignment-remove" type="button" aria-label="Elimina aquest títol">×</button>
     </div>`;
@@ -2728,14 +3189,20 @@ function renderAdminAssignments(assignments){
 }
 
 function adminTaxonomyRow(name='', subcategories=[]){
+  const nameEs = catalogI18n.categories[name] || spanishValue(name);
+  const subcategoriesEs = subcategories.map(subcategory => catalogI18n.subcategories[name]?.[subcategory] || spanishValue(subcategory));
   return `
     <div class="admin-taxonomy-row" data-original-category="${escapeAdminHtml(name)}">
       <div class="admin-taxonomy-category">
-        <input class="admin-taxonomy-name" type="text" required maxlength="32" placeholder="Nom de la categoria" value="${escapeAdminHtml(name)}" aria-label="Nom de la categoria">
+        <input class="admin-taxonomy-name" type="text" required maxlength="32" placeholder="Categoria en català" value="${escapeAdminHtml(name)}" aria-label="Nom de la categoria en català">
+        <input class="admin-taxonomy-name-es" type="text" required maxlength="32" placeholder="Categoría en castellano" value="${escapeAdminHtml(nameEs)}" aria-label="Nom de la categoria en castellà">
         <button class="admin-assignment-remove admin-taxonomy-remove" type="button" aria-label="Elimina la categoria">×</button>
       </div>
-      <textarea class="admin-taxonomy-subcategories" required aria-label="Subcategories" placeholder="Una subcategoria per línia">${escapeAdminHtml(subcategories.join('\n'))}</textarea>
-      <small>Una subcategoria per línia.</small>
+      <div class="admin-taxonomy-languages">
+        <div class="admin-taxonomy-language"><label>CAT · Subcategories</label><textarea class="admin-taxonomy-subcategories" required aria-label="Subcategories en català" placeholder="Una subcategoria per línia">${escapeAdminHtml(subcategories.join('\n'))}</textarea></div>
+        <div class="admin-taxonomy-language"><label>ES · Subcategorías</label><textarea class="admin-taxonomy-subcategories-es" required aria-label="Subcategories en castellà" placeholder="Una subcategoría por línea">${escapeAdminHtml(subcategoriesEs.join('\n'))}</textarea></div>
+      </div>
+      <small>Les dues llistes han de tenir el mateix nombre de línies.</small>
     </div>`;
 }
 
@@ -2763,7 +3230,10 @@ function renderAdminLibrary(){
   const category = document.getElementById('adminCategoryFilter').value;
   const status = document.getElementById('adminStatusFilter').value;
   const list = adminIcons.filter(item => {
-    const searchable = [item.name,item.key,...item.assignments.flatMap(assignment => [assignment.text,assignment.category,assignment.subcategory])].join(' ').toLocaleLowerCase('ca');
+    const searchable = [item.name,item.key,...item.assignments.flatMap(assignment => [
+      assignment.text,assignment.textEs,assignment.category,catalogI18n.categories[assignment.category],
+      assignment.subcategory,catalogI18n.subcategories[assignment.category]?.[assignment.subcategory]
+    ])].join(' ').toLocaleLowerCase('ca');
     return (!search || searchable.includes(search)) && (!category || item.assignments.some(assignment => assignment.category === category)) && (!status || item.status === status);
   });
   document.getElementById('adminVisibleCount').textContent = list.length;
@@ -2867,10 +3337,12 @@ document.getElementById('adminTaxonomyForm').addEventListener('submit', event =>
   const definitions = rows.map(row => ({
     original:row.dataset.originalCategory,
     name:row.querySelector('.admin-taxonomy-name').value.trim(),
-    subcategories:[...new Set(row.querySelector('.admin-taxonomy-subcategories').value.split(/\r?\n/).map(value => value.trim()).filter(Boolean))]
+    nameEs:row.querySelector('.admin-taxonomy-name-es').value.trim(),
+    subcategories:row.querySelector('.admin-taxonomy-subcategories').value.split(/\r?\n/).map(value => value.trim()).filter(Boolean),
+    subcategoriesEs:row.querySelector('.admin-taxonomy-subcategories-es').value.split(/\r?\n/).map(value => value.trim()).filter(Boolean)
   }));
-  if(definitions.some(definition => !definition.name || !definition.subcategories.length)){
-    showAdminToast('Cada categoria necessita un nom i una subcategoria.');
+  if(definitions.some(definition => !definition.name || !definition.nameEs || !definition.subcategories.length || definition.subcategories.length !== definition.subcategoriesEs.length)){
+    showAdminToast('Completa CAT i ES amb el mateix nombre de subcategories.');
     return;
   }
   if(new Set(definitions.map(definition => definition.name.toLocaleLowerCase('ca'))).size !== definitions.length){
@@ -2882,6 +3354,10 @@ document.getElementById('adminTaxonomyForm').addEventListener('submit', event =>
   Object.keys(categoryTaxonomy).forEach(category => delete categoryTaxonomy[category]);
   Object.entries(nextTaxonomy).forEach(([category,subcategories]) => categoryTaxonomy[category] = subcategories);
   categories.splice(0,categories.length,...Object.keys(categoryTaxonomy));
+  catalogI18n = {
+    categories:Object.fromEntries(definitions.map(definition => [definition.name,definition.nameEs])),
+    subcategories:Object.fromEntries(definitions.map(definition => [definition.name,Object.fromEntries(definition.subcategories.map((subcategory,index) => [subcategory,definition.subcategoriesEs[index]]))]))
+  };
   adminIcons = adminIcons.map(item => normalizeAdminIcon({
     ...item,
     assignments:item.assignments.map(assignment => {
@@ -2890,6 +3366,7 @@ document.getElementById('adminTaxonomyForm').addEventListener('submit', event =>
     })
   }));
   localStorage.setItem(CATEGORY_TAXONOMY_STORE, JSON.stringify(categoryTaxonomy));
+  localStorage.setItem(CATEGORY_I18N_STORE, JSON.stringify(catalogI18n));
   saveAdminIcons();
   if(!categoryTaxonomy[activeCategory]) activeCategory = categories[0];
   activeSubcategory = categoryTaxonomy[activeCategory].includes(activeSubcategory) ? activeSubcategory : categoryTaxonomy[activeCategory][0];
@@ -2920,6 +3397,7 @@ document.getElementById('adminAssignments').addEventListener('click', event => {
   const rows = document.querySelectorAll('.admin-assignment-row');
   if(rows.length === 1){
     rows[0].querySelector('.admin-assignment-text').value = '';
+    rows[0].querySelector('.admin-assignment-text-es').value = '';
     return;
   }
   remove.closest('.admin-assignment-row').remove();
@@ -3012,11 +3490,12 @@ document.getElementById('adminIconForm').addEventListener('submit', event => {
   const nextOrderStart = Math.max(-1,...adminIcons.flatMap(item => item.assignments.map(assignment => Number.isFinite(assignment.order) ? assignment.order : -1))) + 1;
   const assignments = assignmentRows.map((row,index) => ({
     text:row.querySelector('.admin-assignment-text').value.trim(),
+    textEs:row.querySelector('.admin-assignment-text-es').value.trim(),
     category:row.querySelector('.admin-assignment-category').value,
     subcategory:row.querySelector('.admin-assignment-subcategory').value,
     order:orderSlots[index] ?? nextOrderStart + index,
     color:row.dataset.color || null
-  })).filter(assignment => assignment.text);
+  })).filter(assignment => assignment.text && assignment.textEs);
   if(!assignments.length){
     showAdminToast('Afegeix com a mínim un títol.');
     return;
@@ -3059,9 +3538,14 @@ document.getElementById('adminReset').addEventListener('click', () => {
   if(!window.confirm('Vols descartar tots els canvis locals i restaurar la biblioteca inicial?')) return;
   localStorage.removeItem(ADMIN_ICON_STORE);
   localStorage.removeItem(CATEGORY_TAXONOMY_STORE);
+  localStorage.removeItem(CATEGORY_I18N_STORE);
   Object.keys(categoryTaxonomy).forEach(category => delete categoryTaxonomy[category]);
   Object.entries(DEFAULT_CATEGORY_TAXONOMY).forEach(([category,subcategories]) => categoryTaxonomy[category] = [...subcategories]);
   categories.splice(0,categories.length,...Object.keys(categoryTaxonomy));
+  catalogI18n = {
+    categories:Object.fromEntries(categories.map(category => [category,ES_TRANSLATIONS[category] || category])),
+    subcategories:Object.fromEntries(categories.map(category => [category,Object.fromEntries(categoryTaxonomy[category].map(subcategory => [subcategory,ES_TRANSLATIONS[subcategory] || subcategory]))]))
+  };
   adminIcons = adminSeedIcons().map(normalizeAdminIcon);
   activeCategory = categories[0];
   activeSubcategory = categoryTaxonomy[activeCategory][0];
@@ -3132,8 +3616,101 @@ document.querySelector('.foot-links a[data-page="contacte"]').addEventListener('
   goTo('contacte');
 });
 document.getElementById('footFaq').addEventListener('click', (e) => { e.preventDefault(); goTo('faqs'); });
+document.getElementById('footLegal').addEventListener('click', (e) => { e.preventDefault(); goTo('legal'); });
 document.getElementById('footPrivacy').addEventListener('click', (e) => { e.preventDefault(); goTo('privacitat'); });
 document.getElementById('footCookies').addEventListener('click', (e) => { e.preventDefault(); goTo('cookies'); });
+
+/* ---------- consentiment de cookies ---------- */
+const COOKIE_CONSENT_KEY = 'uncartell-cookie-consent';
+const cookieBanner = document.getElementById('cookieBanner');
+const cookiePanel = document.getElementById('cookiePanel');
+const analyticsCookies = document.getElementById('analyticsCookies');
+const saveCookieSettings = document.getElementById('saveCookieSettings');
+function readCookieConsent(){
+  try{
+    const value = JSON.parse(localStorage.getItem(COOKIE_CONSENT_KEY) || 'null');
+    if(!value?.savedAt) return null;
+    const expiresAt = new Date(value.savedAt);
+    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+    return expiresAt > new Date() ? value : null;
+  }catch(_error){ return null; }
+}
+function applyCookieConsent(value){
+  document.documentElement.dataset.analyticsConsent = value?.analytics ? 'granted' : 'denied';
+  /* Cap eina analítica està activa. Si s’incorpora, només s’ha de carregar quan
+     data-analytics-consent sigui "granted". */
+}
+function saveConsent(analytics){
+  const value = { necessary:true, analytics:!!analytics, savedAt:new Date().toISOString() };
+  localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(value));
+  applyCookieConsent(value);
+  cookieBanner.classList.remove('show');
+}
+function openCookiePreferences(){
+  const current = readCookieConsent();
+  analyticsCookies.checked = !!current?.analytics;
+  cookiePanel.classList.add('show');
+  saveCookieSettings.hidden = false;
+  cookieBanner.classList.add('show');
+}
+document.getElementById('acceptCookies').addEventListener('click', () => saveConsent(true));
+document.getElementById('rejectCookies').addEventListener('click', () => saveConsent(false));
+document.getElementById('closeCookieBanner').addEventListener('click', () => saveConsent(false));
+document.getElementById('configureCookies').addEventListener('click', openCookiePreferences);
+saveCookieSettings.addEventListener('click', () => saveConsent(analyticsCookies.checked));
+document.getElementById('footCookieSettings').addEventListener('click', openCookiePreferences);
+document.getElementById('openCookieSettings').addEventListener('click', openCookiePreferences);
+const initialCookieConsent = readCookieConsent();
+if(initialCookieConsent) applyCookieConsent(initialCookieConsent);
+else requestAnimationFrame(() => {
+  cookieBanner.classList.add('show');
+});
+
+/* ---------- idioma ---------- */
+const languageToggle = document.getElementById('languageToggle');
+const languageMenu = document.getElementById('languageMenu');
+languageToggle.addEventListener('click', () => {
+  const open = !languageMenu.classList.contains('show');
+  languageMenu.classList.toggle('show',open);
+  languageToggle.setAttribute('aria-expanded',open ? 'true' : 'false');
+});
+document.querySelectorAll('[data-language]').forEach(button => {
+  button.addEventListener('click', () => {
+    currentLanguage = button.dataset.language;
+    localStorage.setItem(LANGUAGE_STORE,currentLanguage);
+    languageMenu.classList.remove('show');
+    languageToggle.setAttribute('aria-expanded','false');
+    applyLanguage();
+    renderCategoryTabs();
+    renderSubcategoryTabs();
+    renderGrid();
+    renderPersonalizeCategoryTabs();
+    renderPersonalizeSubcategoryTabs();
+    renderPosterPicker();
+    selectPoster(selectedPosterIndex);
+    renderPreview();
+    if(typeof renderAdminLibrary === 'function'){
+      adminPopulateCategoryControls();
+      renderAdminLibrary();
+    }
+  });
+});
+document.addEventListener('click', event => {
+  if(!event.target.closest('.language-wrap')){
+    languageMenu.classList.remove('show');
+    languageToggle.setAttribute('aria-expanded','false');
+  }
+});
+const languageObserver = new MutationObserver(mutations => {
+  if(currentLanguage !== 'es') return;
+  mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
+    if(node.nodeType === Node.ELEMENT_NODE) translateDom(node);
+    else if(node.nodeType === Node.TEXT_NODE && node.parentElement) translateDom(node.parentElement);
+  }));
+});
+languageObserver.observe(document.body,{childList:true,subtree:true});
+applyLanguage();
+
 document.getElementById('footAdmin').addEventListener('click', (e) => {
   e.preventDefault();
   if(location.hash !== '#admin') history.pushState(null, '', '#admin');
@@ -3148,7 +3725,16 @@ if(sessionStorage.getItem('uncartell-admin-auth') === 'ok') adminPage.classList.
 document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const error = document.getElementById('adminLoginError');
-  error.textContent = 'L’administració s’activarà amb Supabase.';
+  const user = document.getElementById('adminLoginUser').value.trim().toLocaleLowerCase();
+  const password = document.getElementById('adminLoginPassword').value;
+  if((user === 'admin' || user === 'uncartell') && password === 'Badalona_02'){
+    sessionStorage.setItem('uncartell-admin-auth','ok');
+    adminPage.classList.add('admin-authenticated');
+    error.textContent = '';
+    renderAdminLibrary();
+    return;
+  }
+  error.textContent = t('Usuari o contrasenya incorrectes.');
 });
 
 /* ---------- download quota (persisted) ---------- */
@@ -3177,16 +3763,8 @@ const PLAN_CONFIGS = {
 let accountPlan = 'free'; // free | pass7 | pass30 | annual
 let planExpiresAt = null;
 // Mode de prototip: cada recàrrega comença com una visita anònima.
-localStorage.removeItem('uncartell-plus-email');
-localStorage.removeItem('uncartell-plus-until');
-localStorage.removeItem('uncartell-premium-email');
-localStorage.removeItem('uncartell-premium-until');
 function hasPremiumAccess(){
-  return accountPlan !== 'free' || (
-    PRODUCT_MODE === 'launch' &&
-    !!localStorage.getItem('uncartell-plus-email') &&
-    !!localStorage.getItem('uncartell-plus-until')
-  );
+  return accountPlan !== 'free';
 }
 function dayKey(){
   const d = new Date();
@@ -3210,7 +3788,7 @@ async function saveQuota(){
 }
 function renderQuota(){
   const pill = document.getElementById('quotaFloat');
-  if(accountPlan !== 'free' || (PRODUCT_MODE === 'launch' && accountLoggedIn && localStorage.getItem('uncartell-plus-until'))){
+  if(accountPlan !== 'free'){
     pill.classList.remove('warning','empty');
     pill.classList.add('premium');
     pill.innerHTML = `<span class="quota-main">∞</span><span class="quota-copy"><span>Descàrregues</span><span>il·limitades</span></span>`;
@@ -3243,8 +3821,8 @@ function openSizeModal(def, opts={}){
     document.getElementById('modalTitle').textContent = 'Límit diari assolit';
     document.getElementById('modalDesc').textContent = 'Has fet servir les 10 descàrregues gratuïtes d\u2019avui. Tria un passi per tenir-ne d\u2019il·limitades.';
   } else {
-    document.getElementById('modalTitle').textContent = `“${def.name}” — quina mida?`;
-    document.getElementById('modalDesc').textContent = 'Es descarregarà en PDF a resolució d\u2019impressió.';
+    document.getElementById('modalTitle').textContent = currentLanguage === 'es' ? `«${posterDisplayName(def)}» — ¿qué tamaño?` : `“${def.name}” — quina mida?`;
+    document.getElementById('modalDesc').textContent = currentLanguage === 'es' ? 'Se descargará en PDF con resolución de impresión.' : 'Es descarregarà en PDF a resolució d\u2019impressió.';
   }
   modalBg.classList.add('show');
 }
@@ -3266,7 +3844,9 @@ document.querySelectorAll('.format-btn').forEach(btn => btn.addEventListener('cl
   }
   activeDownloadFormat = btn.dataset.format;
   renderFormatOptions();
-  document.getElementById('modalDesc').textContent = `Es descarregarà en ${activeDownloadFormat.toUpperCase()} a resolució d’impressió.`;
+  document.getElementById('modalDesc').textContent = currentLanguage === 'es'
+    ? `Se descargará en ${activeDownloadFormat.toUpperCase()} con resolución de impresión.`
+    : `Es descarregarà en ${activeDownloadFormat.toUpperCase()} a resolució d’impressió.`;
 }));
 document.getElementById('modalCancel').addEventListener('click', () => modalBg.classList.remove('show'));
 modalBg.addEventListener('click', (e) => { if(e.target === modalBg) modalBg.classList.remove('show'); });
@@ -3334,9 +3914,9 @@ async function downloadPosterPdf(def, opts, size){
     const pdfBlob = makeImagePdf(new Uint8Array(await jpegBlob.arrayBuffer()), canvas.width, canvas.height, dimensions.ptW, dimensions.ptH);
     const pdfUrl = URL.createObjectURL(pdfBlob);
     const link = document.createElement('a');
-    const filename = def.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase();
+    const filename = posterDisplayName(def).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase();
     link.href = pdfUrl;
-    link.download = `uncartell-${filename}-${size.toLowerCase()}.pdf`;
+    link.download = `${currentLanguage === 'es' ? 'uncartel' : 'uncartell'}-${filename}-${size.toLowerCase()}.pdf`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -3347,8 +3927,8 @@ async function downloadPosterPdf(def, opts, size){
 }
 
 function posterFilename(def, size, extension){
-  const filename = def.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase();
-  return `uncartell-${filename}-${size.toLowerCase()}.${extension}`;
+  const filename = posterDisplayName(def).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase();
+  return `${currentLanguage === 'es' ? 'uncartel' : 'uncartell'}-${filename}-${size.toLowerCase()}.${extension}`;
 }
 function downloadPosterSvg(def, opts, size){
   const svg = posterSVG(def, {...opts, background:'#FFFFFF'})
@@ -3405,7 +3985,9 @@ let temporaryLogoAddon = false;
 function syncPlanChoice(){
   const config = PLAN_CONFIGS[selectedPlan];
   document.querySelectorAll('.access-plan').forEach(b => b.classList.toggle('active', b.dataset.plan === selectedPlan));
-  document.querySelectorAll('#unlockBtn,#mobileUnlockBtn').forEach(button => button.textContent = `Continua amb ${config.label.toLowerCase()}`);
+  document.querySelectorAll('#unlockBtn,#mobileUnlockBtn').forEach(button => {
+    button.textContent = currentLanguage === 'es' ? `Continuar con ${config.label.toLowerCase()}` : `Continua amb ${config.label.toLowerCase()}`;
+  });
 }
 document.querySelectorAll('.access-plan').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -3416,8 +3998,10 @@ document.querySelectorAll('.access-plan').forEach(btn => {
 function openPremiumPayment(){
   purchaseIntent = 'plan';
   const config = PLAN_CONFIGS[selectedPlan];
-  document.getElementById('paymentPlanSummary').textContent = `${config.label} · ${config.price}${config.recurring ? ' el primer any · després 39,99 €/any' : ' · pagament únic'}`;
-  document.getElementById('paymentSubmit').textContent = `Paga ${config.price}`;
+  document.getElementById('paymentPlanSummary').textContent = currentLanguage === 'es'
+    ? `${config.label} · ${config.price}${config.recurring ? ' el primer año · después 39,99 €/año' : ' · pago único'}`
+    : `${config.label} · ${config.price}${config.recurring ? ' el primer any · després 39,99 €/any' : ' · pagament únic'}`;
+  document.getElementById('paymentSubmit').textContent = currentLanguage === 'es' ? `Paga ${config.price}` : `Paga ${config.price}`;
   openModal('paymentModalBg');
 }
 document.getElementById('unlockBtn').addEventListener('click', openPremiumPayment);
@@ -3476,7 +4060,7 @@ function renderPersonalizeCategoryTabs(){
   categories.forEach(cat => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.textContent = cat;
+    btn.textContent = t(cat);
     btn.classList.toggle('active', cat === personalizeCategory);
     btn.addEventListener('click', () => {
       personalizeCategory = cat;
@@ -3492,11 +4076,11 @@ function renderPersonalizeCategoryTabs(){
 
 function renderPersonalizeSubcategoryTabs(){
   personalizeSubcategoryTabs.innerHTML = '';
-  personalizeSubcategoryCurrent.textContent = personalizeSubcategory;
+  personalizeSubcategoryCurrent.textContent = t(personalizeSubcategory);
   categoryTaxonomy[personalizeCategory].forEach(subcat => {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.textContent = subcat;
+    btn.textContent = t(subcat);
     btn.classList.toggle('active', subcat === personalizeSubcategory);
     btn.setAttribute('aria-pressed', subcat === personalizeSubcategory ? 'true' : 'false');
     btn.addEventListener('click', () => {
@@ -3518,7 +4102,7 @@ function renderPosterPicker(){
     const thumb = document.createElement('div');
     thumb.className = 'picker-thumb' + (i === selectedPosterIndex ? ' picked' : '');
     thumb.innerHTML = posterSVG(def);
-    thumb.title = def.name;
+    thumb.title = posterDisplayName(def);
     thumb.addEventListener('click', () => selectPoster(i));
     picker.appendChild(thumb);
   });
@@ -3526,13 +4110,13 @@ function renderPosterPicker(){
 
 function selectPoster(i){
   selectedPosterIndex = i;
-  document.getElementById('pText').value = posterDefs[i].word;
-  document.getElementById('pSubtitle').value = posterDefs[i].sub;
+  document.getElementById('pText').value = currentLanguage === 'es' ? (posterDefs[i].wordEs || t(posterDefs[i].word)) : posterDefs[i].word;
+  document.getElementById('pSubtitle').value = currentLanguage === 'es' ? (posterDefs[i].subEs || t(posterDefs[i].sub)) : posterDefs[i].sub;
   document.getElementById('pTitleColor').value = '#181614';
   document.getElementById('pIcon').value = posterDefs[i].iconColor || '#e5372a';
   uploadedLogo = null;
   document.getElementById('pLogo').value = '';
-  document.getElementById('logoFileLabel').textContent = 'Tria un logo';
+  document.getElementById('logoFileLabel').textContent = t('Tria un logo');
   document.getElementById('logoClear').classList.remove('show');
   document.getElementById('pHideBrand').checked = hasPremiumAccess() && !uploadedLogo;
   document.getElementById('logoUploadArea').classList.remove('brand-hidden');
@@ -3552,7 +4136,7 @@ function renderPreview(){
     hideBrand:document.getElementById('pHideBrand').checked,
     fontFamily:document.getElementById('kitFont').value
   });
-  document.getElementById('previewName').textContent = `Basat en “${def.name}”`;
+  document.getElementById('previewName').textContent = currentLanguage === 'es' ? `Basado en «${posterDisplayName(def)}»` : `Basat en “${def.name}”`;
   document.getElementById('pTitleColorHex').value = titleColor.toUpperCase();
   document.getElementById('pIconHex').value = iconColor.toUpperCase();
 }
@@ -3786,7 +4370,9 @@ drawerToggle.addEventListener('click', () => {
 function updateDonationContinue(){
   const valid = Number.isFinite(donationAmount) && donationAmount >= 1 && donationAmount <= 500;
   donationContinue.disabled = !valid;
-  donationContinue.textContent = valid ? `Continua amb ${donationAmount.toLocaleString('ca-ES')} €` : 'Introdueix un import';
+  donationContinue.textContent = valid
+    ? `${currentLanguage === 'es' ? 'Continúa con' : 'Continua amb'} ${donationAmount.toLocaleString(currentLanguage === 'es' ? 'es-ES' : 'ca-ES')} €`
+    : t('Introdueix un import');
 }
 document.querySelectorAll('.donate-amounts button').forEach(b => {
   b.addEventListener('click', () => {
@@ -3853,12 +4439,10 @@ document.getElementById('agencyForm').addEventListener('submit', (e) => {
 });
 document.getElementById('agencyDone').addEventListener('click', () => closeModal('agencyModalBg'));
 
-/* ---------- àrea de compte (mock: Google / Apple / correu) ---------- */
-let accountLoggedIn = (PRODUCT_MODE === 'launch' && !!localStorage.getItem('uncartell-plus-email')) ||
-  (PRODUCT_MODE === 'premium' && !!localStorage.getItem('uncartell-premium-email'));
-let accountEmail = PRODUCT_MODE === 'premium'
-  ? (localStorage.getItem('uncartell-premium-email') || '')
-  : (accountLoggedIn ? localStorage.getItem('uncartell-plus-email') : '');
+/* ---------- àrea de compte: Supabase Auth ---------- */
+let accountLoggedIn = false;
+let accountEmail = '';
+let accountUserId = null;
 let pendingAccountDestination = null;
 if(PRODUCT_MODE === 'launch' || PRODUCT_MODE === 'premium'){
   document.getElementById('accountLoginTitle').textContent = 'Tria com vols continuar';
@@ -3958,14 +4542,10 @@ function updateAccountPlanBadge(){
       ? `Premium gratuït · fins al ${formatDate(new Date(planExpiresAt))}`
       : 'Passi actiu — 30 dies';
   }
-  else if(PRODUCT_MODE === 'launch' && accountLoggedIn){
-    const until = localStorage.getItem('uncartell-plus-until');
-    badge.textContent = until ? `Premium gratuït · fins al ${formatDate(new Date(until))}` : 'Pla Light';
-    badge.classList.toggle('promo', !!until);
-  } else { badge.textContent = accountLoggedIn ? 'Pla Basic' : 'Basic · sense registre'; }
-  if(!(PRODUCT_MODE === 'launch' && accountLoggedIn)) badge.classList.remove('promo');
+  else { badge.textContent = accountLoggedIn ? 'Pla Basic' : 'Basic · sense registre'; }
+  badge.classList.toggle('promo', accountPlan === 'pass30');
   manageBtn.style.display = 'flex';
-  cancelBtn.style.display = accountPlan !== 'free' || (PRODUCT_MODE === 'launch' && accountLoggedIn && localStorage.getItem('uncartell-plus-until')) ? 'block' : 'none';
+  cancelBtn.style.display = accountPlan !== 'free' ? 'block' : 'none';
   renderQuota();
   const icon = document.getElementById('navLockIcon');
   const heroIcon = document.getElementById('heroLockIcon');
@@ -4001,7 +4581,7 @@ function updateAccountPlanBadge(){
 
 let avatarImage = null;
 let avatarColor = '#EDEDED';
-const avatarColorOptions = ['#1CF45E','#E5372A','#D9A404','#1D4E8F','#2E5339','#181614'];
+const avatarColorOptions = ['#73F172','#FF6C93','#FFD7E3','#D9A404','#1D4E8F','#181614'];
 
 function renderAvatar(){
   const circle = document.getElementById('avatarCircle');
@@ -4037,41 +4617,56 @@ document.getElementById('avatarUpload').addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-function showDashboard(email){
-  const activatingPremium = PRODUCT_MODE === 'premium' && pendingAccountDestination === 'personalitza';
+async function activateLaunchPremium(){
+  const { data, error } = await supabaseClient.rpc('activate_launch_premium');
+  if(error) throw error;
+  accountPlan = 'pass30';
+  planExpiresAt = data?.premium_until || null;
+}
+
+async function showDashboard(userOrEmail){
+  const user = typeof userOrEmail === 'object' ? userOrEmail : (await supabaseClient.auth.getUser()).data.user;
+  if(!user) return;
   accountLoggedIn = true;
-  accountEmail = email;
-  if(PRODUCT_MODE === 'launch'){
-    const existingUntil = localStorage.getItem('uncartell-plus-until');
-    const plusUntil = existingUntil ? new Date(existingUntil) : new Date();
-    if(!existingUntil) plusUntil.setFullYear(plusUntil.getFullYear() + 1);
-    localStorage.setItem('uncartell-plus-email', email);
-    localStorage.setItem('uncartell-plus-until', plusUntil.toISOString());
-    localStorage.setItem('uncartell-marketing-consent', document.getElementById('marketingConsent').checked ? new Date().toISOString() : '');
+  accountUserId = user.id;
+  accountEmail = user.email || '';
+  let { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('display_name,plan,premium_until,marketing_consent')
+    .eq('id', user.id)
+    .single();
+  if(profileError && profileError.code !== 'PGRST116') console.error(profileError);
+  const wantsPremium = pendingAccountDestination === 'personalitza' ||
+    localStorage.getItem('uncartell-pending-premium') === '1';
+  if(wantsPremium){
+    try{
+      await activateLaunchPremium();
+      localStorage.removeItem('uncartell-pending-premium');
+      const refreshed = await supabaseClient.from('profiles')
+        .select('display_name,plan,premium_until,marketing_consent').eq('id', user.id).single();
+      if(!refreshed.error) profile = refreshed.data;
+    }catch(error){
+      setAuthFeedback(error.message || 'No s’ha pogut activar Premium.', true);
+    }
   }
-  if(activatingPremium){
-    const existingUntil = localStorage.getItem('uncartell-premium-until');
-    const premiumUntil = existingUntil ? new Date(existingUntil) : new Date();
-    if(!existingUntil) premiumUntil.setMonth(premiumUntil.getMonth() + 6);
-    accountPlan = 'pass30';
-    planExpiresAt = premiumUntil.toISOString();
-    localStorage.setItem('uncartell-premium-email', email);
-    localStorage.setItem('uncartell-premium-until', premiumUntil.toISOString());
-  }
+  const premiumValid = profile?.plan === 'premium' &&
+    profile?.premium_until && new Date(profile.premium_until) > new Date();
+  accountPlan = premiumValid ? 'pass30' : 'free';
+  planExpiresAt = premiumValid ? profile.premium_until : null;
   document.getElementById('accountLoginView').style.display = 'none';
   document.getElementById('accountInvoicesView').classList.remove('show');
   document.getElementById('accountInlineActionView').classList.remove('show');
   document.getElementById('accountDashboardView').style.display = 'block';
   document.getElementById('accountModal').classList.add('dashboard-mode');
-  document.getElementById('accountEmailLabel').textContent = email;
-  const savedProfileName = localStorage.getItem('uncartell-profile-name') || email.split('@')[0];
+  document.getElementById('accountEmailLabel').textContent = accountEmail;
+  const savedProfileName = profile?.display_name || user.user_metadata?.full_name || accountEmail.split('@')[0];
   document.getElementById('accountNameInput').value = savedProfileName;
   document.getElementById('profileGreeting').textContent = `Hola, ${savedProfileName}`;
   updateAccountPlanBadge();
   renderPreview();
   renderAvatar();
   renderAvatarColors();
-  if(PRODUCT_MODE === 'launch' || activatingPremium){
+  if(wantsPremium){
     document.body.classList.remove('signup-gate-open');
     closeModal('accountModalBg');
     if(pendingAccountDestination){
@@ -4081,8 +4676,20 @@ function showDashboard(email){
     }
   }
 }
-document.getElementById('loginGoogle').addEventListener('click', () => showDashboard('tu@gmail.com'));
-document.getElementById('loginApple').addEventListener('click', () => showDashboard('tu@icloud.com'));
+function setAuthFeedback(message, isError = false){
+  const feedback = document.getElementById('accountAuthFeedback');
+  feedback.textContent = message || '';
+  feedback.style.color = isError ? '#b42318' : '#5c5954';
+}
+document.getElementById('loginGoogle').addEventListener('click', async () => {
+  setAuthFeedback('');
+  if(pendingAccountDestination === 'personalitza') localStorage.setItem('uncartell-pending-premium', '1');
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: authRedirectUrl }
+  });
+  if(error) setAuthFeedback('Google encara no està configurat. Pots continuar amb correu.', true);
+});
 document.getElementById('loginEmail').addEventListener('click', () => {
   document.querySelector('.signup-auth-block').classList.add('email-step');
   if(!pendingAccountDestination){
@@ -4092,27 +4699,43 @@ document.getElementById('loginEmail').addEventListener('click', () => {
   }
   requestAnimationFrame(() => document.getElementById('accountSignupName').focus());
 });
-document.getElementById('accountEmailForm').addEventListener('submit', (e) => {
+document.getElementById('accountEmailForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = e.target.querySelector('input[type=email]').value;
+  setAuthFeedback('Connectant…');
+  const email = e.target.querySelector('input[type=email]').value.trim();
+  const password = e.target.querySelector('input[type=password]').value;
   const name = document.getElementById('accountSignupName').value.trim();
-  if(name) localStorage.setItem('uncartell-profile-name', name);
-  showDashboard(email);
+  const marketingConsent = document.getElementById('marketingConsent').checked;
+  if(pendingAccountDestination === 'personalitza') localStorage.setItem('uncartell-pending-premium', '1');
+  let result = await supabaseClient.auth.signInWithPassword({ email, password });
+  if(result.error){
+    result = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: authRedirectUrl,
+        data: { full_name: name, marketing_consent: marketingConsent }
+      }
+    });
+  }
+  if(result.error){
+    setAuthFeedback(result.error.message, true);
+    return;
+  }
+  if(result.data.session){
+    await showDashboard(result.data.user);
+  }else{
+    setAuthFeedback('Revisa el correu i confirma el compte per continuar.');
+  }
 });
-if(accountLoggedIn) showDashboard(accountEmail);
-document.getElementById('accountLogout').addEventListener('click', () => {
+document.getElementById('accountLogout').addEventListener('click', async () => {
+  await supabaseClient.auth.signOut();
   accountLoggedIn = false;
-  if(PRODUCT_MODE === 'launch'){
-    localStorage.removeItem('uncartell-plus-email');
-    localStorage.removeItem('uncartell-plus-until');
-  }
-  if(PRODUCT_MODE === 'premium'){
-    localStorage.removeItem('uncartell-premium-email');
-    localStorage.removeItem('uncartell-premium-until');
-    accountPlan = 'free';
-    planExpiresAt = null;
-    updateAccountPlanBadge();
-  }
+  accountUserId = null;
+  accountEmail = '';
+  accountPlan = 'free';
+  planExpiresAt = null;
+  updateAccountPlanBadge();
   document.getElementById('accountDashboardView').style.display = 'none';
   document.getElementById('accountInvoicesView').classList.remove('show');
   document.getElementById('accountLoginView').style.display = 'block';
@@ -4121,6 +4744,20 @@ document.getElementById('accountLogout').addEventListener('click', () => {
   closeModal('accountModalBg');
   pendingAccountDestination = null;
   goTo('cartells');
+});
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if(event === 'SIGNED_IN' && session?.user) setTimeout(() => showDashboard(session.user), 0);
+  if(event === 'SIGNED_OUT'){
+    accountLoggedIn = false;
+    accountUserId = null;
+    accountEmail = '';
+    accountPlan = 'free';
+    planExpiresAt = null;
+    updateAccountPlanBadge();
+  }
+});
+supabaseClient.auth.getSession().then(({ data }) => {
+  if(data.session?.user) showDashboard(data.session.user);
 });
 document.getElementById('accountManageSub').addEventListener('click', () => {
   openPremiumChoice();
@@ -4161,11 +4798,14 @@ document.addEventListener('keydown', (e) => {
     document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
   }
 });
-document.getElementById('accountSaveName').addEventListener('click', () => {
+document.getElementById('accountSaveName').addEventListener('click', async () => {
   const btn = document.getElementById('accountSaveName');
   const name = document.getElementById('accountNameInput').value.trim();
   if(!name) return;
-  localStorage.setItem('uncartell-profile-name', name);
+  if(accountUserId){
+    const { error } = await supabaseClient.from('profiles').update({ display_name: name }).eq('id', accountUserId);
+    if(error) return;
+  }
   document.getElementById('profileGreeting').textContent = `Hola, ${name}`;
   document.getElementById('profileNameEditor').classList.remove('show');
   const original = btn.innerHTML;
@@ -4234,12 +4874,12 @@ document.getElementById('accountDelete').addEventListener('click', () => {
   showAccountInlineAction('delete');
 });
 document.getElementById('accountInlineBack').addEventListener('click', closeAccountInlineAction);
-document.getElementById('accountInlineConfirm').addEventListener('click', () => {
+document.getElementById('accountInlineConfirm').addEventListener('click', async () => {
   if(pendingAccountAction === 'downgrade'){
+    const { error } = await supabaseClient.rpc('switch_to_basic');
+    if(error) return;
     accountPlan = 'free';
     planExpiresAt = null;
-    localStorage.removeItem('uncartell-premium-until');
-    localStorage.removeItem('uncartell-plus-until');
     updateAccountPlanBadge();
     renderPreview();
     pendingAccountAction = null;
@@ -4251,9 +4891,10 @@ document.getElementById('accountInlineConfirm').addEventListener('click', () => 
     return;
   }
   if(pendingAccountAction === 'cancel'){
+    const { error } = await supabaseClient.rpc('switch_to_basic');
+    if(error) return;
     accountPlan = 'free';
     planExpiresAt = null;
-    if(PRODUCT_MODE === 'launch') localStorage.removeItem('uncartell-plus-until');
     updateAccountPlanBadge();
     lockPanel.classList.add('locked');
     renderPreview();
@@ -4261,17 +4902,8 @@ document.getElementById('accountInlineConfirm').addEventListener('click', () => 
     return;
   }
   if(pendingAccountAction === 'delete'){
-    localStorage.removeItem('uncartell-plus-email');
-    localStorage.removeItem('uncartell-plus-until');
-    localStorage.removeItem('uncartell-profile-name');
-    closeModal('accountModalBg');
-    document.getElementById('accountDashboardView').style.display = 'none';
-    document.getElementById('accountLoginView').style.display = 'block';
-    document.getElementById('accountInlineActionView').classList.remove('show');
-    accountLoggedIn = false;
-    accountPlan = 'free';
-    updateAccountPlanBadge();
-    renderPreview();
+    document.getElementById('accountInlineActionCopy').textContent =
+      'Per seguretat, l’eliminació completa del compte s’activarà amb el servei de suport. Les teves dades no s’han eliminat.';
   }
 });
 </script>
