@@ -29,7 +29,7 @@
     --stone-line:#D6D2C6;
     --gray-text:#6b675f;
     --green:#73F172;
-    --soft-accent:#FF6C93;
+    --soft-accent:#E4FFE3;
   }
   html[data-lang="es"]{--green:#71DEFF;--soft-accent:#C0F3FF;}
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -114,6 +114,12 @@
     cursor:pointer; color:var(--ink);
   }
   .acc-btn:hover{border-color:var(--ink);}
+  .acc-btn:disabled{
+    border-color:#d8d8d5; background:#f1f1ef; color:#96948f;
+    cursor:not-allowed; opacity:1;
+  }
+  .acc-btn:disabled:hover{border-color:#d8d8d5;}
+  .acc-btn .apple-mark{width:16px;height:19px;flex:none;fill:currentColor;}
   .account-divider{text-align:center; font-size:12px; color:var(--gray-text); margin:14px 0; position:relative;}
   .account-divider span{background:var(--paper); padding:0 8px; position:relative; z-index:1;}
   .account-divider::before{content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--stone-line);}
@@ -1068,11 +1074,11 @@
   }
   .btn-send:hover{background:var(--green); color:var(--ink);}
   .contact-note{
-    display:none; margin-top:16px; padding:14px 16px; border:1px solid #73F172;
-    border-radius:10px; background:#E4FFE3; color:#17612f; font-size:14px; font-weight:700;
+    display:none; margin-top:16px; padding:14px 16px; border:1px solid var(--green);
+    border-radius:10px; background:var(--soft-accent); color:#174825; font-size:14px; font-weight:700;
   }
   .contact-note.show{display:flex; align-items:center; gap:9px;}
-  .contact-note.show::before{content:'✓'; display:grid; flex:none; place-items:center; width:23px; height:23px; border-radius:50%; background:#73F172; color:#174825; font-size:14px;}
+  .contact-note.show::before{content:'✓'; display:grid; flex:none; place-items:center; width:23px;height:23px;border-radius:50%;background:var(--green);color:#174825;font-size:14px;}
   .contact-note.is-error{border-color:#efaaa4; background:#fff0ef; color:#9d2f27;}
   .contact-note.is-error::before{content:'!'; background:#e5372a; color:#fff;}
 
@@ -2276,7 +2282,7 @@
         <article class="signup-plan-card featured">
           <span class="signup-plan-badge" id="premiumPlanLabel">RECOMANAT</span>
           <h4>Premium</h4>
-          <ul><li>Personalitza títol i subtítol</li><li>Colors i logotip propi</li><li>Descàrregues il·limitades</li></ul>
+          <ul><li>Personalitza títol i subtítol</li><li>Colors personalitzables</li><li>Descàrregues il·limitades</li></ul>
           <div class="google-price"><strong>0 €</strong><span><del>29,99 €</del></span></div>
           <span class="plan-price-note">Gratis durant 6 mesos · Sense targeta</span>
           <button class="premium-continue" id="choosePremium" type="button">Activa Premium gratis</button>
@@ -2298,7 +2304,7 @@
       <div class="signup-auth-block">
       <div class="account-social">
         <button class="acc-btn" id="loginGoogle"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M22.5 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9c-.3 1.4-1 2.5-2.2 3.3v2.7h3.6c2.1-2 3.2-4.8 3.2-8.1z"/><path fill="#34A853" d="M12 23c3 0 5.4-1 7.2-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.6 1.1-2.8 0-5.1-1.9-6-4.4H2.3v2.8C4.1 20.6 7.8 23 12 23z"/><path fill="#FBBC05" d="M6 14.3c-.2-.7-.3-1.4-.3-2.3s.1-1.6.3-2.3V6.9H2.3C1.5 8.5 1 10.2 1 12s.5 3.5 1.3 5.1L6 14.3z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.4 2.1 15 1 12 1 7.8 1 4.1 3.4 2.3 6.9L6 9.7c.9-2.5 3.2-4.3 6-4.3z"/></svg>Continua amb Google</button>
-        <button class="acc-btn" id="loginApple" type="button" disabled title="Properament"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16.4 1c.1 1.2-.4 2.4-1.1 3.3-.7.9-1.9 1.6-3 1.5-.1-1.2.4-2.5 1.1-3.3.8-.9 2-1.5 3-1.5zM19.9 17.2c-.5 1.2-.8 1.7-1.5 2.8-1 1.5-2.3 3.3-4 3.3-1.5 0-1.9-1-3.9-1s-2.5 1-4 1c-1.7 0-3-1.6-4-3.1C.6 17.4-.6 12.9 1 9.8c.8-1.6 2.2-2.6 3.7-2.6 1.5 0 2.5 1 3.8 1s2.6-1.2 4.4-1c.7 0 2.7.3 4 2.1-3.5 2-2.9 6.9 2 7.9z"/></svg>Apple · Properament</button>
+        <button class="acc-btn" id="loginApple" type="button" disabled aria-disabled="true" title="Properament"><svg class="apple-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Apple"><path d="M18.71 12.98c.02-2.13 1.74-3.15 1.82-3.2a3.9 3.9 0 0 0-3.08-1.67c-1.3-.14-2.57.78-3.23.78-.67 0-1.69-.76-2.78-.74a4.08 4.08 0 0 0-3.44 2.09c-1.49 2.58-.38 6.37 1.05 8.45.72 1.02 1.56 2.15 2.65 2.11 1.07-.04 1.47-.68 2.76-.68 1.28 0 1.65.68 2.77.65 1.15-.02 1.87-1.02 2.56-2.05a8.4 8.4 0 0 0 1.17-2.38 3.68 3.68 0 0 1-2.25-3.36ZM16.6 6.73a3.73 3.73 0 0 0 .86-2.68 3.8 3.8 0 0 0-2.47 1.28 3.58 3.58 0 0 0-.88 2.58 3.14 3.14 0 0 0 2.49-1.18Z"/></svg><span>Apple · Properament</span></button>
         <button class="acc-btn" id="loginEmail" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Continua amb correu</button>
       </div>
       <button class="auth-methods-back" id="authMethodsBack" type="button">Torna als plans</button>
@@ -2426,7 +2432,7 @@ const ES_TRANSLATIONS = {
   "Tria com vols continuar":"Elige cómo quieres continuar","Premium és gratis durant 6 mesos. Sense targeta.":"Premium es gratis durante 6 meses. Sin tarjeta.",
   "Pla actual":"Plan actual","RECOMANAT":"RECOMENDADO","Sense registre":"Sin registro","10 PDF al dia":"10 PDF al día",
   "Catàleg complet":"Catálogo completo","Personalitza títol i subtítol":"Personaliza título y subtítulo",
-  "Colors i logotip propi":"Colores y logotipo propio","Descàrregues il·limitades":"Descargas ilimitadas",
+  "Colors personalitzables":"Colores personalizables","Descàrregues il·limitades":"Descargas ilimitadas",
   "Gratis per sempre":"Gratis para siempre","Gratis durant 6 mesos · Sense targeta":"Gratis durante 6 meses · Sin tarjeta",
   "PROPERAMENT":"PRÓXIMAMENTE","Logotip de l’empresa al cartell":"Logotipo de empresa en el cartel",
   "Sense marca d’aigua":"Sin marca de agua","Desa colors i logotips":"Guarda colores y logotipos",
@@ -4075,8 +4081,8 @@ function openSizeModal(def, opts={}){
   document.getElementById('formatOptions').style.display = limitReached ? 'none' : 'flex';
   document.getElementById('modalPremiumCta').style.display = limitReached ? 'block' : 'none';
   if(limitReached){
-    document.getElementById('modalTitle').textContent = 'Límit diari assolit';
-    document.getElementById('modalDesc').textContent = 'Has fet servir les 10 descàrregues gratuïtes d\u2019avui. Tria un passi per tenir-ne d\u2019il·limitades.';
+    document.getElementById('modalTitle').textContent = t('Límit diari assolit');
+    document.getElementById('modalDesc').textContent = t('Has fet servir les 10 descàrregues gratuïtes d\u2019avui. Tria un passi per tenir-ne d\u2019il·limitades.');
   } else {
     document.getElementById('modalTitle').textContent = currentLanguage === 'es' ? `«${posterDisplayName(def)}» — ¿qué tamaño?` : `“${def.name}” — quina mida?`;
     document.getElementById('modalDesc').textContent = currentLanguage === 'es' ? 'Se descargará en PDF con resolución de impresión.' : 'Es descarregarà en PDF a resolució d\u2019impressió.';
@@ -4214,7 +4220,7 @@ document.querySelectorAll('.size-btn').forEach(btn => {
   btn.addEventListener('click', async () => {
     const original = btn.innerHTML;
     document.querySelectorAll('.size-btn').forEach(button => button.disabled = true);
-    btn.textContent = 'Generant…';
+    btn.textContent = t('Generant…');
     try{
       if(activeDownloadFormat === 'svg') downloadPosterSvg(activePoster, activePosterOptions, btn.dataset.size);
       else if(activeDownloadFormat === 'png') await downloadPosterPng(activePoster, activePosterOptions, btn.dataset.size);
@@ -4430,7 +4436,7 @@ document.getElementById('pLogo').addEventListener('change', (e) => {
   const file = e.target.files[0];
   if(!file) {
     uploadedLogo = null;
-    document.getElementById('logoFileLabel').textContent = 'Tria un logo';
+    document.getElementById('logoFileLabel').textContent = t('Tria un logo');
     document.getElementById('logoClear').classList.remove('show');
     renderPreview();
     return;
@@ -4444,7 +4450,7 @@ document.getElementById('pLogo').addEventListener('change', (e) => {
 document.getElementById('logoClear').addEventListener('click', () => {
   uploadedLogo = null;
   document.getElementById('pLogo').value = '';
-  document.getElementById('logoFileLabel').textContent = 'Tria un logo';
+  document.getElementById('logoFileLabel').textContent = t('Tria un logo');
   document.getElementById('logoClear').classList.remove('show');
   renderPreview();
 });
@@ -4464,10 +4470,10 @@ function openPremiumChoice(){
   document.getElementById('accountDashboardView').style.display = 'none';
   loginView.style.display = 'block';
   document.getElementById('accountModal').classList.remove('dashboard-mode');
-  document.getElementById('accountLoginTitle').textContent = 'Tria com vols continuar';
-  document.getElementById('accountLoginCopy').textContent = 'Premium és gratis durant 6 mesos. Sense targeta.';
-  document.getElementById('accountBackToCatalog').textContent = 'Torna als plans';
-  document.getElementById('authMethodsBack').textContent = 'Torna als plans';
+  document.getElementById('accountLoginTitle').textContent = t('Tria com vols continuar');
+  document.getElementById('accountLoginCopy').textContent = t('Premium és gratis durant 6 mesos. Sense targeta.');
+  document.getElementById('accountBackToCatalog').textContent = t('Torna als plans');
+  document.getElementById('authMethodsBack').textContent = t('Torna als plans');
   pendingAccountDestination = 'personalitza';
   syncPlanChoiceUI();
   openModal('accountModalBg');
@@ -4537,7 +4543,7 @@ function applyBusinessKit(kit=readBusinessKit()){
   document.getElementById('pTitleColor').value = kit.secondary || '#181614';
   if(kit.logo){
     uploadedLogo = kit.logo;
-    document.getElementById('logoFileLabel').textContent = 'Logo del kit';
+    document.getElementById('logoFileLabel').textContent = t('Logo del kit');
     document.getElementById('logoClear').classList.add('show');
     document.getElementById('pHideBrand').checked = false;
   }
@@ -4557,7 +4563,7 @@ document.getElementById('applyKit').addEventListener('click', () => {
     logo:uploadedLogo
   };
   applyBusinessKit(previewKit);
-  document.getElementById('kitStatus').textContent = 'Previsualització aplicada sense desar.';
+  document.getElementById('kitStatus').textContent = t('Previsualització aplicada sense desar.');
 });
 document.getElementById('saveKit').addEventListener('click', () => {
   if(!hasPremiumAccess()) return;
@@ -4569,7 +4575,7 @@ document.getElementById('saveKit').addEventListener('click', () => {
   };
   localStorage.setItem(KIT_STORAGE_KEY, JSON.stringify(kit));
   applyBusinessKit(kit);
-  document.getElementById('kitStatus').textContent = 'Kit desat i preparat per als pròxims cartells.';
+  document.getElementById('kitStatus').textContent = t('Kit desat i preparat per als pròxims cartells.');
   closeKitPage(false);
 });
 document.getElementById('ctaDownload').addEventListener('click', () => {
@@ -4742,9 +4748,9 @@ let accountEmail = '';
 let accountUserId = null;
 let pendingAccountDestination = null;
 if(PRODUCT_MODE === 'launch' || PRODUCT_MODE === 'premium'){
-  document.getElementById('accountLoginTitle').textContent = 'Tria com vols continuar';
-  document.getElementById('accountLoginCopy').textContent = 'Premium és gratis durant 6 mesos. Sense targeta.';
-  document.getElementById('accountEmailSubmit').textContent = 'Activa Premium gratis';
+  document.getElementById('accountLoginTitle').textContent = t('Tria com vols continuar');
+  document.getElementById('accountLoginCopy').textContent = t('Premium és gratis durant 6 mesos. Sense targeta.');
+  document.getElementById('accountEmailSubmit').textContent = t('Activa Premium gratis');
 }
 function openAccountAccess(){
   document.body.classList.remove('signup-gate-open');
@@ -4759,11 +4765,11 @@ function openAccountAccess(){
   loginView.classList.add('account-access-flow');
   loginView.classList.remove('auth-step');
   document.querySelector('.signup-auth-block').classList.remove('email-step');
-  document.getElementById('accountLoginTitle').textContent = 'Inicia sessió o registra’t';
-  document.getElementById('accountLoginCopy').textContent = 'Accedeix al teu compte per continuar.';
-  document.getElementById('accountEmailSubmit').textContent = 'Continua';
-  document.getElementById('accountBackToCatalog').textContent = 'Torna enrere';
-  document.getElementById('authMethodsBack').textContent = 'Segueix sense registrar-te';
+  document.getElementById('accountLoginTitle').textContent = t('Inicia sessió o registra’t');
+  document.getElementById('accountLoginCopy').textContent = t('Accedeix al teu compte per continuar.');
+  document.getElementById('accountEmailSubmit').textContent = t('Continua');
+  document.getElementById('accountBackToCatalog').textContent = t('Torna enrere');
+  document.getElementById('authMethodsBack').textContent = t('Segueix sense registrar-te');
   openModal('accountModalBg');
 }
 document.getElementById('accountOpenBtn').addEventListener('click', openAccountAccess);
@@ -4785,15 +4791,15 @@ document.getElementById('accountBackToCatalog').addEventListener('click', () => 
   const loginView = document.getElementById('accountLoginView');
   if(loginView.classList.contains('account-access-flow')){
     document.querySelector('.signup-auth-block').classList.remove('email-step');
-    document.getElementById('accountLoginTitle').textContent = 'Inicia sessió o registra’t';
-    document.getElementById('accountLoginCopy').textContent = 'Accedeix al teu compte per continuar.';
-    document.getElementById('accountEmailSubmit').textContent = 'Continua';
+    document.getElementById('accountLoginTitle').textContent = t('Inicia sessió o registra’t');
+    document.getElementById('accountLoginCopy').textContent = t('Accedeix al teu compte per continuar.');
+    document.getElementById('accountEmailSubmit').textContent = t('Continua');
     return;
   }
   loginView.classList.remove('auth-step');
   document.querySelector('.signup-auth-block').classList.remove('email-step');
-  document.getElementById('accountLoginTitle').textContent = 'Tria com vols continuar';
-  document.getElementById('accountLoginCopy').textContent = 'Premium és gratis durant 6 mesos. Sense targeta.';
+  document.getElementById('accountLoginTitle').textContent = t('Tria com vols continuar');
+  document.getElementById('accountLoginCopy').textContent = t('Premium és gratis durant 6 mesos. Sense targeta.');
 });
 document.getElementById('authMethodsBack').addEventListener('click', () => {
   if(document.getElementById('accountLoginView').classList.contains('account-access-flow')){
@@ -4822,10 +4828,10 @@ document.getElementById('choosePremium').addEventListener('click', () => {
   loginView.classList.remove('account-access-flow');
   loginView.classList.add('auth-step');
   document.querySelector('.signup-auth-block').classList.remove('email-step');
-  document.getElementById('accountLoginTitle').textContent = 'Activa Premium gratis';
-  document.getElementById('accountLoginCopy').textContent = 'Crea el compte i gaudeix-ne durant 6 mesos. Sense targeta.';
-  document.getElementById('accountBackToCatalog').textContent = 'Torna als plans';
-  document.getElementById('authMethodsBack').textContent = 'Torna als plans';
+  document.getElementById('accountLoginTitle').textContent = t('Activa Premium gratis');
+  document.getElementById('accountLoginCopy').textContent = t('Crea el compte i gaudeix-ne durant 6 mesos. Sense targeta.');
+  document.getElementById('accountBackToCatalog').textContent = t('Torna als plans');
+  document.getElementById('authMethodsBack').textContent = t('Torna als plans');
   requestAnimationFrame(() => document.getElementById('loginGoogle').focus());
 });
 
@@ -4924,8 +4930,8 @@ function updateAccountPlanBadge(){
   const businessKitLockIcon = document.getElementById('businessKitLockIcon');
   businessKitLockIcon.innerHTML = '<rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-linecap="round"></path>';
   businessKit.classList.remove('logo-only');
-  document.getElementById('businessKitTitle').textContent = 'Kit del negoci';
-  document.getElementById('businessKitPlan').textContent = 'Properament';
+  document.getElementById('businessKitTitle').textContent = t('Kit del negoci');
+  document.getElementById('businessKitPlan').textContent = t('Properament');
   document.getElementById('catalogAd')?.classList.toggle('hide', personalizationUnlocked);
   syncPersonalizeScrollLock();
   premiumNav.classList.toggle('premium-active', personalizationUnlocked);
@@ -5056,9 +5062,9 @@ document.getElementById('loginGoogle').addEventListener('click', async () => {
 document.getElementById('loginEmail').addEventListener('click', () => {
   document.querySelector('.signup-auth-block').classList.add('email-step');
   if(!pendingAccountDestination){
-    document.getElementById('accountLoginTitle').textContent = 'Continua amb correu';
-    document.getElementById('accountLoginCopy').textContent = 'Introdueix les teves dades per accedir o crear el compte.';
-    document.getElementById('accountEmailSubmit').textContent = 'Continua';
+    document.getElementById('accountLoginTitle').textContent = t('Continua amb correu');
+    document.getElementById('accountLoginCopy').textContent = t('Introdueix les teves dades per accedir o crear el compte.');
+    document.getElementById('accountEmailSubmit').textContent = t('Continua');
   }
   requestAnimationFrame(() => document.getElementById('accountSignupName').focus());
 });
@@ -5194,9 +5200,9 @@ function showAccountInlineAction(type){
   view.classList.toggle('delete-mode', type === 'delete');
   if(type === 'downgrade'){
     actionIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 21h14" stroke-linecap="round"/></svg>';
-    document.getElementById('accountInlineActionTitle').textContent = 'Vols tornar a Basic?';
-    document.getElementById('accountInlineActionCopy').textContent = 'Perdràs les descàrregues il·limitades i les opcions de personalització Premium.';
-    confirmBtn.textContent = 'Sí, torna a Basic';
+    document.getElementById('accountInlineActionTitle').textContent = t('Vols tornar a Basic?');
+    document.getElementById('accountInlineActionCopy').textContent = t('Perdràs les descàrregues il·limitades i les opcions de personalització Premium.');
+    confirmBtn.textContent = t('Sí, torna a Basic');
     confirmBtn.classList.remove('danger');
   } else if(type === 'cancel'){
     actionIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.8 3h15.6a2 2 0 0 0 1.8-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -5209,9 +5215,9 @@ function showAccountInlineAction(type){
     confirmBtn.classList.remove('danger');
   } else {
     actionIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 17c.9-1.5 2.1-2.2 3.5-2.2s2.6.7 3.5 2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    document.getElementById('accountInlineActionTitle').textContent = 'Elimina el compte';
-    document.getElementById('accountInlineActionCopy').textContent = 'Eliminarem el compte i totes les dades associades. Aquesta acció no es pot desfer.';
-    confirmBtn.textContent = 'Sí, elimina el compte';
+    document.getElementById('accountInlineActionTitle').textContent = t('Elimina el compte');
+    document.getElementById('accountInlineActionCopy').textContent = t('Eliminarem el compte i totes les dades associades. Aquesta acció no es pot desfer.');
+    confirmBtn.textContent = t('Sí, elimina el compte');
     confirmBtn.classList.add('danger');
   }
 }
