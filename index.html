@@ -330,15 +330,13 @@
   }
   .hero-copy{max-width:760px; text-align:left;}
   .hero-visual{
-    min-width:0; aspect-ratio:4/3; overflow:hidden; border-radius:11px;
-    background:#F8F8F6; border:1px solid rgba(24,22,20,.12);
+    min-width:0; aspect-ratio:1015/886; overflow:hidden;
     display:flex; align-items:center; justify-content:center;
   }
-  .hero-visual-placeholder{
-    color:var(--gray-text); font-size:13px; font-weight:700;
-    letter-spacing:.08em; text-transform:uppercase;
-  }
-  .hero-visual svg{display:block; width:100%; height:100%;}
+  .hero-visual img{display:block; width:100%; height:100%; object-fit:contain;}
+  .hero-image-es{display:none !important;}
+  html[data-lang="es"] .hero-image-cat{display:none !important;}
+  html[data-lang="es"] .hero-image-es{display:block !important;}
   .hero-title{
     font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight:700;
     font-size:clamp(32px,4.2vw,50px); line-height:1.16; letter-spacing:-0.02em;
@@ -1587,8 +1585,9 @@
           <a class="hero-btn-outline" href="#filterTabs">Explora cartells</a>
         </div>
       </div>
-      <div class="hero-visual" aria-label="Espai reservat per a una imatge">
-        <span class="hero-visual-placeholder">Imatge</span>
+      <div class="hero-visual">
+        <img class="hero-image-cat" src="hero-uncartell-cat.png" width="1015" height="886" alt="Comparativa entre un cartell improvisat i un cartell ben dissenyat en català">
+        <img class="hero-image-es" src="hero-uncartel-es.png" width="1015" height="886" alt="Comparativa entre un cartel improvisado y un cartel bien diseñado en castellano">
       </div>
     </div>
 
