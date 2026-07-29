@@ -2652,7 +2652,7 @@ Object.assign(ES_TRANSLATIONS,{
   "Necessites un cartell a mida?":"¿Necesitas un cartel a medida?",
   "Explica’ns el projecte i crearem un cartell únic per a tu o la teva empresa.":"Explícanos el proyecto y crearemos un cartel único para ti o tu empresa.",
   "*Subjecte a pressupost":"*Sujeto a presupuesto",
-  "La versió gratuïta sempre existirà. Si algun dia decideixes fer-te Premium, m’ajudaràs a mantenir aquest projecte i a continuar fent-lo créixer.":"La versión gratuita siempre existirá. Si algún día decides hacerte Premium, me ayudarás a mantener este proyecto y a seguir haciéndolo crecer.",
+  "La versió gratuïta sempre existirà. Si algun dia decideixes fer-te Premium, m’ajudaràs a mantenir aquest projecte i a continuar fent-lo créixer.":"La versión gratuita siempre existirá. Si algún día decides hacerte Premium, me ayudarás a mantener este proyecto y a seguir ampliándolo.",
   "Tens dubtes, suggeriments o simplement vols que afegim el teu cartell al repositori?":"¿Tienes dudas, sugerencias o simplemente quieres que añadamos tu cartel al repositorio?",
   "Pots consultar tot el catàleg i descarregar fins a 10 cartells al dia en PDF d’alta qualitat, preparats per imprimir en A4 o A3.":"Puedes consultar todo el catálogo y descargar hasta 10 carteles al día en PDF de alta calidad, listos para imprimir en A4 o A3.",
   "Pots personalitzar el títol, el subtítol i els colors dels cartells, descarregar-ne tants com vulguis i accedir a totes les funcions disponibles del pla Premium. Les funcionalitats marcades com a “Properament” encara no estan incloses.":"Puedes personalizar el título, el subtítulo y los colores de cada cartel, descargar tantos como quieras y acceder a todas las funciones disponibles del plan Premium. Las funcionalidades marcadas como “Próximamente” todavía no están incluidas.",
@@ -3045,9 +3045,9 @@ const posterDisplayTag = def => currentLanguage === 'es' ? (def.subEs || t(def.t
 function posterSVG(def, opts={}){
   const isPremiumPoster = opts.premium === true;
   const hidePremiumBrand = false;
-  const footerFill = '#FFFFFF';
   const titleColor = opts.titleColor || '#181614';
   const backgroundColor = opts.background || '#FAFAF8';
+  const footerFill = backgroundColor;
   const iconColor = opts.iconColor || def.iconColor || '#E5372A';
   const fontFamily = opts.fontFamily || 'Helvetica Neue, Helvetica, Arial, sans-serif';
   const word = opts.word || (currentLanguage === 'es' ? (def.wordEs || t(def.word)) : def.word);
