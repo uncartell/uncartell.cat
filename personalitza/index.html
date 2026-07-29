@@ -1604,7 +1604,7 @@
       -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain; touch-action:pan-y;
       scroll-padding-bottom:24px;
     }
-    .signup-plan-grid{gap:7px; margin:10px 0 0; padding-bottom:6px;}
+    .signup-plan-grid{gap:11px; margin:10px 0 0; padding-bottom:8px;}
     .signup-plan-card,.signup-plan-card.featured{padding:31px 14px 12px; min-height:0;}
     .signup-plan-card h4{margin-bottom:4px; font-size:16px;}
     .signup-plan-card ul{display:grid; grid-template-columns:1fr; gap:4px; margin:4px 0 8px; font-size:10px;}
@@ -1625,7 +1625,7 @@
       overflow:visible; touch-action:pan-y;
     }
     .signup-plan-card,.signup-plan-card.featured{
-      display:grid; grid-template-columns:88px minmax(0,1fr);
+      display:grid; grid-template-columns:98px minmax(0,1fr);
       grid-template-areas:"title features" "price features" "note note" "button button";
       column-gap:10px; row-gap:3px; align-items:start; padding:31px 13px 10px;
     }
@@ -1635,6 +1635,8 @@
       grid-template-columns:1fr; gap:4px;
     }
     .signup-plan-card .plan-price,.signup-plan-card .google-price{grid-area:price; margin:0;}
+    .signup-plan-card .plan-price,.signup-plan-card .google-price,
+    .signup-plan-card .google-price strong{white-space:nowrap;}
     .signup-plan-card .plan-price-note{grid-area:note; margin:0; min-height:0;}
     .signup-plan-card .light-continue,.signup-plan-card .premium-continue,
     .signup-plan-card .ultra-notify{grid-area:button; margin-top:4px;}
@@ -2370,8 +2372,8 @@
           <span class="signup-plan-badge">PROPERAMENT</span>
           <h4>Ultra</h4>
           <ul><li>Logotip de l’empresa al cartell</li><li>Sense marca d’aigua</li><li>Desa colors i logotips</li></ul>
-          <div class="google-price"><strong>69,99 €</strong><span>/ any</span></div>
-          <span class="plan-price-note">Kit d’empresa · pagament anual</span>
+          <div class="google-price"><strong>50 €</strong></div>
+          <span class="plan-price-note">Pagament anual</span>
           <button class="ultra-notify" id="ultraNotify" type="button">Avisa’m quan estigui disponible</button>
           <div class="ultra-email-wrap" id="ultraEmailWrap">
             <input id="ultraEmail" type="email" autocomplete="email" placeholder="El teu correu">
@@ -2515,7 +2517,7 @@ const ES_TRANSLATIONS = {
   "Gratis per sempre":"Gratis para siempre","Gratis durant 6 mesos · Sense targeta":"Gratis durante 6 meses · Sin tarjeta",
   "PROPERAMENT":"PRÓXIMAMENTE","Logotip de l’empresa al cartell":"Logotipo de empresa en el cartel",
   "Sense marca d’aigua":"Sin marca de agua","Desa colors i logotips":"Guarda colores y logotipos",
-  "Kit d’empresa · pagament anual":"Kit de empresa · pago anual",
+  "Kit d’empresa · pagament anual":"Kit de empresa · pago anual","Pagament anual":"Pago anual",
   "Avisa’m quan estigui disponible":"Avísame cuando esté disponible","/ any":"/ año",
   "Activa Premium gratis":"Activa Premium gratis","Darreres factures":"Últimas facturas","No hi ha factures":"No hay facturas",
   "Canvia de pla":"Cambiar de plan","Tanca sessió":"Cerrar sesión","Elimina el compte":"Eliminar la cuenta",
