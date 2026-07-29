@@ -1600,9 +1600,11 @@
     #accountModalBg:has(#accountLoginView:not(.auth-step) .signup-plan-grid){align-items:flex-start; padding-top:8px;}
     body.mode-launch.signup-gate-open #accountModal,
     body.mode-premium.signup-gate-open #accountModal{
-      height:auto; max-height:calc(100vh - 20px); min-height:0; overflow-y:auto;
+      height:auto; max-height:calc(100dvh - 84px); min-height:0; overflow-y:auto;
+      -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain; touch-action:pan-y;
+      scroll-padding-bottom:24px;
     }
-    .signup-plan-grid{gap:7px; margin:10px 0 0;}
+    .signup-plan-grid{gap:7px; margin:10px 0 0; padding-bottom:6px;}
     .signup-plan-card,.signup-plan-card.featured{padding:31px 14px 12px; min-height:0;}
     .signup-plan-card h4{margin-bottom:4px; font-size:16px;}
     .signup-plan-card ul{display:grid; grid-template-columns:1fr; gap:4px; margin:4px 0 8px; font-size:10px;}
@@ -1611,6 +1613,31 @@
     .signup-plan-card .plan-price,.google-price strong{font-size:27px;}
     .plan-price-note{margin-bottom:5px;}
     .light-continue,.premium-continue,.ultra-notify{min-height:34px; padding:7px 10px;}
+
+    /* En pricing, es desplaça tota la capa: el gest funciona des de qualsevol punt. */
+    #accountModalBg:has(#accountLoginView:not(.auth-step) .signup-plan-grid){
+      overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
+      touch-action:pan-y; padding:8px 12px 16px;
+    }
+    body.mode-launch.signup-gate-open #accountModalBg:has(#accountLoginView:not(.auth-step) .signup-plan-grid) #accountModal,
+    body.mode-premium.signup-gate-open #accountModalBg:has(#accountLoginView:not(.auth-step) .signup-plan-grid) #accountModal{
+      flex:none; height:auto; min-height:0; max-height:none; margin:0 auto 8px;
+      overflow:visible; touch-action:pan-y;
+    }
+    .signup-plan-card,.signup-plan-card.featured{
+      display:grid; grid-template-columns:88px minmax(0,1fr);
+      grid-template-areas:"title features" "price features" "note note" "button button";
+      column-gap:10px; row-gap:3px; align-items:start; padding:31px 13px 10px;
+    }
+    .signup-plan-card h4{grid-area:title; align-self:center; margin:0;}
+    .signup-plan-card ul{
+      grid-area:features; align-self:center; margin:0; padding:0;
+      grid-template-columns:1fr; gap:4px;
+    }
+    .signup-plan-card .plan-price,.signup-plan-card .google-price{grid-area:price; margin:0;}
+    .signup-plan-card .plan-price-note{grid-area:note; margin:0; min-height:0;}
+    .signup-plan-card .light-continue,.signup-plan-card .premium-continue,
+    .signup-plan-card .ultra-notify{grid-area:button; margin-top:4px;}
 
     /* Login i totes les vistes de perfil queden centrades, no enganxades al peu. */
     #accountModalBg{align-items:center;}
