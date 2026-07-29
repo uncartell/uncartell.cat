@@ -1,24 +1,34 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="ca" data-lang="ca">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cartells gratuïts per imprimir | uncartell.cat</title>
-<meta id="metaDescription" name="description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF. Troba senyalització per a comerços, equipaments i espais públics.">
+<meta id="metaDescription" name="description" content="Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link id="canonicalUrl" rel="canonical" href="https://uncartell.cat/">
 <link id="alternateCa" rel="alternate" hreflang="ca" href="https://uncartell.cat/">
 <link id="alternateEs" rel="alternate" hreflang="es" href="https://uncartel.es/">
 <link id="alternateDefault" rel="alternate" hreflang="x-default" href="https://uncartell.cat/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta id="ogLocale" property="og:locale" content="ca_ES">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="uncartell.cat">
 <meta id="ogTitle" property="og:title" content="Cartells gratuïts per imprimir | uncartell.cat">
-<meta id="ogDescription" property="og:description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF.">
+<meta id="ogDescription" property="og:description" content="Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.">
 <meta id="ogUrl" property="og:url" content="https://uncartell.cat/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://uncartell.cat/og-uncartell-cat.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta id="twitterTitle" name="twitter:title" content="Cartells gratuïts per imprimir | uncartell.cat">
-<meta id="twitterDescription" name="twitter:description" content="Cartells gratuïts, clars i ben dissenyats per imprimir en PDF.">
+<meta id="twitterDescription" name="twitter:description" content="Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.">
+<meta name="twitter:image" content="https://uncartell.cat/og-uncartell-cat.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://uncartell.cat/#website","url":"https://uncartell.cat/","name":"uncartell.cat","inLanguage":"ca"},{"@type":"Person","@id":"https://uncartell.cat/#marti-ruiz","name":"Martí Ruiz","url":"https://uncartell.cat/manifest","sameAs":["https://es.linkedin.com/in/marti-ruiz"]}]}</script>
 <style>
   :root{
     --paper:#FAFAF8;
@@ -1583,10 +1593,10 @@
     <nav id="mainNav">
       <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Tanca el menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></svg></button>
       <span class="mobile-nav-heading">Menú</span>
-      <button data-page="cartells" class="active">Cartells</button>
-      <button data-page="personalitza" class="nav-premium"><svg class="nav-lock" id="navLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Personalitza</button>
-      <button data-page="manifest">Manifest</button>
-      <button data-page="contacte">Contacte</button>
+      <a data-page="cartells" class="active" href="/">Cartells</a>
+      <a data-page="personalitza" class="nav-premium" href="/personalitza/"><svg class="nav-lock" id="navLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Personalitza</a>
+      <a data-page="manifest" href="/manifest/">Manifest</a>
+      <a data-page="contacte" href="/contacte/">Contacte</a>
       <button class="mobile-account-nav" id="mobileAccountOpenBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/></svg>El meu compte</button>
       <div class="mobile-nav-watermark">uncartell<span class="dot">.</span>cat<small>Cartells clars per fer els espais una mica més amables.</small></div>
     </nav>
@@ -1648,11 +1658,11 @@
   </section>
 
   <!-- MANIFEST -->
-  <section class="page" id="page-manifest">
+  <section class="page" id="page-manifest" inert aria-hidden="true">
     <div class="manifest-grid">
       <div class="manifest">
         <span class="eyebrow">Manifest</span>
-        <h1 class="display">Crec que el bon disseny no hauria de dependre dels diners.</h1>
+        <div class="display" role="presentation">Crec que el bon disseny no hauria de dependre dels diners.</div>
         <p class="lede">Fa anys que em dedico a dissenyar informació perquè les persones s’orientin, entenguin millor els espais i es moguin amb més facilitat.</p>
         <p>Un cartell també forma part d’aquesta experiència.</p>
         <p>Per això vaig crear <strong>uncartell.cat</strong>: una col·lecció de cartells gratuïts, clars i cuidats, perquè qualsevol persona els pugui descarregar i imprimir en segons.</p>
@@ -1678,11 +1688,11 @@
   </section>
 
   <!-- PERSONALITZA -->
-  <section class="page" id="page-personalitza">
+  <section class="page" id="page-personalitza" inert aria-hidden="true">
     <div class="personalize-wrap premium-locked" id="personalizeWrap">
       <div class="page-head" style="padding-top:0;">
         <span class="eyebrow">Personalitza</span>
-        <h1 class="display">Personalitza els teus cartells</h1>
+        <div class="display" role="presentation">Personalitza els teus cartells</div>
         <p class="page-sub">Crea i edita cartells per a cada ocasió.</p>
       </div>
 
@@ -1820,11 +1830,11 @@
   </section>
 
   <!-- CONTACTE -->
-  <section class="page" id="page-contacte">
+  <section class="page" id="page-contacte" inert aria-hidden="true">
     <div class="contact-wrap">
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Contacte</span>
-        <h1 class="display" style="font-size:38px;">Escriu-nos.</h1>
+        <div class="display" style="font-size:38px;" role="presentation">Escriu-nos.</div>
         <p class="page-sub">Tens dubtes, suggeriments o simplement vols que afegim el teu cartell al repositori?</p>
       </div>
       <form id="contactForm">
@@ -1847,11 +1857,11 @@
   </section>
 
   <!-- FAQS -->
-  <section class="page" id="page-faqs">
+  <section class="page" id="page-faqs" inert aria-hidden="true">
     <div class="legal-wrap">
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Ajuda</span>
-        <h1 class="display" style="font-size:38px;">Preguntes freqüents</h1>
+        <div class="display" style="font-size:38px;" role="presentation">Preguntes freqüents</div>
         <p class="page-sub">Si no trobes la resposta aquí, escriu-nos des de Contacte.</p>
       </div>
       <div class="faq-list">
@@ -1900,11 +1910,11 @@
   </section>
 
   <!-- PRIVACITAT -->
-  <section class="page" id="page-privacitat">
+  <section class="page" id="page-privacitat" inert aria-hidden="true">
     <div class="legal-wrap">
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Legal</span>
-        <h1 class="display" style="font-size:38px;">Política de privacitat</h1>
+        <div class="display" style="font-size:38px;" role="presentation">Política de privacitat</div>
         <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
       </div>
       <div class="legal-body">
@@ -1933,11 +1943,11 @@
   </section>
 
   <!-- COOKIES -->
-  <section class="page" id="page-cookies">
+  <section class="page" id="page-cookies" inert aria-hidden="true">
     <div class="legal-wrap">
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Legal</span>
-        <h1 class="display" style="font-size:38px;">Política de cookies</h1>
+        <div class="display" style="font-size:38px;" role="presentation">Política de cookies</div>
         <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
       </div>
       <div class="legal-body">
@@ -1961,11 +1971,11 @@
   </section>
 
   <!-- AVÍS LEGAL -->
-  <section class="page" id="page-legal">
+  <section class="page" id="page-legal" inert aria-hidden="true">
     <div class="legal-wrap">
       <div class="page-head" style="padding-top:48px;">
         <span class="eyebrow">Legal</span>
-        <h1 class="display" style="font-size:38px;">Avís legal i condicions d’ús</h1>
+        <div class="display" style="font-size:38px;" role="presentation">Avís legal i condicions d’ús</div>
         <p class="page-sub">Última actualització: 28 de juliol de 2026.</p>
       </div>
       <div class="legal-body">
@@ -1992,11 +2002,11 @@
   </section>
 
   <!-- ADMINISTRACIÓ -->
-  <section class="page" id="page-admin">
+  <section class="page" id="page-admin" inert aria-hidden="true">
     <div class="admin-auth-gate">
       <form class="admin-auth-card" id="adminLoginForm">
         <span class="eyebrow">Accés restringit</span>
-        <h1>Administració</h1>
+        <div role="presentation">Administració</div>
         <p>Identifica’t per gestionar la biblioteca d’icones.</p>
         <input id="adminLoginUser" type="text" autocomplete="username" placeholder="Usuari" required>
         <input id="adminLoginPassword" type="password" autocomplete="current-password" placeholder="Contrasenya" required>
@@ -2008,7 +2018,7 @@
       <div class="admin-head">
         <div>
           <span class="eyebrow">Prototip local</span>
-          <h1 class="display">Biblioteca d’icones</h1>
+          <div class="display" role="presentation">Biblioteca d’icones</div>
           <p>Gestiona les icones i els textos del catàleg. Els canvis es desen només en aquest navegador i no es publica res.</p>
         </div>
         <div class="admin-head-actions">
