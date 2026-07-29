@@ -1389,7 +1389,7 @@
       border:1.5px solid var(--stone-line); border-radius:50%; background:var(--paper); color:var(--ink); cursor:pointer;
     }
     .mobile-menu-toggle svg{width:18px; height:18px;}
-    nav{
+    #mainNav{
       position:fixed; z-index:92; top:0; right:0; bottom:0;
       width:min(82vw,320px); padding:78px 20px 28px;
       display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; flex-wrap:nowrap;
@@ -1399,15 +1399,15 @@
       transform:translateX(105%); visibility:hidden;
       transition:transform .26s ease, visibility .26s;
     }
-    nav.mobile-open{transform:translateX(0); visibility:visible;}
-    nav button{flex:none; width:100%; justify-content:flex-start; padding:12px 14px; font-size:14px; border-radius:10px;}
-    nav button.mobile-account-nav{display:flex; margin-top:7px; border-style:dashed;}
+    #mainNav.mobile-open{transform:translateX(0); visibility:visible;}
+    #mainNav button{flex:none; width:100%; justify-content:flex-start; padding:12px 14px; font-size:14px; border-radius:10px;}
+    #mainNav button.mobile-account-nav{display:flex; margin-top:7px; border-style:dashed;}
     .mobile-account-nav svg{width:16px; height:16px; flex:none;}
-    nav .mobile-menu-close{
+    #mainNav .mobile-menu-close{
       display:flex; position:absolute; top:16px; right:16px; width:38px; height:38px;
       padding:0; align-items:center; justify-content:center; border-radius:50%;
     }
-    nav .mobile-menu-close svg{width:17px; height:17px;}
+    #mainNav .mobile-menu-close svg{width:17px; height:17px;}
     .mobile-nav-heading{
       display:block; margin:0 0 15px; padding-bottom:14px; border-bottom:1px solid var(--stone-line);
       font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--gray-text);
@@ -1572,7 +1572,59 @@
   .cookie-banner.show{display:block;animation:fade .22s ease}.cookie-banner h2{font-size:20px;margin:0 0 7px}.cookie-banner p{font-size:14px;line-height:1.5;color:var(--gray-text);margin:0}
   .cookie-actions{display:flex;gap:8px;margin-top:17px;flex-wrap:nowrap}.cookie-actions button{flex:1;min-width:0;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--stone-line);background:#fff;font-weight:700;white-space:nowrap;cursor:pointer}.cookie-actions .cookie-primary{background:var(--ink);border-color:var(--ink);color:#fff}.cookie-actions .cookie-settings{margin-left:0}
   .cookie-panel{display:none;padding-top:17px}.cookie-panel.show{display:block}.cookie-option{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:13px 0;border-top:1px solid var(--stone-line)}.cookie-option strong,.cookie-option span{display:block}.cookie-option span{font-size:13px;color:var(--gray-text);margin-top:3px}.cookie-toggle{width:46px;height:26px;accent-color:#00a57e}.legal-note{padding:16px 18px;border-radius:14px;background:#ededed;margin:18px 0}.legal-body ul{padding-left:20px;line-height:1.65}.cookie-manage-link{border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer}.cookie-manage-link:hover{text-decoration:underline}
-  @media(max-width:640px){.cookie-banner{right:10px;bottom:10px;width:calc(100vw - 20px);padding:18px;border-radius:18px}.cookie-actions{display:grid;grid-template-columns:1fr 1fr}.cookie-actions button{padding:0 12px}.cookie-actions .cookie-settings{grid-column:1/-1;margin-left:0}}
+  .hero-arrow-mobile,.hero-mobile-break,.hero-second-end-mobile{display:none;}
+  @media(max-width:640px){
+    .cookie-banner{right:10px;bottom:10px;width:calc(100vw - 20px);padding:18px;border-radius:18px}.cookie-actions{display:grid;grid-template-columns:1fr 1fr}.cookie-actions button{padding:0 12px}.cookie-actions .cookie-settings{grid-column:1/-1;margin-left:0}
+
+    /* Composició específica del titular en pantalles estretes. */
+    .hero-arrow-desktop{display:none;}
+    .hero-arrow-mobile{display:inline-flex; margin-left:0; margin-right:7px;}
+    .hero-mobile-break{display:block;}
+    .hero-second-end-desktop{display:none;}
+    .hero-second-end-mobile{display:inline;}
+    .hero-second-start,.hero-second-end{white-space:nowrap;}
+
+    /* El calaix lateral acaba amb dos vèrtexs rectes. */
+    #mainNav{border-radius:0;}
+
+    /* Mateix inici vertical a totes les pàgines principals. */
+    .personalize-wrap,.personalize-wrap.premium-locked,
+    .manifest-grid,.contact-wrap,.legal-wrap{padding-top:18px;}
+    #page-contacte .page-head{padding-top:0 !important;}
+    .manifest h1.display{margin-top:0;}
+
+    /* Controls de Personalitza sempre a la mateixa amplada. */
+    .poster-text-input,.business-kit,.logo-file-control{width:100% !important; max-width:none;}
+
+    /* Pricing a la part alta i compacte; els avantatges no es trenquen. */
+    #accountModalBg:has(#accountLoginView:not(.auth-step) .signup-plan-grid){align-items:flex-start; padding-top:8px;}
+    body.mode-launch.signup-gate-open #accountModal,
+    body.mode-premium.signup-gate-open #accountModal{
+      height:auto; max-height:calc(100vh - 20px); min-height:0; overflow-y:auto;
+    }
+    .signup-plan-grid{gap:7px; margin:10px 0 0;}
+    .signup-plan-card,.signup-plan-card.featured{padding:31px 14px 12px; min-height:0;}
+    .signup-plan-card h4{margin-bottom:4px; font-size:16px;}
+    .signup-plan-card ul{display:grid; grid-template-columns:1fr; gap:4px; margin:4px 0 8px; font-size:10px;}
+    .signup-plan-card li{gap:8px; line-height:1.15; white-space:nowrap;}
+    .signup-plan-card .plan-price,.google-price{margin:2px 0 4px;}
+    .signup-plan-card .plan-price,.google-price strong{font-size:27px;}
+    .plan-price-note{margin-bottom:5px;}
+    .light-continue,.premium-continue,.ultra-notify{min-height:34px; padding:7px 10px;}
+
+    /* Login i totes les vistes de perfil queden centrades, no enganxades al peu. */
+    #accountModalBg{align-items:center;}
+    #accountModal.dashboard-mode,
+    body.mode-premium:not(.signup-gate-open) #accountModal:not(.dashboard-mode){
+      height:auto; min-height:420px; max-height:calc(100vh - 32px);
+    }
+
+    /* Footer complet, visible i centrat. */
+    footer{text-align:center;}
+    footer .foot-row{align-items:center; justify-content:center;}
+    .foot-links{display:flex; width:100%; justify-content:center; align-items:center; gap:10px 16px;}
+    .footer-admin-link{display:inline-block; margin:0 auto;}
+  }
 </style>
 </head>
 <body>
@@ -1618,8 +1670,8 @@
     <div class="hero">
       <div class="hero-copy">
         <h1 class="hero-title">
-          Cartells gratuïts <span class="hero-icon-pill"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><br>
-          per un món millor <span class="hero-icon-circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.1" fill="currentColor"/><circle cx="15.5" cy="10" r="1.1" fill="currentColor"/><path d="M7.5 14c1 1.8 3 2.8 4.5 2.8s3.5-1 4.5-2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
+          Cartells gratuïts <span class="hero-icon-pill hero-arrow-desktop"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><br>
+          <span class="hero-icon-pill hero-arrow-mobile"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M0.75 12h22.5"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.75 22.5 23.25 12 12.75 1.5"></path></svg></span><span class="hero-second-start">per un</span> <br class="hero-mobile-break"><span class="hero-second-end hero-second-end-desktop">món millor</span><span class="hero-second-end hero-second-end-mobile">Món millor</span> <span class="hero-icon-circle"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.1" fill="currentColor"/><circle cx="15.5" cy="10" r="1.1" fill="currentColor"/><path d="M7.5 14c1 1.8 3 2.8 4.5 2.8s3.5-1 4.5-2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span>
         </h1>
         <p class="hero-purpose">Crea, personalitza i descarrega cartells gratuïts preparats per imprimir.</p>
         <div class="hero-ctas">
@@ -2404,7 +2456,7 @@ const ES_TRANSLATIONS = {
   "El meu compte":"Mi cuenta","Menú":"Menú","Explora cartells":"Explora carteles",
   "Un món visualment millor":"Un mundo visualmente mejor","És possible":"Es posible",
   "Per un món millor :)":"Por un mundo mejor :)","Imatge":"Imagen",
-  "Cartells gratuïts":"Carteles gratuitos","per un món millor":"por un mundo mejor",
+  "Cartells gratuïts":"Carteles gratuitos","per un món millor":"para un mundo mejor","per un":"para un","món millor":"mundo mejor","Món millor":"mundo mejor",
   "uncartell.cat és una eina per crear i descarregar cartells gratuïts, clars i preparats per imprimir.":"uncartel.es es una herramienta para crear y descargar carteles gratuitos, claros y preparados para imprimir.",
   "Cartells clars per fer els espais una mica més amables.":"Carteles claros para hacer los espacios un poco más amables.",
   "ABANS":"ANTES","ARA":"AHORA","Ajuda":"Ayuda","Preguntes freqüents":"Preguntas frecuentes",
