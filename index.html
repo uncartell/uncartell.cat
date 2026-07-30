@@ -981,11 +981,22 @@
 
   .preview-side h2.display{width:100%; max-width:520px; margin:0 auto 16px; font-size:17px; text-align:center; transform:translateY(-2px);}
   .preview-poster{
-    width:100%; max-width:520px; margin:0 auto; aspect-ratio:297/210;
+    position:relative; width:100%; max-width:520px; margin:0 auto; aspect-ratio:297/210;
     border-radius:8px; overflow:hidden; border:1px solid var(--stone-line);
     box-shadow:0 10px 30px -14px rgba(0,0,0,.3);
   }
   .preview-poster svg{width:100%; height:100%; display:block;}
+  .preview-poster [data-inline-edit]{cursor:text;}
+  .preview-poster [data-inline-edit]:hover{filter:brightness(.72);}
+  .preview-inline-editor{
+    position:absolute; z-index:4; left:50%; width:82%; transform:translateX(-50%);
+    box-sizing:border-box; margin:0; padding:5px 9px; border:1.5px solid var(--green);
+    border-radius:6px; outline:none; background:rgba(255,255,255,.96); color:var(--ink);
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; text-align:center;
+    box-shadow:0 5px 18px -10px rgba(0,0,0,.48);
+  }
+  .preview-inline-editor.is-title{top:54%; font-size:clamp(16px,3.7vw,30px); line-height:1.08; font-weight:700; text-transform:uppercase;}
+  .preview-inline-editor.is-subtitle{top:72%; min-height:40px; resize:none; font-size:clamp(10px,1.7vw,14px); line-height:1.2; font-weight:400;}
   .preview-name{text-align:center; font-size:11px; font-weight:400; color:var(--gray-text); margin-top:10px;}
   @media(max-width:760px){
     .lock-panel,.preview-side{flex:1 1 100%; min-width:0;}
@@ -3163,14 +3174,14 @@ function posterSVG(def, opts={}){
   };
   const safeTitleLines = wrapTitle(word).map(escapeSvgText);
   const titleStartY = safeTitleLines.length === 1 ? 137 : safeTitleLines.length === 2 ? 128 : 116;
-  const titleMarkup = `<text text-anchor="middle" font-family="${fontFamily}" font-weight="700" font-size="${titleSize}" fill="${titleColor}">${safeTitleLines.map((line, index) => `<tspan x="148.5" y="${titleStartY + index * 23}">${line}</tspan>`).join('')}</text>`;
+  const titleMarkup = `<text data-inline-edit="title" text-anchor="middle" font-family="${fontFamily}" font-weight="700" font-size="${titleSize}" fill="${titleColor}">${safeTitleLines.map((line, index) => `<tspan x="148.5" y="${titleStartY + index * 23}">${line}</tspan>`).join('')}</text>`;
   const safeSubLines = String(sub).split(/\r?\n/).slice(0,2).map(line => line.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c])));
   const subtitleY = safeTitleLines.length === 1 ? 157 : safeTitleLines.length === 2 ? 167 : 176;
   return `<svg viewBox="0 0 297 210" xmlns="http://www.w3.org/2000/svg">
     <rect width="297" height="210" fill="${backgroundColor}"/>
     <svg x="114" y="28" width="69" height="69" viewBox="${iconViewBox}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:${iconColor}">${icon}</svg>
     ${titleMarkup}
-    ${isPremiumPoster ? (safeSubLines.length > 1 ? `<text text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f"><tspan x="148.5" y="${subtitleY}">${safeSubLines[0]}</tspan><tspan x="148.5" y="${subtitleY + 11}">${safeSubLines[1]}</tspan></text>` : `<text x="148.5" y="${subtitleY}" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f">${safeSubLines[0] || ''}</text>`) : ''}
+    ${isPremiumPoster ? (safeSubLines.length > 1 ? `<text data-inline-edit="subtitle" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f"><tspan x="148.5" y="${subtitleY}">${safeSubLines[0]}</tspan><tspan x="148.5" y="${subtitleY + 11}">${safeSubLines[1]}</tspan></text>` : `<text data-inline-edit="subtitle" x="148.5" y="${subtitleY}" text-anchor="middle" font-family="${fontFamily}" font-size="9" fill="#6b675f">${safeSubLines[0] || ''}</text>`) : ''}
     ${hidePremiumBrand ? '' : `<rect x="8" y="190" width="281" height="14" rx="7" fill="${footerFill}" stroke="#D8D8D8" stroke-width="0.25pt"/>${opts.logo && isPremiumPoster ? `<image href="${opts.logo}" x="18" y="192.5" width="64" height="9" preserveAspectRatio="xMinYMid meet"/><text x="279" y="199.5" text-anchor="end" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="300" font-size="6.5" fill="#C6C6C6">${posterBrand}</text>` : `<text x="18" y="199.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="300" font-size="6.5" fill="#C6C6C6">${posterBrand}</text>`}`}
   </svg>`;
 }
@@ -4483,6 +4494,61 @@ function renderPreview(){
   document.getElementById('pTitleColorHex').value = titleColor.toUpperCase();
   document.getElementById('pIconHex').value = iconColor.toUpperCase();
 }
+
+const previewPoster = document.getElementById('previewPoster');
+let activeInlinePosterEditor = null;
+function closeInlinePosterEditor(commit=true){
+  if(!activeInlinePosterEditor) return;
+  const {editor, input, initialValue} = activeInlinePosterEditor;
+  if(!commit) input.value = initialValue;
+  else input.value = editor.value;
+  activeInlinePosterEditor = null;
+  renderPreview();
+}
+function startInlinePosterEditor(kind){
+  if(activeInlinePosterEditor) closeInlinePosterEditor(true);
+  const input = document.getElementById(kind === 'title' ? 'pText' : 'pSubtitle');
+  if(kind === 'subtitle' && !hasPremiumAccess()) return;
+  const editor = document.createElement(kind === 'title' ? 'input' : 'textarea');
+  editor.className = `preview-inline-editor is-${kind}`;
+  editor.value = input.value;
+  editor.maxLength = Number(input.maxLength) || (kind === 'title' ? 18 : 60);
+  editor.setAttribute('aria-label', currentLanguage === 'es'
+    ? (kind === 'title' ? 'Editar título directamente' : 'Editar subtítulo directamente')
+    : (kind === 'title' ? 'Edita el títol directament' : 'Edita el subtítol directament'));
+  if(kind === 'subtitle') editor.rows = 2;
+  const initialValue = input.value;
+  activeInlinePosterEditor = {editor, input, initialValue};
+  previewPoster.appendChild(editor);
+  editor.addEventListener('click', event => event.stopPropagation());
+  editor.addEventListener('input', () => {
+    if(kind === 'subtitle'){
+      const lines = editor.value.split(/\r?\n/);
+      if(lines.length > 2) editor.value = [lines[0], lines.slice(1).join(' ')].join('\n');
+    }
+    input.value = editor.value;
+  });
+  editor.addEventListener('keydown', event => {
+    if(event.key === 'Escape'){
+      event.preventDefault();
+      closeInlinePosterEditor(false);
+    }else if(kind === 'title' && event.key === 'Enter'){
+      event.preventDefault();
+      closeInlinePosterEditor(true);
+    }else if(kind === 'subtitle' && event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
+      event.preventDefault();
+      closeInlinePosterEditor(true);
+    }
+  });
+  editor.addEventListener('blur', () => closeInlinePosterEditor(true), {once:true});
+  editor.focus();
+  editor.setSelectionRange(editor.value.length, editor.value.length);
+}
+previewPoster.addEventListener('click', event => {
+  if(event.target.closest('.preview-inline-editor')) return;
+  const editableText = event.target.closest('[data-inline-edit]');
+  if(editableText) startInlinePosterEditor(editableText.dataset.inlineEdit);
+});
 
 ['pTitleColor','pIcon','pText'].forEach(id => document.getElementById(id).addEventListener('input', renderPreview));
 document.getElementById('pSubtitle').addEventListener('input', (e) => {
