@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url><loc>https://uncartell.cat/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/"/></url>
-  <url><loc>https://uncartell.cat/personalitza/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/personalitza/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/personaliza/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/personalitza/"/></url>
-  <url><loc>https://uncartell.cat/manifest/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/manifest/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/manifiesto/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/manifest/"/></url>
-  <url><loc>https://uncartell.cat/contacte/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/contacte/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/contacto/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/contacte/"/></url>
-  <url><loc>https://uncartell.cat/faqs/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/faqs/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/preguntas-frecuentes/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/faqs/"/></url>
-  <url><loc>https://uncartell.cat/legal/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/legal/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/aviso-legal/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/legal/"/></url>
-  <url><loc>https://uncartell.cat/privacitat/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/privacitat/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/privacidad/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/privacitat/"/></url>
-  <url><loc>https://uncartell.cat/cookies/</loc><xhtml:link rel="alternate" hreflang="ca" href="https://uncartell.cat/cookies/"/><xhtml:link rel="alternate" hreflang="es" href="https://uncartel.es/cookies/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://uncartell.cat/cookies/"/></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://uncartell.cat/</loc></url>
+  <url><loc>https://uncartell.cat/cartells/</loc></url>
+  <url><loc>https://uncartell.cat/cartes-i-menus/</loc></url>
+  <url><loc>https://uncartell.cat/taules-de-preus/</loc></url>
+  <url><loc>https://uncartell.cat/codis-qr/</loc></url>
+  <url><loc>https://uncartell.cat/plans/</loc></url>
+  <url><loc>https://uncartell.cat/faqs/</loc></url>
+  <url><loc>https://uncartell.cat/manifest/</loc></url>
+  <url><loc>https://uncartell.cat/contacte/</loc></url>
+  <url><loc>https://uncartell.cat/legal/</loc></url>
+  <url><loc>https://uncartell.cat/privacitat/</loc></url>
+  <url><loc>https://uncartell.cat/cookies/</loc></url>
 </urlset>

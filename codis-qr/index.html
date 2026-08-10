@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <title>Creador de codis QR | uncartell.cat</title><meta name="description" content="Crea, personalitza i descarrega cartells, cartes, menús, tarifes i codis QR amb un disseny clar i professional.">
+  <link rel="stylesheet" href="/assets/platform.css?v=17">
+  <link rel="stylesheet" href="/assets/qr-generator.css?v=10">
+<link rel="canonical" href="https://uncartell.cat/codis-qr/"><link rel="alternate" hreflang="ca" href="https://uncartell.cat/codis-qr/"><link rel="alternate" hreflang="es" href="https://uncartel.es/"><meta property="og:type" content="website"><meta property="og:locale" content="ca_ES"><meta property="og:title" content="Eines de disseny gratuïtes per imprimir | uncartell.cat"><meta property="og:description" content="Crea, personalitza i descarrega cartells, cartes, menús, tarifes i codis QR amb un disseny clar i professional."><meta property="og:url" content="https://uncartell.cat/codis-qr/"><meta property="og:image" content="https://uncartell.cat/og-uncartell-cat.jpg"><meta name="twitter:card" content="summary_large_image"></head>
+<body>
+  <div data-platform-header></div>
+  <main class="qr-page">
+    <section class="qr-intro u-shell">
+      <div><span class="qr-eyebrow">CODIS QR</span><h1>Crea el teu codi QR</h1><p>Converteix qualsevol enllaç en un QR gratuït, personalitzable i que no caduca.</p></div>
+      <button class="qr-open-projects" type="button" data-open-projects>Obre un projecte<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></button>
+    </section>
+    <section class="qr-editor u-shell" aria-label="Editor de codis QR">
+      <div class="qr-project-bar"><strong>Editor</strong><label><span>Nom del projecte</span><span class="qr-project-input"><input data-project-name maxlength="70" value="El meu codi QR"><em data-project-plan>Premium</em></span></label><div><button type="button" data-save-project><svg viewBox="0 0 24 24"><path d="M15.2 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.8Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Desa el projecte</button><button type="button" data-open-projects><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>Obre un projecte</button></div></div>
+      <div class="qr-editor-shell">
+        <aside class="qr-controls"><div class="qr-panel-tabs"><button class="active" type="button" data-tab="content">Contingut</button><button type="button" data-tab="style">Estil</button></div>
+          <div class="qr-panel-view" data-panel="content"><span class="qr-panel-title">CONTINGUT</span><label class="qr-field"><span>Enllaç</span><input data-qr-url type="url" inputmode="url" autocomplete="url" placeholder="https://exemple.cat"><small data-url-error></small></label><button class="qr-generate" type="button" data-generate>Genera el codi QR</button><label class="qr-field qr-correction"><span>Correcció d’errors</span><select data-correction><option value="M">M · Equilibrada</option><option value="Q" selected>Q · Recomanada per imprimir</option></select></label><p class="qr-note">El QR es genera al teu navegador. No enviem l’enllaç a cap servidor i no caduca.</p></div>
+          <div class="qr-panel-view" data-panel="style" hidden><span class="qr-panel-title">ESTIL DEL QR</span><section class="qr-feature-card" data-colors-card><div><strong>Colors</strong><small>Personalitza el QR i el fons.</small></div><em>Premium</em><div class="qr-colors"><label><span>Color del QR</span><input type="color" data-foreground value="#181614"></label><label><span>Fons</span><input type="color" data-background value="#ffffff"></label></div></section><section class="qr-feature-card" data-watermark-card><div><strong>Marca d’aigua al peu</strong><small>Edita o elimina el text que acompanya el QR.</small></div><em class="ultra">Ultra</em><label class="qr-watermark-field"><input type="text" data-watermark maxlength="50" value="uncartell.cat"><button type="button" data-clear-watermark>×</button></label></section></div>
+        </aside>
+        <div class="qr-workspace">
+          <div class="qr-canvas"><div class="qr-empty" data-empty><svg class="qr-empty-watermark" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h4v4h-7v-3m4-4h3"/></svg><div class="qr-empty-card"><strong>Crea el teu codi QR</strong><label><span>Enganxa l’enllaç</span><div><input data-qr-url type="url" inputmode="url" autocomplete="url" placeholder="https://exemple.cat"><button type="button" data-generate>Genera</button></div><small data-url-error></small></label></div></div><div class="qr-result" data-result hidden><div data-qr-preview></div><a data-result-url target="_blank" rel="noopener"></a></div></div>
+          <div class="qr-actions"><span data-save-status>Encara no has generat cap QR</span><div><button type="button" data-print disabled>Imprimeix</button><button type="button" data-download-png disabled>Descarrega PNG <em>Premium</em></button><button class="primary" type="button" data-download-svg disabled>Descarrega SVG <em>Ultra</em></button></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div data-platform-footer></div><div data-global-quota></div>
+  <div class="qr-projects-modal" data-projects-modal hidden><button class="qr-modal-backdrop" type="button" data-close-projects></button><section role="dialog" aria-modal="true" aria-labelledby="qrProjectsTitle"><button class="qr-modal-close" type="button" data-close-projects>×</button><span class="qr-eyebrow">ELS MEUS PROJECTES</span><h2 id="qrProjectsTitle">Codis QR desats</h2><div data-project-list></div></section></div>
+  <div class="qr-toast" data-toast role="status"></div>
+  <script src="/assets/vendor-qrcode-generator.js"></script><script src="/assets/platform.js?v=10"></script><script src="/assets/qr-generator.js?v=6"></script>
+</body></html>
