@@ -35,8 +35,8 @@
   const valid=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   let pending=false;
 
-  const saveInterest=async()=>{
-    const value=email.value.trim().toLowerCase();
+  const saveInterest=async(explicitEmail='')=>{
+    const value=(explicitEmail||email.value).trim().toLowerCase();
     if(!valid(value)){
       feedback.textContent=es?'Escribe un correo válido.':'Escriu un correu vàlid.';
       email.focus();
@@ -61,7 +61,10 @@
     }
   };
 
-  notify.addEventListener('click',()=>{
+  notify.addEventListener('click',async event=>{
+    event.preventDefault();
+    const knownEmail=window.UncartellPlatform?.getUser?.()?.email||'';
+    if(knownEmail){await saveInterest(knownEmail);return}
     notify.hidden=true;
     emailWrap.hidden=false;
     email.focus();

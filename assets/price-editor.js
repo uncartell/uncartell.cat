@@ -541,11 +541,19 @@
     };
     input.addEventListener("input", refresh);
     input.addEventListener("blur", () => { state.mobilePublication.slug = normalizeSlug(input.value); save(); });
-    $("#publishMobileMenu", box).addEventListener("click", () => {
+    $("#publishMobileMenu", box).addEventListener("click", async event => {
       const { slug, collision } = refresh();
       if (!slug || collision || !entitlements.canPublishMobileMenu(state.plan)) return;
-      state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString() };
-      save(); saveProject(true); renderPlans(); $("#mobilePublishModal").hidden = true; toast(L.mobilePublishedPreview);
+      const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=lang==='es'?'Publicando…':'Publicant…';
+      try{
+        const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,priceHeader:state.priceHeader,pages:state.pages},(_key,value)=>typeof value==='string'&&value.startsWith('blob:')?null:value));
+        const published=await window.UncartellPlatform.publishDocument({kind:'services',slug,payload:persistent});
+        state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString(), url:published.url };
+        save(); saveProject(true); renderPlans();
+        box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${lang==='es'?'Tu carta de servicios ya está disponible.':'La teva carta de serveis ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
+        $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
+        $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1`});
+      }catch(error){status.textContent=error?.message||L.slugUnavailable;status.className='is-unavailable';button.disabled=false;button.textContent=original}
     });
     refresh();
   }
