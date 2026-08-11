@@ -258,6 +258,7 @@
     toast.timer = setTimeout(() => node.classList.remove("show"), action?.duration || 2400);
   };
   function openPlanGate(required = "Premium") {
+    if (window.UncartellPlatform?.openUpgradeModal) return window.UncartellPlatform.openUpgradeModal();
     $("#planGateTitle").textContent = L.lockedFeatureTitle;
     $("#planGateCopy").textContent = L.lockedFeatureCopy.replace("{plan}", required);
     $("#continueEditing").textContent = L.stayEditing;
