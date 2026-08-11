@@ -1,4 +1,11 @@
 (()=>{
+  // GitHub Pages can briefly return a stale/missing asset while a deployment is
+  // propagating. Retry failed stylesheets once instead of leaving a naked page.
+  document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{
+    const retry=()=>{if(link.dataset.retry)return;link.dataset.retry='1';const url=new URL(link.href,location.href);url.searchParams.set('retry',Date.now());link.href=url.href};
+    link.addEventListener('error',retry,{once:true});
+    if(!link.sheet&&document.readyState!=='loading')retry();
+  });
   const lang=document.documentElement.lang==='es'?'es':'ca';
   const host=location.hostname.replace(/^www\./,'');
   const canonicalHost=(()=>{try{return new URL(document.querySelector('link[rel="canonical"]')?.href||location.href).hostname.replace(/^www\./,'')}catch(_){return host}})();
@@ -72,6 +79,9 @@
   googleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.4Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2 1-3.4 1a5.9 5.9 0 0 1-5.5-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.5 14a6 6 0 0 1 0-3.9V7.4H3.1a10 10 0 0 0 0 9.2L6.5 14Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.9 1.5l2.9-2.8A9.7 9.7 0 0 0 3.1 7.4l3.4 2.7A5.9 5.9 0 0 1 12 5.9Z"/></svg><span>${words.google}</span>`;
   emailButton.classList.add('u-auth-email');
   emailButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v11H3zM3.5 7l8.5 6 8.5-6"/></svg><span>${lang==='ca'?'Registra’t amb correu':'Regístrate con correo'}</span>`;
+  const appleButton=document.querySelector('.u-account-methods .disabled');
+  appleButton?.classList.add('u-auth-apple');
+  if(appleButton)appleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.8c0-2.4 2-3.6 2.1-3.7a4.5 4.5 0 0 0-3.5-1.9c-1.5-.2-2.9.9-3.6.9-.7 0-1.8-.9-3-.9a4.7 4.7 0 0 0-4 2.4c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3.1 2.4 1.2 0 1.7-.8 3.3-.8 1.5 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-3.3-1.3-3.3-3.8ZM14.3 5.6c.7-.9 1.2-2.2 1.1-3.4-1.1 0-2.4.7-3.2 1.6-.7.8-1.3 2.1-1.1 3.3 1.2.1 2.4-.6 3.2-1.5Z"/></svg><span>${words.apple}</span><small>${lang==='ca'?'Properament':'Próximamente'}</small>`;
   const upgradeModal=document.querySelector('[data-upgrade-modal]');
   const showUpgradeStep=name=>upgradeModal?.querySelectorAll('[data-upgrade-step]').forEach(step=>step.hidden=step.dataset.upgradeStep!==name);
   const closeUpgrade=()=>{if(!upgradeModal)return;upgradeModal.hidden=true;document.body.classList.remove('u-modal-open')};
@@ -100,9 +110,20 @@
     currentUser=user;
     const result=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent').eq('id',user.id).maybeSingle();
     currentProfile=result.data||{};
-    if(pendingPremium){const activation=await supabaseClient.rpc('activate_launch_premium');if(!activation.error){localStorage.removeItem('uncartell-pending-premium');pendingPremium=false;const refreshed=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent').eq('id',user.id).maybeSingle();currentProfile=refreshed.data||{...(currentProfile||{}),plan:'premium'};closeAccount();closeUpgrade()}}
-    const premiumValid=currentProfile.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date();
-    const ultraValid=currentProfile.plan==='ultra'&&currentProfile.ultra_until&&new Date(currentProfile.ultra_until)>new Date();
+    let premiumValid=currentProfile.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date();
+    let ultraValid=currentProfile.plan==='ultra'&&currentProfile.ultra_until&&new Date(currentProfile.ultra_until)>new Date();
+    // During the beta every authenticated account is Premium automatically.
+    // This also repairs older accounts that were left as Basic after login.
+    if(!ultraValid&&!premiumValid){
+      const activation=await supabaseClient.rpc('activate_launch_premium');
+      if(!activation.error){
+        const refreshed=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent').eq('id',user.id).maybeSingle();
+        currentProfile=refreshed.data||{...(currentProfile||{}),plan:'premium'};
+        premiumValid=currentProfile.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date();
+        ultraValid=currentProfile.plan==='ultra'&&currentProfile.ultra_until&&new Date(currentProfile.ultra_until)>new Date();
+      }
+    }
+    localStorage.removeItem('uncartell-pending-premium');pendingPremium=false;closeUpgrade();
     setPlan(ultraValid?'ultra':premiumValid?'premium':'basic');
     const name=currentProfile.display_name||user.user_metadata?.full_name||user.email?.split('@')[0]||'';
     document.querySelector('[data-profile-greeting]').textContent=`${words.hello}, ${name}`;
@@ -153,6 +174,6 @@
     if(error)throw error;
     return {...data,url:`${location.origin}/${kind==='menu'?(lang==='ca'?'carta':'carta'):(lang==='ca'?'serveis':'servicios')}/${slug}/`};
   }
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,submitMailboxForm,publishDocument,consumeDownload(options={}){if(getPlan()==='basic'){quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload()},getPlan,setPlan,openAccount,openUpgradeModal,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,consumeDownload(options={}){if(getPlan()==='basic'){quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload()},getPlan,setPlan,openAccount,openUpgradeModal,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();

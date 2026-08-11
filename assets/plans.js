@@ -1,4 +1,24 @@
 (()=>{
+  const es=document.documentElement.lang==='es';
+  const syncPlanCards=()=>{
+    const platform=window.UncartellPlatform;
+    if(!platform)return;
+    const plan=platform.getPlan();
+    const basic=document.querySelector('[data-plan="basic"]');
+    const premium=document.querySelector('[data-plan="premium"]');
+    const basicHead=basic?.closest('.u-plan')?.querySelector('.u-plan-head');
+    const premiumHead=premium?.closest('.u-plan')?.querySelector('.u-plan-head');
+    if(basic){basic.disabled=plan==='basic';basic.textContent=plan==='basic'?(es?'Plan actual':'Pla actual'):(es?'Cambiar a Basic':'Canvia a Basic')}
+    if(premium){premium.disabled=plan==='premium'||plan==='ultra';premium.textContent=plan==='premium'?(es?'Plan actual':'Pla actual'):plan==='ultra'?(es?'Incluido en Ultra':'Inclòs amb Ultra'):(es?'Activa Premium gratis':'Activa Premium gratis')}
+    if(basicHead)basicHead.textContent=plan==='basic'?(es?'Plan actual':'Pla actual'):(es?'Basic':'Basic');
+    if(premiumHead)premiumHead.textContent=plan==='premium'?(es?'Plan actual':'Pla actual'):(es?'Recomendado':'Recomanat');
+    basic?.closest('.u-plan')?.classList.toggle('is-current',plan==='basic');
+    premium?.closest('.u-plan')?.classList.toggle('is-current',plan==='premium');
+  };
+  syncPlanCards();
+  addEventListener('uncartell:plan',syncPlanCards);
+  addEventListener('uncartell:auth-ready',syncPlanCards);
+  addEventListener('uncartell:auth-change',syncPlanCards);
   document.querySelectorAll('[data-plan]').forEach(button=>button.addEventListener('click',async()=>{
     const platform=window.UncartellPlatform;
     if(!platform||button.disabled)return;
@@ -31,7 +51,6 @@
   const feedback=document.querySelector('[data-ultra-feedback]');
   if(!notify||!emailWrap||!email||!submit||!feedback)return;
 
-  const es=document.documentElement.lang==='es';
   const valid=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   let pending=false;
 
@@ -63,13 +82,14 @@
 
   notify.addEventListener('click',async event=>{
     event.preventDefault();
+    await window.UncartellPlatform?.whenReady?.();
     const knownEmail=window.UncartellPlatform?.getUser?.()?.email||'';
     if(knownEmail){await saveInterest(knownEmail);return}
     notify.hidden=true;
     emailWrap.hidden=false;
     email.focus();
   });
-  submit.addEventListener('click',saveInterest);
+  submit.addEventListener('click',()=>saveInterest());
   email.addEventListener('keydown',event=>{
     if(event.key!=='Enter')return;
     event.preventDefault();
