@@ -32,7 +32,6 @@
   if(!notify||!emailWrap||!email||!submit||!feedback)return;
 
   const es=document.documentElement.lang==='es';
-  const mailbox=es?'hola@uncartel.es':'hola@uncartell.cat';
   const valid=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   let pending=false;
 
@@ -47,17 +46,8 @@
     pending=true;
     submit.disabled=true;
     feedback.textContent=es?'Guardando…':'Desant…';
-    const data=new FormData();
-    data.append('email',value);
-    data.append('message',es?`${value} se ha interesado por el plan Ultra.`:`${value} s’ha interessat pel pla Ultra.`);
-    data.append('language',es?'es':'ca');
-    data.append('source_domain',location.hostname);
-    data.append('_subject',es?'Interés en el plan Ultra':'Interès pel pla Ultra');
-    data.append('_template','table');
-    data.append('_captcha','false');
     try{
-      const response=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(mailbox)}`,{method:'POST',headers:{Accept:'application/json'},body:data});
-      if(!response.ok)throw new Error('submit_failed');
+      await window.UncartellPlatform.submitMailboxForm({type:'ultra',fields:{email:value,message:es?`${value} se ha interesado por el plan Ultra.`:`${value} s’ha interessat pel pla Ultra.`}});
       localStorage.setItem(`uncartell-ultra-interest-${es?'es':'ca'}`,value);
       emailWrap.hidden=true;
       notify.hidden=false;

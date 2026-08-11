@@ -4040,7 +4040,7 @@ applyLanguage();
 
 document.getElementById('footAdmin').addEventListener('click', (e) => {
   e.preventDefault();
-  goTo('admin');
+  window.location.href = '/admin/';
 });
 const hashPages = {
   '#admin':'admin',
@@ -4068,28 +4068,9 @@ if(legacyHashPage) updatePageUrl(legacyHashPage,true);
 const initialRoutePage = legacyHashPage || routeQueryPage || pageFromLocation();
 if(initialRoutePage !== 'cartells') requestAnimationFrame(() => goTo(initialRoutePage,false));
 const adminPage = document.getElementById('page-admin');
-if(sessionStorage.getItem('uncartell-admin-auth') === 'ok') adminPage.classList.add('admin-authenticated');
-document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const error = document.getElementById('adminLoginError');
-  const submit = e.target.querySelector('[type="submit"]');
-  const user = document.getElementById('adminLoginUser').value.trim().toLocaleLowerCase();
-  const password = document.getElementById('adminLoginPassword').value;
-  submit.disabled = true;
-  error.textContent = currentLanguage === 'es' ? 'Comprobando…' : 'Comprovant…';
-  const { data: valid, error: verifyError } = await supabaseClient.rpc('verify_admin_credentials', {
-    p_username:user,
-    p_password:password
-  });
-  submit.disabled = false;
-  if(!verifyError && valid === true){
-    sessionStorage.setItem('uncartell-admin-auth','ok');
-    adminPage.classList.add('admin-authenticated');
-    error.textContent = '';
-    renderAdminLibrary();
-    return;
-  }
-  error.textContent = t('Usuari o contrasenya incorrectes.');
+document.getElementById('adminLoginForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  window.location.href = '/admin/';
 });
 
 /* ---------- download quota (persisted) ---------- */

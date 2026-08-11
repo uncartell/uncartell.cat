@@ -204,7 +204,7 @@
     const close=()=>{modal.hidden=true;document.body.style.overflow=''};
     brief.querySelector('.custom-brief-open').onclick=()=>{modal.hidden=false;document.body.style.overflow='hidden'};
     modal.querySelectorAll('[data-poster-brief-close]').forEach(button=>button.onclick=close);
-    modal.querySelector('form').onsubmit=event=>{event.preventDefault();modal.querySelector('form').innerHTML=`<div class="custom-brief-success"><strong>${es?'¡Enviado!':'Enviat!'}</strong><p>${es?'Gracias. Te responderemos lo antes posible.':'Gràcies. Et respondrem tan aviat com puguem.'}</p></div>`};
+    modal.querySelector('form').onsubmit=async event=>{event.preventDefault();const form=event.currentTarget,button=form.querySelector('[type="submit"]'),platform=window.UncartellPlatform;button.disabled=true;button.textContent=platform?.words.formSending||(es?'Enviando…':'Enviant…');try{await platform.submitMailboxForm({type:'studio',form,fields:{tool:es?'Cartel':'Cartell'}});form.innerHTML=`<div class="custom-brief-success"><strong>${es?'¡Enviado!':'Enviat!'}</strong><p>${es?'Gracias. Te responderemos lo antes posible.':'Gràcies. Et respondrem tan aviat com puguem.'}</p></div>`}catch(error){button.disabled=false;button.textContent=es?'Envía la solicitud':'Envia la petició';let out=form.querySelector('.custom-brief-error');if(!out){out=document.createElement('p');out.className='custom-brief-error';form.appendChild(out)}out.textContent=error.message||platform?.words.formError}};
   }
   function storedPosterProjects(){const value=read(PROJECT_KEY,[]);return Array.isArray(value)?value:[]}
   function projectTitle(project){return project[`title${es?'Es':'Ca'}`]||project.title||project.name||''}
