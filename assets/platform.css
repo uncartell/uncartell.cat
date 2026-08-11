@@ -175,4 +175,5 @@ body:has(.plan-preview) .u-quota{bottom:74px}
   .u-account-card,.u-upgrade-card{width:min(1040px,calc(100vw - 44px));height:min(650px,calc(100vh - 44px));max-height:none}
 }
 .u-upgrade-back{display:none!important}
+.u-account-methods .u-auth-google,.u-account-methods .u-auth-email{border-color:var(--ink);box-shadow:0 6px 18px rgba(24,22,20,.08);transition:transform .16s ease,box-shadow .16s ease}.u-account-methods .u-auth-google{background:var(--ink);color:#fff}.u-account-methods .u-auth-google:hover,.u-account-methods .u-auth-email:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(24,22,20,.14)}.u-account-methods .u-auth-google svg,.u-account-methods .u-auth-email svg{width:24px;height:24px;flex:none}.u-account-methods .u-auth-email svg{fill:none;stroke:currentColor;stroke-width:1.7}.u-account-methods .disabled{border-color:var(--line);background:#efede8;box-shadow:none;opacity:.72}.u-account-methods .disabled b{font-size:15px}
 .u-quota.is-unlimited small{font-weight:700;color:#fff}

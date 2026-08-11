@@ -78,3 +78,4 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-catalog-step,.poster-editor-section{width:100%;max-width:none;margin-inline:auto}
   .poster-editor-shell,.poster-editor-shell .workspace,.poster-editor-shell .project-save-bar{box-sizing:border-box;width:100%;min-width:0}
 }
+.custom-brief-success{margin-top:22px}
