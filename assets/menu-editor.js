@@ -10,7 +10,7 @@
   const FEATURES = Object.freeze({ ultraMenuImages: ["localhost", "127.0.0.1"].includes(location.hostname) && window.UNCARTELL_ENABLE_ULTRA_MENU_IMAGES !== false });
   const entitlements = Object.freeze({
     canCreateMobileMenu: plan => plan === "premium" || plan === "ultra",
-    canPublishMobileMenu: plan => plan === "ultra",
+    canPublishMobileMenu: plan => plan === "premium" || plan === "ultra",
     canUploadMenuImages: plan => plan === "ultra" && FEATURES.ultraMenuImages
   });
   const defaultBrandKit = () => ({ version: 2, businessName: "", logo: null, primary: "#e5372a", secondary: "#181614", font: "modern", footerText: L.lang === "ca" ? "uncartell.cat" : "uncartel.es", footerTextSet: false });
@@ -275,16 +275,21 @@
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 
   function renderFormats() {
-    $("#formatGrid").innerHTML = L.formats.map(format => `
-      <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}" data-format="${format.id}">
+    $("#formatGrid").innerHTML = L.formats.map(format => {
+      const mobileLocked = format.id === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
+      return `
+      <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
+        ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
         <span class="format-copy"><h2>${escapeHtml(format.name)}</h2><p>${escapeHtml(format.detail)}</p><p>${escapeHtml(format.fold)}</p></span>
         <span class="format-actions"><button type="button" data-format-action="demo"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>${escapeHtml(L.demo)}</button><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
-      </article>`).join("");
+      </article>`;
+    }).join("");
     $$("[data-format-action]").forEach(button => button.addEventListener("click", () => {
       const format = button.closest("[data-format]").dataset.format;
       if (button.dataset.formatAction === "demo") openDemo(format);
+      else if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) openPlanGate("Premium");
       else openEditor(format);
     }));
   }
@@ -307,6 +312,7 @@
   }
 
   function openEditor(format) {
+    if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) return openPlanGate("Premium");
     if (state.format !== format) {
       state.pages = pagesForFormat(format);
       state.contentColumns = format === "a3-landscape" ? 2 : 1;
@@ -986,7 +992,9 @@
     menu.style.setProperty("--accent", paidPlan ? state.accent : "#e5372a");
     menu.style.setProperty("--text", paidPlan ? state.textColor : "#181614");
     const fitZoom = state.format === "a4-landscape" ? .92 : .72;
-    menu.style.zoom = state.format === "mobile-interactive" || window.innerWidth <= 820 ? "1" : String(fitZoom * editorZoom);
+    const mobileFitZoom = state.format === "a4-portrait" ? .72 : state.format === "a4-landscape" ? .78 : .58;
+    menu.style.setProperty("--mobile-editor-zoom", String(mobileFitZoom * editorZoom));
+    menu.style.zoom = state.format === "mobile-interactive" ? "1" : window.innerWidth <= 820 ? String(mobileFitZoom * editorZoom) : String(fitZoom * editorZoom);
     $(".zoom-controls").hidden = state.format === "mobile-interactive";
     const mobileNav = () => state.format === "mobile-interactive" && state.activePage > 0 ? `<nav class="mobile-page-nav" aria-label="${escapeHtml(L.mobileNavigation || L.mobileHome)}">${state.activePage > 1 ? `<button class="mobile-nav-previous" type="button" data-mobile-page="${state.activePage - 1}" aria-label="${escapeHtml(L.previousPage || "Anterior")}"><svg viewBox="0 0 24 24"><path d="m5 15 7-7 7 7"/></svg></button>` : ""}${state.activePage < state.pages.length - 1 ? `<button class="mobile-nav-next" type="button" data-mobile-page="${state.activePage + 1}" aria-label="${escapeHtml(L.nextPage || "Següent")}"><svg viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></svg></button>` : ""}</nav>` : "";
     const mobileHomeButton = `<button class="mobile-home-button" type="button" data-mobile-page="0" aria-label="${escapeHtml(L.backToMenu || L.mobileHome)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></button>`;

@@ -5,6 +5,11 @@
     'arrow-down':'<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
     elevator:'<rect x="3.5" y="2.5" width="17" height="19" rx="2"/><path d="M12 8.5v13M7.5 7V3.8M5.8 5.5l1.7-1.7 1.7 1.7M16.5 3.8V7m-1.7-1.7 1.7 1.7 1.7-1.7"/><circle cx="8" cy="11" r="1.35"/><path d="M5.8 18v-3.2A2.2 2.2 0 0 1 8 12.6a2.2 2.2 0 0 1 2.2 2.2V18M8 15.2V20"/><circle cx="16" cy="11" r="1.35"/><path d="M13.8 18v-3.2a2.2 2.2 0 0 1 4.4 0V18M16 15.2V20"/>',
     stairs:'<path d="M3 19h4v-4h4v-4h4V7h6"/><path d="M4 5h6m-3-3 3 3-3 3"/>',
+    'escales-mecaniques':'<circle cx="8" cy="4.5" r="1.5"/><path d="M6.5 8v4.2l3 2.1 3.6-3.6h5.4a2.5 2.5 0 0 1 0 5h-3.4l-4.2 4.2a3.7 3.7 0 0 1-2.6 1.1H5.5a2.5 2.5 0 0 1 0-5h1.8l1.2-1.2-3-2.1V8"/>',
+    ascensor:'<rect x="3.5" y="2.5" width="17" height="19" rx="2"/><path d="M12 8.5v13M7.5 7V3.8M5.8 5.5l1.7-1.7 1.7 1.7M16.5 3.8V7m-1.7-1.7 1.7 1.7 1.7-1.7"/><circle cx="8" cy="11" r="1.35"/><path d="M5.8 18v-3.2A2.2 2.2 0 0 1 8 12.6a2.2 2.2 0 0 1 2.2 2.2V18M8 15.2V20"/><circle cx="16" cy="11" r="1.35"/><path d="M13.8 18v-3.2a2.2 2.2 0 0 1 4.4 0V18M16 15.2V20"/>',
+    'wc-accessible':'<circle cx="10" cy="4" r="1.5"/><path d="M9 7.5h3l1.3 4.2h3.2M10 8l-1 6.5h5.2l2.5 5.5h2.8M7.8 11.5a5 5 0 1 0 6.7 6.9"/>',
+    'wc-homes':'<circle cx="12" cy="4" r="1.7"/><path d="M8.5 21v-7H6.7l1.8-6h7l1.8 6h-1.8v7M12 14v7"/>',
+    'wc-dones':'<circle cx="12" cy="4" r="1.7"/><path d="m9 8-2.5 8h3V21m5-5h3L15 8h-6m5.5 13v-5"/>',
     'wc-people':'<g><circle cx="5.75" cy="4.25" r="1.65"/><path d="M3.2 21v-7.1H1.9l1.55-5.6h4.6l1.55 5.6H8.3V21M5.75 13.9V21"/></g><g><circle cx="18.25" cy="4.25" r="1.65"/><path d="M15.7 21v-5.2h-1.55l2.05-7.5h4.1l2.05 7.5H20.8V21M18.25 15.8V21"/></g>',
     mask:'<path d="M5.5 8.5c4.3-1.8 8.7-1.8 13 0v6.8c-3.8 3.2-9.2 3.2-13 0Z"/><path d="M5.5 10.2H4.3a2.3 2.3 0 0 0 0 4.6h1.2m13-4.6h1.2a2.3 2.3 0 0 1 0 4.6h-1.2M8.3 11.3h7.4M8.3 13.8h7.4"/>',
     bizum:'<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.2"><path d="m5.2 5.3 5 3.4"/><path d="m4.1 10.4 5 3.4"/><path d="m3 15.5 5 3.4"/></g><g fill="currentColor" stroke="none"><circle cx="17.6" cy="7.5" r="1.55"/><circle cx="14.55" cy="16.65" r="1.55"/></g>',
@@ -66,6 +71,7 @@
     let icon=map[item.icon]||item.icon;
     const title=`${item.titleCa||''} ${item.titleEs||''}`.toLocaleLowerCase();
     if(title.includes('ascensor'))icon='elevator';
+    else if(title.includes('escales mecàniques')||title.includes('escaleras mecánicas'))icon='escales-mecaniques';
     else if(title.includes('escales')||title.includes('escaleras'))icon='stairs';
     else if(title==='tren tren')icon='tram-front';
     else if(title.includes('bizum'))icon='bizum';
