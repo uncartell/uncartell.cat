@@ -106,7 +106,7 @@
   const openUpgradeModal=()=>{if(!upgradeModal)return;syncUpgradePlans();showUpgradeStep('plans');upgradeModal.hidden=false;document.body.classList.add('u-modal-open')};
   // The Premium badge inside every locked project-save field is itself a CTA.
   // Keep this delegated so it also covers editors rendered after platform init.
-  const projectPremiumSelector='.project-save-bar.is-locked .project-lock, .qr-project-bar.is-locked [data-project-plan]';
+  const projectPremiumSelector='.project-save-bar.is-locked .project-lock, .qr-project-bar.is-locked [data-project-plan], [data-premium-controls].is-locked, [data-colors-card].is-locked';
   const openProjectPremiumGate=event=>{
     const badge=event.target.closest(projectPremiumSelector);
     if(!badge)return;
@@ -119,7 +119,7 @@
     if(!badge)return;
     event.preventDefault();openUpgradeModal();
   });
-  const prepareProjectPremiumBadges=()=>document.querySelectorAll('.project-lock,[data-project-plan]').forEach(badge=>{badge.setAttribute('role','button');badge.setAttribute('tabindex','0')});
+  const prepareProjectPremiumBadges=()=>document.querySelectorAll('.project-lock,[data-project-plan],[data-premium-controls],[data-colors-card]').forEach(badge=>{badge.setAttribute('role','button');badge.setAttribute('tabindex','0')});
   prepareProjectPremiumBadges();
   addEventListener('uncartell:plan',syncUpgradePlans);
   let supabaseClient=null,currentUser=null,currentProfile=null,pendingPremium=localStorage.getItem('uncartell-pending-premium')==='1';
