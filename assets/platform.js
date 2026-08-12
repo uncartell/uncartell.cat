@@ -229,12 +229,25 @@
     return response.json().catch(()=>({success:true}));
   }
   async function activatePremium(){await authReady;if(!supabaseClient)throw new Error(words.authError);if(!currentUser){pendingPremium=true;localStorage.setItem('uncartell-pending-premium','1');closeUpgrade();openAccount('plans');return false}const {error}=await supabaseClient.rpc('activate_launch_premium');if(error)throw error;localStorage.removeItem('uncartell-pending-premium');pendingPremium=false;await loadProfile(currentUser);return true}
+  const blobToDataUrl=async url=>{
+    const response=await fetch(url);
+    if(!response.ok)throw new Error(words.publishUploadError||'No s’ha pogut desar una de les imatges.');
+    const blob=await response.blob();
+    return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error||new Error(words.publishUploadError));reader.readAsDataURL(blob)});
+  };
+  async function persistUploadedData(value){
+    if(typeof value==='string'&&value.startsWith('blob:'))return blobToDataUrl(value);
+    if(Array.isArray(value))return Promise.all(value.map(persistUploadedData));
+    if(value&&typeof value==='object')return Object.fromEntries(await Promise.all(Object.entries(value).map(async([key,item])=>[key,await persistUploadedData(item)])));
+    return value;
+  }
   async function publishDocument({kind,slug,payload}){
     await authReady;
     if(!supabaseClient||!currentUser)throw new Error(words.authError);
     const plan=getPlan();
     if(!['premium','ultra'].includes(plan))throw new Error(upgradeWords.copy);
-    const record={user_id:currentUser.id,owner_email:currentUser.email||'',locale:lang,kind,slug,payload,plan,status:'active',plan_expires_at:plan==='ultra'?currentProfile?.ultra_until:currentProfile?.premium_until,updated_at:new Date().toISOString()};
+    const persistedPayload=await persistUploadedData(payload);
+    const record={user_id:currentUser.id,owner_email:currentUser.email||'',locale:lang,kind,slug,payload:persistedPayload,plan,status:'active',plan_expires_at:plan==='ultra'?currentProfile?.ultra_until:currentProfile?.premium_until,updated_at:new Date().toISOString()};
     const {data,error}=await supabaseClient.from('public_documents').upsert(record,{onConflict:'locale,kind,slug'}).select('locale,kind,slug,status,published_at,updated_at').single();
     if(error)throw error;
     return {...data,url:`${location.origin}/${kind==='menu'?(lang==='ca'?'carta':'carta'):(lang==='ca'?'serveis':'servicios')}/${slug}/`};
