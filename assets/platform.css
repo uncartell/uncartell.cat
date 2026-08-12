@@ -200,3 +200,11 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Les etiquetes Premium dels camps de desament també obren la tria de plans. */
 .project-save-bar.is-locked .project-lock,.qr-project-bar.is-locked [data-project-plan]{cursor:pointer}
 .project-save-bar.is-locked .project-lock:focus-visible,.qr-project-bar.is-locked [data-project-plan]:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+/* Comptador compacte: valor i etiqueta comparteixen jerarquia i el punt respira suaument. */
+.u-quota{min-height:64px;gap:16px;padding:12px 22px 12px 18px}
+.u-quota-dot{width:16px;height:16px;flex:0 0 16px;animation:u-quota-pulse 1.7s ease-in-out infinite}
+.u-quota strong{min-width:74px;font-size:36px;font-weight:800;line-height:1}
+.u-quota.is-unlimited strong{min-width:52px;font-size:42px}
+.u-quota small{max-width:142px;font-size:17px;font-weight:400;line-height:1.08}
+@keyframes u-quota-pulse{0%,100%{transform:scale(.88);box-shadow:0 0 0 6px rgba(115,241,114,.13)}50%{transform:scale(1.08);box-shadow:0 0 0 10px rgba(115,241,114,.2)}}
+@media(prefers-reduced-motion:reduce){.u-quota-dot{animation:none}}
