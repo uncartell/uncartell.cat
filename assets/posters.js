@@ -155,7 +155,8 @@
   function closeIconGallery(){q('[data-icon-dialog]').hidden=true;document.body.classList.remove('poster-dialog-open')}
   function renderIconGallery(search){
     const needle=normalizeSearch(search.trim());
-    q('[data-icon-grid]').innerHTML=Object.keys(icons).filter(key=>!needle||iconSearchText(key).includes(needle)).map(key=>`<button type="button" data-gallery-icon="${escapeHtml(key)}">${svgMarkup(key)}<span>${escapeHtml(iconLabel(key))}</span></button>`).join('');fitLegacyIconSvgs(q('[data-icon-grid]'));
+    const visibleIconKeys=Object.keys(icons).filter(key=>key==='circle-help'||(!key.startsWith('missing-')&&Boolean(icons[key]?.trim())));
+    q('[data-icon-grid]').innerHTML=visibleIconKeys.filter(key=>!needle||iconSearchText(key).includes(needle)).map(key=>`<button type="button" data-gallery-icon="${escapeHtml(key)}">${svgMarkup(key)}<span>${escapeHtml(iconLabel(key))}</span></button>`).join('');fitLegacyIconSvgs(q('[data-icon-grid]'));
     qa('[data-gallery-icon]').forEach(button=>button.onclick=()=>{current.icon=button.dataset.galleryIcon;delete current.image;updatePreview();pushHistory();closeIconGallery()});
   }
   function uploadIcon(file){if(!file||!paid())return;const reader=new FileReader();reader.onload=()=>{const key=`custom-${Date.now()}`;customIcons[key]=null;localStorage.setItem(ICON_KEY,JSON.stringify(customIcons));current.icon=key;current.image=reader.result;updatePreview();pushHistory();closeIconGallery()};reader.readAsDataURL(file)}
