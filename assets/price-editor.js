@@ -555,7 +555,7 @@
       if (!slug || collision || !entitlements.canPublishMobileMenu(state.plan)) return;
       const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=lang==='es'?'Publicando…':'Publicant…';
       try{
-        const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,priceHeader:state.priceHeader,pages:state.pages},(_key,value)=>typeof value==='string'&&value.startsWith('blob:')?null:value));
+        const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,priceHeader:state.priceHeader,pages:state.pages}));
         const published=await window.UncartellPlatform.publishDocument({kind:'services',slug,payload:persistent});
         state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString(), url:published.url };
         save();
@@ -574,7 +574,7 @@
     state.mobilePublication ||= { slug: "", status: "draft", publishedAt: null };
     const published = state.mobilePublication.status === "published" && state.mobilePublication.slug;
     const box = $("#mobilePublishModalCard");
-    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${escapeHtml(L.mobilePublicationHelp)}</p><div class="mobile-publication-card"><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="restaurant-olivera"></label><code>uncartell.cat/carta/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus"></span><button id="publishMobileMenu" type="button">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></div>`;
+    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${lang==='es'?'Elige una dirección pública y permanente. Guardaremos los servicios y sus imágenes en tu cuenta.':'Tria una adreça pública i permanent. Desarem els serveis i les imatges al teu compte.'}</p><div class="mobile-publication-card"><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="hanoi-spa"></label><code>${lang==='es'?'uncartel.es/servicios':'uncartell.cat/serveis'}/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus"></span><button id="publishMobileMenu" type="button">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></div>`;
     $("#mobilePublishModal").hidden = false;
     $$('[data-close-mobile-publish]', $("#mobilePublishModal")).forEach(button => button.addEventListener("click", () => { $("#mobilePublishModal").hidden = true; }));
     wireMobilePublication(box);
