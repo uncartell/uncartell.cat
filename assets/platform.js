@@ -75,6 +75,9 @@
   document.body.insertAdjacentHTML('beforeend',`<div class="u-upgrade-modal" data-upgrade-modal hidden><button class="u-modal-shade" type="button" data-upgrade-close aria-label="${upgradeWords.close}"></button><section class="u-upgrade-card" role="dialog" aria-modal="true" aria-labelledby="uUpgradeTitle"><button class="u-account-close" type="button" data-upgrade-close aria-label="${upgradeWords.close}"><svg viewBox="0 0 24 24">${icon('close')}</svg></button><div data-upgrade-step="intro"><h2 id="uUpgradeTitle">${upgradeWords.title}</h2><p>${upgradeWords.copy}</p><button class="u-button primary u-upgrade-view" type="button" data-upgrade-view>${upgradeWords.view}</button></div><div data-upgrade-step="plans" hidden><h2>${upgradeWords.choose}</h2><p>${upgradeWords.chooseCopy}</p><div class="u-upgrade-plans"><article data-upgrade-plan="basic"><header data-upgrade-label>${upgradeWords.current}</header><div class="u-upgrade-plan-body"><h3>Basic</h3><p>${upgradeWords.basicCopy}</p>${upgradeFeatures(upgradeWords.basicFeatures)}<strong>0 €</strong><button type="button" data-upgrade-basic>${upgradeWords.current}</button></div></article><article class="featured" data-upgrade-plan="premium"><header data-upgrade-label>${upgradeWords.recommended}</header><div class="u-upgrade-plan-body"><h3>Premium</h3><p>${upgradeWords.premiumCopy}</p>${upgradeFeatures(upgradeWords.premiumFeatures)}<strong>0 € <del>29,99 €</del></strong><button type="button" data-upgrade-premium>${upgradeWords.premiumCta}</button></div></article><article class="ultra" data-upgrade-plan="ultra"><header data-upgrade-label>${upgradeWords.soon}</header><div class="u-upgrade-plan-body"><h3>Ultra</h3><p>${upgradeWords.ultraCopy}</p>${upgradeFeatures(upgradeWords.ultraFeatures)}<strong>59,99 €</strong><button type="button" data-upgrade-ultra-notify>${upgradeWords.ultraCta}</button><div class="u-upgrade-ultra-email" data-upgrade-ultra-email hidden><input type="email" inputmode="email" autocomplete="email" placeholder="${upgradeWords.ultraEmail}" aria-label="${upgradeWords.ultraEmail}"><button type="button" aria-label="Envia">→</button></div><small class="u-upgrade-ultra-feedback" data-upgrade-ultra-feedback></small></div></article></div></div></section></div>`);
 
   const modal=document.querySelector('[data-account-modal]'),view=name=>document.querySelector(`[data-account-view="${name}"]`),feedback=document.querySelector('[data-auth-feedback]');
+  const accountPlansBack=document.createElement('button');
+  accountPlansBack.type='button';accountPlansBack.className='u-text-button u-account-plans-back';accountPlansBack.textContent=lang==='ca'?'Torna als plans':'Volver a los planes';accountPlansBack.hidden=true;
+  document.querySelector('.u-account-methods')?.after(accountPlansBack);
   const googleButton=document.querySelector('[data-auth-google]'),emailButton=document.querySelector('[data-auth-email]');
   googleButton.classList.add('u-auth-google');
   googleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.4Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2 1-3.4 1a5.9 5.9 0 0 1-5.5-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.5 14a6 6 0 0 1 0-3.9V7.4H3.1a10 10 0 0 0 0 9.2L6.5 14Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.9 1.5l2.9-2.8A9.7 9.7 0 0 0 3.1 7.4l3.4 2.7A5.9 5.9 0 0 1 12 5.9Z"/></svg><span>${words.google}</span>`;
@@ -106,7 +109,7 @@
   let resolveAuthReady;
   const authReady=new Promise(resolve=>{resolveAuthReady=resolve});
   const showView=name=>{['login','profile','invoices','delete'].forEach(v=>view(v).hidden=v!==name)};
-  const openAccount=()=>{modal.hidden=false;document.body.classList.add('u-modal-open');showView(currentUser?'profile':'login')};
+  const openAccount=(source='account')=>{modal.hidden=false;document.body.classList.add('u-modal-open');showView(currentUser?'profile':'login');accountPlansBack.hidden=Boolean(currentUser)||source!=='plans'};
   const closeAccount=()=>{modal.hidden=true;document.body.classList.remove('u-modal-open')};
   document.querySelectorAll('[data-upgrade-close]').forEach(button=>button.addEventListener('click',closeUpgrade));
   document.querySelector('[data-upgrade-view]')?.addEventListener('click',()=>showUpgradeStep('plans'));
@@ -144,7 +147,8 @@
   upgradeUltraButton?.addEventListener('click',async()=>{await authReady;if(currentUser?.email){saveUpgradeUltraInterest();return}upgradeUltraButton.hidden=true;upgradeUltraEmail.hidden=false;upgradeUltraInput?.focus()});
   upgradeUltraSubmit?.addEventListener('click',saveUpgradeUltraInterest);
   upgradeUltraInput?.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();saveUpgradeUltraInterest()}});
-  document.querySelector('[data-account]')?.addEventListener('click',openAccount);
+  document.querySelector('[data-account]')?.addEventListener('click',()=>openAccount());
+  accountPlansBack.addEventListener('click',()=>{pendingPremium=false;localStorage.removeItem('uncartell-pending-premium');closeAccount();openUpgradeModal()});
   document.querySelectorAll('[data-account-close]').forEach(button=>button.addEventListener('click',closeAccount));
   document.addEventListener('keydown',event=>{if(event.key!=='Escape')return;if(!upgradeModal?.hidden)closeUpgrade();else if(!modal.hidden)closeAccount()});
   document.querySelector('[data-auth-email]').addEventListener('click',()=>{const form=document.querySelector('[data-auth-form]');document.querySelector('.u-account-methods').hidden=true;form.hidden=false;form.dataset.authMode='register';form.querySelector('[name="name"]').hidden=false;form.querySelector('[data-auth-marketing]').hidden=false;form.querySelector('[name="password"]').autocomplete='new-password';form.querySelector('[data-auth-submit]').textContent=words.createAccount;form.querySelector('[data-auth-toggle]').textContent=words.alreadyAccount;form.querySelector('input[name="name"]').focus()});
@@ -207,7 +211,7 @@
     if(!response.ok)throw new Error(words.formError);
     return response.json().catch(()=>({success:true}));
   }
-  async function activatePremium(){await authReady;if(!supabaseClient)throw new Error(words.authError);if(!currentUser){pendingPremium=true;localStorage.setItem('uncartell-pending-premium','1');closeUpgrade();openAccount();return false}const {error}=await supabaseClient.rpc('activate_launch_premium');if(error)throw error;localStorage.removeItem('uncartell-pending-premium');pendingPremium=false;await loadProfile(currentUser);return true}
+  async function activatePremium(){await authReady;if(!supabaseClient)throw new Error(words.authError);if(!currentUser){pendingPremium=true;localStorage.setItem('uncartell-pending-premium','1');closeUpgrade();openAccount('plans');return false}const {error}=await supabaseClient.rpc('activate_launch_premium');if(error)throw error;localStorage.removeItem('uncartell-pending-premium');pendingPremium=false;await loadProfile(currentUser);return true}
   async function publishDocument({kind,slug,payload}){
     await authReady;
     if(!supabaseClient||!currentUser)throw new Error(words.authError);

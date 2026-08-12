@@ -180,3 +180,6 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-account-methods .u-auth-google,.u-account-methods .u-auth-email{border-color:var(--ink);box-shadow:0 6px 18px rgba(24,22,20,.08);transition:transform .16s ease,box-shadow .16s ease}.u-account-methods .u-auth-google{background:var(--ink);color:#fff}.u-account-methods .u-auth-google:hover,.u-account-methods .u-auth-email:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(24,22,20,.14)}.u-account-methods .u-auth-google svg,.u-account-methods .u-auth-email svg{width:24px;height:24px;flex:none}.u-account-methods .u-auth-email svg{fill:none;stroke:currentColor;stroke-width:1.7}.u-account-methods .disabled{border-color:var(--line);background:#efede8;box-shadow:none;opacity:.72}.u-account-methods .disabled b{font-size:15px}
 .u-account-methods .u-auth-apple svg{width:23px;height:23px;flex:none}.u-account-methods .u-auth-apple span{display:inline-block}.u-plan.is-current{box-shadow:inset 0 0 0 2px var(--green)}.u-plan.is-current .u-plan-head{background:var(--green);color:var(--ink)}
 .u-quota.is-unlimited small{font-weight:700;color:#fff}
+/* Flux de conversió: retorn als plans i alineació vertical comuna de les targetes. */
+.u-account-plans-back{display:block;margin:28px auto 0}
+.u-upgrade-plan-body>p{min-height:44px}
