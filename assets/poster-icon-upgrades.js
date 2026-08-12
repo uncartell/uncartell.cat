@@ -3,10 +3,10 @@
   if(!seed)return;
   const icons={
     'arrow-down':'<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
-    elevator:'<rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M8 8V4m-2 2 2-2 2 2M16 4v4m-2-2 2 2 2-2"/><circle cx="12" cy="11.5" r="1.7"/><path d="M8.8 19v-3.2a3.2 3.2 0 0 1 6.4 0V19M12 15.5v5.5"/>',
+    elevator:'<rect x="3" y="2.5" width="18" height="19" rx="2"/><path d="M7 8V4m-2 2 2-2 2 2M17 4v4m-2-2 2 2 2-2"/><circle cx="8" cy="11" r="1.35"/><circle cx="16" cy="11" r="1.35"/><path d="M5.7 19v-3.1a2.3 2.3 0 0 1 4.6 0V19M13.7 19v-3.1a2.3 2.3 0 0 1 4.6 0V19M12 9v10"/>',
     stairs:'<path d="M3 19h4v-4h4v-4h4V7h6"/><path d="M4 5h6m-3-3 3 3-3 3"/>',
     'escales-mecaniques':'<circle cx="8" cy="4.5" r="1.5"/><path d="M6.5 8v4.2l3 2.1 3.6-3.6h5.4a2.5 2.5 0 0 1 0 5h-3.4l-4.2 4.2a3.7 3.7 0 0 1-2.6 1.1H5.5a2.5 2.5 0 0 1 0-5h1.8l1.2-1.2-3-2.1V8"/>',
-    ascensor:'<rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M8 8V4m-2 2 2-2 2 2M16 4v4m-2-2 2 2 2-2"/><circle cx="12" cy="11.5" r="1.7"/><path d="M8.8 19v-3.2a3.2 3.2 0 0 1 6.4 0V19M12 15.5v5.5"/>',
+    ascensor:'<rect x="3" y="2.5" width="18" height="19" rx="2"/><path d="M7 8V4m-2 2 2-2 2 2M17 4v4m-2-2 2 2 2-2"/><circle cx="8" cy="11" r="1.35"/><circle cx="16" cy="11" r="1.35"/><path d="M5.7 19v-3.1a2.3 2.3 0 0 1 4.6 0V19M13.7 19v-3.1a2.3 2.3 0 0 1 4.6 0V19M12 9v10"/>',
     'wc-accessible':'<circle cx="10" cy="4" r="1.5"/><path d="M9 7.5h3l1.3 4.2h3.2M10 8l-1 6.5h5.2l2.5 5.5h2.8M7.8 11.5a5 5 0 1 0 6.7 6.9"/>',
     'wc-homes':'<circle cx="12" cy="4" r="1.7"/><path d="M8.5 21v-7H6.7l1.8-6h7l1.8 6h-1.8v7M12 14v7"/>',
     'wc-dones':'<circle cx="12" cy="4" r="1.7"/><path d="m9 8-2.5 8h3V21m5-5h3L15 8h-6m5.5 13v-5"/>',
