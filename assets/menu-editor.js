@@ -153,6 +153,14 @@
   });};
 
   let state = initialState();
+  window.addEventListener("uncartell:plan", event => {
+    const globalPlan = event.detail?.plan;
+    const nextPlan = globalPlan === "basic" ? "free" : globalPlan;
+    if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
+    state.plan = nextPlan;
+    if (nextPlan === "ultra") state.brandKit = readBrandKit();
+    renderAll();
+  });
   let autoSaveTimer = null;
   let editorZoom = 1;
   let history = [];
