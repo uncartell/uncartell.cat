@@ -1,4 +1,6 @@
 
+.u-feature-list li::before,.u-upgrade-features li::before{content:"";width:7px;height:12px;flex:0 0 7px;margin:1px 5px 0 3px;border:0;border-right:2px solid #00a57e;border-bottom:2px solid #00a57e;border-radius:1px;transform:rotate(45deg)}
+
 .u-upgrade-plans article[data-upgrade-plan="basic"],.u-upgrade-plans article[data-upgrade-plan="basic"].is-current{border-color:var(--line)}
 .u-upgrade-plans article[data-upgrade-plan="premium"],.u-upgrade-plans article[data-upgrade-plan="premium"].is-current{border-color:var(--green)}
 .u-upgrade-plans article[data-upgrade-plan="ultra"],.u-upgrade-plans article[data-upgrade-plan="ultra"].is-current{border-color:var(--ink)}
