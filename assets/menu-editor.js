@@ -159,6 +159,7 @@
     if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
     state.plan = nextPlan;
     if (nextPlan === "ultra") state.brandKit = readBrandKit();
+    renderFormats();
     renderAll();
   });
   let autoSaveTimer = null;
