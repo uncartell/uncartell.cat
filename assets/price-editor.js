@@ -557,7 +557,9 @@
         const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,priceHeader:state.priceHeader,pages:state.pages},(_key,value)=>typeof value==='string'&&value.startsWith('blob:')?null:value));
         const published=await window.UncartellPlatform.publishDocument({kind:'services',slug,payload:persistent});
         state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString(), url:published.url };
-        save(); saveProject(true); renderPlans();
+        save();
+        try{await saveProject(true)}catch(saveError){console.warn('Published, but cloud project sync failed',saveError)}
+        renderPlans();
         box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${lang==='es'?'Tu carta de servicios ya está disponible.':'La teva carta de serveis ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
         $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
         $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1`});
