@@ -189,6 +189,7 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Centra el conjunt de títol, subtítol i plans dins del marc fix del popup. */
 @media(min-width:621px){
   .u-upgrade-card>[data-upgrade-step="plans"]:not([hidden]){display:flex;min-height:100%;flex-direction:column;justify-content:center}
+  .u-account-card>[data-account-view="login"]:not([hidden]){display:flex;min-height:100%;flex-direction:column;justify-content:center}
 }
 /* Cada pla conserva el seu color de contorn, també quan és el pla actual. */
 .u-upgrade-plans article[data-upgrade-plan="basic"],.u-upgrade-plans article[data-upgrade-plan="basic"].is-current{border-color:var(--line)}
