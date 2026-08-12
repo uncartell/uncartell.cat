@@ -191,3 +191,8 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Flux de conversió: retorn als plans i alineació vertical comuna de les targetes. */
 .u-account-plans-back{display:block;margin:28px auto 0}
 .u-upgrade-plan-body>p{min-height:44px}
+
+/* Comptador compacte i coherent */
+.u-quota strong{min-width:0;font-size:32px;font-weight:800;line-height:1;text-align:center;white-space:nowrap}
+.u-quota small,.u-quota.is-unlimited small,.u-quota:not(.is-unlimited) small{width:auto;max-width:126px;font-size:13px;font-weight:700;line-height:1.08;color:#fff}
+.u-quota{min-height:58px;width:max-content;max-width:calc(100vw - 24px);gap:13px;padding-inline:16px 18px}
