@@ -575,10 +575,11 @@
     input.addEventListener("input", () => { clearTimeout(validationTimer); validationTimer = setTimeout(refresh, 250); });
     input.addEventListener("blur", () => { state.mobilePublication.slug = normalizeSlug(input.value); save(); });
     $("#publishMobileMenu", box).addEventListener("click", async event => {
-      const { slug, collision } = await refresh();
-      if (!slug || collision || !entitlements.canPublishMobileMenu(state.plan)) return;
+      const slug = normalizeSlug(input.value);
+      if (!slug) { status.textContent = L.slugRequired; status.className = "is-unavailable"; return; }
       const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=L.lang==='es'?'Publicando…':'Publicant…';
       try{
+        await window.UncartellPlatform.whenReady();
         const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,priceHeader:state.priceHeader,pages:state.pages}));
         const published=await window.UncartellPlatform.publishDocument({kind:'services',slug,payload:persistent});
         state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString(), url:published.url };
@@ -587,8 +588,8 @@
         renderPlans();
         box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${L.lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${L.lang==='es'?'Tu carta de servicios ya está disponible.':'La teva carta de serveis ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${L.lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
         $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
-        $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1`});
-      }catch(error){console.error('Mobile services publication failed',error);const unavailable=String(error?.message||'').includes('slug_unavailable');status.textContent=unavailable?L.slugUnavailable:(L.lang==='es'?'No se ha podido publicar. Inténtalo de nuevo.':'No s’ha pogut publicar. Torna-ho a provar.');status.className='is-unavailable';button.disabled=false;button.textContent=original}
+        $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1&save=1&name=${encodeURIComponent(state.projectName||slug)}`});
+      }catch(error){console.error('Mobile services publication failed',error);const unavailable=String(error?.message||'').includes('slug_unavailable');status.textContent=unavailable?L.slugUnavailable:(error?.message||(L.lang==='es'?'No se ha podido publicar. Inténtalo de nuevo.':'No s’ha pogut publicar. Torna-ho a provar.'));status.className='is-unavailable';button.disabled=false;button.textContent=original}
     });
     void refresh();
   }

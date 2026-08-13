@@ -53,8 +53,26 @@
   $$('[data-generate]').forEach(button=>button.addEventListener('click',()=>generate()));
   urlInputs.forEach(input=>{input.addEventListener('input',()=>{urlInputs.forEach(peer=>{if(peer!==input)peer.value=input.value});urlErrors.forEach(error=>error.textContent='')});input.addEventListener('keydown',event=>{if(event.key!=='Enter')return;event.preventDefault();generate()})});
   $$('[data-foreground],[data-background],[data-correction],[data-watermark]').forEach(input=>input.addEventListener('input',()=>{if(state.svg)generate({quiet:true})}));
-  const incoming=new URLSearchParams(location.search).get('url');
-  if(incoming&&validUrl(incoming)){urlInputs.forEach(input=>input.value=incoming);state.url=incoming;if(new URLSearchParams(location.search).get('generate')==='1')setTimeout(()=>generate({quiet:true}),0)}
+  const incomingParams=new URLSearchParams(location.search),incoming=incomingParams.get('url');
+  if(incoming&&validUrl(incoming)){
+    urlInputs.forEach(input=>input.value=incoming);state.url=incoming;
+    const incomingName=incomingParams.get('name');
+    if(incomingName){state.name=incomingName;$('[data-project-name]').value=incomingName}
+    if(incomingParams.get('generate')==='1')setTimeout(async()=>{
+      if(!generate({quiet:true})||incomingParams.get('save')!=='1')return;
+      try{
+        await window.UncartellPlatform?.whenReady?.();
+        const activePlan=window.UncartellPlatform?.getPlan?.()||'basic';
+        if(activePlan!=='premium'&&activePlan!=='ultra')return;
+        const stableId=`qr-${safeName(incoming)}`;state.id=stableId;sync();
+        const saved={...state,name:state.name||T.fallbackName,savedAt:new Date().toISOString()};
+        const list=projects().filter(project=>project.id!==stableId);list.unshift(saved);saveProjects(list);
+        await window.UncartellPlatform.saveUserProject('qr',saved);
+        $('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.savedAt))}`;
+        toast(T.saved);
+      }catch(error){console.error('Automatic QR save failed',error);toast(lang==='ca'?'QR generat; no s’ha pogut desar al núvol':'QR generado; no se ha podido guardar en la nube')}
+    },0)
+  }
   $('[data-clear-watermark]').addEventListener('click',()=>{$('[data-watermark]').value='';if(state.svg)generate({quiet:true})});
   $$('[data-tab]').forEach(button=>button.addEventListener('click',()=>{$$('[data-tab]').forEach(item=>item.classList.toggle('active',item===button));$$('[data-panel]').forEach(panel=>panel.hidden=panel.dataset.panel!==button.dataset.tab)}));
   const projectBar=$('.qr-project-bar'),colorsCard=$('[data-colors-card]'),watermarkCard=$('[data-watermark-card]');projectBar.classList.toggle('is-locked',!canPremium);$$('[data-open-projects]').forEach(button=>button.classList.toggle('is-plan-locked',!canPremium));$('[data-project-name]').disabled=!canPremium;$('[data-project-plan]').hidden=canPremium;colorsCard.classList.toggle('is-locked',!canPremium);$$('input',colorsCard).forEach(input=>input.disabled=!canPremium);$('em',colorsCard).hidden=canPremium;watermarkCard.classList.toggle('is-locked',!canUltra);$$('input,button',watermarkCard).forEach(input=>input.disabled=!canUltra);$('em',watermarkCard).hidden=canUltra;
