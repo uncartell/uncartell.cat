@@ -71,7 +71,7 @@
       notify.hidden=false;
       notify.disabled=true;
       notify.textContent=es?'Te avisaremos ✓':'T’avisarem ✓';
-      feedback.textContent=es?'Ya estás en la lista.':'Ja ets a la llista.';
+      feedback.textContent='';
     }catch(_){
       feedback.textContent=es?'No se ha podido guardar. Inténtalo de nuevo.':'No s’ha pogut desar. Torna-ho a provar.';
       submit.disabled=false;

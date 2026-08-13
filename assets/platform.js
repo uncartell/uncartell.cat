@@ -198,7 +198,7 @@
     document.querySelector('[data-profile-plan]').textContent=ultraValid?'Ultra':premiumValid?'Premium':'Basic';
     const actions=document.querySelector('.u-account-actions');
     let adminLink=document.querySelector('[data-profile-admin]');
-    if(currentProfile.role==='admin'&&!adminLink&&actions){adminLink=document.createElement('a');adminLink.className='u-account-action';adminLink.dataset.profileAdmin='';adminLink.href='/admin/';adminLink.innerHTML=`<svg viewBox="0 0 24 24">${icon('settings')}</svg>${lang==='ca'?'Administració':'Administración'}`;actions.prepend(adminLink)}
+    if(currentProfile.role==='admin'&&!adminLink&&actions){adminLink=document.createElement('a');adminLink.className='u-account-action';adminLink.dataset.profileAdmin='';adminLink.href=`${base}/admin/`.replace(/\/+/g,'/');adminLink.innerHTML=`<svg viewBox="0 0 24 24">${icon('settings')}</svg>${lang==='ca'?'Administració':'Administración'}`;actions.prepend(adminLink)}
     if(adminLink)adminLink.hidden=currentProfile.role!=='admin';
     showView('profile');
   }
@@ -266,7 +266,8 @@
   async function saveUserProject(toolType,project){
     await authReady;if(!supabaseClient||!currentUser)throw new Error(words.authError);
     const payload=await persistUploadedData(project);const now=new Date().toISOString();
-    const {error}=await supabaseClient.from('user_projects').upsert({id:String(project.id||project.projectId),user_id:currentUser.id,tool_type:toolType,locale:lang,name:String(project.name||'Projecte'),payload,updated_at:now},{onConflict:'user_id,tool_type,id'});
+    const projectId=String(project.id||project.projectId||`${toolType}-${Date.now()}`);
+    const {error}=await supabaseClient.from('user_projects').upsert({id:projectId,user_id:currentUser.id,tool_type:toolType,locale:lang,name:String(project.name||'Projecte'),payload:{...payload,id:projectId},updated_at:now},{onConflict:'user_id,tool_type,id'});
     if(error)throw error;return {...project,updated_at:now};
   }
   async function deleteUserProject(toolType,id){
