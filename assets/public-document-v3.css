@@ -12,3 +12,4 @@
 .u-public-pager>span:empty{display:none}
 .u-public-pager button{box-shadow:0 8px 24px rgba(24,22,20,.09)}
 @media(max-width:560px){.u-public-pager{top:64%!important;left:18px!important}.u-public-pager button{width:42px;height:42px}.u-public-allergen-grid{grid-template-columns:1fr}}
+.u-public-status .u-public-shell{display:grid;min-height:min(720px,calc(100vh - 40px));place-items:center;text-align:center}.u-public-status .u-public-home{max-width:760px}.u-public-status-home{display:inline-flex;margin-top:28px;border-radius:999px;background:#171513;padding:15px 24px;color:#fff;font-weight:800;text-decoration:none}
