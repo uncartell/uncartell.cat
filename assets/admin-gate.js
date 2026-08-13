@@ -9,7 +9,7 @@
   const accountButton=document.querySelector('[data-admin-account]');
   const feedback=document.querySelector('[data-admin-feedback]');
   let checking=false,loaded=false;
-  const loadAdmin=()=>{gate.remove();if(main)main.hidden=false;const script=document.createElement('script');script.src='/assets/poster-admin.js?v=6';document.body.appendChild(script);const publications=document.createElement('script');publications.src='/assets/publication-admin.js?v=1';document.body.appendChild(publications)};
+  const loadAdmin=()=>{gate.remove();if(main)main.hidden=false;['/assets/poster-admin.js?v=7','/assets/publication-admin.js?v=2','/assets/admin-dashboard.js?v=1'].forEach(src=>{const script=document.createElement('script');script.src=src;document.body.appendChild(script)})};
   const waitPlatform=()=>new Promise(resolve=>{const poll=()=>window.UncartellPlatform?.getSupabase?.()?resolve(window.UncartellPlatform):setTimeout(poll,80);poll()});
   async function checkAccess(){
     if(checking||loaded)return;

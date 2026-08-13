@@ -1,0 +1,27 @@
+(()=>{
+  const es=document.documentElement.lang==='es';
+  const usersHost=document.querySelector('[data-user-admin]'),analyticsHost=document.querySelector('[data-analytics-admin]'),systemHost=document.querySelector('[data-system-admin]');
+  if(!usersHost||!analyticsHost||!systemHost)return;
+  const t=es?{
+    users:'Usuarios activos',usersCopy:'Datos mínimos para gestionar cuentas y planes. No se muestran tokens, IP ni metadatos OAuth.',reload:'Actualizar',loading:'Cargando…',name:'Nombre',email:'Correo',plan:'Plan',joined:'Alta',last:'Último acceso',projects:'Proyectos',empty:'Todavía no hay usuarios.',analytics:'Resumen del servicio',analyticsCopy:'Métricas propias, agregadas y sin cookies de seguimiento.',accounts:'Cuentas',premium:'Premium',ultra:'Ultra',published:'URL activas',saved:'Proyectos guardados',ga:'Google Analytics',gaCopy:'No está configurado. Si lo activamos, debe cargarse únicamente después del consentimiento analítico. El panel completo se consulta mediante la Data API, nunca exponiendo credenciales en el navegador.',system:'Estado del sistema',healthy:'Operativo',db:'Base de datos y autenticación',publications:'Publicaciones web',storage:'Archivos de usuario',storageCopy:'Las imágenes y logos se gestionan en los proyectos del usuario; el acceso está limitado por sesión y políticas RLS.',error:'No se han podido cargar los datos de administración.'
+  }:{
+    users:'Usuaris actius',usersCopy:'Dades mínimes per gestionar comptes i plans. No es mostren tokens, IP ni metadades OAuth.',reload:'Actualitza',loading:'Carregant…',name:'Nom',email:'Correu',plan:'Pla',joined:'Alta',last:'Darrer accés',projects:'Projectes',empty:'Encara no hi ha usuaris.',analytics:'Resum del servei',analyticsCopy:'Mètriques pròpies, agregades i sense cookies de seguiment.',accounts:'Comptes',premium:'Premium',ultra:'Ultra',published:'URL actives',saved:'Projectes desats',ga:'Google Analytics',gaCopy:'No està configurat. Si l’activem, s’ha de carregar només després del consentiment analític. El tauler complet es consulta mitjançant la Data API, mai exposant credencials al navegador.',system:'Estat del sistema',healthy:'Operatiu',db:'Base de dades i autenticació',publications:'Publicacions web',storage:'Fitxers d’usuari',storageCopy:'Les imatges i logotips es gestionen dins els projectes de l’usuari; l’accés està limitat per sessió i polítiques RLS.',error:'No s’han pogut carregar les dades d’administració.'
+  };
+  const fmt=value=>value?new Intl.DateTimeFormat(es?'es-ES':'ca-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value)):'—';
+  const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const metric=(label,value)=>`<article class="admin-metric"><strong>${esc(value)}</strong><span>${label}</span></article>`;
+  async function getData(){
+    const platform=window.UncartellPlatform,supabase=platform?.getSupabase?.();
+    if(!supabase)throw new Error(t.error);
+    const {data:{session}}=await supabase.auth.getSession();if(!session)throw new Error(t.error);
+    const {data,error}=await supabase.functions.invoke('admin-dashboard');if(error)throw error;return data;
+  }
+  function render(data){
+    usersHost.innerHTML=`<div class="admin-module-head"><div><h2>${t.users}</h2><p>${t.usersCopy}</p></div><button type="button" data-users-reload>${t.reload}</button></div><div class="admin-user-list">${data.users?.length?data.users.map(user=>`<article class="admin-user-row"><div><strong>${esc(user.display_name||'—')}</strong><small>${esc(user.email)}</small></div><div><strong>${esc(String(user.plan||'basic').toUpperCase())}</strong><small>${t.plan}</small></div><div><strong>${fmt(user.created_at)}</strong><small>${t.joined}</small></div><div><strong>${fmt(user.last_sign_in_at)}</strong><small>${t.last}</small></div><div><strong>${user.project_count||0}</strong><small>${t.projects}</small></div></article>`).join(''):`<p class="poster-admin-empty">${t.empty}</p>`}</div>`;
+    analyticsHost.innerHTML=`<div class="admin-module-head"><div><h2>${t.analytics}</h2><p>${t.analyticsCopy}</p></div></div><div class="admin-metrics">${metric(t.accounts,data.summary.users)}${metric(t.premium,data.summary.premium)}${metric(t.ultra,data.summary.ultra)}${metric(t.published,data.summary.active_publications)}${metric(t.saved,data.summary.projects)}</div><aside class="admin-note"><strong>${t.ga}</strong><p>${t.gaCopy}</p></aside>`;
+    systemHost.innerHTML=`<div class="admin-module-head"><div><h2>${t.system}</h2><p>${t.storageCopy}</p></div></div><div class="admin-system-list"><div><span class="admin-health"></span><strong>${t.db}</strong><em>${t.healthy}</em></div><div><span class="admin-health"></span><strong>${t.publications}</strong><em>${data.summary.active_publications} ${t.published.toLowerCase()}</em></div><div><span class="admin-health"></span><strong>${t.storage}</strong><em>${data.summary.projects} ${t.saved.toLowerCase()}</em></div></div>`;
+    usersHost.querySelector('[data-users-reload]')?.addEventListener('click',load);
+  }
+  async function load(){usersHost.innerHTML=`<p class="admin-loading">${t.loading}</p>`;try{render(await getData())}catch(error){usersHost.innerHTML=`<p class="publication-admin-feedback">${esc(error.message||t.error)}</p>`;analyticsHost.innerHTML='';systemHost.innerHTML=''}}
+  let started=false;[usersHost,analyticsHost,systemHost].forEach(host=>host.closest('details')?.addEventListener('toggle',event=>{if(event.currentTarget.open&&!started){started=true;load()}}));
+})();
