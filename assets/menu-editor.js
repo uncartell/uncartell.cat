@@ -162,6 +162,15 @@
     renderFormats();
     renderAll();
   });
+  window.UncartellPlatform?.whenReady?.().then(() => {
+    const globalPlan = window.UncartellPlatform.getPlan?.();
+    const nextPlan = globalPlan === "basic" ? "free" : globalPlan;
+    if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
+    state.plan = nextPlan;
+    if (nextPlan === "ultra") state.brandKit = readBrandKit();
+    renderFormats();
+    renderAll();
+  });
   let autoSaveTimer = null;
   let editorZoom = 1;
   let history = [];
@@ -549,7 +558,7 @@
       const token = ++validationToken;
       let collision = false;
       if (slug) {
-        status.textContent = lang === 'es' ? 'Comprobando disponibilidad…' : 'Comprovant disponibilitat…';
+        status.textContent = L.lang === 'es' ? 'Comprobando disponibilidad…' : 'Comprovant disponibilitat…';
         status.className = '';
         $("#publishMobileMenu", box).disabled = true;
         try { collision = !(await window.UncartellPlatform.checkDocumentSlug('menu', slug)); }
@@ -567,7 +576,7 @@
     $("#publishMobileMenu", box).addEventListener("click", async event => {
       const { slug, collision } = await refresh();
       if (!slug || collision || !entitlements.canPublishMobileMenu(state.plan)) return;
-      const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=lang==='es'?'Publicando…':'Publicant…';
+      const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=L.lang==='es'?'Publicando…':'Publicant…';
       try{
         const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,pages:state.pages}));
         const published=await window.UncartellPlatform.publishDocument({kind:'menu',slug,payload:persistent});
@@ -575,10 +584,10 @@
         save();
         try{await saveProject(true)}catch(saveError){console.warn('Published, but cloud project sync failed',saveError)}
         renderPlans();
-        box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${lang==='es'?'Tu carta ya está disponible.':'La teva carta ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
+        box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${L.lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${L.lang==='es'?'Tu carta ya está disponible.':'La teva carta ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${L.lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
         $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
         $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1`});
-      }catch(error){const unavailable=String(error?.message||'').includes('slug_unavailable');status.textContent=unavailable?L.slugUnavailable:(lang==='es'?'No se ha podido publicar. Inténtalo de nuevo.':'No s’ha pogut publicar. Torna-ho a provar.');status.className='is-unavailable';button.disabled=false;button.textContent=original}
+      }catch(error){console.error('Mobile menu publication failed',error);const unavailable=String(error?.message||'').includes('slug_unavailable');status.textContent=unavailable?L.slugUnavailable:(L.lang==='es'?'No se ha podido publicar. Inténtalo de nuevo.':'No s’ha pogut publicar. Torna-ho a provar.');status.className='is-unavailable';button.disabled=false;button.textContent=original}
     });
     void refresh();
   }
@@ -588,7 +597,7 @@
     state.mobilePublication ||= { slug: "", status: "draft", publishedAt: null };
     const published = state.mobilePublication.status === "published" && state.mobilePublication.slug;
     const box = $("#mobilePublishModalCard");
-    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${lang==='es'?'Elige una dirección pública y permanente. Guardaremos la carta y sus imágenes en tu cuenta.':'Tria una adreça pública i permanent. Desarem la carta i les imatges al teu compte.'}</p><div class="mobile-publication-card"><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="restaurant-olivera"></label><code>${lang==='es'?'uncartel.es':'uncartell.cat'}/carta/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus"></span><button id="publishMobileMenu" type="button">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></div>`;
+    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${L.lang==='es'?'Elige una dirección pública y permanente. Guardaremos la carta y sus imágenes en tu cuenta.':'Tria una adreça pública i permanent. Desarem la carta i les imatges al teu compte.'}</p><div class="mobile-publication-card"><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="restaurant-olivera"></label><code>${L.lang==='es'?'uncartel.es':'uncartell.cat'}/carta/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus"></span><button id="publishMobileMenu" type="button">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></div>`;
     $("#mobilePublishModal").hidden = false;
     $$('[data-close-mobile-publish]', $("#mobilePublishModal")).forEach(button => button.addEventListener("click", () => { $("#mobilePublishModal").hidden = true; }));
     wireMobilePublication(box);
