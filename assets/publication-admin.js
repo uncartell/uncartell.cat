@@ -16,7 +16,7 @@
   const date=value=>value?new Intl.DateTimeFormat(es?'es-ES':'ca-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value)):'—';
   const url=row=>`${location.origin}/${row.kind==='menu'?'carta':(es?'servicios':'serveis')}/${row.slug}/`;
   async function update(id,status){const supabase=await wait();const {error}=await supabase.from('public_documents').update({status}).eq('id',id);if(error)throw error;await load()}
-  async function remove(id){const supabase=await wait();const {data,error}=await supabase.functions.invoke('admin-dashboard',{body:{action:'delete_publication',id}});if(error)throw error;if(!data?.ok)throw new Error(data?.error||labels.error);await load()}
+  async function remove(id){const supabase=await wait();const {data,error}=await supabase.functions.invoke('admin-dashboard',{body:{action:'delete_publication',id}});if(error){let detail='';try{detail=(await error.context.json()).error||''}catch{}throw new Error(detail||error.message||labels.error)}if(!data?.ok)throw new Error(data?.error||labels.error);await load()}
   async function load(){
     feedback.textContent='';list.innerHTML='';
     try{
