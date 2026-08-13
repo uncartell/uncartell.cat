@@ -1,8 +1,12 @@
 .u-public-dish-allergens{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;color:var(--accent)}
-.u-public-allergen{display:inline-flex;align-items:center;gap:9px}
-.u-public-allergen svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.u-public-allergen{position:relative;display:inline-flex;align-items:center;gap:9px;border:0;background:transparent;padding:0;color:inherit;font:inherit;cursor:pointer}
+.u-public-allergen svg{display:block;flex:0 0 20px;width:20px!important;height:20px!important;min-width:20px;max-width:20px;aspect-ratio:1/1;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.u-public-allergen-tooltip{position:absolute;z-index:20;bottom:calc(100% + 8px);left:50%;width:max-content;max-width:150px;border-radius:999px;background:#181614;padding:6px 10px;color:#fff;font-size:11px;font-weight:750;line-height:1;opacity:0;pointer-events:none;transform:translate(-50%,5px);transition:opacity .15s ease,transform .15s ease}
+.u-public-allergen-tooltip:after{content:"";position:absolute;top:100%;left:50%;border:4px solid transparent;border-top-color:#181614;transform:translateX(-50%)}
+.u-public-allergen:hover .u-public-allergen-tooltip,.u-public-allergen:focus-visible .u-public-allergen-tooltip,.u-public-allergen[aria-expanded="true"] .u-public-allergen-tooltip{opacity:1;transform:translate(-50%,0)}
+.u-public-allergen:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
 .u-public-allergen-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:28px}
-.u-public-allergen-grid .u-public-allergen{min-height:46px;border:1px solid #dedbd4;border-radius:14px;padding:10px 12px;color:#181614;font-size:13px;font-weight:700}
+.u-public-allergen-grid .u-public-allergen{min-height:46px;border:1px solid #dedbd4;border-radius:14px;padding:10px 12px;color:#181614;font-size:13px;font-weight:700;cursor:default}
 .u-public-allergen-grid svg{flex:0 0 auto;color:var(--accent)}
 .u-public-pager{position:fixed!important;z-index:10;top:62%!important;right:auto!important;bottom:auto!important;left:max(16px,calc(50vw - 336px))!important;display:flex;flex-direction:column;justify-content:flex-start!important;gap:12px;transform:translateY(-50%)}
 .u-public-pager>span:empty{display:none}
