@@ -31,13 +31,12 @@
         if(activated)location.reload();
       }else if(plan==='basic'){
         if(platform.getPlan()==='basic')return;
-        const es=document.documentElement.lang==='es';
-        if(!confirm(es?'¿Quieres cambiar a Basic? Perderás las descargas ilimitadas.':'Vols canviar a Basic? Perdràs les descàrregues il·limitades.'))return;
+        if(!await platform.requestBasicDowngrade())return;
         await platform.switchToBasic();
         location.reload();
       }
     }catch(error){
-      alert(error?.message||'No s’ha pogut actualitzar el pla.');
+      console.error(error);
     }finally{
       button.disabled=false;
       button.textContent=original;

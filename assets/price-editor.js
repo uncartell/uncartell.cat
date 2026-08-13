@@ -214,7 +214,7 @@
     if (state.pages[state.activePage]?.isExtra) state.extraPagesDirty = true;
     recordHistory();
   };
-  const saveProject = (silent = false) => {
+  const saveProject = async (silent = false) => {
     if (state.plan !== "premium" && state.plan !== "ultra") {
       toast(L.messages.premiumRequired);
       return false;
@@ -226,7 +226,9 @@
       return false;
     }
     state.projectName = name;
-    const persistentPages = JSON.parse(JSON.stringify(state.pages, (_key, value) => typeof value === "string" && value.startsWith("blob:") ? null : value));
+    // Keep uploaded images in the cloud payload. The platform converts blob:
+    // URLs to durable data URLs before writing to Supabase.
+    const persistentPages = JSON.parse(JSON.stringify(state.pages));
     const payload = {
       id: state.projectId,
       owner_id: "preview-user",
@@ -241,7 +243,7 @@
         text_color: state.textColor,
         content_columns: state.contentColumns,
         price_header: { ...state.priceHeader },
-        brand_kit: { ...state.brandKit, logo: null, uses_saved_logo: !!state.brandKit.logo },
+        brand_kit: { ...state.brandKit, uses_saved_logo: !!state.brandKit.logo },
         pages: persistentPages,
         mobile_publication: state.mobilePublication
       }
@@ -251,6 +253,8 @@
     projects = projects.filter(project => project.id !== payload.id);
     projects.unshift(payload);
     localStorage.setItem(projectStorageKey, JSON.stringify(projects.slice(0, 20)));
+    try { await window.UncartellPlatform?.saveUserProject?.('services', payload); }
+    catch (error) { if (!silent) toast(L.lang === 'ca' ? 'No s’ha pogut desar al núvol.' : 'No se ha podido guardar en la nube.'); throw error; }
     state.isDirty = false;
     state.lastAutoSavedAt = new Date();
     $("#saveStatus").textContent = autoSavedLabel(state.lastAutoSavedAt);
@@ -1121,6 +1125,8 @@
   function storedProjects() {
     try { return JSON.parse(localStorage.getItem(projectStorageKey) || "[]"); } catch (_) { return []; }
   }
+  window.UncartellPlatform?.syncProjectStore?.('services', projectStorageKey).catch(console.error);
+  window.addEventListener('uncartell:projects-synced',event=>{if(event.detail?.toolType==='services')renderProjects()});
 
   let pendingLeaveAction = null;
   let projectsModalTrigger = null;
@@ -1476,7 +1482,9 @@
     if (state.format === "mobile-interactive") {
       openMobilePublishModal(); return;
     }
+    if (!window.UncartellPlatform?.canDownload?.()) { window.UncartellPlatform?.openUpgradeModal?.(); return; }
     buildPrintDocument();
+    window.UncartellPlatform?.consumeDownload?.({ reload: false });
     toast(L.messages.pdf);
     setTimeout(() => window.print(), 600);
   });

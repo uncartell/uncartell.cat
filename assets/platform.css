@@ -204,6 +204,21 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Les etiquetes Premium dels camps de desament també obren la tria de plans. */
 .project-save-bar.is-locked .project-lock,.qr-project-bar.is-locked [data-project-plan]{cursor:pointer}
 .project-save-bar.is-locked .project-lock:focus-visible,.qr-project-bar.is-locked [data-project-plan]:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* Shared production palette and quota states. Novelty labels intentionally keep blue. */
+.u-lang-es{--accent:var(--green)!important;--blue:var(--green);--blue-soft:var(--green-soft)}
+.u-lang-es .u-plan.premium,.u-lang-es .u-upgrade-plans article.featured{--accent:var(--green)}
+.u-quota{min-height:72px;box-sizing:border-box;padding:14px 20px;gap:16px}
+.u-quota-dot{width:14px;height:14px;animation:uQuotaPulse 1.8s ease-in-out infinite}
+.u-quota strong{min-width:max-content;font-size:34px;line-height:1;font-weight:800}
+.u-quota small{max-width:150px;color:#fff;font-size:17px;line-height:1.05;font-weight:500}
+.u-quota.is-low .u-quota-dot{background:#ffad32;box-shadow:0 0 0 7px rgba(255,173,50,.2)}
+.u-quota.is-empty .u-quota-dot{background:#ff4b45;box-shadow:0 0 0 7px rgba(255,75,69,.2)}
+@keyframes uQuotaPulse{50%{transform:scale(.78);box-shadow:0 0 0 10px rgba(115,241,114,.08)}}
+@media(prefers-reduced-motion:reduce){.u-quota-dot{animation:none}}
+.u-lang-es{--accent:var(--green)!important}
+.u-quota-dot{animation:uQuotaPulse 1.8s ease-in-out infinite}.u-quota.is-low .u-quota-dot{background:#ff9f0a;box-shadow:0 0 0 5px rgba(255,159,10,.16)}.u-quota.is-empty .u-quota-dot{background:#ff3b30;box-shadow:0 0 0 5px rgba(255,59,48,.16);animation:none}@keyframes uQuotaPulse{50%{transform:scale(1.18);box-shadow:0 0 0 8px rgba(115,241,114,.08)}}
+.u-upgrade-login{display:block;margin:20px auto 0}.u-confirm-modal{position:fixed;z-index:1600;inset:0;display:grid;place-items:center;padding:22px}.u-confirm-modal section{position:relative;width:min(560px,100%);border:1px solid var(--line);border-radius:26px;background:#fff;padding:42px}.u-confirm-modal h2{margin:0 0 14px;font-size:36px;letter-spacing:-.04em}.u-confirm-modal p{color:var(--muted);font-size:18px;line-height:1.5}.u-confirm-modal section>div{display:flex;gap:10px;margin-top:28px}.u-confirm-modal section>div button{flex:1;min-height:52px;border:1px solid var(--ink);border-radius:999px;background:#fff;font:inherit;font-weight:800}.u-confirm-modal section>div .danger{background:var(--ink);color:#fff}
 /* Comptador compacte: valor i etiqueta comparteixen jerarquia i el punt respira suaument. */
 .u-quota{min-height:76px;gap:16px;padding:15px 10px 15px 30px}
 .u-quota-dot{width:16px;height:16px;flex:0 0 16px;animation:u-quota-pulse 1.7s ease-in-out infinite}

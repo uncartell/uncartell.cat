@@ -7,6 +7,7 @@
     if(!link.sheet&&document.readyState!=='loading')retry();
   });
   const lang=document.documentElement.lang==='es'?'es':'ca';
+  document.documentElement.classList.add(`u-lang-${lang}`);
   const host=location.hostname.replace(/^www\./,'');
   const canonicalHost=(()=>{try{return new URL(document.querySelector('link[rel="canonical"]')?.href||location.href).hostname.replace(/^www\./,'')}catch(_){return host}})();
   const prod=['uncartell.cat','uncartel.es'].includes(host)||['uncartell.cat','uncartel.es'].includes(canonicalHost);
@@ -22,7 +23,7 @@
   }:{
     language:'Idioma',languageTitle:'Elige el idioma',loginTitle:'Inicia sesión o regístrate',loginCopy:'Accede a tu cuenta para guardar proyectos y gestionar el plan.',google:'Continúa con Google',apple:'Continúa con Apple',email:'Continúa con correo',name:'Tu nombre',emailField:'Tu correo',password:'Contraseña',continue:'Inicia sesión',createAccount:'Crea la cuenta',newHere:'¿Aún no tienes cuenta? Regístrate',alreadyAccount:'¿Ya tienes cuenta? Inicia sesión',marketing:'Quiero recibir novedades y avisos de nuevas herramientas.',back:'Volver',profile:'Mi cuenta',hello:'Hola',plan:'Plan',manage:'Cambiar de plan',logout:'Cerrar sesión',editName:'Editar el nombre',saveName:'Guardar el nombre',invoices:'Facturas',noInvoices:'Todavía no hay facturas.',backProfile:'Volver al perfil',delete:'Eliminar la cuenta',deleteTitle:'¿Quieres eliminar la cuenta?',deleteCopy:'Eliminaremos la cuenta y todos los datos asociados. Esta acción no se puede deshacer.',cancel:'Cancelar',confirmDelete:'Sí, elimina la cuenta',loading:'Conectando…',confirmMail:'Revisa el correo y confirma la cuenta para continuar.',authError:'No se ha podido iniciar la sesión.',invalidLogin:'El correo o la contraseña no son correctos.',profileSaved:'Nombre actualizado.',formSending:'Enviando…',formError:'No se ha podido enviar. Inténtalo de nuevo.',cookieTitle:'Tú decides las cookies',cookieCopy:'Utilizamos elementos necesarios para que la web funcione. Las cookies analíticas son opcionales y ahora mismo no activamos ninguna.',reject:'Rechazar opcionales',accept:'Aceptar opcionales',configure:'Configurar',necessary:'Necesarias',analytics:'Analíticas',save:'Guardar la selección',necessaryCopy:'Sesión, seguridad, preferencias y descargas.',analyticsCopy:'Medición agregada del uso. Actualmente sin proveedor activo.'
   };
-  const icon=name=>({globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/>',user:'<circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"/>',crown:'<path d="m3 7 4.5 4L12 4l4.5 7L21 7l-2 11H5Z"/><path d="M5 18h14"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',layers:'<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>',logout:'<path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h7v18h-7"/>'}[name]||'');
+  const icon=name=>({globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/>',user:'<circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"/>',crown:'<path d="m3 7 4.5 4L12 4l4.5 7L21 7l-2 11H5Z"/><path d="M5 18h14"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',layers:'<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>',logout:'<path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h7v18h-7"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21h-4v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3.1 14H3v-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.5V3h4v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1v4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>'}[name]||'');
   const current=location.pathname.endsWith('/')?location.pathname:`${location.pathname}/`;
   if(current===cfg.root){document.body.classList.add('u-home');const toolsSection=document.querySelector('.u-section');if(toolsSection)toolsSection.id='tools';const explore=document.querySelector('.u-hero .u-button.primary');if(explore)explore.href='#tools';document.querySelectorAll('.u-tool-link').forEach(link=>{link.innerHTML=link.textContent.replace(/\s*→\s*$/,'')+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'})}
   const header=document.querySelector('[data-platform-header]');
@@ -44,7 +45,8 @@
   let quota={date:today,count:0};try{quota={...quota,...JSON.parse(localStorage.getItem(quotaKey)||'{}')}}catch(_){ }
   if(quota.date!==today)quota={date:today,count:0};
   const max=10,quotaEl=document.querySelector('[data-global-quota]'),quotaRoutes=[cfg.root,cfg.postersPath,cfg.menusPath,cfg.qrPath,cfg.pricesPath];
-  const renderQuota=()=>{if(!quotaEl||!quotaRoutes.includes(current)){quotaEl?.remove();return}const plan=getPlan(),paid=plan!=='basic';const value=paid?'∞':`${Math.max(0,max-quota.count)}/${max}`;quotaEl.innerHTML=`<div class="u-quota${paid?' is-unlimited':''}"><span class="u-quota-dot"></span><strong>${value}</strong><small>${paid?cfg.unlimited:cfg.downloads}</small></div>`;requestAnimationFrame(syncQuotaDock)};
+  const remainingDownloads=()=>Math.max(0,max-quota.count);
+  const renderQuota=()=>{if(!quotaEl||!quotaRoutes.includes(current)){quotaEl?.remove();return}const plan=getPlan(),paid=plan!=='basic',remaining=remainingDownloads(),value=paid?'∞':`${remaining}/${max}`,state=paid?' is-unlimited':remaining===0?' is-empty':remaining<=5?' is-low':'';quotaEl.innerHTML=`<div class="u-quota${state}"><span class="u-quota-dot"></span><strong>${value}</strong><small>${paid?cfg.unlimited:cfg.downloads}</small></div>`;requestAnimationFrame(syncQuotaDock)};
   let quotaDockFrame=0;
   function syncQuotaDock(){
     cancelAnimationFrame(quotaDockFrame);
@@ -87,6 +89,8 @@
   appleButton?.classList.add('u-auth-apple');
   if(appleButton)appleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.8c0-2.4 2-3.6 2.1-3.7a4.5 4.5 0 0 0-3.5-1.9c-1.5-.2-2.9.9-3.6.9-.7 0-1.8-.9-3-.9a4.7 4.7 0 0 0-4 2.4c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3.1 2.4 1.2 0 1.7-.8 3.3-.8 1.5 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-3.3-1.3-3.3-3.8ZM14.3 5.6c.7-.9 1.2-2.2 1.1-3.4-1.1 0-2.4.7-3.2 1.6-.7.8-1.3 2.1-1.1 3.3 1.2.1 2.4-.6 3.2-1.5Z"/></svg><span>${words.apple}</span><small>${lang==='ca'?'Properament':'Próximamente'}</small>`;
   const upgradeModal=document.querySelector('[data-upgrade-modal]');
+  const upgradePlansStep=upgradeModal?.querySelector('[data-upgrade-step="plans"]');
+  if(upgradePlansStep){const login=document.createElement('button');login.type='button';login.className='u-text-button u-upgrade-login';login.dataset.upgradeLogin='';login.textContent=words.alreadyAccount;upgradePlansStep.append(login)}
   const showUpgradeStep=name=>upgradeModal?.querySelectorAll('[data-upgrade-step]').forEach(step=>step.hidden=step.dataset.upgradeStep!==name);
   const closeUpgrade=()=>{if(!upgradeModal)return;upgradeModal.hidden=true;document.body.classList.remove('u-modal-open')};
   const syncUpgradePlans=()=>{
@@ -129,6 +133,7 @@
   const openAccount=(source='account')=>{modal.hidden=false;document.body.classList.add('u-modal-open');showView(currentUser?'profile':'login');accountPlansBack.hidden=Boolean(currentUser)||source!=='plans'};
   const closeAccount=()=>{modal.hidden=true;document.body.classList.remove('u-modal-open')};
   document.querySelectorAll('[data-upgrade-close]').forEach(button=>button.addEventListener('click',closeUpgrade));
+  document.querySelector('[data-upgrade-login]')?.addEventListener('click',()=>{closeUpgrade();openAccount('plans')});
   document.querySelector('[data-upgrade-view]')?.addEventListener('click',()=>showUpgradeStep('plans'));
   document.querySelector('[data-upgrade-premium]')?.addEventListener('click',async event=>{
     const button=event.currentTarget,original=button.textContent;button.disabled=true;
@@ -136,14 +141,11 @@
     catch(error){console.error(error);button.textContent=lang==='ca'?'Torna-ho a provar':'Inténtalo de nuevo'}
     finally{button.disabled=false;if(button.textContent!==original)setTimeout(()=>button.textContent=original,1800)}
   });
-  document.querySelector('[data-upgrade-basic]')?.addEventListener('click',async event=>{
-    if(getPlan()==='basic')return;
-    const message=lang==='ca'?'Vols canviar a Basic? Perdràs les descàrregues il·limitades.':'¿Quieres cambiar a Basic? Perderás las descargas ilimitadas.';
-    if(!confirm(message))return;
-    const button=event.currentTarget;button.disabled=true;
-    try{await window.UncartellPlatform.switchToBasic();syncUpgradePlans()}
-    catch(error){console.error(error);button.disabled=false}
+  const requestBasicDowngrade=()=>new Promise(resolve=>{
+    const wrap=document.createElement('div');wrap.className='u-confirm-modal';wrap.innerHTML=`<button class="u-modal-shade" type="button" data-no></button><section role="dialog" aria-modal="true"><button class="u-account-close" type="button" data-no aria-label="${words.cancel}"><svg viewBox="0 0 24 24">${icon('close')}</svg></button><h2>${lang==='ca'?'Canviar a Basic?':'¿Cambiar a Basic?'}</h2><p>${lang==='ca'?'Perdràs l’accés als projectes desats, als documents mòbils publicats i a les funcions Premium.':'Perderás el acceso a los proyectos guardados, a los documentos móviles publicados y a las funciones Premium.'}</p><div><button type="button" data-no>${words.cancel}</button><button type="button" class="danger" data-yes>${lang==='ca'?'Sí, canvia a Basic':'Sí, cambia a Basic'}</button></div></section>`;
+    const finish=value=>{wrap.remove();document.body.classList.remove('u-modal-open');resolve(value)};wrap.querySelectorAll('[data-no]').forEach(node=>node.addEventListener('click',()=>finish(false)));wrap.querySelector('[data-yes]').addEventListener('click',()=>finish(true));document.body.append(wrap);document.body.classList.add('u-modal-open');
   });
+  document.querySelector('[data-upgrade-basic]')?.addEventListener('click',async event=>{if(getPlan()==='basic'||!await requestBasicDowngrade())return;const button=event.currentTarget;button.disabled=true;try{await window.UncartellPlatform.switchToBasic();syncUpgradePlans()}catch(error){console.error(error)}finally{button.disabled=false}});
   const upgradeUltraButton=document.querySelector('[data-upgrade-ultra-notify]');
   const upgradeUltraEmail=document.querySelector('[data-upgrade-ultra-email]');
   const upgradeUltraInput=upgradeUltraEmail?.querySelector('input');
@@ -158,7 +160,7 @@
       await submitMailboxForm({type:'ultra',fields:{email:value,message:lang==='ca'?`${value} s’ha interessat pel pla Ultra.`:`${value} se ha interesado por el plan Ultra.`}});
       if(upgradeUltraEmail)upgradeUltraEmail.hidden=true;
       if(upgradeUltraButton){upgradeUltraButton.hidden=false;upgradeUltraButton.disabled=true;upgradeUltraButton.textContent=upgradeWords.ultraSent}
-      if(upgradeUltraFeedback)upgradeUltraFeedback.textContent=lang==='ca'?'Ja ets a la llista.':'Ya estás en la lista.';
+      if(upgradeUltraFeedback)upgradeUltraFeedback.textContent='';
     }catch(_){if(upgradeUltraFeedback)upgradeUltraFeedback.textContent=lang==='ca'?'No s’ha pogut enviar. Torna-ho a provar.':'No se ha podido enviar. Inténtalo de nuevo.';upgradeUltraSubmit&&(upgradeUltraSubmit.disabled=false)}
   };
   upgradeUltraButton?.addEventListener('click',async()=>{await authReady;if(currentUser?.email){saveUpgradeUltraInterest();return}upgradeUltraButton.hidden=true;upgradeUltraEmail.hidden=false;upgradeUltraInput?.focus()});
@@ -173,7 +175,7 @@
   document.querySelector('[data-auth-toggle]').addEventListener('click',()=>{const form=document.querySelector('[data-auth-form]'),register=form.dataset.authMode!=='register';form.dataset.authMode=register?'register':'login';form.querySelector('[name="name"]').hidden=!register;form.querySelector('[data-auth-marketing]').hidden=!register;form.querySelector('[name="password"]').autocomplete=register?'new-password':'current-password';form.querySelector('[data-auth-submit]').textContent=register?words.createAccount:words.continue;form.querySelector('[data-auth-toggle]').textContent=register?words.alreadyAccount:words.newHere;feedback.textContent=''});
   async function loadProfile(user){
     currentUser=user;
-    const result=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent').eq('id',user.id).maybeSingle();
+    const result=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent,role').eq('id',user.id).maybeSingle();
     currentProfile=result.data||{};
     let premiumValid=currentProfile.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date();
     let ultraValid=currentProfile.plan==='ultra'&&currentProfile.ultra_until&&new Date(currentProfile.ultra_until)>new Date();
@@ -182,7 +184,7 @@
     if(!ultraValid&&!premiumValid){
       const activation=await supabaseClient.rpc('activate_launch_premium');
       if(!activation.error){
-        const refreshed=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent').eq('id',user.id).maybeSingle();
+        const refreshed=await supabaseClient.from('profiles').select('display_name,plan,premium_until,ultra_until,marketing_consent,role').eq('id',user.id).maybeSingle();
         currentProfile=refreshed.data||{...(currentProfile||{}),plan:'premium'};
         premiumValid=currentProfile.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date();
         ultraValid=currentProfile.plan==='ultra'&&currentProfile.ultra_until&&new Date(currentProfile.ultra_until)>new Date();
@@ -194,14 +196,18 @@
     document.querySelector('[data-profile-greeting]').textContent=`${words.hello}, ${name}`;
     document.querySelector('[data-profile-email]').textContent=user.email||'';
     document.querySelector('[data-profile-plan]').textContent=ultraValid?'Ultra':premiumValid?'Premium':'Basic';
+    const actions=document.querySelector('.u-account-actions');
+    let adminLink=document.querySelector('[data-profile-admin]');
+    if(currentProfile.role==='admin'&&!adminLink&&actions){adminLink=document.createElement('a');adminLink.className='u-account-action';adminLink.dataset.profileAdmin='';adminLink.href='/admin/';adminLink.innerHTML=`<svg viewBox="0 0 24 24">${icon('settings')}</svg>${lang==='ca'?'Administració':'Administración'}`;actions.prepend(adminLink)}
+    if(adminLink)adminLink.hidden=currentProfile.role!=='admin';
     showView('profile');
   }
   function injectSupabase(){return new Promise((resolve,reject)=>{if(window.supabase)return resolve();const existing=document.querySelector('script[data-supabase-client]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const script=document.createElement('script');script.dataset.supabaseClient='';script.src='/assets/vendor-supabase.js?v=1';script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}
   async function initAuth(){
-    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr');const {data}=await supabaseClient.auth.getSession();if(data.session?.user)await loadProfile(data.session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser}}));supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user}}))},0);if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}})}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
+    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr');const {data}=await supabaseClient.auth.getSession();if(data.session?.user)await loadProfile(data.session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser}}));if(data.session?.user&&sessionStorage.getItem('uncartell-refresh-after-auth')==='1'){sessionStorage.removeItem('uncartell-refresh-after-auth');location.reload();return}supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user}}))},0);if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}})}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
   }
-  document.querySelector('[data-auth-google]').addEventListener('click',async()=>{if(!supabaseClient)return;feedback.textContent=words.loading;const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${location.origin}${location.pathname}`}});if(error)feedback.textContent=error.message||words.authError});
-  document.querySelector('[data-auth-form]').addEventListener('submit',async event=>{event.preventDefault();if(!supabaseClient)return;feedback.textContent=words.loading;const node=event.currentTarget,form=new FormData(node),email=String(form.get('email')||'').trim(),password=String(form.get('password')||''),name=String(form.get('name')||'').trim(),marketingConsent=form.get('marketing_consent')==='on',register=node.dataset.authMode==='register';const result=register?await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,marketing_consent:marketingConsent},emailRedirectTo:`${location.origin}${location.pathname}`}}):await supabaseClient.auth.signInWithPassword({email,password});if(result.error){feedback.textContent=register?(result.error.message||words.authError):words.invalidLogin;return}if(result.data.session)await loadProfile(result.data.user);else feedback.textContent=words.confirmMail});
+  document.querySelector('[data-auth-google]').addEventListener('click',async()=>{if(!supabaseClient)return;sessionStorage.setItem('uncartell-refresh-after-auth','1');feedback.textContent=words.loading;const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${location.origin}${location.pathname}${location.search}${location.hash}`}});if(error){sessionStorage.removeItem('uncartell-refresh-after-auth');feedback.textContent=error.message||words.authError}});
+  document.querySelector('[data-auth-form]').addEventListener('submit',async event=>{event.preventDefault();if(!supabaseClient)return;feedback.textContent=words.loading;const node=event.currentTarget,form=new FormData(node),email=String(form.get('email')||'').trim(),password=String(form.get('password')||''),name=String(form.get('name')||'').trim(),marketingConsent=form.get('marketing_consent')==='on',register=node.dataset.authMode==='register';const result=register?await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,marketing_consent:marketingConsent},emailRedirectTo:`${location.origin}${location.pathname}`}}):await supabaseClient.auth.signInWithPassword({email,password});if(result.error){feedback.textContent=register?(result.error.message||words.authError):words.invalidLogin;return}if(result.data.session){await loadProfile(result.data.user);location.reload()}else feedback.textContent=words.confirmMail});
   document.querySelector('[data-auth-logout]').addEventListener('click',async()=>{if(supabaseClient)await supabaseClient.auth.signOut();closeAccount();location.href=cfg.root});
   document.querySelector('[data-auth-delete]').addEventListener('click',()=>showView('delete'));
   document.querySelector('[data-profile-invoices]').addEventListener('click',()=>showView('invoices'));
@@ -280,11 +286,21 @@
     // authenticated account. Cloud rows win when both sides contain the same id.
     const localOnly=local.filter(project=>!cloudIds.has(String(project.id||project.projectId)));
     if(localOnly.length)await Promise.all(localOnly.map(project=>saveUserProject(toolType,project)));
-    const merged=[...cloud,...localOnly].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
+    const refreshed=localOnly.length?await listUserProjects(toolType):cloud;
+    const merged=[...refreshed].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
     localStorage.setItem(storageKey,JSON.stringify(merged));
     window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:merged}}));return merged;
   }
   window.addEventListener('uncartell:auth-change',event=>{if(event.detail?.user)projectStores.forEach((key,type)=>syncProjectStore(type,key).catch(console.error))});
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,consumeDownload(options={}){if(getPlan()==='basic'){quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload()},getPlan,setPlan,openAccount,openUpgradeModal,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  // Every plan-gated control opens the same upgrade journey, including
+  // controls that editors render after platform initialisation.
+  document.addEventListener('click',event=>{
+    const locked=event.target.closest('.is-locked,.ultra-locked,.locked-logo-control,.locked-footer-control,.ultra-pages-button.locked,[data-plan-locked]');
+    if(!locked||locked.closest('.u-upgrade-modal,.u-account-modal'))return;
+    const actionable=event.target.closest('.project-lock,[data-project-plan],.plan-style-badge,.ultra-badge,.feature-plan-badge,button,a')||locked.matches('.premium-style,.footer-style-card,.brand-kit,[data-colors-card],[data-watermark-card]');
+    if(!actionable)return;
+    event.preventDefault();event.stopPropagation();openUpgradeModal();
+  },true);
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();

@@ -80,3 +80,9 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-editor-shell,.poster-editor-shell .workspace,.poster-editor-shell .project-save-bar{box-sizing:border-box;width:100%;min-width:0}
 }
 .custom-brief-success{margin-top:22px}
+.u-lang-es .poster-category-tabs button.active{border-color:var(--green)!important;background:var(--green)!important}.u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}.u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
+/* Catalan and Spanish use the same corporate green. */
+.u-lang-es .poster-category-tabs button.active{border-color:var(--green)!important;background:var(--green)!important}
+.u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}
+.u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
+.u-lang-es .poster-editor-tabs button.active{box-shadow:inset 0 -4px 0 var(--green)!important}
