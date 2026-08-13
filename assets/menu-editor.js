@@ -573,10 +573,12 @@
     let validationTimer;
     input.addEventListener("input", () => { clearTimeout(validationTimer); validationTimer = setTimeout(refresh, 250); });
     input.addEventListener("blur", () => { state.mobilePublication.slug = normalizeSlug(input.value); save(); });
-    $("#publishMobileMenu", box).addEventListener("click", async event => {
+    const form = $("[data-mobile-publish-form]", box);
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
       const slug = normalizeSlug(input.value);
       if (!slug) { status.textContent = L.slugRequired; status.className = "is-unavailable"; return; }
-      const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=L.lang==='es'?'Publicando…':'Publicant…';
+      const button=$("#publishMobileMenu",box),original=button.textContent;button.disabled=true;button.textContent=L.lang==='es'?'Publicando…':'Publicant…';
       try{
         await window.UncartellPlatform.whenReady();
         const persistent=JSON.parse(JSON.stringify({name:state.projectName,format:state.format,style:state.style,accent:state.accent,textColor:state.textColor,pages:state.pages}));
@@ -584,7 +586,6 @@
         state.mobilePublication = { slug, status: "published", publishedAt: new Date().toISOString(), url:published.url };
         save();
         try{await saveProject(true)}catch(saveError){console.warn('Published, but cloud project sync failed',saveError)}
-        renderPlans();
         box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${L.lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${L.lang==='es'?'Tu carta ya está disponible.':'La teva carta ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${L.lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
         $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
         $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1&save=1&name=${encodeURIComponent(state.projectName||slug)}`});
@@ -598,7 +599,7 @@
     state.mobilePublication ||= { slug: "", status: "draft", publishedAt: null };
     const published = state.mobilePublication.status === "published" && state.mobilePublication.slug;
     const box = $("#mobilePublishModalCard");
-    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${L.lang==='es'?'Elige una dirección pública y permanente. Guardaremos la carta y sus imágenes en tu cuenta.':'Tria una adreça pública i permanent. Desarem la carta i les imatges al teu compte.'}</p><div class="mobile-publication-card"><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="restaurant-olivera"></label><code>${L.lang==='es'?'uncartel.es':'uncartell.cat'}/carta/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus"></span><button id="publishMobileMenu" type="button">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></div>`;
+    box.innerHTML = `<button class="modal-close" type="button" data-close-mobile-publish aria-label="${escapeHtml(L.close || "Tanca")}">×</button><span class="eyebrow">${escapeHtml(L.mobilePublicationTitle)}</span><h2 id="mobilePublishModalTitle">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</h2><p>${L.lang==='es'?'Elige una dirección pública y permanente. Guardaremos la carta y sus imágenes en tu cuenta.':'Tria una adreça pública i permanent. Desarem la carta i les imatges al teu compte.'}</p><form class="mobile-publication-card" data-mobile-publish-form><label><span>${escapeHtml(L.businessSlug)}</span><input id="mobileSlug" type="text" maxlength="48" value="${escapeHtml(state.mobilePublication.slug || "")}" placeholder="restaurant-olivera"></label><code>${L.lang==='es'?'uncartel.es':'uncartell.cat'}/carta/<b id="mobileSlugPreview">${escapeHtml(state.mobilePublication.slug || "escriu-el-nom")}</b></code><span id="mobileSlugStatus" role="status"></span><button id="publishMobileMenu" type="submit">${escapeHtml(published ? L.republishMobileMenu : L.publishMobileMenu)}</button></form>`;
     $("#mobilePublishModal").hidden = false;
     $$('[data-close-mobile-publish]', $("#mobilePublishModal")).forEach(button => button.addEventListener("click", () => { $("#mobilePublishModal").hidden = true; }));
     wireMobilePublication(box);

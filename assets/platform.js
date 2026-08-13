@@ -253,9 +253,14 @@
     const plan=getPlan();
     if(!['premium','ultra'].includes(plan))throw new Error(upgradeWords.copy);
     const persistedPayload=await persistUploadedData(payload);
-    const {data,error}=await supabaseClient.rpc('publish_public_document',{p_locale:lang,p_kind:kind,p_slug:slug,p_payload:persistedPayload}).single();
+    const {data,error}=await supabaseClient.rpc('publish_public_document',{p_locale:lang,p_kind:kind,p_slug:slug,p_payload:persistedPayload});
     if(error)throw error;
-    return {...data,url:`${location.origin}/${kind==='menu'?(lang==='ca'?'carta':'carta'):(lang==='ca'?'serveis':'servicios')}/${slug}/`};
+    const published=Array.isArray(data)?data[0]:data;
+    if(!published?.slug)throw new Error(words.publishError||'La publicació no s’ha confirmat.');
+    const {data:verified,error:verifyError}=await supabaseClient.rpc('get_public_document',{p_locale:lang,p_kind:kind,p_slug:slug});
+    if(verifyError)throw verifyError;
+    if(!(Array.isArray(verified)?verified.length:verified))throw new Error(words.publishError||'La publicació no s’ha confirmat.');
+    return {...published,url:`${location.origin}/${kind==='menu'?'carta':(lang==='ca'?'serveis':'servicios')}/${slug}/`};
   }
   async function checkDocumentSlug(kind,slug){
     await authReady;
