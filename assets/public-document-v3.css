@@ -1,0 +1,10 @@
+.u-public-dish-allergens{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;color:var(--accent)}
+.u-public-allergen{display:inline-flex;align-items:center;gap:9px}
+.u-public-allergen svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.u-public-allergen-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:28px}
+.u-public-allergen-grid .u-public-allergen{min-height:46px;border:1px solid #dedbd4;border-radius:14px;padding:10px 12px;color:#181614;font-size:13px;font-weight:700}
+.u-public-allergen-grid svg{flex:0 0 auto;color:var(--accent)}
+.u-public-pager{position:fixed!important;z-index:10;top:50%!important;right:auto!important;bottom:auto!important;left:max(16px,calc(50vw - 336px))!important;display:flex;flex-direction:column;justify-content:flex-start!important;gap:12px;transform:translateY(-50%)}
+.u-public-pager>span:empty{display:none}
+.u-public-pager button{box-shadow:0 8px 24px rgba(24,22,20,.09)}
+@media(max-width:560px){.u-public-section{padding-left:32px}.u-public-pager{left:9px!important}.u-public-pager button{width:42px;height:42px}.u-public-allergen-grid{grid-template-columns:1fr}}
