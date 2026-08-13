@@ -252,6 +252,39 @@
     if(error)throw error;
     return {...data,url:`${location.origin}/${kind==='menu'?(lang==='ca'?'carta':'carta'):(lang==='ca'?'serveis':'servicios')}/${slug}/`};
   }
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,consumeDownload(options={}){if(getPlan()==='basic'){quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload()},getPlan,setPlan,openAccount,openUpgradeModal,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  async function listUserProjects(toolType){
+    await authReady;if(!supabaseClient||!currentUser)return [];
+    const {data,error}=await supabaseClient.from('user_projects').select('id,name,payload,created_at,updated_at').eq('user_id',currentUser.id).eq('tool_type',toolType).order('updated_at',{ascending:false});
+    if(error)throw error;return (data||[]).map(row=>({...row.payload,id:row.id,name:row.name,updated_at:row.updated_at}));
+  }
+  async function saveUserProject(toolType,project){
+    await authReady;if(!supabaseClient||!currentUser)throw new Error(words.authError);
+    const payload=await persistUploadedData(project);const now=new Date().toISOString();
+    const {error}=await supabaseClient.from('user_projects').upsert({id:String(project.id||project.projectId),user_id:currentUser.id,tool_type:toolType,locale:lang,name:String(project.name||'Projecte'),payload,updated_at:now},{onConflict:'user_id,tool_type,id'});
+    if(error)throw error;return {...project,updated_at:now};
+  }
+  async function deleteUserProject(toolType,id){
+    await authReady;if(!supabaseClient||!currentUser)throw new Error(words.authError);
+    const {error}=await supabaseClient.from('user_projects').delete().eq('user_id',currentUser.id).eq('tool_type',toolType).eq('id',String(id));if(error)throw error;
+  }
+  const projectStores=new Map();
+  async function syncProjectStore(toolType,storageKey){
+    projectStores.set(toolType,storageKey);await authReady;
+    // Editors may register their store before platform.js has finished auth init.
+    // Wait for that initialisation too, then read the authenticated cloud account.
+    if(!supabaseClient)await new Promise(resolve=>window.addEventListener('uncartell:auth-ready',resolve,{once:true}));
+    if(!currentUser)return [];
+    let local=[];try{local=JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(_){local=[]}
+    const cloud=await listUserProjects(toolType),cloudIds=new Set(cloud.map(project=>String(project.id||project.projectId)));
+    // Preserve projects created before cloud sync existed and migrate them to the
+    // authenticated account. Cloud rows win when both sides contain the same id.
+    const localOnly=local.filter(project=>!cloudIds.has(String(project.id||project.projectId)));
+    if(localOnly.length)await Promise.all(localOnly.map(project=>saveUserProject(toolType,project)));
+    const merged=[...cloud,...localOnly].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
+    localStorage.setItem(storageKey,JSON.stringify(merged));
+    window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:merged}}));return merged;
+  }
+  window.addEventListener('uncartell:auth-change',event=>{if(event.detail?.user)projectStores.forEach((key,type)=>syncProjectStore(type,key).catch(console.error))});
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,consumeDownload(options={}){if(getPlan()==='basic'){quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload()},getPlan,setPlan,openAccount,openUpgradeModal,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();
