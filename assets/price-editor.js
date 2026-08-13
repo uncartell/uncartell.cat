@@ -542,20 +542,31 @@
     const input = $("#mobileSlug", box);
     if (!input) return;
     const status = $("#mobileSlugStatus", box);
-    const refresh = () => {
+    let validationToken = 0;
+    const refresh = async () => {
       const slug = normalizeSlug(input.value);
       input.value = slug;
       $("#mobileSlugPreview", box).textContent = slug || "escriu-el-nom";
-      const collision = getProjects().some(project => project.id !== state.projectId && project.document?.mobile_publication?.slug === slug);
+      const token = ++validationToken;
+      let collision = false;
+      if (slug) {
+        status.textContent = lang === 'es' ? 'Comprobando disponibilidad…' : 'Comprovant disponibilitat…';
+        status.className = '';
+        $("#publishMobileMenu", box).disabled = true;
+        try { collision = !(await window.UncartellPlatform.checkDocumentSlug('services', slug)); }
+        catch { collision = true; }
+        if (token !== validationToken) return { slug, collision: true };
+      }
       status.textContent = !slug ? L.slugRequired : collision ? L.slugUnavailable : L.slugAvailable;
       status.className = slug && !collision ? "is-available" : "is-unavailable";
       $("#publishMobileMenu", box).disabled = !slug || collision;
       return { slug, collision };
     };
-    input.addEventListener("input", refresh);
+    let validationTimer;
+    input.addEventListener("input", () => { clearTimeout(validationTimer); validationTimer = setTimeout(refresh, 250); });
     input.addEventListener("blur", () => { state.mobilePublication.slug = normalizeSlug(input.value); save(); });
     $("#publishMobileMenu", box).addEventListener("click", async event => {
-      const { slug, collision } = refresh();
+      const { slug, collision } = await refresh();
       if (!slug || collision || !entitlements.canPublishMobileMenu(state.plan)) return;
       const button=event.currentTarget,original=button.textContent;button.disabled=true;button.textContent=lang==='es'?'Publicando…':'Publicant…';
       try{
@@ -568,9 +579,9 @@
         box.innerHTML=`<button class="modal-close" type="button" data-close-mobile-publish>×</button><div class="mobile-publish-success"><span>✓</span><h2>${lang==='es'?'¡Publicado!':'Publicat!'}</h2><p>${lang==='es'?'Tu carta de servicios ya está disponible.':'La teva carta de serveis ja està disponible.'}</p><a href="${published.url}" target="_blank" rel="noopener">${published.url}</a><button type="button" data-generate-published-qr>${lang==='es'?'Generar QR':'Genera un QR'}</button></div>`;
         $('[data-close-mobile-publish]',box).addEventListener('click',()=>{$('#mobilePublishModal').hidden=true});
         $('[data-generate-published-qr]',box).addEventListener('click',()=>{location.href=`${window.UncartellPlatform.cfg.qrPath}?url=${encodeURIComponent(published.url)}&generate=1`});
-      }catch(error){status.textContent=error?.message||L.slugUnavailable;status.className='is-unavailable';button.disabled=false;button.textContent=original}
+      }catch(error){const unavailable=String(error?.message||'').includes('slug_unavailable');status.textContent=unavailable?L.slugUnavailable:(lang==='es'?'No se ha podido publicar. Inténtalo de nuevo.':'No s’ha pogut publicar. Torna-ho a provar.');status.className='is-unavailable';button.disabled=false;button.textContent=original}
     });
-    refresh();
+    void refresh();
   }
 
   function openMobilePublishModal() {
@@ -1145,12 +1156,14 @@
     $("#leaveModal").hidden = false;
     $("#leavePrimary").focus();
   }
-  function openProjectsModal(trigger) {
+  async function openProjectsModal(trigger) {
     if (state.plan !== "premium" && state.plan !== "ultra") return openPlanGate("Premium");
     projectsModalTrigger = trigger;
     $("#projectsGalleryView").hidden = false;
     $("#projectDeleteView").hidden = true;
     pendingDeleteProjectId = null;
+    try { await window.UncartellPlatform?.syncProjectStore?.('services', projectStorageKey); }
+    catch (error) { console.error('Cloud projects sync', error); }
     renderProjects();
     $("#projectsModal").hidden = false;
     $(".projects-modal-close").focus();

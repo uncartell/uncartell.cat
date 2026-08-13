@@ -232,7 +232,8 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Final production polish: consistent quota and Spanish corporate palette. */
 .u-quota{padding-right:22px}
 .u-quota strong{font-family:inherit;font-weight:800}
-.u-quota.is-unlimited strong{align-self:auto;padding-bottom:3px}
+.u-quota.is-unlimited strong{align-self:auto;padding-bottom:0;transform:translateY(-5px)}
+.mobile-publication-card>button:focus,.mobile-publication-card>button:focus-visible,#exportButton:focus,#exportButton:focus-visible{border-color:var(--ink)!important;outline:none!important;box-shadow:none!important}
 .u-quota small{white-space:normal}
 .u-lang-es .editor-shell,.u-lang-es .poster-editor,.u-lang-es .qr-editor,
 .u-lang-es .price-editor,.u-lang-es .menu-editor{--accent:var(--green)!important;--blue:var(--green)!important}

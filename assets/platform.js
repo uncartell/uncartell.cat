@@ -253,10 +253,16 @@
     const plan=getPlan();
     if(!['premium','ultra'].includes(plan))throw new Error(upgradeWords.copy);
     const persistedPayload=await persistUploadedData(payload);
-    const record={user_id:currentUser.id,owner_email:currentUser.email||'',locale:lang,kind,slug,payload:persistedPayload,plan,status:'active',plan_expires_at:plan==='ultra'?currentProfile?.ultra_until:currentProfile?.premium_until,updated_at:new Date().toISOString()};
-    const {data,error}=await supabaseClient.from('public_documents').upsert(record,{onConflict:'locale,kind,slug'}).select('locale,kind,slug,status,published_at,updated_at').single();
+    const {data,error}=await supabaseClient.rpc('publish_public_document',{p_locale:lang,p_kind:kind,p_slug:slug,p_payload:persistedPayload}).single();
     if(error)throw error;
     return {...data,url:`${location.origin}/${kind==='menu'?(lang==='ca'?'carta':'carta'):(lang==='ca'?'serveis':'servicios')}/${slug}/`};
+  }
+  async function checkDocumentSlug(kind,slug){
+    await authReady;
+    if(!supabaseClient||!currentUser)return false;
+    const {data,error}=await supabaseClient.rpc('public_document_slug_available',{p_locale:lang,p_kind:kind,p_slug:slug});
+    if(error)throw error;
+    return data===true;
   }
   async function listUserProjects(toolType){
     await authReady;if(!supabaseClient||!currentUser)return [];
@@ -302,6 +308,6 @@
     if(!actionable)return;
     event.preventDefault();event.stopPropagation();openUpgradeModal();
   },true);
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();
