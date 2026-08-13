@@ -1,5 +1,5 @@
 (()=>{
-  if(!document.querySelector('link[data-public-document-v3]')){const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='/assets/public-document-v3.css?v=3';stylesheet.dataset.publicDocumentV3='';document.head.append(stylesheet)}
+  if(!document.querySelector('link[data-public-document-v3]')){const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='/assets/public-document-v3.css?v=4';stylesheet.dataset.publicDocumentV3='';document.head.append(stylesheet)}
   const parts=location.pathname.split('/').filter(Boolean);
   const kind=parts[0]==='carta'?'menu':parts[0]==='serveis'||parts[0]==='servicios'?'services':'';
   const slug=parts[1];
@@ -51,9 +51,10 @@
     show(homeIndex);
     document.body.classList.add('u-public-mode');
   };
+  const renderStatus=status=>{const copy=lang==='es'?{not_found:['Página no encontrada','Esta página no se ha encontrado.'],blocked:['Página bloqueada temporalmente','Esta carta está bloqueada temporalmente. Contacta con hola@uncartel.es.'],expired:['Página no disponible','Esta página ya no está disponible.']}:{not_found:['Pàgina no trobada','Aquesta pàgina no s’ha trobat.'],blocked:['Pàgina bloquejada temporalment','Aquesta carta està bloquejada temporalment. Contacta amb hola@uncartell.cat.'],expired:['Pàgina no disponible','Aquesta pàgina ja no està disponible.']};const message=copy[status]||copy.not_found;const main=document.querySelector('main');main.className='u-public-document u-public-status';main.innerHTML=`<div class="u-public-shell"><section class="u-public-home"><span class="u-public-kicker">404</span><h1>${escape(message[0])}</h1><p>${escape(message[1])}</p><a href="/" class="u-public-status-home">${lang==='es'?'Volver al inicio':'Torna a l’inici'}</a></section></div>`;document.body.classList.add('u-public-mode')};
   wait().then(async supabase=>{
     const {data,error}=await supabase.rpc('get_public_document',{p_locale:lang,p_kind:kind,p_slug:slug}).maybeSingle();
-    if(error||!data)return;
+    if(error||!data){const {data:status}=await supabase.rpc('get_public_document_status',{p_locale:lang,p_kind:kind,p_slug:slug});renderStatus(status||'not_found');return}
     render(data.payload||{});
   }).catch(()=>{});
 })();
