@@ -242,3 +242,23 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-lang-es .editor-tabs button.active,.u-lang-es .mobile-page-tabs button.active{border-color:var(--green)!important;background:var(--green)!important;color:var(--ink)!important}
 .u-lang-es .premium-badge,.u-lang-es .project-lock,.u-lang-es [data-project-plan],
 .u-lang-es .feature-plan-badge:not(.novelty){border-color:#38c94b!important;background:var(--green)!important;color:var(--ink)!important}
+/* Spanish uses the Catalan corporate green. Explicit novelty labels remain blue. */
+.u-lang-es{--accent:var(--green)!important;--blue:var(--green)!important;--blue-soft:var(--green-soft)!important}
+.u-lang-es .u-logo i,.u-lang-es .logo i{color:var(--green)!important}
+.u-lang-es .u-quota-dot{background:var(--green)!important;box-shadow:0 0 0 6px rgba(115,241,114,.13)!important}
+.u-lang-es .u-quota.is-low .u-quota-dot{background:#ff9f0a!important}.u-lang-es .u-quota.is-empty .u-quota-dot{background:#ff3b30!important}
+.u-lang-es button:focus-visible,.u-lang-es a:focus-visible,.u-lang-es input:focus-visible,.u-lang-es select:focus-visible,.u-lang-es textarea:focus-visible{outline-color:var(--green)}
+.u-lang-es .format-card:first-child .format-tag,.u-lang-es .format-card.format-featured .format-tag{border-color:#0074d9!important;background:var(--novelty-blue,#0088ff)!important;color:#fff!important}
+
+/* ES shares the Catalan corporate green everywhere except the explicit novelty badge. */
+.u-lang-es .poster-category-tabs button.active,
+.u-lang-es .poster-create-card,
+.u-lang-es .poster-card-hover button:last-child{border-color:var(--green)!important;background:var(--green)!important}
+.u-lang-es .poster-create-card{background:var(--green-soft)!important}
+.u-lang-es .u-logo-dot,
+.u-lang-es .u-quota-dot{background:var(--green)!important}
+.u-lang-es button:focus-visible,
+.u-lang-es a:focus-visible,
+.u-lang-es input:focus-visible,
+.u-lang-es textarea:focus-visible,
+.u-lang-es select:focus-visible{outline-color:var(--green)!important}
