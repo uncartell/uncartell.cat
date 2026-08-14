@@ -269,6 +269,14 @@
     if(error)throw error;
     return data===true;
   }
+  async function deletePublishedDocument(kind,slug){
+    await authReady;
+    if(!supabaseClient||!currentUser)throw new Error(words.authError);
+    if(!slug)return false;
+    const {data,error}=await supabaseClient.rpc('delete_own_public_document',{p_locale:lang,p_kind:kind,p_slug:String(slug).trim().toLowerCase()});
+    if(error)throw error;
+    return data===true;
+  }
   async function listUserProjects(toolType){
     await authReady;if(!supabaseClient||!currentUser)return [];
     const {data,error}=await supabaseClient.from('user_projects').select('id,name,payload,created_at,updated_at').eq('user_id',currentUser.id).eq('tool_type',toolType).order('updated_at',{ascending:false});
@@ -313,6 +321,6 @@
     if(!actionable)return;
     event.preventDefault();event.stopPropagation();openUpgradeModal();
   },true);
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>currentUser,getProfile:()=>currentProfile,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();

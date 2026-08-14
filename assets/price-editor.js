@@ -1399,8 +1399,16 @@
     pendingDeleteProjectId = null;
     $("[data-delete-project]")?.focus();
   }));
-  $("#confirmDeleteProject").addEventListener("click", () => {
+  $("#confirmDeleteProject").addEventListener("click", async () => {
     if (!pendingDeleteProjectId) return;
+    const deletedProject = storedProjects().find(project => project.id === pendingDeleteProjectId);
+    const publishedSlug = deletedProject?.document?.mobile_publication?.slug;
+    if (publishedSlug) {
+      try { await window.UncartellPlatform?.deletePublishedDocument?.("services", publishedSlug); }
+      catch (error) { console.error("Unable to remove published price list", error); toast(error.message || L.projectDeleteError || L.projectDeleted); return; }
+    }
+    try { await window.UncartellPlatform?.deleteUserProject?.("services", pendingDeleteProjectId); }
+    catch (error) { console.error("Unable to remove cloud project", error); toast(error.message || L.projectDeleteError || L.projectDeleted); return; }
     const projects = storedProjects().filter(project => project.id !== pendingDeleteProjectId);
     localStorage.setItem(projectStorageKey, JSON.stringify(projects));
     if (state.projectId === pendingDeleteProjectId) {
