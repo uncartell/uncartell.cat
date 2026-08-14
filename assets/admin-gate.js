@@ -5,7 +5,7 @@
   if(main)main.hidden=true;
   if(editModal)editModal.hidden=true;
   let checking=false,loaded=false;
-  const loadAdmin=()=>{document.querySelector('[data-admin-gate]')?.remove();if(main)main.hidden=false;['/assets/poster-admin.js?v=10','/assets/publication-admin.js?v=4','/assets/admin-dashboard.js?v=4'].forEach(src=>{const script=document.createElement('script');script.src=src;document.body.appendChild(script)})};
+  const loadAdmin=()=>{document.querySelector('[data-admin-gate]')?.remove();if(main)main.hidden=false;['/assets/poster-admin.js?v=11','/assets/publication-admin.js?v=4','/assets/admin-dashboard.js?v=4'].forEach(src=>{const script=document.createElement('script');script.src=src;document.body.appendChild(script)})};
   const showDenied=message=>{
     document.querySelector('[data-admin-gate]')?.remove();
     document.body.insertAdjacentHTML('beforeend',`<div class="u-account-modal" data-admin-gate><div class="u-modal-shade"></div><section class="u-account-card" role="dialog" aria-modal="true"><div><h2>${es?'Acceso restringido':'Accés restringit'}</h2><p>${message}</p><button class="u-button primary" type="button" data-admin-account>${es?'Cambiar de cuenta':'Canvia de compte'}</button></div></section></div>`);
