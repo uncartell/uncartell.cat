@@ -242,6 +242,32 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-lang-es .editor-tabs button.active,.u-lang-es .mobile-page-tabs button.active{border-color:var(--green)!important;background:var(--green)!important;color:var(--ink)!important}
 .u-lang-es .premium-badge,.u-lang-es .project-lock,.u-lang-es [data-project-plan],
 .u-lang-es .feature-plan-badge:not(.novelty){border-color:#38c94b!important;background:var(--green)!important;color:var(--ink)!important}
+/* Spanish uses the Catalan corporate green. Explicit novelty labels remain blue. */
+.u-lang-es{--accent:var(--green)!important;--blue:var(--green)!important;--blue-soft:var(--green-soft)!important}
+.u-lang-es .u-logo i,.u-lang-es .logo i{color:var(--green)!important}
+.u-lang-es .u-quota-dot{background:var(--green)!important;box-shadow:0 0 0 6px rgba(115,241,114,.13)!important}
+.u-lang-es .u-quota.is-low .u-quota-dot{background:#ff9f0a!important}.u-lang-es .u-quota.is-empty .u-quota-dot{background:#ff3b30!important}
+.u-lang-es button:focus-visible,.u-lang-es a:focus-visible,.u-lang-es input:focus-visible,.u-lang-es select:focus-visible,.u-lang-es textarea:focus-visible{outline-color:var(--green)}
+.u-lang-es .format-card:first-child .format-tag,.u-lang-es .format-card.format-featured .format-tag{border-color:#0074d9!important;background:var(--novelty-blue,#0088ff)!important;color:#fff!important}
+
+/* ES shares the Catalan corporate green everywhere except the explicit novelty badge. */
+.u-lang-es .poster-category-tabs button.active,
+.u-lang-es .poster-create-card,
+.u-lang-es .poster-card-hover button:last-child{border-color:var(--green)!important;background:var(--green)!important}
+.u-lang-es .poster-create-card{background:var(--green-soft)!important}
+.u-lang-es .u-logo-dot,
+.u-lang-es .u-quota-dot{background:var(--green)!important}
+.u-lang-es button:focus-visible,
+.u-lang-es a:focus-visible,
+.u-lang-es input:focus-visible,
+.u-lang-es textarea:focus-visible,
+.u-lang-es select:focus-visible{outline-color:var(--green)!important}
+
+/* Imatges definitives de les eines: sense cap element flotant superposat. */
+.u-tool-visual:before,.u-tool-visual:after{display:none}.u-tool-visual>img{display:block;width:100%;height:100%;object-fit:cover}
+.u-support-banner{position:sticky;top:0;z-index:10020;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 20px;background:#171614;color:#fff;font-size:14px}.u-support-banner button{border:0;border-radius:999px;padding:7px 13px;background:#69ee70;color:#111;font:inherit;font-weight:800;cursor:pointer}
+/* Shared, one-time tool onboarding. */
+.u-tool-onboarding{position:fixed;z-index:190;right:24px;bottom:24px;width:min(360px,calc(100vw - 32px));padding:22px 24px;border:1px solid #d8d4cc;border-radius:24px;background:#fff;color:#181614;box-shadow:0 18px 50px rgba(24,22,20,.16)}.u-tool-onboarding>button{position:absolute;top:10px;right:13px;border:0;background:transparent;font:400 28px/1 Arial;cursor:pointer}.u-tool-onboarding strong{display:block;padding-right:28px;font-size:18px}.u-tool-onboarding ol{margin:12px 0 0;padding-left:20px}.u-tool-onboarding li{margin-top:7px;color:#6e6a63;line-height:1.35}@media(max-width:620px){.u-tool-onboarding{right:16px;bottom:16px;padding:20px;border-radius:20px}}
 </style><style>.production-plan-preview{display:none!important}</style><link rel="canonical" href="https://uncartell.cat/plans/"><link rel="alternate" hreflang="ca" href="https://uncartell.cat/plans/"><link rel="alternate" hreflang="es" href="https://uncartel.es/"><meta property="og:type" content="website"><meta property="og:locale" content="ca_ES"><meta property="og:title" content="Eines de disseny gratuïtes per imprimir | uncartell.cat"><meta property="og:description" content="Crea, personalitza i descarrega cartells, cartes, menús, tarifes i codis QR amb un disseny clar i professional."><meta property="og:url" content="https://uncartell.cat/plans/"><meta property="og:image" content="https://uncartell.cat/og-uncartell-cat.jpg"><meta name="twitter:card" content="summary_large_image"></head><body><div data-platform-header></div><main class="u-pricing"><div class="u-shell"><header class="u-pricing-intro"><h1>Comença gratis,<br>creix quan ho necessitis.</h1></header><div class="u-plans-grid">
 <article class="u-plan"><div class="u-plan-head">Pla actual</div><div class="u-plan-body"><h2>Basic</h2><p>Crea i descarrega sense registrar-te.</p><div class="u-price">0 €</div><div class="u-price-note">Gratis per sempre</div><ul class="u-feature-list"><li>Crea cartells i cartes</li><li>Edita tots els textos</li><li>10 descàrregues diàries</li><li>Arxius en PDF preparats per imprimir</li></ul><button class="u-button" data-plan="basic">Pla actual</button></div></article>
 <article class="u-plan premium"><div class="u-plan-head">Recomanat</div><div class="u-plan-body"><h2>Premium</h2><p>Desa projectes i personalitza colors i tipografies.</p><div class="u-price u-price-offer"><span>0 €</span><del>29,99 €</del></div><div class="u-price-note">Promoció beta · sense targeta</div><ul class="u-feature-list"><li>Tot el que inclou Basic</li><li>Colors i tipografies personalitzades</li><li>Descàrregues il·limitades</li><li>Desa i recupera projectes</li></ul><button class="u-button accent" data-plan="premium">Activa Premium gratis</button></div></article>

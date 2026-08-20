@@ -1,5 +1,9 @@
 (() => {
   const L = window.UNCARTELL_LOCALE;
+  if (!L.blockTypes.some(item => item.id === "image")) L.blockTypes.push({ id: "image", label: L.lang === "ca" ? "Bloc d’imatge" : "Bloque de imagen", symbol: "▧" });
+  L.contentImage = L.lang === "ca" ? "Imatge" : "Imagen";
+  L.chooseContentImage = L.lang === "ca" ? "Afegeix una imatge 16:9" : "Añade una imagen 16:9";
+  L.contentImageHelp = L.lang === "ca" ? "Disponible amb Ultra en composicions de dues columnes." : "Disponible con Ultra en composiciones de dos columnas.";
   const projectStorageKey = `uncartell-menu-projects-preview-user-${L.lang}`;
   const brandKitStorageKey = "uncartell-brand-kit-preview-user";
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -7,11 +11,11 @@
   const uid = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
   const requestedPlan = new URLSearchParams(location.search).get("plan") || ({basic:"free",premium:"premium",ultra:"ultra"}[localStorage.getItem("uncartell-plan-v12") || "basic"]);
   const previewPlan = ["premium", "ultra"].includes(requestedPlan) ? requestedPlan : "free";
-  const FEATURES = Object.freeze({ ultraMenuImages: ["localhost", "127.0.0.1"].includes(location.hostname) && window.UNCARTELL_ENABLE_ULTRA_MENU_IMAGES !== false });
+  const FEATURES = Object.freeze({ ultraMenuImages: window.UNCARTELL_ENABLE_ULTRA_MENU_IMAGES !== false });
   const entitlements = Object.freeze({
     canCreateMobileMenu: plan => plan === "premium" || plan === "ultra",
     canPublishMobileMenu: plan => plan === "premium" || plan === "ultra",
-    canUploadMenuImages: plan => plan === "ultra" && FEATURES.ultraMenuImages
+    canUploadMenuImages: plan => plan === "ultra" && FEATURES.ultraMenuImages && state.contentColumns === 2
   });
   const defaultBrandKit = () => ({ version: 2, businessName: "", logo: null, primary: "#e5372a", secondary: "#181614", font: "modern", footerText: L.lang === "ca" ? "uncartell.cat" : "uncartel.es", footerTextSet: false });
   const readBrandKit = () => {
@@ -23,6 +27,7 @@
     if (type === "spacer-large") return { ...base, ...overrides };
     if (type === "section") return { ...base, text: L.defaults.section, ...overrides };
     if (type === "dish" || type === "dish-image") return { ...base, name: L.defaults.dish, description: L.defaults.description, price: L.defaults.price, allergens: [], image: null, imagePosition: "above", ...overrides };
+    if (type === "image") return { ...base, image: null, imageMeta: null, ...overrides };
     if (type === "separator") return { ...base, ...overrides };
     if (type === "note") return { ...base, text: L.defaults.note, ...overrides };
     return { ...base, text: L.defaults.note, ...overrides };
@@ -420,13 +425,13 @@
   function renderBlockButtons() {
     const disabled = ["cover", "back", "mobile-home", "mobile-allergens"].includes(state.pages[state.activePage].role);
     $("#blockButtons").innerHTML = L.blockTypes.map(block => {
-      const ultraLocked = block.id === "dish-image" && !entitlements.canUploadMenuImages(state.plan);
+      const ultraLocked = ["dish-image", "image"].includes(block.id) && !entitlements.canUploadMenuImages(state.plan);
       const crown = '<span class="block-plan-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>';
-      const symbol = block.id === "dish-image" ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(block.symbol);
-      return `<button class="block-add${block.id === "dish-image" ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
+      const symbol = ["dish-image", "image"].includes(block.id) ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(block.symbol);
+      return `<button class="block-add${["dish-image", "image"].includes(block.id) ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
     }).join("");
     $$(".block-add").forEach(button => button.addEventListener("click", () => {
-      if (button.dataset.add === "dish-image" && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
+      if (["dish-image", "image"].includes(button.dataset.add) && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
       const block = makeBlock(button.dataset.add);
       const blocks = state.pages[state.activePage].blocks;
       const selectedIndex = blocks.findIndex(item => item.id === state.selectedBlock);
@@ -653,6 +658,8 @@
       controls = field(L.inspector.name, "name", block.name) + field(L.inspector.description, "description", block.description, true) + field(L.inspector.price, "price", block.price);
       if (block.type === "dish-image") controls += `<div class="field dish-image-field"><span>${escapeHtml(L.imageDish)}</span><p>${escapeHtml(L.imageDishHelp)}</p>${block.image ? `<img src="${block.image}" alt=""><button id="removeDishImage" type="button">${escapeHtml(L.removeDishImage)}</button>` : `<label for="dishImageInput">${escapeHtml(L.chooseDishImage)}</label>`}<input id="dishImageInput" type="file" accept="image/png,image/jpeg,image/webp"><button class="dish-order-toggle" id="swapDishImage" type="button" aria-label="${escapeHtml(L.swapDishImage)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3m3 3-3 3M17 17H6l3 3m-3-3 3-3"/></svg>${escapeHtml(block.imagePosition === "below" ? L.textFirst : L.photoFirst)}</button></div>`;
       controls += `<div class="field"><span>${L.inspector.allergens}</span><div class="allergen-grid">${Object.entries(L.allergens).map(([key, label]) => `<label class="allergen-check"><input type="checkbox" data-allergen="${key}" ${block.allergens.includes(key) ? "checked" : ""}>${allergenIcon(key)}${escapeHtml(label)}</label>`).join("")}</div></div>`;
+    } else if (block.type === "image") {
+      controls = `<div class="field dish-image-field"><span>${escapeHtml(L.contentImage)}</span><p>${escapeHtml(L.contentImageHelp)}</p>${block.image ? `<img src="${block.image}" alt=""><button id="removeDishImage" type="button">${escapeHtml(L.removeDishImage)}</button>` : `<label for="dishImageInput">${escapeHtml(L.chooseContentImage)}</label>`}<input id="dishImageInput" type="file" accept="image/png,image/jpeg,image/webp"></div>`;
     } else if (!["separator", "spacer-large"].includes(block.type)) {
       controls = field(L.inspector.text, "text", block.text, block.type !== "section");
     }
@@ -748,13 +755,14 @@
   const dragHandle = block => `<span class="drag-handle" data-drag="${block.id}" title="${escapeHtml(L.inspector.drag)}" aria-label="${escapeHtml(L.inspector.drag)}">⠿</span>`;
   const textLengthClass = value => String(value || "").length > 150 ? " text-very-long" : String(value || "").length > 75 ? " text-long" : "";
   const editable = (field, value, className = "", multiline = false) => `<span class="${className} inline-editable${textLengthClass(value)}" data-inline-field="${field}" data-multiline="${multiline ? "true" : "false"}" contenteditable="true" spellcheck="true">${escapeHtml(value)}</span>`;
-  const floatingBlockSymbol = item => item.id === "dish-image" ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(item.symbol);
-  const contextualBlockControls = block => `<span class="block-context-actions" aria-hidden="false"><button class="block-context-delete" type="button" data-context-delete="${block.id}" aria-label="${escapeHtml(L.inspector.delete)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button class="block-context-duplicate" type="button" data-context-duplicate="${block.id}" aria-label="${escapeHtml(L.duplicateBlock)}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></span><button class="block-context-add" type="button" data-context-add="${block.id}" aria-label="${escapeHtml(L.addBlockAfter || L.messages.added)}"><span>+</span></button><div class="block-insert-menu" data-insert-menu="${block.id}" hidden><button class="block-insert-close" type="button" data-context-close aria-label="${escapeHtml(L.closeBlockMenu)}">×</button>${L.blockTypes.map(item => `<button class="${item.id === "dish-image" ? "context-dish-image" : ""}" type="button" data-context-type="${item.id}"><span class="context-block-symbol">${floatingBlockSymbol(item)}</span><b>${escapeHtml(item.label)}</b>${item.id === "dish-image" ? `<em class="context-ultra-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</em>` : ""}</button>`).join("")}</div>`;
+  const floatingBlockSymbol = item => ["dish-image", "image"].includes(item.id) ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(item.symbol);
+  const contextualBlockControls = block => `<span class="block-context-actions" aria-hidden="false"><button class="block-context-delete" type="button" data-context-delete="${block.id}" aria-label="${escapeHtml(L.inspector.delete)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button class="block-context-duplicate" type="button" data-context-duplicate="${block.id}" aria-label="${escapeHtml(L.duplicateBlock)}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></span><button class="block-context-add" type="button" data-context-add="${block.id}" aria-label="${escapeHtml(L.addBlockAfter || L.messages.added)}"><span>+</span></button><div class="block-insert-menu" data-insert-menu="${block.id}" hidden><button class="block-insert-close" type="button" data-context-close aria-label="${escapeHtml(L.closeBlockMenu)}">×</button>${L.blockTypes.map(item => { const isImage = ["dish-image", "image"].includes(item.id); return `<button class="${isImage ? "context-dish-image" : ""}" type="button" data-context-type="${item.id}"><span class="context-block-symbol">${floatingBlockSymbol(item)}</span><b>${escapeHtml(item.label)}</b>${isImage ? `<em class="context-ultra-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</em>` : ""}</button>`; }).join("")}</div>`;
   function blockHtml(block) {
     const selected = block.id === state.selectedBlock ? " selected" : "";
     const controls = contextualBlockControls(block);
     if (block.type === "section") return `<div class="menu-block section-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "section-text")}${controls}</div>`;
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}${selected}" data-block="${block.id}">${dragHandle(block)}${block.type === "dish-image" ? (block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseDishImage)}</button>`) : ""}${editable("name", block.name, "dish-name")}${editable("price", block.price, "dish-price")}${editable("description", block.description, "dish-description", true)}${block.allergens.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}${controls}</div>`;
+    if (block.type === "image") return `<div class="menu-block content-image-block${selected}" data-block="${block.id}">${dragHandle(block)}${block.image ? `<img src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseContentImage)}</button>`}${controls}</div>`;
     if (block.type === "separator") return `<div class="menu-block separator-block${selected}" data-block="${block.id}">${dragHandle(block)}${controls}</div>`;
     if (block.type === "spacer-large") return `<div class="menu-block spacer-block spacer-large${selected}" data-block="${block.id}">${dragHandle(block)}<span></span>${controls}</div>`;
     if (block.type === "note") return `<div class="menu-block note-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "note-text", true)}${controls}</div>`;
@@ -851,7 +859,7 @@
     }));
     $$('[data-context-type]', menu).forEach(button => button.addEventListener("click", event => {
       event.stopPropagation();
-      if (button.dataset.contextType === "dish-image" && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
+      if (["dish-image", "image"].includes(button.dataset.contextType) && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
       const panel = button.closest('[data-insert-menu]');
       const after = page.blocks.findIndex(item => item.id === panel.dataset.insertMenu);
       const source = page.blocks[after];
@@ -866,7 +874,13 @@
     if (state.contentColumns !== 2) return `<div class="blocks-content columns-1">${blocks.map(renderer).join("")}</div>`;
     const split = Math.ceil(blocks.length / 2);
     blocks.forEach((block, index) => { if (!block.column) block.column = index < split ? 1 : 2; });
-    return `<div class="blocks-content columns-2 manual-columns"><div class="manual-column" data-manual-column="1">${blocks.filter(block => block.column === 1).map(renderer).join("")}</div><div class="manual-column" data-manual-column="2">${blocks.filter(block => block.column === 2).map(renderer).join("")}</div></div>`;
+    const columnHtml = column => {
+      const content = blocks.filter(block => block.column === column).map(renderer).join("");
+      const emptyLabel = L.emptyColumn || (L.lang === "ca" ? "Afegeix un bloc" : "Añade un bloque");
+      const empty = renderer === blockHtml ? `<button class="manual-column-empty" type="button" data-empty-column="${column}">${escapeHtml(emptyLabel)}</button>` : "";
+      return `<div class="manual-column${content ? "" : " is-empty"}" data-manual-column="${column}">${content || empty}</div>`;
+    };
+    return `<div class="blocks-content columns-2 manual-columns">${columnHtml(1)}${columnHtml(2)}</div>`;
   }
 
   function usedAllergens() {
@@ -935,7 +949,8 @@
       node.addEventListener("dragend", clearTargets);
     });
     $$("[data-manual-column]", menu).forEach(column => {
-      column.addEventListener("dragover", event => event.preventDefault());
+      column.addEventListener("dragover", event => { event.preventDefault(); column.classList.add("drag-target-column"); });
+      column.addEventListener("dragleave", event => { if (!column.contains(event.relatedTarget)) column.classList.remove("drag-target-column"); });
       column.addEventListener("drop", event => {
         if (event.target.closest("[data-block]")) return;
         event.preventDefault();
@@ -943,6 +958,14 @@
         renderAll();
       });
     });
+    $$("[data-empty-column]", menu).forEach(button => button.addEventListener("click", () => {
+      const block = makeBlock("dish");
+      block.column = Number(button.dataset.emptyColumn);
+      page.blocks.push(block);
+      state.selectedBlock = block.id;
+      save();
+      renderAll();
+    }));
     $$("[data-drag]", menu).forEach(handle => {
       handle.addEventListener("pointerdown", event => {
         event.preventDefault();
@@ -953,19 +976,28 @@
       });
       handle.addEventListener("pointermove", event => {
         if (!draggedId) return;
-        const target = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-block]");
+        const hit = document.elementFromPoint(event.clientX, event.clientY);
+        const target = hit?.closest("[data-block]");
+        const targetColumn = hit?.closest("[data-manual-column]");
         if (target && target.dataset.block !== draggedId) {
           clearTargets();
           handle.closest("[data-block]").classList.add("dragging");
           target.classList.add("drag-target");
           pointerTargetId = target.dataset.block;
           pointerPlacement = setDropPosition(target, event.clientY);
+        } else if (targetColumn) {
+          clearTargets();
+          handle.closest("[data-block]").classList.add("dragging");
+          pointerTargetId = null;
+          targetColumn.classList.add("drag-target-column");
+          targetColumn.dataset.pointerDropColumn = targetColumn.dataset.manualColumn;
         }
       });
       handle.addEventListener("pointerup", event => {
         if (!draggedId) return;
         const targetNode = pointerTargetId ? menu.querySelector(`[data-block="${pointerTargetId}"]`) : null;
-        moveBlock(page, draggedId, pointerTargetId, targetNode?.closest("[data-manual-column]")?.dataset.manualColumn, pointerPlacement);
+        const emptyTargetColumn = menu.querySelector("[data-pointer-drop-column]");
+        moveBlock(page, draggedId, pointerTargetId, targetNode?.closest("[data-manual-column]")?.dataset.manualColumn || emptyTargetColumn?.dataset.manualColumn, pointerPlacement);
         draggedId = null;
         pointerTargetId = null;
         pointerPlacement = "before";
@@ -1214,6 +1246,7 @@
   const staticBlockHtml = block => {
     if (block.type === "section") return `<div class="menu-block section-block"><span class="section-text">${escapeHtml(block.text)}</span></div>`;
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}">${block.type === "dish-image" && block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : ""}<span class="dish-name${textLengthClass(block.name)}">${escapeHtml(block.name)}</span><span class="dish-price">${escapeHtml(block.price)}</span><span class="dish-description${textLengthClass(block.description)}">${escapeHtml(block.description)}</span>${block.allergens?.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}</div>`;
+    if (block.type === "image") return block.image ? `<div class="menu-block content-image-block"><img src="${block.image}" alt=""></div>` : "";
     if (block.type === "separator") return `<div class="menu-block separator-block"></div>`;
     if (block.type === "spacer-large") return `<div class="menu-block spacer-block spacer-large"></div>`;
     return `<div class="menu-block ${block.type === "note" ? "note-block" : "text-block"}${textLengthClass(block.text)}">${escapeHtml(block.text || "")}</div>`;
@@ -1232,7 +1265,8 @@
     content += brandedFooter(page);
     const pageIndex = state.pages.indexOf(page);
     const pageNumber = state.format === "a3-landscape" && page?.role === "inside" ? pageIndex : null;
-    return `<div class="print-panel menu-page style-${state.style} format-${state.format} role-${page.role} ${state.plan === "ultra" ? "no-watermark" : ""}" style="--accent:${paid ? state.accent : "#e5372a"};--text:${paid ? state.textColor : "#181614"}">${content}${pageNumber ? `<span class="print-page-number">${pageNumber}</span>` : ""}${state.plan === "ultra" ? "" : watermark()}</div>`;
+    const pageNumberSide = pageNumber ? (pageNumber % 2 ? "odd" : "even") : "";
+    return `<div class="print-panel menu-page style-${state.style} format-${state.format} role-${page.role} ${state.plan === "ultra" ? "no-watermark" : ""}" style="--accent:${paid ? state.accent : "#e5372a"};--text:${paid ? state.textColor : "#181614"}">${content}${pageNumber ? `<span class="print-page-number ${pageNumberSide}">${pageNumber}</span>` : ""}${state.plan === "ultra" ? "" : watermark()}</div>`;
   }
 
   function buildPrintDocument() {
