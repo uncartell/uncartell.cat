@@ -91,6 +91,26 @@
   @keyframes u-mobile-language-in{from{opacity:0;transform:translateY(-9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 }
 
+/* Modal geometry: one restrained radius across every product surface. */
+.u-modal-card,
+.u-account-card,
+.u-upgrade-card,
+.projects-modal-card,
+.demo-modal-card,
+.leave-modal-card,
+.mobile-publish-modal-card,
+.custom-brief-dialog,
+.poster-download-card,
+.poster-projects-card,
+.poster-icon-dialog-card,
+.poster-admin-dialog,
+.qr-projects-modal>section,
+.qr-projects-dialog,
+.qr-modal-card,
+.u-tool-onboarding{
+  border-radius:11px!important;
+}
+
 /* Identitat cromàtica comuna CAT/ES; el blau queda reservat a novetats. */
 :root{--blue:var(--green);--blue-soft:var(--green-soft);--novelty-blue:#0088ff}
 .u-lang-es{--accent:var(--green)}
@@ -131,6 +151,34 @@
 @media(max-width:620px){.u-header .u-logo{transform:translateX(5px)}}
 @media(max-width:620px){.u-home .u-hero-claim-desktop{display:none}.u-home .u-hero-claim-mobile{display:block}}
 
+/* Proposta local 2026: geometria única, clara i continuista. */
+:root{--ui-radius:16px;--ui-button-radius:11px;--ui-surface:#fff;--ui-canvas:#f5f6f3}
+.u-button,.u-nav a,.u-nav button{border-radius:var(--ui-button-radius)}
+.u-icon-action{border-radius:50%!important}
+.u-home .u-hero{padding-top:clamp(64px,8vw,110px)}
+.u-home .u-hero-box{max-width:1180px;margin-inline:auto}
+.u-home .u-hero h1{max-width:1060px;line-height:.96}
+.u-home .u-hero-copy{margin-top:28px!important;color:#5d5952}
+.u-home #tools{padding-top:30px;padding-bottom:88px}
+.u-home .u-tools-grid{align-items:stretch;gap:18px}
+.u-home .u-tool-card{min-height:450px;border-radius:20px;box-shadow:0 1px 0 rgba(24,22,20,.03)}
+.u-home .u-tool-card:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(24,22,20,.08)}
+.u-home .u-tool-visual{height:250px;background:#f1f2ef}
+.u-home .u-tool-visual:before,.u-home .u-tool-visual:after{display:none!important}
+.u-home .u-tool-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.u-home .u-tool-content{padding:24px 24px 26px}
+.u-home .u-tool-content h3{font-size:25px;margin-bottom:9px}
+.u-home .u-tool-content p{font-size:15px;line-height:1.5}
+.u-home .u-tool-link{width:max-content;border-bottom:1px solid currentColor;padding-bottom:3px}
+.format-step,.poster-catalog-step,.qr-intro{width:min(calc(100% - 48px),1180px)!important;margin-inline:auto!important}
+.format-step>.intro-row,.poster-catalog-step>.intro-row{margin-bottom:30px!important}
+.format-step>.intro-row .intro h1,.poster-catalog-step>.intro-row .intro h1,.qr-intro h1{min-height:0!important;margin:0!important;line-height:.98!important}
+.format-step>.intro-row .intro p,.poster-catalog-step>.intro-row .intro p,.qr-intro p{min-height:0!important;margin-top:16px!important}
+.open-projects-cta,.qr-open-projects{border-radius:var(--ui-button-radius)!important}
+@media(min-width:981px){.u-home .u-tools-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.u-home .u-tool-card{grid-column:span 2}.u-home .u-tool-card:nth-child(4){grid-column:2/span 2}.u-home .u-tool-card:nth-child(5){grid-column:4/span 2}}
+@media(max-width:980px) and (min-width:621px){.u-home .u-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.u-home .u-tool-card:last-child{grid-column:1/-1;width:calc(50% - 9px);justify-self:center}}
+@media(max-width:620px){.format-step,.poster-catalog-step,.qr-intro{width:calc(100% - 28px)!important}.u-home .u-hero{padding-top:42px}.u-home #tools{padding-top:18px;padding-bottom:54px}.u-home .u-tool-card{border-radius:16px}.u-home .u-tool-visual{height:205px}}
+
 /* El selector compacte només pertany al header mòbil; en escriptori ja existeix dins la navegació. */
 @media(min-width:981px){.u-mobile-language{display:none!important}}
 
@@ -146,6 +194,12 @@ button{-webkit-appearance:none;appearance:none}
   .format-step>.intro-row .intro p,.poster-catalog-step>.intro-row .intro p{min-height:0!important}
   .format-step>.intro-row,.poster-catalog-step>.intro-row{gap:20px!important}
 }
+
+/* Capçaleres d'eines: el títol no reserva una segona línia buida. */
+.format-step>.intro-row .intro h1,.poster-catalog-step>.intro-row .intro h1,.qr-intro h1{min-height:0!important}
+.format-step>.intro-row .intro h1,.poster-catalog-step>.intro-row .intro h1{margin-bottom:12px}
+.format-step>.intro-row .intro p,.poster-catalog-step>.intro-row .intro p{margin-top:0}
+.qr-intro p{min-height:0!important;margin-top:12px}
 
 /* En mòbil, les accions no poden quedar activades com si hi hagués hover. */
 @media(max-width:620px){
@@ -266,11 +320,63 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 /* Imatges definitives de les eines: sense cap element flotant superposat. */
 .u-tool-visual:before,.u-tool-visual:after{display:none}.u-tool-visual>img{display:block;width:100%;height:100%;object-fit:cover}
 .u-support-banner{position:sticky;top:0;z-index:10020;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 20px;background:#171614;color:#fff;font-size:14px}.u-support-banner button{border:0;border-radius:999px;padding:7px 13px;background:#69ee70;color:#111;font:inherit;font-weight:800;cursor:pointer}
-/* Shared, one-time tool onboarding. */
-.u-tool-onboarding{position:fixed;z-index:190;right:24px;bottom:24px;width:min(360px,calc(100vw - 32px));padding:22px 24px;border:1px solid #d8d4cc;border-radius:24px;background:#fff;color:#181614;box-shadow:0 18px 50px rgba(24,22,20,.16)}.u-tool-onboarding>button{position:absolute;top:10px;right:13px;border:0;background:transparent;font:400 28px/1 Arial;cursor:pointer}.u-tool-onboarding strong{display:block;padding-right:28px;font-size:18px}.u-tool-onboarding ol{margin:12px 0 0;padding-left:20px}.u-tool-onboarding li{margin-top:7px;color:#6e6a63;line-height:1.35}@media(max-width:620px){.u-tool-onboarding{right:16px;bottom:16px;padding:20px;border-radius:20px}}
 
+/* 2026: capçalera i onboarding coherent amb la interfície d'edició. */
+.u-tutorial-launcher{display:none!important}
+.u-onboarding-backdrop[hidden]{display:none!important}
+.u-onboarding-backdrop{position:fixed;z-index:189;inset:0;background:rgba(24,22,20,.34)}
+.u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:min(400px,calc(100vw - 32px))!important;max-height:calc(100dvh - 32px);overflow:auto;transform:translate(-50%,-50%);box-shadow:0 24px 80px rgba(24,22,20,.28)}
+@media(min-width:981px){.u-nav a,.u-nav button,.u-plans-link,.u-icon-action{border-radius:11px!important}}
+@media(max-width:620px){.u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)}}
 /* Tutorial visual compartit per totes les eines. */
-.u-tutorial-launcher{position:fixed;z-index:189;right:24px;bottom:24px;display:flex;align-items:center;gap:9px;height:48px;padding:0 17px 0 9px;border:1px solid #181614;border-radius:999px;background:#181614;color:#fff;font:700 14px/1 Arial,sans-serif;box-shadow:0 10px 28px rgba(24,22,20,.18);cursor:pointer}.u-tutorial-launcher span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:#181614;font:800 18px/1 Georgia,serif}.u-tutorial-launcher b{font:inherit}.u-tool-onboarding[hidden]{display:none}.u-tool-onboarding{position:fixed;z-index:190;right:24px;bottom:84px;width:min(380px,calc(100vw - 32px));overflow:hidden;border:1px solid #d8d4cc;border-radius:24px;background:#fff;color:#181614;box-shadow:0 22px 60px rgba(24,22,20,.2)}.u-onboarding-media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#efede8}.u-onboarding-media img{display:block;width:100%;height:100%;object-fit:cover}.u-onboarding-media span{position:absolute;right:14px;bottom:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.94);font:800 12px/1 Arial,sans-serif}.u-onboarding-close{position:absolute;z-index:1;top:12px;right:12px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:#181614;font:400 25px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-copy{padding:22px 24px 24px}.u-onboarding-copy strong{display:block;padding-right:8px;font-size:24px;line-height:1.12}.u-onboarding-copy p{min-height:48px;margin:9px 0 14px;color:#6e6a63;font-size:16px;line-height:1.45}.u-onboarding-dots{display:flex;gap:6px;margin-bottom:18px}.u-onboarding-dots i{width:7px;height:7px;border-radius:50%;background:#d8d4cc}.u-onboarding-dots i.is-active{width:22px;border-radius:999px;background:var(--green)}.u-onboarding-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.u-onboarding-actions button{min-height:44px;border-radius:999px;padding:0 20px;font:800 14px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-skip{border:0;background:transparent;color:#6e6a63}.u-onboarding-next{border:1px solid #181614;background:#181614;color:#fff}@media(max-width:620px){.u-tutorial-launcher{right:14px;bottom:14px;width:50px;height:50px;padding:9px}.u-tutorial-launcher b{display:none}.u-tutorial-launcher span{width:30px;height:30px}.u-tool-onboarding{right:12px;bottom:76px;width:calc(100vw - 24px);max-height:calc(100dvh - 94px);overflow:auto;border-radius:20px}.u-onboarding-copy{padding:18px 20px 20px}.u-onboarding-copy strong{font-size:22px}.u-onboarding-copy p{min-height:0}.u-onboarding-actions button{min-height:42px}}
+.u-tutorial-launcher{position:fixed;z-index:189;right:24px;bottom:24px;display:flex;align-items:center;gap:9px;height:48px;padding:0 17px 0 9px;border:1px solid #181614;border-radius:999px;background:#181614;color:#fff;font:700 14px/1 Arial,sans-serif;box-shadow:0 10px 28px rgba(24,22,20,.18);cursor:pointer}.u-tutorial-launcher span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:#181614;font:800 18px/1 Georgia,serif}.u-tutorial-launcher b{font:inherit}.u-tool-onboarding[hidden]{display:none}.u-tool-onboarding{position:fixed;z-index:190;right:24px;bottom:84px;width:min(380px,calc(100vw - 32px));overflow:hidden;border:1px solid #d8d4cc;border-radius:24px;background:#fff;color:#181614;box-shadow:0 22px 60px rgba(24,22,20,.2)}.u-onboarding-media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#efede8}.u-onboarding-media img{display:block;width:100%;height:100%;object-fit:cover}.u-onboarding-media span{position:absolute;right:14px;bottom:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.94);font:800 12px/1 Arial,sans-serif}.u-onboarding-close{position:absolute;z-index:1;top:12px;right:12px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:#181614;font:400 25px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-copy{padding:22px 24px 24px}.u-onboarding-copy strong{display:block;padding-right:8px;font-size:24px;line-height:1.12}.u-onboarding-copy p{min-height:48px;margin:9px 0 14px;color:#6e6a63;font-size:16px;line-height:1.45}.u-onboarding-dots{display:flex;gap:6px;margin-bottom:18px}.u-onboarding-dots i{width:7px;height:7px;border-radius:50%;background:#d8d4cc}.u-onboarding-dots i.is-active{width:22px;border-radius:999px;background:var(--green)}.u-onboarding-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.u-onboarding-actions button{min-height:44px;border-radius:999px;padding:0 20px;font:800 14px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-skip{border:0;background:transparent;color:#6e6a63}.u-onboarding-next{border:1px solid #181614;background:#181614;color:#fff}@media(max-width:620px){.u-tutorial-launcher{right:14px;bottom:14px}.u-tutorial-launcher b{display:none}.u-tutorial-launcher{width:50px;height:50px;padding:9px}.u-tutorial-launcher span{width:30px;height:30px}.u-tool-onboarding{right:12px;bottom:76px;width:calc(100vw - 24px);max-height:calc(100dvh - 94px);overflow:auto;border-radius:20px}.u-onboarding-copy{padding:18px 20px 20px}.u-onboarding-copy strong{font-size:22px}.u-onboarding-copy p{min-height:0}.u-onboarding-actions button{min-height:42px}}
 
-/* Capçaleres d'eines: títol i subtítol compactes i coherents. */
-.format-step>.intro-row .intro h1,.poster-catalog-step>.intro-row .intro h1,.qr-intro h1{min-height:0!important}.format-step>.intro-row .intro h1,.poster-catalog-step>.intro-row .intro h1{margin-bottom:12px}.format-step>.intro-row .intro p,.poster-catalog-step>.intro-row .intro p{margin-top:0}.qr-intro p{min-height:0!important;margin-top:12px}
+/* Header d'aplicació: marca a l'esquerra, eines i compte agrupats. */
+@media(min-width:981px){
+  .u-header>.u-header-inner{
+    width:100%;
+    max-width:none;
+    padding-inline:24px;
+    gap:24px;
+  }
+  .u-header .u-logo{
+    flex:0 0 auto;
+    margin-right:0;
+  }
+  .u-header .u-nav{
+    flex:1 1 auto;
+    justify-content:flex-end;
+    gap:4px;
+  }
+  .u-header .u-nav>a:not(.u-plans-link){padding-inline:13px!important}
+  .u-header .u-nav .u-plans-link{
+    position:relative;
+    margin-left:28px!important;
+  }
+  .u-header .u-nav .u-plans-link:before{
+    content:"";
+    position:absolute;
+    left:-15px;
+    top:7px;
+    width:1px;
+    height:28px;
+    background:var(--line);
+  }
+  .u-header .u-icon-action{margin-left:2px}
+}
+
+/* Home 2026: benvinguda editorial i carrusel d'eines visible d'un cop d'ull. */
+.u-hero-next{position:relative;overflow:hidden}
+.u-hero-next:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(24,22,20,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(24,22,20,.055) 1px,transparent 1px),radial-gradient(circle at 78% 38%,rgba(224,255,103,.52),transparent 25%),radial-gradient(circle at 18% 74%,rgba(115,241,114,.28),transparent 31%);background-size:42px 42px,42px 42px,100% 100%,100% 100%}
+.u-hero-next .u-shell{position:relative}
+.u-hero-next .u-hero-box{position:relative;isolation:isolate;min-height:clamp(430px,54vw,680px);align-content:center}
+.u-hero-next .u-eyebrow{display:inline-block;margin-bottom:22px;color:var(--muted)}
+.u-hero-next mark{position:relative;z-index:0;padding:0 .08em;background:transparent;color:inherit;white-space:nowrap}
+.u-hero-next mark:after{content:"";position:absolute;z-index:-1;left:-.02em;right:-.02em;bottom:.03em;height:.31em;border-radius:3px;background:var(--green);transform:rotate(-1deg)}
+.u-hero-shape{position:absolute;z-index:-1;right:5%;top:17%;width:clamp(90px,12vw,170px);aspect-ratio:1;border:2px solid var(--ink);border-radius:34% 66% 54% 46%/44% 39% 61% 56%;transform:rotate(13deg);opacity:.72}
+.u-hero-shape:after{content:"";position:absolute;inset:24%;border:2px solid var(--ink);border-radius:50%}
+.u-tools-grid{display:grid!important;grid-auto-flow:column;grid-auto-columns:minmax(320px,calc((100% - 72px)/3.5));grid-template-columns:none!important;gap:24px!important;overflow-x:auto;overflow-y:hidden;padding:4px 2px 24px;scroll-snap-type:x mandatory;scrollbar-width:thin;overscroll-behavior-inline:contain}
+.u-tools-grid .u-tool-card{grid-column:auto!important;grid-row:auto!important;min-width:0;scroll-snap-align:start}
+.u-tools-grid .u-tool-card .u-tool-visual{aspect-ratio:16/10}
+@media(max-width:900px){.u-tools-grid{grid-auto-columns:minmax(290px,72vw)}}
+@media(max-width:620px){.u-hero-next .u-hero-box{min-height:430px}.u-hero-next:before{background-size:30px 30px,30px 30px,100% 100%,100% 100%}.u-hero-next .u-eyebrow{margin-bottom:16px}.u-hero-shape{right:-24px;top:12%;opacity:.38}.u-tools-grid{grid-auto-columns:86vw;gap:14px!important}}

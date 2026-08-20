@@ -1,0 +1,245 @@
+/* Proposta local: l'edició es comporta com una aplicació a sang. */
+body.uncartell-editor-active { overflow: hidden; }
+body.uncartell-editor-active > [data-platform-footer],
+body.uncartell-editor-active > [data-global-quota] { display: none !important; }
+
+body.uncartell-editor-active .editor-section,
+body.uncartell-editor-active .qr-editor {
+  position: fixed;
+  z-index: 90;
+  inset: 78px 0 0;
+  width: 100%;
+  max-width: none;
+  height: calc(100dvh - 78px);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fcfcfb;
+}
+body.uncartell-editor-active .plan-preview,
+body.uncartell-editor-active .custom-menu-brief,
+body.uncartell-editor-active .poster-custom-brief,
+body.uncartell-editor-active .qr-intro { display: none !important; }
+
+body.uncartell-editor-active .editor-section {
+  display: grid;
+  grid-template-rows: 70px minmax(0, 1fr);
+}
+body.uncartell-editor-active .editor-head {
+  display: none;
+}
+body.uncartell-editor-active .project-save-bar {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 36px minmax(24px, 1fr) minmax(260px, 420px) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background-color: #fff;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148' viewBox='0 0 148 148'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.085'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 18% 130% at 3% 48%, rgba(225,255,47,.88) 0%, rgba(192,252,72,.5) 29%, rgba(192,252,72,0) 70%),
+    linear-gradient(96deg, rgba(115,241,114,.96) 0%, rgba(164,247,154,.74) 12%, rgba(227,253,224,.4) 22%, #fff 34%, #fff 100%);
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: none;
+}
+body.uncartell-editor-active .project-save-bar .tool-title { display: none; }
+body.uncartell-editor-active .project-save-bar > .editor-app-context,
+body.uncartell-editor-active .qr-project-bar > .editor-app-context {
+  grid-column: 1;
+  justify-self: center;
+}
+body.uncartell-editor-active .project-save-bar > .tool-project-field,
+body.uncartell-editor-active .qr-project-bar > .tool-project-field { grid-column: 3; }
+body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+body.uncartell-editor-active .qr-project-bar > .tool-header-actions { grid-column: 4; }
+body.uncartell-editor-active .tool-header-actions { justify-content: flex-end; }
+body.uncartell-editor-active .tool-project-field,
+body.uncartell-editor-active .tool-header-actions,
+body.uncartell-editor-active .editor-app-context {
+  position: relative;
+  z-index: 1;
+}
+body.uncartell-editor-active .tool-project-field input,
+body.uncartell-editor-active .tool-header-actions > button {
+  min-height: 46px !important;
+  height: 46px;
+  border: 1px solid rgba(24,22,20,.32) !important;
+  background: rgba(255,255,255,.96) !important;
+  color: var(--ink) !important;
+  opacity: 1 !important;
+  box-shadow: 0 1px 2px rgba(24,22,20,.07), 0 6px 18px rgba(24,22,20,.035);
+}
+body.uncartell-editor-active .tool-project-field input {
+  background: rgba(255,255,255,.96) !important;
+  border-color: rgba(24,22,20,.14) !important;
+}
+body.uncartell-editor-active .tool-header-actions > button {
+  padding-inline: 18px !important;
+  border-radius: 10px !important;
+  white-space: nowrap;
+}
+body.uncartell-editor-active .tool-header-actions > button:not(.editor-app-final-action) {
+  min-width: 104px !important;
+  width: auto !important;
+  padding-inline: 12px !important;
+}
+body.uncartell-editor-active .tool-header-actions .editor-app-final-action {
+  border-color: var(--green) !important;
+  background: var(--green) !important;
+  color: var(--ink) !important;
+}
+body.uncartell-editor-active .editor-shell {
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.uncartell-editor-active .editor-shell .workspace,
+body.uncartell-editor-active .editor-shell .canvas-stage { min-height: 0; }
+body.uncartell-editor-active .editor-shell .workspace { height: 100%; }
+body.uncartell-editor-active .workspace-actions { min-height: 54px; }
+
+/* Capa final de geometria: totes les eines comparteixen el mateix centre visual. */
+body.uncartell-editor-active .editor-shell { grid-template-columns:minmax(310px,420px) minmax(0,1fr);background:#f7f8f6; }
+body.uncartell-editor-active .editor-shell.tool-rail-ready { grid-template-columns:72px 300px minmax(0,1fr); }
+body.uncartell-editor-active .editor-panel { min-width:0;background:#fbfbfa; }
+body.uncartell-editor-active .workspace { min-width:0;background:#f6f7f4; }
+body.uncartell-editor-active .page-tabs { justify-content:center;gap:8px;padding-inline:clamp(16px,3vw,42px);background:rgba(255,255,255,.94); }
+body.uncartell-editor-active .page-tab {
+  border:1px solid transparent !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#69665f !important;
+}
+body.uncartell-editor-active .page-tabs .page-tab.active,
+body.uncartell-editor-active .page-tabs .page-tab[aria-selected="true"] {
+  border-color:var(--ink) !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  color:var(--ink) !important;
+}
+body.uncartell-editor-active .page-tab:not(.active):hover {
+  background:rgba(24,22,20,.05) !important;
+  color:var(--ink) !important;
+}
+body.uncartell-editor-active .canvas-stage,
+body.uncartell-editor-active .poster-canvas-stage,
+body.uncartell-editor-active .qr-canvas { box-sizing:border-box;align-items:center;justify-content:center;padding:clamp(28px,4vw,58px);scroll-padding:clamp(28px,4vw,58px);background-color:#f4f5f2;background-image:radial-gradient(rgba(104,101,94,.22) .8px,transparent .8px);background-size:20px 20px; }
+body.uncartell-editor-active .canvas-stage>.menu-page,
+body.uncartell-editor-active .poster-canvas-stage>.u-live-poster,
+body.uncartell-editor-active .qr-result-card { margin:auto; }
+body.uncartell-editor-active .workspace-actions { padding-inline:clamp(18px,3vw,36px);background:rgba(255,255,255,.96); }
+
+/* QR: mateix marc d'aplicació, conservant els controls específics. */
+body.uncartell-editor-active .qr-editor {
+  display: grid;
+  grid-template-rows: 70px minmax(0, 1fr);
+}
+body.uncartell-editor-active .qr-project-bar {
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  margin: 0;
+  grid-template-columns: 72px minmax(24px, 1fr) minmax(260px, 420px) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--qr-line);
+  border-radius: 0;
+  background-color: #fff;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148' viewBox='0 0 148 148'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.085'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 18% 130% at 3% 48%, rgba(225,255,47,.88) 0%, rgba(192,252,72,.5) 29%, rgba(192,252,72,0) 70%),
+    linear-gradient(96deg, rgba(115,241,114,.96) 0%, rgba(164,247,154,.74) 12%, rgba(227,253,224,.4) 22%, #fff 34%, #fff 100%);
+  background-blend-mode: soft-light, normal, normal;
+}
+body.uncartell-editor-active .qr-editor-shell {
+  grid-row: 2;
+  min-height: 0;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+body.uncartell-editor-active .qr-workspace,
+body.uncartell-editor-active .qr-canvas { min-height: 0; }
+body.uncartell-editor-active .qr-workspace { height: 100%; }
+body.uncartell-editor-active .editor-app-context {
+  display: inline-flex;
+  width: 50px !important;
+  min-width: 50px !important;
+  min-height: 50px !important;
+  height: 50px !important;
+  align-items: center;
+  justify-content: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: var(--ink) !important;
+  cursor: pointer;
+  white-space: nowrap;
+  position:relative;
+  z-index:5;
+  isolation:isolate;
+  opacity:1 !important;
+  mix-blend-mode:normal;
+}
+body.uncartell-editor-active .editor-app-context:hover { background: transparent !important;opacity:1 !important; }
+.editor-app-context:focus-visible { outline: 2px solid var(--ink);outline-offset: 2px; }
+.editor-app-context svg { position:relative;z-index:2;width: 25px !important; height: 25px !important; flex: none; fill: none; stroke:#181614 !important; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; opacity:1 !important; }
+body.uncartell-editor-active .qr-project-bar > strong { display: none; }
+
+@media (max-width: 820px) {
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor {
+    inset: 68px 0 0;
+    height: calc(100dvh - 68px);
+  }
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor { overflow-y: auto; }
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor { grid-template-rows: auto auto; }
+  body.uncartell-editor-active .editor-head { display: none; }
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    position: sticky;
+    top: 0;
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    min-height: 68px;
+  }
+  body.uncartell-editor-active .project-save-bar > .editor-app-context,
+  body.uncartell-editor-active .qr-project-bar > .editor-app-context { grid-column: 1; }
+  body.uncartell-editor-active .project-save-bar > .tool-project-field,
+  body.uncartell-editor-active .qr-project-bar > .tool-project-field { grid-column: 2; }
+  body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+  body.uncartell-editor-active .qr-project-bar > .tool-header-actions { grid-column: 3; }
+  body.uncartell-editor-active .editor-shell,
+  body.uncartell-editor-active .qr-editor-shell { height: auto; min-height: calc(100dvh - 68px); }
+  .editor-app-context { width: 46px !important; min-width: 46px !important; height: 46px !important; min-height: 46px !important; justify-content: center !important; padding: 0 !important; }
+  .editor-app-context strong { display: none; }
+  body.uncartell-editor-active .editor-shell.tool-rail-ready { grid-template-columns:1fr; }
+}

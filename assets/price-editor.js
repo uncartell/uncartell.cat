@@ -304,7 +304,7 @@
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
         <span class="format-copy"><h2>${escapeHtml(format.name)}</h2><p>${escapeHtml(format.detail)}</p><p>${escapeHtml(format.fold)}</p></span>
-        <span class="format-actions"><button type="button" data-format-action="demo"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>${escapeHtml(L.demo)}</button><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
       </article>`;
     }).join("");
     $$("[data-format-action]").forEach(button => button.addEventListener("click", () => {
@@ -423,7 +423,7 @@
       const ultraLocked = ["dish-image", "image"].includes(block.id) && !entitlements.canUploadMenuImages(state.plan);
       const crown = '<span class="block-plan-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>';
       const symbol = ["dish-image", "image"].includes(block.id) ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(block.symbol);
-      return `<button class="block-add${["dish-image", "image"].includes(block.id) ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
+      return `<button class="block-add${["dish-image", "image"].includes(block.id) ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" draggable="${disabled ? "false" : "true"}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
     }).join("");
     $$(".block-add").forEach(button => button.addEventListener("click", () => {
       if (["dish-image", "image"].includes(button.dataset.add) && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
@@ -433,6 +433,13 @@
       block.column = selectedIndex >= 0 ? (blocks[selectedIndex].column || 1) : 1;
       tryInsertBlock(state.pages[state.activePage], block, selectedIndex >= 0 ? selectedIndex + 1 : blocks.length);
     }));
+    $$(".block-add:not(:disabled)").forEach(button => button.addEventListener("dragstart", event => {
+      event.dataTransfer.effectAllowed = "copy";
+      event.dataTransfer.setData("application/x-uncartell-block", button.dataset.add);
+      event.dataTransfer.setData("text/plain", `new:${button.dataset.add}`);
+      button.classList.add("palette-dragging");
+    }));
+    $$(".block-add").forEach(button => button.addEventListener("dragend", () => button.classList.remove("palette-dragging")));
   }
 
   function renderStyles() {
@@ -940,6 +947,17 @@
       return placement;
     };
     const clearTargets = () => $$(".menu-block", menu).forEach(node => { node.classList.remove("dragging", "drag-target", "drag-target-before", "drag-target-after"); delete node.dataset.dropPlacement; });
+    const paletteType = event => event.dataTransfer.getData("application/x-uncartell-block") || (event.dataTransfer.getData("text/plain").startsWith("new:") ? event.dataTransfer.getData("text/plain").slice(4) : "");
+    const insertPaletteBlock = (event, targetId = null, targetColumn = null, placement = "before") => {
+      const type = paletteType(event);
+      if (!type) return false;
+      if (["dish-image", "image"].includes(type) && !entitlements.canUploadMenuImages(state.plan)) { openPlanGate("Ultra"); return true; }
+      const block = makeBlock(type);
+      if (targetColumn) block.column = Number(targetColumn);
+      const targetIndex = targetId ? page.blocks.findIndex(item => item.id === targetId) : page.blocks.length;
+      tryInsertBlock(page, block, targetId && placement === "after" ? targetIndex + 1 : Math.max(0, targetIndex));
+      return true;
+    };
     $$("[data-block]", menu).forEach(node => {
       node.draggable = true;
       node.addEventListener("dragstart", event => {
@@ -956,6 +974,7 @@
       });
       node.addEventListener("drop", event => {
         event.preventDefault();
+        if (insertPaletteBlock(event, node.dataset.block, node.closest("[data-manual-column]")?.dataset.manualColumn, node.dataset.dropPlacement || "before")) return;
         moveBlock(page, draggedId || event.dataTransfer.getData("text/plain"), node.dataset.block, node.closest("[data-manual-column]")?.dataset.manualColumn, node.dataset.dropPlacement || "before");
         renderAll();
       });
@@ -966,6 +985,7 @@
       column.addEventListener("drop", event => {
         if (event.target.closest("[data-block]")) return;
         event.preventDefault();
+        if (insertPaletteBlock(event, null, column.dataset.manualColumn)) return;
         moveBlock(page, draggedId || event.dataTransfer.getData("text/plain"), null, column.dataset.manualColumn);
         renderAll();
       });

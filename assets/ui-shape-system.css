@@ -1,0 +1,314 @@
+/*
+ * Shared shape language — local V1.2 proposal.
+ * Keeps icon-only utilities circular, while actions, tabs and plan labels use
+ * the same compact rounded rectangle throughout the product.
+ */
+:root{
+  --u-control-radius:11px;
+  --u-tag-radius:8px;
+  --u-dialog-radius:11px;
+  --u-floating-radius:11px;
+}
+
+/* Global actions and navigation */
+.u-button,
+.u-nav a,
+.u-nav button:not(.u-icon-action):not(.u-mobile-close),
+.u-plans-link,
+.u-cookie-actions button,
+.u-upgrade-plans button,
+.u-upgrade-plans a,
+.u-poster-actions button,
+.u-ultra-notify,
+.u-ultra-email,
+.u-language-strip a{
+  border-radius:var(--u-control-radius)!important;
+}
+.u-icon-action{
+  border-radius:11px!important;
+}
+
+/* Plans and feature tags */
+.u-plan,
+.u-upgrade-plans article{
+  border-radius:var(--u-control-radius)!important;
+}
+.u-plan-badge,
+.u-locked:after,
+.format-tag,
+.format-plan-badge,
+.plan-chip,
+.feature-plan-badge,
+.plan-style-badge,
+.block-plan-chip,
+.context-ultra-badge,
+.locked-feature-status span,
+.brand-kit .ultra-badge,
+.locked-logo-control small,
+.locked-footer-control em,
+.ultra-pages-button span,
+.project-lock,
+.download-plan-tag,
+.poster-brand-kit summary b,
+.poster-brand-kit .ultra-badge,
+.poster-fonts.is-locked>span,
+.poster-ultra-control>span,
+.poster-project-input em,
+.qr-project-input em,
+.qr-feature-card>em,
+.qr-actions button em{
+  border-radius:var(--u-tag-radius)!important;
+}
+
+/* Dialogs: still friendly, but no longer oversized capsules */
+.u-modal-card,
+.u-account-card,
+.u-upgrade-card,
+.projects-modal-card,
+.demo-modal-card,
+.mobile-publish-modal-card,
+.poster-icon-dialog-card,
+.poster-admin-dialog,
+.qr-projects-modal>section,
+.qr-projects-dialog,
+.qr-modal-card{
+  border-radius:var(--u-dialog-radius)!important;
+}
+
+/* Shared containers follow the same 11px geometry as the controls. */
+.u-tool-card,
+.u-hero-box,
+.u-category-panel,
+.u-poster-card,
+.u-create-card,
+.u-editor-panel,
+.u-editor-preview,
+.u-faq-item,
+.u-contact-form input,
+.u-contact-form textarea,
+.u-contact-success,
+.custom-brief-dialog,
+.custom-brief-success,
+.poster-download-card,
+.poster-projects-card,
+.poster-project-row,
+.poster-projects-empty,
+.poster-custom-brief,
+.poster-admin-card,
+.admin-user-row,
+.admin-metric,
+.admin-note,
+.admin-system-list>div,
+.poster-admin-dialog,
+.projects-empty,
+.leave-modal-card,
+.demo-preview,
+.mobile-publication-card,
+.price-header-controls,
+.price-header-upload,
+.block-insert-menu{
+  border-radius:var(--u-control-radius)!important;
+}
+
+/* Editor actions, page selectors and contextual controls */
+.tool-header-actions>button,
+.editor-app-context,
+.pages-tabs button,
+.page-tabs button,
+.menu-page-tabs button,
+.poster-category-tabs button,
+.poster-subcategory-tabs button,
+.poster-repository-copy button,
+.open-projects-cta,
+.format-actions,
+.format-actions button,
+.format-actions a,
+.ghost-button,
+.primary-button,
+.plan-preview,
+.plan-preview button,
+.project-save-bar button,
+.duplicate-block-button,
+.block-item-actions .delete-button,
+.logo-toggle,
+.ultra-pages-button,
+.custom-brief-open,
+.custom-brief-dialog form>button,
+.poster-projects-note,
+.poster-card-hover,
+.poster-card-hover button,
+.poster-icon-card,
+.poster-icon-dialog-actions button,
+.poster-project-actions button,
+.projects-gallery button,
+.project-card button,
+.mobile-publication-card>button,
+.mobile-publication-locked,
+.mobile-publish-qr-cta,
+.custom-menu-brief form>button,
+.price-header-actions button,
+.qr-open-projects,
+.qr-project-bar button,
+.qr-generate,
+.qr-actions button,
+.qr-project-card button,
+.qr-empty-card button,
+.qr-toast,
+.poster-admin button{
+  border-radius:var(--u-control-radius)!important;
+}
+
+/* QR keeps its card geometry outside the editor. In app mode the tool is full-bleed. */
+.qr-project-bar{
+  border-radius:var(--u-control-radius) var(--u-control-radius) 0 0!important;
+}
+.qr-editor-shell{
+  border-radius:0 0 var(--u-control-radius) var(--u-control-radius)!important;
+}
+body.uncartell-editor-active .qr-project-bar,
+body.uncartell-editor-active .qr-editor-shell{
+  border-radius:0!important;
+}
+
+/* Page navigation is secondary: selected, but deliberately quieter than CTAs. */
+.page-tabs{
+  gap:8px!important;
+}
+.page-tab{
+  min-height:38px!important;
+  padding:0 13px!important;
+  border-color:transparent!important;
+  background:transparent!important;
+  color:#69665f!important;
+  font-weight:680!important;
+  box-shadow:none!important;
+}
+.page-tab:hover{
+  background:#f3f3f0!important;
+  color:var(--ink)!important;
+}
+.page-tab.active{
+  border-color:transparent!important;
+  background:color-mix(in srgb,var(--green) 22%,white)!important;
+  color:var(--ink)!important;
+  font-weight:760!important;
+  box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--green) 82%,#3f9f4a)!important;
+}
+.ultra-pages-button{
+  min-height:38px!important;
+  height:38px!important;
+  margin-left:auto!important;
+  padding:0 12px!important;
+  border:1px solid #d8d6cf!important;
+  background:#f6f6f3!important;
+  color:#69665f!important;
+  font-weight:680!important;
+  box-shadow:none!important;
+}
+.ultra-pages-button:hover{
+  border-color:#c8c5bd!important;
+  background:#efefeb!important;
+  color:var(--ink)!important;
+}
+.ultra-pages-button>span{
+  min-height:20px!important;
+  margin-right:7px!important;
+  padding:0 6px!important;
+  border-radius:var(--u-tag-radius)!important;
+}
+
+/* Format repository: editorial cards with a real visual area and one action. */
+.format-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:22px!important;
+}
+.format-card{
+  min-height:430px!important;
+  padding:0 0 74px!important;
+  border-radius:var(--u-control-radius)!important;
+}
+.format-paper-wrap{
+  width:100%!important;
+  height:250px!important;
+  margin:0 0 18px!important;
+  border-radius:var(--u-control-radius) var(--u-control-radius) 0 0!important;
+  background:#f1f0ec!important;
+  overflow:hidden!important;
+}
+.format-card>.format-tag{
+  position:absolute!important;
+  z-index:4!important;
+  top:16px!important;
+  left:16px!important;
+}
+.format-card>.format-plan-badge{
+  top:16px!important;
+  right:16px!important;
+}
+.format-card>.format-copy{
+  display:block!important;
+  padding:0 18px 18px!important;
+}
+.format-card:nth-child(4n+1) .format-paper-wrap{background:#f4f0df!important}
+.format-card:nth-child(4n+2) .format-paper-wrap{background:#e8f1e5!important}
+.format-card:nth-child(4n+3) .format-paper-wrap{background:#eee9f6!important}
+.format-card:nth-child(4n+4) .format-paper-wrap{background:#e5f0f4!important}
+.format-card .format-paper{
+  transform:scale(1.12)!important;
+}
+.format-card:hover .format-paper{
+  transform:rotate(-1deg) scale(1.16)!important;
+}
+.format-card .format-actions{
+  grid-template-columns:1fr!important;
+}
+.format-card .format-actions button{
+  width:100%!important;
+  min-height:40px!important;
+  border:1px solid color-mix(in srgb,var(--green) 78%,#2d8537)!important;
+  background:var(--green)!important;
+}
+
+/* The quota remains visible because it conveys a real product limit. */
+.u-quota{
+  border-radius:var(--u-floating-radius)!important;
+  padding:12px 16px!important;
+}
+
+/* Mobile/public navigation remains a control, not a pill. */
+.mobile-section-links button,
+.mobile-section-links a,
+.u-public-index button,
+.mobile-section-head button,
+.mobile-section-head a{
+  border-radius:var(--u-control-radius)!important;
+}
+
+/* Circular affordances remain circular by intent. */
+.u-modal-close,
+.u-account-close,
+.qr-modal-close,
+.poster-icon-dialog-close,
+.mobile-publish-modal-close,
+.zoom-controls button,
+.undo-redo button,
+.mobile-page-nav button,
+.mobile-home-button,
+.block-context-actions button,
+.block-context-add,
+.qr-watermark-field button{
+  border-radius:50%!important;
+}
+
+@media(max-width:620px){
+  .format-grid{
+    grid-template-columns:1fr!important;
+  }
+  .format-card{
+    min-height:410px!important;
+  }
+  .u-quota{
+    border-radius:var(--u-control-radius)!important;
+    padding:10px 13px!important;
+  }
+}

@@ -1,4 +1,11 @@
 (()=>{
+  if(!document.querySelector('link[data-ui-shape-system]')){
+    const shapeStyles=document.createElement('link');
+    shapeStyles.rel='stylesheet';
+    shapeStyles.href='/assets/ui-shape-system.css?v=20260820-5';
+    shapeStyles.dataset.uiShapeSystem='true';
+    document.head.append(shapeStyles);
+  }
   // GitHub Pages can briefly return a stale/missing asset while a deployment is
   // propagating. Retry failed stylesheets once instead of leaving a naked page.
   document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{
@@ -48,15 +55,30 @@
   const initToolOnboarding=()=>{
     const tool=current.includes('/cartell')?'posters':current.includes('cartes-i-menus')||current.includes('cartas-y-menus')?'menus':current.includes('taules-de-preus')||current.includes('tablas-de-precios')?'services':current.includes('codis-qr')||current.includes('codigos-qr')?'qr':'';
     const editor=document.querySelector('#editor,#posterEditor,.qr-editor,.editor-shell,[data-editor-shell]');
-    if(!tool||!editor||localStorage.getItem(`uncartell-onboarding-${tool}-v1`)==='done')return;
+    if(!tool||!editor||document.querySelector('.u-tool-onboarding'))return;
     if(editor.hidden||editor.closest('[hidden]')||editor.getClientRects().length===0){
       const observer=new MutationObserver(()=>{if(!editor.hidden&&!editor.closest('[hidden]')&&editor.getClientRects().length){observer.disconnect();initToolOnboarding()}});
       observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:['hidden','class','style']});
       setTimeout(()=>observer.disconnect(),120000);return;
     }
     const copy=lang==='ca'?['Edita el contingut des del panell o directament sobre la previsualització.','Desa el projecte per recuperar-lo en qualsevol dispositiu.','Previsualitza el resultat abans de descarregar o publicar.']:['Edita el contenido desde el panel o directamente sobre la vista previa.','Guarda el proyecto para recuperarlo en cualquier dispositivo.','Previsualiza el resultado antes de descargar o publicar.'];
-    const box=document.createElement('aside');box.className='u-tool-onboarding';box.setAttribute('role','dialog');box.setAttribute('aria-label',lang==='ca'?'Guia ràpida':'Guía rápida');box.innerHTML=`<button type="button" aria-label="${lang==='ca'?'Tanca':'Cerrar'}">×</button><strong>${lang==='ca'?'Comença en tres passos':'Empieza en tres pasos'}</strong><ol>${copy.map(item=>`<li>${item}</li>`).join('')}</ol>`;
-    box.querySelector('button').addEventListener('click',()=>{localStorage.setItem(`uncartell-onboarding-${tool}-v1`,'done');box.remove()});document.body.append(box);
+    const titles=lang==='ca'?['Edita al teu ritme','Desa el projecte','Revisa el resultat']:['Edita a tu ritmo','Guarda el proyecto','Revisa el resultado'];
+    const images={posters:'/assets/home/cartells.png',menus:'/assets/home/cartes-i-menus.png',services:'/assets/home/taules-de-preus.png',qr:'/assets/home/codis-qr.png'};
+    const doneKey=`uncartell-onboarding-${tool}-v2`;
+    let step=0;
+    const backdrop=document.createElement('div');backdrop.className='u-onboarding-backdrop';backdrop.hidden=true;
+    const box=document.createElement('aside');box.className='u-tool-onboarding';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('aria-label',lang==='ca'?'Tutorial de l’eina':'Tutorial de la herramienta');box.hidden=true;
+    const render=()=>{const last=step===copy.length-1;box.innerHTML=`<div class="u-onboarding-media"><img src="${images[tool]}" alt=""><span>${step+1} / ${copy.length}</span></div><button class="u-onboarding-close" type="button" aria-label="${lang==='ca'?'Tanca':'Cerrar'}">×</button><div class="u-onboarding-copy"><strong>${titles[step]}</strong><p>${copy[step]}</p><div class="u-onboarding-dots" aria-hidden="true">${copy.map((_,index)=>`<i${index===step?' class="is-active"':''}></i>`).join('')}</div><div class="u-onboarding-actions"><button class="u-onboarding-skip" type="button">${lang==='ca'?'Omet':'Omitir'}</button><button class="u-onboarding-next" type="button">${last?(lang==='ca'?'Comença':'Empezar'):(lang==='ca'?'Següent':'Siguiente')}</button></div></div>`;
+      box.querySelector('.u-onboarding-close').addEventListener('click',complete);
+      box.querySelector('.u-onboarding-skip').addEventListener('click',complete);
+      box.querySelector('.u-onboarding-next').addEventListener('click',()=>{if(last){complete();return}step+=1;render()});
+    };
+    function open(){step=0;render();backdrop.hidden=false;box.hidden=false;document.body.classList.add('u-onboarding-open');box.querySelector('.u-onboarding-close')?.focus()}
+    function close(){box.hidden=true;backdrop.hidden=true;document.body.classList.remove('u-onboarding-open')}
+    function complete(){localStorage.setItem(doneKey,'done');close()}
+    document.body.append(backdrop,box);
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!box.hidden)complete()});
+    if(localStorage.getItem(doneKey)!=='done')open();
   };
   addEventListener('DOMContentLoaded',()=>setTimeout(initToolOnboarding,0),{once:true});
 
