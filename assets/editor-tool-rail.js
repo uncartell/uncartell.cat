@@ -2,7 +2,7 @@
   if (!document.querySelector('link[href*="editor-tool-rail.css"]')) {
     const styles = document.createElement('link');
     styles.rel = 'stylesheet';
-    styles.href = '/assets/editor-tool-rail.css?v=1';
+    styles.href = '/assets/editor-tool-rail.css?v=3';
     document.head.append(styles);
   }
 
@@ -32,6 +32,40 @@
     title.className = 'editor-tool-panel-title';
     title.textContent = label;
     return title;
+  };
+
+  const installMobileSheet = (shell, panel, rail, views) => {
+    if (panel.querySelector('.editor-mobile-sheet-bar')) return;
+    const lang = document.documentElement.lang === 'es' ? 'es' : 'ca';
+    const bar = document.createElement('div');
+    bar.className = 'editor-mobile-sheet-bar';
+    bar.innerHTML = `<span aria-hidden="true"></span><button type="button" aria-label="${lang === 'es' ? 'Cerrar herramientas' : 'Tanca les eines'}">×</button>`;
+    panel.prepend(bar);
+
+    const close = () => {
+      shell.classList.remove('mobile-panel-open');
+      rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
+    };
+    bar.querySelector('button').addEventListener('click', close);
+    shell.addEventListener('click', (event) => {
+      if (!matchMedia('(max-width: 820px)').matches || !shell.classList.contains('mobile-panel-open')) return;
+      if (event.target.closest('.editor-panel,.editor-tool-rail')) return;
+      close();
+    });
+    views.addEventListener('touchmove', (event) => event.stopPropagation(), { passive: true });
+  };
+
+  const selectTool = (shell, rail, views, button, key) => {
+    const wasSelected = button.getAttribute('aria-selected') === 'true';
+    const mobile = matchMedia('(max-width: 820px)').matches;
+    if (mobile && wasSelected && shell.classList.contains('mobile-panel-open')) {
+      shell.classList.remove('mobile-panel-open');
+      button.setAttribute('aria-selected', 'false');
+      return;
+    }
+    rail.querySelectorAll('.editor-tool-rail-button').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
+    views.querySelectorAll('.editor-tool-view').forEach((view) => { view.hidden = view.dataset.toolView !== key; });
+    if (mobile) shell.classList.add('mobile-panel-open');
   };
 
   const initialiseDocumentEditor = () => {
@@ -87,9 +121,8 @@
       button.setAttribute('title', labels[key]);
       button.setAttribute('aria-selected', key === 'blocks' ? 'true' : 'false');
       button.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[key]}</svg><span>${labels[key]}</span>`;
-      button.addEventListener('click', () => {
-        rail.querySelectorAll('.editor-tool-rail-button').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
-        views.querySelectorAll('.editor-tool-view').forEach((view) => { view.hidden = view.dataset.toolView !== key; });
+      button.addEventListener('click', (event) => {
+        selectTool(shell, rail, views, button, key);
       });
       rail.append(button);
     });
@@ -101,6 +134,11 @@
     shell.prepend(rail);
     shell.classList.add('tool-rail-ready');
     shell.dataset.toolRailReady = 'true';
+    installMobileSheet(shell, panel, rail, views);
+    if (matchMedia('(max-width: 820px)').matches) {
+      shell.classList.remove('mobile-panel-open');
+      rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
+    }
 
     const inspector = views.querySelector('#inspector');
     const moveLogoControl = (control) => { if (control) logoHost.replaceChildren(control); };
@@ -163,9 +201,8 @@
       button.setAttribute('title', labels[key]);
       button.setAttribute('aria-selected', key === 'blocks' ? 'true' : 'false');
       button.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[key]}</svg><span>${labels[key]}</span>`;
-      button.addEventListener('click', () => {
-        rail.querySelectorAll('.editor-tool-rail-button').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
-        views.querySelectorAll('.editor-tool-view').forEach((view) => { view.hidden = view.dataset.toolView !== key; });
+      button.addEventListener('click', (event) => {
+        selectTool(shell, rail, views, button, key);
       });
       rail.append(button);
     });
@@ -179,6 +216,11 @@
     shell.prepend(rail);
     shell.classList.add('tool-rail-ready');
     shell.dataset.toolRailReady = 'true';
+    installMobileSheet(shell, panel, rail, views);
+    if (matchMedia('(max-width: 820px)').matches) {
+      shell.classList.remove('mobile-panel-open');
+      rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
+    }
     return true;
   };
 

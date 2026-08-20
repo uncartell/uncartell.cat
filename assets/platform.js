@@ -41,16 +41,35 @@
   const footer=document.querySelector('[data-platform-footer]');
   if(footer)footer.innerHTML=`<footer class="u-footer"><div class="u-shell"><div class="u-footer-grid"><div class="u-footer-brand"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><p>© 2026</p></div><div><h3>${cfg.tools}</h3><a href="${cfg.postersPath}">${cfg.posterCreator}</a><a href="${cfg.menusPath}">${cfg.menuCreator}</a><a href="${cfg.pricesPath}">${cfg.priceCreator}</a><a href="${cfg.qrPath}">${cfg.qrCreator}</a></div><div><h3>${cfg.about}</h3><a href="${cfg.plansPath}">${cfg.plans}</a><a href="${route(lang==='ca'?'faqs':'preguntas-frecuentes')}">${cfg.faqs}</a><a href="${route(lang==='ca'?'manifest':'manifiesto')}">${cfg.manifest}</a><a href="${route(lang==='ca'?'contacte':'contacto')}">${cfg.contact}</a></div><div><h3>${cfg.legal}</h3><a href="${route(lang==='ca'?'legal':'aviso-legal')}">${cfg.notice}</a><a href="${route(lang==='ca'?'privacitat':'privacidad')}">${cfg.privacy}</a><a href="${route('cookies')}">${cfg.cookies}</a><button data-cookie-settings>${cfg.settings}</button></div></div></div></footer>`;
   const mobileNav=document.querySelector('#uNav'),mobileToggle=document.querySelector('.u-mobile-toggle'),mobileBackdrop=document.querySelector('.u-mobile-backdrop');
-  const setMobileMenu=open=>{mobileNav?.classList.toggle('open',open);mobileToggle?.setAttribute('aria-expanded',String(open));if(mobileBackdrop)mobileBackdrop.hidden=!open;document.body.classList.toggle('u-mobile-menu-open',open)};
+  const headerInner=document.querySelector('.u-header-inner');
+  const syncMobileNavPortal=()=>{
+    if(!mobileNav||!headerInner)return;
+    if(matchMedia('(max-width:980px)').matches){
+      if(mobileNav.parentElement!==document.body)document.body.append(mobileNav);
+    }else if(mobileNav.parentElement!==headerInner){
+      headerInner.append(mobileNav);
+    }
+  };
+  syncMobileNavPortal();
+  const setMobileMenu=open=>{mobileNav?.classList.toggle('open',open);mobileNav?.setAttribute('aria-hidden',String(!open));mobileToggle?.setAttribute('aria-expanded',String(open));if(mobileBackdrop)mobileBackdrop.hidden=!open;document.body.classList.toggle('u-mobile-menu-open',open)};
   mobileToggle?.addEventListener('click',()=>setMobileMenu(!mobileNav?.classList.contains('open')));
   document.querySelector('.u-mobile-close')?.addEventListener('click',()=>setMobileMenu(false));
   mobileBackdrop?.addEventListener('click',()=>setMobileMenu(false));
   mobileNav?.addEventListener('click',event=>{
-    if(event.target.closest('a,[data-account]'))setMobileMenu(false);
+    const link=event.target.closest('a');
+    if(link&&matchMedia('(max-width:980px)').matches&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
+      const href=link.href;
+      event.preventDefault();
+      setMobileMenu(false);
+      location.assign(href);
+      return;
+    }
+    if(link||event.target.closest('[data-account]'))setMobileMenu(false);
   });
   const toggleLanguage=()=>{const button=document.querySelector('[data-language]');if(matchMedia('(max-width:980px)').matches){const options=document.querySelector('[data-mobile-language-options]');const open=options.hidden;options.hidden=!open;button?.setAttribute('aria-expanded',String(open));return}const strip=document.querySelector('[data-language-strip]');const open=strip.hidden;strip.hidden=!open;document.body.classList.toggle('u-language-open',open);button?.setAttribute('aria-expanded',String(open));setMobileMenu(false)};
   document.querySelector('[data-language]')?.addEventListener('click',toggleLanguage);
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileMenu(false)});
+  addEventListener('resize',()=>{syncMobileNavPortal();if(!matchMedia('(max-width:980px)').matches)setMobileMenu(false)});
 
   const initToolOnboarding=()=>{
     const tool=current.includes('/cartell')?'posters':current.includes('cartes-i-menus')||current.includes('cartas-y-menus')?'menus':current.includes('taules-de-preus')||current.includes('tablas-de-precios')?'services':current.includes('codis-qr')||current.includes('codigos-qr')?'qr':'';
