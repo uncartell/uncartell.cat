@@ -1515,7 +1515,7 @@
     if (state.format === "mobile-interactive") {
       openMobilePublishModal(); return;
     }
-    if (!window.UncartellPlatform?.canDownload?.()) { window.UncartellPlatform?.openUpgradeModal?.(); return; }
+    if (window.UncartellPlatform?.canDownloadFormat?.("pdf") === false || !window.UncartellPlatform?.canDownload?.()) { window.UncartellPlatform?.openUpgradeModal?.(); return; }
     buildPrintDocument();
     window.UncartellPlatform?.consumeDownload?.({ reload: false });
     toast(L.messages.pdf);
