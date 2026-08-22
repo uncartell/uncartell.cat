@@ -43,12 +43,12 @@
     bar.innerHTML = `<span aria-hidden="true"></span><button type="button" aria-label="${lang === 'es' ? 'Cerrar herramientas' : 'Tanca les eines'}">×</button>`;
     panel.prepend(bar);
 
-    const close = () => {
+    const close = (clearSelection = false) => {
       shell.classList.remove('mobile-panel-open');
       rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
-      document.dispatchEvent(new CustomEvent('uncartell:editor-clear-selection'));
+      if (clearSelection) document.dispatchEvent(new CustomEvent('uncartell:editor-clear-selection'));
     };
-    bar.querySelector('button').addEventListener('click', close);
+    bar.querySelector('button').addEventListener('click', () => close(true));
     shell.addEventListener('click', (event) => {
       if (!matchMedia('(max-width: 820px)').matches || !shell.classList.contains('mobile-panel-open')) return;
       // A preview block is allowed to open the contextual editor. The preview
@@ -59,7 +59,7 @@
         '.editor-panel,.editor-tool-rail,[data-block],[data-price-block],[data-live-title],[data-live-subtitle],[data-live-icon]'
       ));
       if (startedInsideEditorControl) return;
-      close();
+      close(false);
     });
     views.addEventListener('touchmove', (event) => event.stopPropagation(), { passive: true });
   };
@@ -139,6 +139,12 @@
       const selectedContent = event.target.closest(options.selectionSelector || '[data-block]');
       if (selectedContent && shell.contains(selectedContent)) {
         requestAnimationFrame(() => setEditing(true, true));
+        return;
+      }
+      const previewBackground = event.target.closest('#menuPage,#pricePage,#posterPage,.menu-page,.price-page,.poster-page');
+      if (previewBackground && !event.target.closest('button,input,textarea,select,[contenteditable="true"]')) {
+        setEditing(false);
+        document.dispatchEvent(new CustomEvent('uncartell:editor-clear-selection'));
         return;
       }
       if (event.target.closest('.page-tab,[data-mobile-page],.delete-button,[data-context-delete]')) {
