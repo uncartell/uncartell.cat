@@ -426,6 +426,7 @@ body:has(.plan-preview) .u-quota{bottom:74px}
     background:var(--line);
   }
   .u-header .u-icon-action{margin-left:2px}
+  .u-header .u-icon-action svg{display:block;margin:auto;transform:none}
 }
 
 /* Home 2026: benvinguda editorial i carrusel d'eines visible d'un cop d'ull. */
