@@ -349,6 +349,16 @@
     margin: 3px 0 16px;
     font-size: 19px;
   }
+  .tool-rail-ready.mobile-context-editing [data-tool-view="blocks"] #inspector {
+    margin-top: 0;
+  }
+  .tool-rail-ready.mobile-context-editing [data-tool-view="blocks"] #blockButtons {
+    display: none !important;
+  }
+  .tool-rail-ready .editor-tool-rail-button.is-context-edit {
+    background: var(--green);
+    color: var(--ink);
+  }
   .editor-mobile-sheet-bar {
     display: grid;
     height: 42px;
