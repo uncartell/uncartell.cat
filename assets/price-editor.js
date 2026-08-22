@@ -1634,7 +1634,7 @@
     state.selectedBlock = null;
     renderInspector();
     renderPage();
-  });
+  }, true);
 
   $("#siteFooter").innerHTML = `<div class="foot-row"><span>${escapeHtml(L.footerClaim)}</span><nav class="foot-links"><a href="/${L.lang}/${L.contactRoute}/">${escapeHtml(L.contact)}</a><a href="/${L.lang}/faqs/">FAQs</a><a href="/${L.lang}/${L.legalRoute}/">${escapeHtml(L.legal)}</a><a href="/${L.lang}/${L.privacyRoute}/">${escapeHtml(L.privacy)}</a><a href="/${L.lang}/cookies/">Cookies</a><button type="button">${escapeHtml(L.cookieSettings)}</button></nav><a class="footer-admin-link" href="/${L.lang}/admin/" aria-label="Admin">© 2026</a></div>`;
 
