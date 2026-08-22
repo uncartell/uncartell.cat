@@ -270,7 +270,7 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
 .qr-actions>span{font-size:11px}
 .qr-project-bar{align-items:center}
 .qr-project-bar>div{align-self:center;align-items:center}
-.qr-project-bar button{align-self:center;height:48px;line-height:1;transform:translateY(-3.5px)}
+.qr-project-bar button{align-self:center;height:48px;line-height:1;transform:none}
 @media(max-width:1000px){.qr-project-bar button{transform:none}}
 .qr-project-bar button svg{width:18px;height:18px;stroke-width:1.8}
 .qr-open-projects.is-plan-locked{border-color:#cbc7bd;background:#e7e5df;color:#817d76;box-shadow:none}.qr-open-projects.is-plan-locked:hover{background:#dedbd4;color:#6d6962}
@@ -310,6 +310,61 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
   html[lang="es"] .qr-project-bar [data-open-projects]::after{content:"Abre"}
 }
 
+/* Final authority — desktop project bar alignment and Basic download access. */
+@media(min-width:1001px){
+  body.uncartell-editor-active .qr-project-bar{align-items:center!important}
+  body.uncartell-editor-active .qr-project-bar>.tool-project-field,
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions{align-self:center!important;margin-block:0!important}
+  body.uncartell-editor-active .qr-project-bar .qr-project-input,
+  body.uncartell-editor-active .qr-project-bar [data-project-name],
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{height:48px!important;min-height:48px!important}
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{transform:none!important}
+}
+.qr-project-bar .tool-project-field.is-locked [data-project-name],
+.qr-project-bar .tool-project-field.is-locked [data-project-name]::placeholder{color:#77736c!important;font-weight:400!important;opacity:1!important;-webkit-text-fill-color:#77736c!important}
+.qr-project-bar .tool-header-actions>.qr-download-trigger,
+.qr-project-bar .tool-header-actions>.qr-download-trigger:hover{border-color:var(--qr-accent)!important;background:var(--qr-accent)!important;color:var(--qr-ink)!important;opacity:1!important;cursor:pointer!important}
+
+/* Autoritat final del subheader QR: camp i accions comparteixen eix i alçada. */
+@media(min-width:1001px){
+  body.uncartell-editor-active .qr-project-bar{
+    align-items:center!important;
+  }
+  body.uncartell-editor-active .qr-project-bar>.tool-project-field,
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions{
+    align-self:center!important;
+    margin-block:0!important;
+  }
+  body.uncartell-editor-active .qr-project-bar .qr-project-input,
+  body.uncartell-editor-active .qr-project-bar [data-project-name],
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{
+    height:48px!important;
+    min-height:48px!important;
+  }
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{
+    transform:none!important;
+  }
+}
+.qr-project-bar .tool-project-field.is-locked [data-project-name]{
+  color:#77736c!important;
+  font-weight:400!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#77736c!important;
+}
+.qr-project-bar .tool-project-field.is-locked [data-project-name]::placeholder{
+  color:#77736c!important;
+  font-weight:400!important;
+  opacity:1!important;
+}
+.qr-project-bar .tool-header-actions>.qr-download-trigger,
+.qr-project-bar .tool-header-actions>.qr-download-trigger:hover{
+  border-color:var(--qr-accent)!important;
+  background:var(--qr-accent)!important;
+  color:var(--qr-ink)!important;
+  opacity:1!important;
+  cursor:pointer!important;
+}
+
 /* Autoritat final: subheader QR idèntic al patró transversal dels editors. */
 body.uncartell-editor-active .qr-project-bar{
   grid-template-columns:auto minmax(24px,1fr) minmax(260px,420px) auto!important;
@@ -319,7 +374,7 @@ body.uncartell-editor-active .qr-project-bar{
 body.uncartell-editor-active .qr-project-bar>.editor-app-context{grid-column:1}
 body.uncartell-editor-active .qr-project-bar>.tool-project-field{display:grid!important;grid-column:3;grid-template-columns:auto minmax(190px,1fr)!important;width:100%!important;min-width:0;margin:0}
 body.uncartell-editor-active .qr-project-bar>.tool-header-actions{display:flex!important;grid-column:4;width:auto!important;min-width:0;align-items:center!important;justify-content:flex-end!important;gap:8px!important;margin:0}
-body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{display:inline-flex!important;width:auto!important;min-width:0!important;height:46px!important;min-height:46px!important;padding:0 14px!important;border-radius:10px!important;font-size:11px!important;transform:none!important}
+body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{display:inline-flex!important;width:auto!important;min-width:0!important;height:48px!important;min-height:48px!important;padding:0 14px!important;border-radius:10px!important;font-size:11px!important;transform:translateY(-3.5px)!important}
 body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-trigger{border-color:var(--qr-accent)!important;background:var(--qr-accent)!important;color:var(--qr-ink)!important}
 @media(max-width:1000px){
   body.uncartell-editor-active .qr-project-bar{grid-template-columns:auto minmax(0,1fr) auto!important}
