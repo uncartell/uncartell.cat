@@ -293,7 +293,12 @@
     const name=currentProfile.display_name||user.user_metadata?.full_name||user.email?.split('@')[0]||'';
     document.querySelector('[data-profile-greeting]').textContent=`${words.hello}, ${name}`;
     document.querySelector('[data-profile-email]').textContent=user.email||'';
-    document.querySelector('[data-profile-plan]').textContent=ultraValid?'Ultra':premiumValid?'Premium':'Basic';
+    const profilePlanBadge=document.querySelector('[data-profile-plan]');
+    const profilePlan=ultraValid?'ultra':premiumValid?'premium':'basic';
+    profilePlanBadge.textContent=profilePlan==='ultra'?'Ultra':profilePlan==='premium'?'Premium':'Basic';
+    profilePlanBadge.classList.toggle('is-ultra',profilePlan==='ultra');
+    profilePlanBadge.classList.toggle('is-premium',profilePlan==='premium');
+    profilePlanBadge.classList.toggle('is-basic',profilePlan==='basic');
     const actions=document.querySelector('.u-account-actions');
     let adminLink=document.querySelector('[data-profile-admin]');
     if(currentProfile.role==='admin'&&!adminLink&&actions){adminLink=document.createElement('a');adminLink.className='u-account-action';adminLink.dataset.profileAdmin='';adminLink.href=`${base}/admin/`.replace(/\/+/g,'/');adminLink.innerHTML=`<svg viewBox="0 0 24 24">${icon('settings')}</svg>${lang==='ca'?'Administració':'Administración'}`;actions.prepend(adminLink)}
