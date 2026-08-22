@@ -145,9 +145,9 @@
 @media(max-width:620px){.u-home #tools{padding-top:2px}}
 
 /* Logotip amb més presència, mantenint l'alineació del header. */
-.u-header .u-logo{font-size:29px;line-height:1}
-@media (min-width:981px) and (max-width:1180px){.u-header .u-logo{font-size:24px}}
-@media(max-width:980px){.u-header .u-logo{font-size:34px;letter-spacing:-.055em}}
+.u-header .u-logo{font-size:31px;line-height:1}
+@media (min-width:981px) and (max-width:1180px){.u-header .u-logo{font-size:26px}}
+@media(max-width:980px){.u-header .u-logo{font-size:35px;letter-spacing:-.055em}}
 @media(max-width:620px){.u-header .u-logo{transform:translateX(5px)}}
 @media(max-width:620px){.u-home .u-hero-claim-desktop{display:none}.u-home .u-hero-claim-mobile{display:block}}
 
@@ -416,15 +416,7 @@ body:has(.plan-preview) .u-quota{bottom:74px}
     position:relative;
     margin-left:28px!important;
   }
-  .u-header .u-nav .u-plans-link:before{
-    content:"";
-    position:absolute;
-    left:-15px;
-    top:7px;
-    width:1px;
-    height:28px;
-    background:var(--line);
-  }
+  .u-header .u-nav .u-plans-link:before{content:none}
   .u-header .u-icon-action{margin-left:2px}
   .u-header .u-icon-action svg{display:block;margin:auto;transform:none}
 }
