@@ -327,6 +327,14 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-onboarding-backdrop{position:fixed;z-index:189;inset:0;background:rgba(24,22,20,.34)}
 .u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:min(400px,calc(100vw - 32px))!important;max-height:calc(100dvh - 32px);overflow:auto;transform:translate(-50%,-50%);box-shadow:0 24px 80px rgba(24,22,20,.28)}
 @media(min-width:981px){.u-nav a,.u-nav button,.u-plans-link,.u-icon-action{border-radius:11px!important}}
+
+/* Capçalera neta: separació per espai, mai amb un filet entre grups. */
+@media(min-width:981px){
+  .u-header .u-mobile-nav-divider{display:none!important}
+  .u-header .u-nav::before,.u-header .u-nav::after,
+  .u-header .u-plans-link::before,.u-header .u-plans-link::after{content:none!important;display:none!important;border:0!important}
+  .u-header .u-plans-link{border-left-color:var(--green)!important}
+}
 @media(max-width:620px){.u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)}}
 
 /* Mobile navigation stabilization: one drawer, one backdrop, predictable touch targets. */
@@ -472,6 +480,11 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   background:#73f172!important;
   color:#181614!important;
 }
+.u-plan-badge.is-basic{
+  border:1px solid #d5d2ca!important;
+  background:#efede8!important;
+  color:#181614!important;
+}
 :where(.u-plan-badge.is-ultra,.ultra-badge,.context-ultra-badge,.qr-feature-card>em.ultra,.brand-kit .ultra-badge,.footer-style-card.plan-ultra .plan-style-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){
   border:1px solid #91999e!important;
   background:linear-gradient(145deg,#3a3e40 0%,#111314 48%,#2d3133 100%)!important;
@@ -488,13 +501,4 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   stroke-width:2;
   stroke-linecap:round;
   stroke-linejoin:round;
-}
-
-/* Desktop header groups are separated only by whitespace. */
-@media(min-width:981px){
-  .u-header .u-mobile-nav-divider{display:none!important}
-  .u-header .u-nav::before,.u-header .u-nav::after,
-  .u-header .u-plans-link::before,.u-header .u-plans-link::after{
-    content:none!important;display:none!important;border:0!important
-  }
 }
