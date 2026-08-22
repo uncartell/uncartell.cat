@@ -361,6 +361,18 @@ body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-featur
 }
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
 
+/* Revista: el control de pàgines comparteix l'eix dret del header i subheader. */
+@media (min-width:821px){
+  body.uncartell-editor-active .page-tabs{position:relative;padding-right:24px!important}
+  body.uncartell-editor-active .page-tabs>.ultra-pages-button{
+    position:absolute;
+    right:24px;
+    top:50%;
+    margin:0!important;
+    transform:translateY(-50%);
+  }
+}
+
 /* Mobile app shell: no document flow stacking, no desktop minimum widths. */
 @media (max-width: 820px) {
   body.uncartell-editor-active { overflow: hidden !important; }
