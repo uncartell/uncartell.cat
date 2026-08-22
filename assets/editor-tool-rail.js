@@ -2,7 +2,7 @@
   if (!document.querySelector('link[href*="editor-tool-rail.css"]')) {
     const styles = document.createElement('link');
     styles.rel = 'stylesheet';
-    styles.href = '/assets/editor-tool-rail.css?v=5';
+    styles.href = '/assets/editor-tool-rail.css?v=6-grid';
     document.head.append(styles);
   }
 

@@ -112,8 +112,12 @@
 
 .tool-rail-ready .workspace { background: #f7f7f5; }
 .tool-rail-ready .canvas-stage {
-  background-color: #f5f5f2;
-  background-image: radial-gradient(circle, #d8d8d2 1.2px, transparent 1.2px);
+  background-color: #f7f7f4;
+  background-image:
+    linear-gradient(rgba(24, 22, 20, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 22, 20, .055) 1px, transparent 1px);
+  background-position: -1px -1px;
+  background-size: 48px 48px;
 }
 .tool-rail-ready .workspace-actions { background: #fff; }
 .tool-rail-ready .primary-button,
