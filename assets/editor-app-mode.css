@@ -589,10 +589,37 @@ body.uncartell-editor-active .editor-app-context strong {
 /* Final authority — shared desktop subheader and plan badges. */
 @media (min-width:821px){
 body.uncartell-editor-active .project-save-bar,body.uncartell-editor-active .qr-project-bar{grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;height:70px!important;min-height:70px!important;align-items:center!important;gap:12px!important;padding:10px 24px!important}
-body.uncartell-editor-active .project-save-bar>.editor-app-context,body.uncartell-editor-active .qr-project-bar>.editor-app-context{grid-column:1;justify-self:center}
+body.uncartell-editor-active .project-save-bar>.editor-app-context,body.uncartell-editor-active .qr-project-bar>.editor-app-context{grid-column:1;justify-self:start;margin-left:-13px!important}
+body.uncartell-editor-active .qr-project-bar>.editor-app-context{margin-left:-15px!important}
 body.uncartell-editor-active .project-save-bar>.tool-project-field,body.uncartell-editor-active .qr-project-bar>.tool-project-field{display:grid!important;grid-column:3;grid-template-columns:auto minmax(220px,1fr)!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0;margin:0!important}
 body.uncartell-editor-active .project-save-bar>.tool-header-actions,body.uncartell-editor-active .qr-project-bar>.tool-header-actions{display:flex!important;grid-column:4;align-items:center!important;justify-content:flex-end!important;gap:8px!important;width:auto!important;margin:0!important}
 body.uncartell-editor-active .tool-project-field input,body.uncartell-editor-active .tool-header-actions>button{height:46px!important;min-height:46px!important;margin:0!important}
+}
+
+/* Eixos comuns: el retorn comparteix marge amb la rail i les accions amb el perfil. */
+body.uncartell-editor-active .tool-header-actions>button,
+body.uncartell-editor-active .tool-header-actions>a,
+body.uncartell-editor-active .u-icon-action {
+  align-items:center!important;
+  justify-content:center!important;
+}
+body.uncartell-editor-active :where(.tool-header-actions,.u-icon-action) svg {
+  display:block;
+  flex:none;
+  margin:0!important;
+  transform:none!important;
+  transform-origin:center;
+}
+@media (max-width:820px){
+  body.uncartell-editor-active .project-save-bar>.editor-app-context,
+  body.uncartell-editor-active .qr-project-bar>.editor-app-context{
+    justify-self:start!important;
+    margin-left:6px!important;
+  }
+}
+@media (max-width:520px){
+  body.uncartell-editor-active .project-save-bar>.editor-app-context,
+  body.uncartell-editor-active .qr-project-bar>.editor-app-context{margin-left:4px!important}
 }
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){display:inline-flex!important;width:72px!important;min-width:72px!important;max-width:72px!important;height:24px!important;min-height:24px!important;box-sizing:border-box!important;align-items:center!important;justify-content:center!important;gap:4px!important;margin:0!important;padding:0 8px!important;border-radius:8px!important;font:900 8px/1 Arial,sans-serif!important;letter-spacing:.055em!important;text-transform:uppercase!important;white-space:nowrap!important}
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em):not(.ultra){border:1px solid #50c458!important;background:#73f172!important;color:#181614!important;box-shadow:none!important}
