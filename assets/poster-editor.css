@@ -116,3 +116,13 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
 }
 .poster-create-card .poster-repository-preview::after{border-color:#20d82c}
 @media(max-width:620px){.poster-repository-preview::after{top:18px;right:-8px;width:54px}}
+
+/* Fold diagonal rendered inside the clipped paper surface. */
+.poster-repository-preview::after{
+  content:""!important;position:absolute!important;z-index:4!important;top:0!important;right:0!important;
+  width:52px!important;height:52px!important;border:0!important;transform:none!important;
+  background:linear-gradient(to top right,transparent 46.5%,var(--fold-line,#d5d2ca) 47.5%,var(--fold-line,#d5d2ca) 49.5%,transparent 50.5%)!important;
+  pointer-events:none!important
+}
+.poster-create-card .poster-repository-preview{--fold-line:#20d82c}
+@media(max-width:620px){.poster-repository-preview::after{width:38px!important;height:38px!important}}
