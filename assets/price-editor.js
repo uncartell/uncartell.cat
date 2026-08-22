@@ -636,8 +636,8 @@
       wireFields(page); wirePageLogo(page, box); wireMobileSections(box); return;
     }
     if (page.role === "mobile-allergens") {
-      box.innerHTML = `<div class="inspector-head"><strong>${escapeHtml(page.title)}</strong></div><p class="empty-inspector">${escapeHtml(L.interiorPages)}</p>${footerTextInspector()}`;
-      wireFooterText(box); return;
+      box.innerHTML = `<div class="inspector-head"><strong>${escapeHtml(page.title)}</strong></div><p class="empty-inspector">${escapeHtml(L.interiorPages)}</p>`;
+      return;
     }
     if (page.role === "cover") {
       if (page.side === "back" && state.format.startsWith("a4-single-") && state.plan === "free") {
@@ -665,8 +665,7 @@
     }
     const block = page.blocks.find(item => item.id === state.selectedBlock);
     if (!block) {
-      box.innerHTML = `<p class="empty-inspector">${L.inspector.empty}</p>${footerTextInspector()}`;
-      wireFooterText(box);
+      box.innerHTML = `<p class="empty-inspector">${L.inspector.empty}</p>`;
       return;
     }
     const typeLabel = L.blockTypes.find(item => item.id === block.type)?.label ?? block.type;
@@ -679,9 +678,8 @@
     } else if (!["separator", "spacer-large"].includes(block.type)) {
       controls = field(L.inspector.text, "text", block.text, block.type !== "section");
     }
-    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button><button class="delete-button" type="button">${L.inspector.delete}</button></div>${footerTextInspector()}`;
+    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button><button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
     wireFields(block);
-    wireFooterText(box);
     $$("[data-allergen]", box).forEach(input => input.addEventListener("change", () => {
       block.allergens = $$("[data-allergen]:checked", box).map(item => item.dataset.allergen);
       save(); renderPage();
