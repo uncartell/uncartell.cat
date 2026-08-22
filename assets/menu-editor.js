@@ -1574,6 +1574,20 @@
     renderPage();
   });
   $("#menuPage").addEventListener("click", event => {
+    if (matchMedia("(max-width: 820px)").matches) {
+      const blockNode = event.target.closest("[data-block]");
+      if (blockNode) {
+        const blockId = blockNode.dataset.block;
+        const currentPage = state.pages[state.activePage];
+        if (!currentPage?.blocks?.some(block => block.id === blockId)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        state.selectedBlock = blockId;
+        renderInspector();
+        $$("[data-block]", $("#menuPage")).forEach(node => node.classList.toggle("selected", node === blockNode));
+        return;
+      }
+    }
     if (event.target.closest("[data-block],[data-mobile-page],[data-logo-placeholder],button,[contenteditable='true']")) return;
     if (!state.selectedBlock) return;
     state.selectedBlock = null;
