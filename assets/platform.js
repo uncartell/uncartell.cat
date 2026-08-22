@@ -187,7 +187,7 @@
   const openUpgradeModal=()=>{if(!upgradeModal)return;syncUpgradePlans();showUpgradeStep('plans');upgradeModal.hidden=false;document.body.classList.add('u-modal-open')};
   // The Premium badge inside every locked project-save field is itself a CTA.
   // Keep this delegated so it also covers editors rendered after platform init.
-  const projectPremiumSelector='.project-save-bar.is-locked .project-lock, .qr-project-bar.is-locked [data-project-plan], [data-premium-controls].is-locked, [data-colors-card].is-locked';
+  const projectPremiumSelector='.project-save-bar.is-locked .project-lock, .tool-project-field.is-locked [data-project-plan], [data-premium-controls].is-locked, [data-colors-card].is-locked';
   const openProjectPremiumGate=event=>{
     const badge=event.target.closest(projectPremiumSelector);
     if(!badge)return;
@@ -419,6 +419,9 @@
   // Every plan-gated control opens the same upgrade journey, including
   // controls that editors render after platform initialisation.
   document.addEventListener('click',event=>{
+    // The primary download action is available on every plan. Format-level
+    // permissions are enforced inside each editor's download chooser.
+    if(event.target.closest('[data-open-downloads],.editor-app-final-action'))return;
     const locked=event.target.closest('.is-locked,.ultra-locked,.locked-logo-control,.locked-footer-control,.ultra-pages-button.locked,[data-plan-locked]');
     if(!locked||locked.closest('.u-upgrade-modal,.u-account-modal'))return;
     const actionable=event.target.closest('.project-lock,[data-project-plan],.plan-style-badge,.ultra-badge,.feature-plan-badge,button,a')||locked.matches('.premium-style,.footer-style-card,.brand-kit,[data-colors-card],[data-watermark-card]');
