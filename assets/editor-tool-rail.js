@@ -120,7 +120,10 @@
     // a tap, so relying only on click bubbling is inherently race-prone.
     document.addEventListener('uncartell:editor-selection', (event) => {
       const detail = event.detail || {};
-      setEditing(Boolean(detail.selected), detail.open !== false);
+      // The selection event is emitted inside the preview click handler. Open
+      // after that click has finished bubbling, otherwise the mobile sheet's
+      // outside-click closer immediately undoes the selection.
+      requestAnimationFrame(() => setEditing(Boolean(detail.selected), detail.open !== false));
     });
 
     shell.addEventListener('click', (event) => {
