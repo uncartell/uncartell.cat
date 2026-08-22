@@ -141,7 +141,7 @@ body.uncartell-editor-active .page-tab:not(.active):hover {
 }
 body.uncartell-editor-active .canvas-stage,
 body.uncartell-editor-active .poster-canvas-stage,
-body.uncartell-editor-active .qr-canvas { box-sizing:border-box;align-items:center;justify-content:center;padding:clamp(28px,4vw,58px);scroll-padding:clamp(28px,4vw,58px);background-color:#f4f5f2;background-image:radial-gradient(rgba(104,101,94,.22) .8px,transparent .8px);background-size:20px 20px; }
+body.uncartell-editor-active .qr-canvas { box-sizing:border-box;align-items:center;justify-content:center;padding:clamp(28px,4vw,58px);scroll-padding:clamp(28px,4vw,58px);background-color:transparent;background-image:none; }
 body.uncartell-editor-active .canvas-stage>.menu-page,
 body.uncartell-editor-active .poster-canvas-stage>.u-live-poster,
 body.uncartell-editor-active .qr-result-card { margin:auto; }
