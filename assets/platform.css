@@ -328,6 +328,69 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:min(400px,calc(100vw - 32px))!important;max-height:calc(100dvh - 32px);overflow:auto;transform:translate(-50%,-50%);box-shadow:0 24px 80px rgba(24,22,20,.28)}
 @media(min-width:981px){.u-nav a,.u-nav button,.u-plans-link,.u-icon-action{border-radius:11px!important}}
 @media(max-width:620px){.u-tool-onboarding{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)}}
+
+/* Mobile navigation stabilization: one drawer, one backdrop, predictable touch targets. */
+@media(max-width:980px){
+  /* Safari clips fixed descendants when their ancestor uses backdrop-filter.
+     The mobile drawer lives inside the header, so keep the opaque header but
+     remove the filter to let the drawer occupy the full viewport. */
+  .u-header{position:sticky;top:0;z-index:1203;background:#fafaf8;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .u-header-inner{width:100%;height:68px;padding:0 14px;gap:10px}
+  .u-header .u-logo{min-width:0;margin-right:auto;font-size:clamp(25px,8vw,32px);white-space:nowrap}
+  .u-mobile-toggle{position:relative;z-index:1206;display:grid;flex:0 0 48px;width:48px;height:48px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .u-mobile-toggle svg{width:28px;height:28px}
+  .u-nav{
+    display:flex!important;
+    position:fixed!important;
+    z-index:1204!important;
+    inset:0 0 0 auto!important;
+    width:min(88vw,380px)!important;
+    height:100dvh!important;
+    max-height:none!important;
+    padding:72px 16px calc(24px + env(safe-area-inset-bottom))!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:6px!important;
+    border:0!important;
+    border-left:1px solid rgba(24,22,20,.1)!important;
+    border-radius:0!important;
+    background:#fff!important;
+    box-shadow:-20px 0 60px rgba(24,22,20,.22)!important;
+    transform:translate3d(105%,0,0)!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+    transition:transform .25s cubic-bezier(.22,.8,.28,1),visibility .25s!important;
+  }
+  .u-nav.open{
+    transform:translate3d(0,0,0)!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+  }
+  .u-nav a,.u-nav button{min-height:48px;padding:12px 13px!important;border-radius:9px!important;text-align:left!important;font-size:16px;line-height:1.25}
+  .u-mobile-close{position:absolute;top:12px;right:12px;display:grid!important;width:46px;height:46px;place-items:center;padding:0!important;border:0!important;background:transparent!important;font-size:28px}
+  .u-mobile-backdrop{position:fixed;z-index:1202;inset:0;display:block;width:100%;height:100%;border:0;background:rgba(24,22,20,.48);backdrop-filter:blur(2px)}
+  .u-mobile-backdrop[hidden]{display:none!important}
+  body.u-mobile-menu-open{overflow:hidden!important;touch-action:none}
+  body.u-mobile-menu-open .u-mobile-toggle{visibility:hidden}
+  .u-mobile-language-options{margin:0!important;padding:4px 0 8px!important;border-radius:0!important;background:transparent!important}
+  .u-mobile-language-options a{min-height:44px!important;margin:0 0 4px;padding-left:46px!important}
+}
+
+@media(max-width:620px){
+  .u-nav{width:min(90vw,360px)!important;padding-top:70px!important}
+  .u-mobile-nav-heading{top:26px!important;left:18px!important}
+  .u-mobile-close{top:11px!important;right:11px!important}
+}
+
+@media(max-width:620px){
+  .u-account-modal,.u-upgrade-modal{padding:8px!important}
+  .u-account-card,.u-upgrade-card{width:100%!important;max-width:none!important;height:auto!important;max-height:calc(100dvh - 16px)!important;margin:0!important;padding:46px 18px 22px!important;border-radius:16px!important;overflow-y:auto!important}
+  .u-tool-onboarding{border-radius:16px!important}
+  .u-onboarding-media{aspect-ratio:16/8.5}
+  .u-onboarding-copy{padding:16px 18px 18px}
+}
 /* Tutorial visual compartit per totes les eines. */
 .u-tutorial-launcher{position:fixed;z-index:189;right:24px;bottom:24px;display:flex;align-items:center;gap:9px;height:48px;padding:0 17px 0 9px;border:1px solid #181614;border-radius:999px;background:#181614;color:#fff;font:700 14px/1 Arial,sans-serif;box-shadow:0 10px 28px rgba(24,22,20,.18);cursor:pointer}.u-tutorial-launcher span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:#181614;font:800 18px/1 Georgia,serif}.u-tutorial-launcher b{font:inherit}.u-tool-onboarding[hidden]{display:none}.u-tool-onboarding{position:fixed;z-index:190;right:24px;bottom:84px;width:min(380px,calc(100vw - 32px));overflow:hidden;border:1px solid #d8d4cc;border-radius:24px;background:#fff;color:#181614;box-shadow:0 22px 60px rgba(24,22,20,.2)}.u-onboarding-media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#efede8}.u-onboarding-media img{display:block;width:100%;height:100%;object-fit:cover}.u-onboarding-media span{position:absolute;right:14px;bottom:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.94);font:800 12px/1 Arial,sans-serif}.u-onboarding-close{position:absolute;z-index:1;top:12px;right:12px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:#181614;font:400 25px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-copy{padding:22px 24px 24px}.u-onboarding-copy strong{display:block;padding-right:8px;font-size:24px;line-height:1.12}.u-onboarding-copy p{min-height:48px;margin:9px 0 14px;color:#6e6a63;font-size:16px;line-height:1.45}.u-onboarding-dots{display:flex;gap:6px;margin-bottom:18px}.u-onboarding-dots i{width:7px;height:7px;border-radius:50%;background:#d8d4cc}.u-onboarding-dots i.is-active{width:22px;border-radius:999px;background:var(--green)}.u-onboarding-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.u-onboarding-actions button{min-height:44px;border-radius:999px;padding:0 20px;font:800 14px/1 Arial,sans-serif;cursor:pointer}.u-onboarding-skip{border:0;background:transparent;color:#6e6a63}.u-onboarding-next{border:1px solid #181614;background:#181614;color:#fff}@media(max-width:620px){.u-tutorial-launcher{right:14px;bottom:14px}.u-tutorial-launcher b{display:none}.u-tutorial-launcher{width:50px;height:50px;padding:9px}.u-tutorial-launcher span{width:30px;height:30px}.u-tool-onboarding{right:12px;bottom:76px;width:calc(100vw - 24px);max-height:calc(100dvh - 94px);overflow:auto;border-radius:20px}.u-onboarding-copy{padding:18px 20px 20px}.u-onboarding-copy strong{font-size:22px}.u-onboarding-copy p{min-height:0}.u-onboarding-actions button{min-height:42px}}
 
@@ -380,3 +443,5 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-tools-grid .u-tool-card .u-tool-visual{aspect-ratio:16/10}
 @media(max-width:900px){.u-tools-grid{grid-auto-columns:minmax(290px,72vw)}}
 @media(max-width:620px){.u-hero-next .u-hero-box{min-height:430px}.u-hero-next:before{background-size:30px 30px,30px 30px,100% 100%,100% 100%}.u-hero-next .u-eyebrow{margin-bottom:16px}.u-hero-shape{right:-24px;top:12%;opacity:.38}.u-tools-grid{grid-auto-columns:86vw;gap:14px!important}}
+/* Brighter global canvas: keep cards and editor surfaces unchanged. */
+body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
