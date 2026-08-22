@@ -425,6 +425,12 @@
     if(!actionable)return;
     event.preventDefault();event.stopPropagation();openUpgradeModal();
   },true);
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
-  setPlan(getPlan());renderQuota();initAuth();
+  const downloadFormatAccess=format=>{
+    const activePlan=getPlan(),normalized=String(format||'pdf').toLowerCase();
+    if(normalized==='pdf'||normalized==='print')return {allowed:true,requiredPlan:null};
+    if(normalized==='png')return {allowed:activePlan==='premium'||activePlan==='ultra',requiredPlan:'premium'};
+    if(normalized==='svg')return {allowed:activePlan==='ultra',requiredPlan:'ultra'};
+    return {allowed:false,requiredPlan:null};
+  };
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,downloadFormatAccess,canDownloadFormat(format){return downloadFormatAccess(format).allowed},canDownload(){return getPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
 })();
