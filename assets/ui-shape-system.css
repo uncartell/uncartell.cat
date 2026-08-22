@@ -272,7 +272,7 @@ body.uncartell-editor-active .qr-editor-shell{
 /* The quota remains visible because it conveys a real product limit. */
 .u-quota{
   border-radius:var(--u-floating-radius)!important;
-  padding:12px 16px!important;
+  padding:12px 16px 12px 28px!important;
 }
 
 /* Mobile/public navigation remains a control, not a pill. */
@@ -309,7 +309,7 @@ body.uncartell-editor-active .qr-editor-shell{
   }
   .u-quota{
     border-radius:var(--u-control-radius)!important;
-    padding:10px 13px!important;
+    padding:10px 13px 10px 21px!important;
   }
 }
 /* Locked project naming explains the entitlement instead of looking broken. */
