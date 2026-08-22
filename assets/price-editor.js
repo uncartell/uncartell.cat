@@ -23,7 +23,10 @@
   const uid = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
   const requestedPlan = new URLSearchParams(location.search).get("plan") || ({basic:"free",premium:"premium",ultra:"ultra"}[localStorage.getItem("uncartell-plan-v12") || "basic"]);
   const previewPlan = ["premium", "ultra"].includes(requestedPlan) ? requestedPlan : "free";
-  const FEATURES = Object.freeze({ ultraMenuImages: ["localhost", "127.0.0.1"].includes(location.hostname) && window.UNCARTELL_ENABLE_ULTRA_MENU_IMAGES !== false });
+  // Ultra image blocks are a production entitlement. The explicit feature flag
+  // remains available as an emergency kill switch, but production must not be
+  // treated as ineligible merely because it is not localhost.
+  const FEATURES = Object.freeze({ ultraMenuImages: window.UNCARTELL_ENABLE_ULTRA_MENU_IMAGES !== false });
   const entitlements = Object.freeze({
     canCreateMobileMenu: plan => plan === "premium" || plan === "ultra",
     canPublishMobileMenu: plan => plan === "premium" || plan === "ultra",
