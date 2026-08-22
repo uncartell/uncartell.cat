@@ -634,6 +634,9 @@ body.uncartell-editor-active .qr-project-bar>.editor-app-context{margin-left:-15
 body.uncartell-editor-active .project-save-bar>.tool-project-field,body.uncartell-editor-active .qr-project-bar>.tool-project-field{display:grid!important;grid-column:3;grid-template-columns:auto minmax(220px,1fr)!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0;margin:0!important}
 body.uncartell-editor-active .project-save-bar>.tool-header-actions,body.uncartell-editor-active .qr-project-bar>.tool-header-actions{display:flex!important;grid-column:4;align-items:center!important;justify-content:flex-end!important;gap:8px!important;width:auto!important;margin:0!important}
 body.uncartell-editor-active .tool-project-field input,body.uncartell-editor-active .tool-header-actions>button{height:46px!important;min-height:46px!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-name-input-wrap{position:relative!important;display:flex!important;height:46px!important;min-height:46px!important;align-items:center!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-name-input-wrap>input{display:block!important;width:100%!important;height:46px!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-save-bar.is-locked .project-lock{top:50%!important;right:11px!important;bottom:auto!important;margin:0!important;transform:translateY(-50%)!important}
 }
 
 /* Eixos comuns: el retorn comparteix marge amb la rail i les accions amb el perfil. */
