@@ -489,3 +489,12 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   stroke-linecap:round;
   stroke-linejoin:round;
 }
+
+/* Desktop header groups are separated only by whitespace. */
+@media(min-width:981px){
+  .u-header .u-mobile-nav-divider{display:none!important}
+  .u-header .u-nav::before,.u-header .u-nav::after,
+  .u-header .u-plans-link::before,.u-header .u-plans-link::after{
+    content:none!important;display:none!important;border:0!important
+  }
+}
