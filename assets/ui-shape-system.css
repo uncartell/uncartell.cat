@@ -312,3 +312,5 @@ body.uncartell-editor-active .qr-editor-shell{
     padding:10px 13px!important;
   }
 }
+/* Locked project naming explains the entitlement instead of looking broken. */
+.project-save-bar.is-locked input:disabled,.tool-project-field.is-locked input:disabled{opacity:1!important;color:#6f6b64!important;-webkit-text-fill-color:#6f6b64!important;background:#f3f1ec!important;cursor:not-allowed}
