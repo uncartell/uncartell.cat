@@ -54,7 +54,11 @@
       // A preview block is allowed to open the contextual editor. The preview
       // may be re-rendered during the same tap, so treat the original block as
       // an inside interaction even when it has already been detached.
-      if (event.target.closest('.editor-panel,.editor-tool-rail,[data-block],[data-price-block],[data-live-title],[data-live-subtitle],[data-live-icon]')) return;
+      const interactionPath = event.composedPath?.() || [];
+      const startedInsideEditorControl = interactionPath.some((node) => node?.matches?.(
+        '.editor-panel,.editor-tool-rail,[data-block],[data-price-block],[data-live-title],[data-live-subtitle],[data-live-icon]'
+      ));
+      if (startedInsideEditorControl) return;
       close();
     });
     views.addEventListener('touchmove', (event) => event.stopPropagation(), { passive: true });
