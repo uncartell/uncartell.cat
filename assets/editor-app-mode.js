@@ -6,17 +6,20 @@
   const lang = document.documentElement.lang === 'es' ? 'es' : 'ca';
   const projectBar = editor.querySelector('.project-save-bar, .qr-project-bar');
   const path = window.location.pathname;
-  const homeHref = lang === 'es' ? '/es/' : '/ca/';
+  const isProductionHost = /^(www\.)?uncartell\.cat$|^(www\.)?uncartel\.es$/.test(window.location.hostname);
+  const localeBase = isProductionHost ? '' : (lang === 'es' ? '/es' : '/ca');
+  const localizedRoute = slug => `${localeBase}/${slug}`.replace(/\/+/g, '/').replace(/([^/])$/, '$1/');
+  const homeHref = localizedRoute('');
 
   const editorContext = (() => {
     if (/cartells|carteles/.test(path)) {
-      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: lang === 'es' ? '/es/carteles/' : '/ca/cartells/' };
+      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: localizedRoute(lang === 'es' ? 'carteles' : 'cartells') };
     }
     if (/taules-de-preus|tablas-de-precios/.test(path)) {
-      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: lang === 'es' ? '/es/tablas-de-precios/' : '/ca/taules-de-preus/' };
+      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: localizedRoute(lang === 'es' ? 'tablas-de-precios' : 'taules-de-preus') };
     }
     if (/cartes-i-menus|cartas-y-menus/.test(path)) {
-      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: lang === 'es' ? '/es/cartas-y-menus/' : '/ca/cartes-i-menus/' };
+      return { buttonLabel: lang === 'es' ? 'Plantillas' : 'Plantilles', href: localizedRoute(lang === 'es' ? 'cartas-y-menus' : 'cartes-i-menus') };
     }
     return { buttonLabel: lang === 'es' ? 'Inicio' : 'Inici', href: homeHref };
   })();
@@ -46,7 +49,24 @@
   };
 
   const ensureContextNavigation = () => {
-    if (!projectBar || projectBar.querySelector('.editor-app-context')) return;
+    if (!projectBar) return;
+    const existingContext = projectBar.querySelector('.editor-app-context');
+    if (existingContext) {
+      existingContext.setAttribute('href', editorContext.href);
+      existingContext.setAttribute('aria-label', editorContext.buttonLabel);
+      existingContext.setAttribute('title', editorContext.buttonLabel);
+      if (!existingContext.dataset.editorContextReady) {
+        existingContext.dataset.editorContextReady = 'true';
+        existingContext.addEventListener('click', event => {
+          event.preventDefault();
+          confirmLeave(() => window.location.assign(editorContext.href));
+        });
+      }
+      if (projectBar.classList.contains('qr-project-bar')) {
+        projectBar.querySelector(':scope > div')?.classList.add('tool-header-actions');
+      }
+      return;
+    }
     const contextButton = document.createElement('button');
     contextButton.type = 'button';
     contextButton.className = 'editor-app-context';
