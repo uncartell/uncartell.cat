@@ -80,9 +80,12 @@
     const title = blocksView.querySelector('.editor-tool-panel-title');
     const icon = blocksButton.querySelector('svg');
     const text = blocksButton.querySelector('span');
+    let contextualEditing = false;
 
     const setEditing = (editing, open = false) => {
       if (!matchMedia('(max-width: 820px)').matches) return;
+      const unchanged = contextualEditing === editing;
+      contextualEditing = editing;
       shell.classList.toggle('mobile-context-editing', editing);
       blocksButton.classList.toggle('is-context-edit', editing);
       blocksButton.setAttribute('aria-label', editing ? editLabel : defaultLabel);
@@ -91,7 +94,7 @@
       if (text) text.textContent = editing ? editLabel : defaultLabel;
       if (title) title.textContent = editing ? editLabel : defaultLabel;
       if (blockButtons) blockButtons.hidden = editing;
-      if (open) {
+      if (open && (!unchanged || !shell.classList.contains('mobile-panel-open'))) {
         blocksButton.setAttribute('aria-selected', 'false');
         shell.classList.remove('mobile-panel-open');
         selectTool(shell, rail, views, blocksButton, 'blocks');
@@ -101,6 +104,14 @@
         });
       }
     };
+
+    // The editors dispatch this event from their real selection state. This is
+    // deliberately the primary mobile path: their preview is re-rendered after
+    // a tap, so relying only on click bubbling is inherently race-prone.
+    document.addEventListener('uncartell:editor-selection', (event) => {
+      const detail = event.detail || {};
+      setEditing(Boolean(detail.selected), detail.open !== false);
+    });
 
     shell.addEventListener('click', (event) => {
       if (!matchMedia('(max-width: 820px)').matches) return;
