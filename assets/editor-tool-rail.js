@@ -46,6 +46,7 @@
     const close = () => {
       shell.classList.remove('mobile-panel-open');
       rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
+      document.dispatchEvent(new CustomEvent('uncartell:editor-clear-selection'));
     };
     bar.querySelector('button').addEventListener('click', close);
     shell.addEventListener('click', (event) => {
@@ -140,6 +141,11 @@
 
     blocksButton.addEventListener('click', () => {
       if (!shell.classList.contains('mobile-context-editing') && blockButtons) blockButtons.hidden = false;
+    });
+    rail.addEventListener('click', (event) => {
+      if (!event.target.closest('[data-tool-target]:not([data-tool-target="blocks"])')) return;
+      setEditing(false);
+      document.dispatchEvent(new CustomEvent('uncartell:editor-clear-selection'));
     });
     matchMedia('(max-width: 820px)').addEventListener?.('change', event => {
       if (!event.matches) {
