@@ -94,10 +94,20 @@
       if (text) text.textContent = editing ? editLabel : defaultLabel;
       if (title) title.textContent = editing ? editLabel : defaultLabel;
       if (blockButtons) blockButtons.hidden = editing;
+      if (open) {
+        // Do not route contextual editing through selectTool(): that helper is
+        // intentionally toggleable on mobile and can therefore close the sheet
+        // when the editor emits selection twice during the same render. A real
+        // selection must always win and leave the inspector visible.
+        rail.querySelectorAll('.editor-tool-rail-button').forEach((item) => {
+          item.setAttribute('aria-selected', String(item === blocksButton));
+        });
+        views.querySelectorAll('.editor-tool-view').forEach((view) => {
+          view.hidden = view !== blocksView;
+        });
+        shell.classList.add('mobile-panel-open');
+      }
       if (open && (!unchanged || !shell.classList.contains('mobile-panel-open'))) {
-        blocksButton.setAttribute('aria-selected', 'false');
-        shell.classList.remove('mobile-panel-open');
-        selectTool(shell, rail, views, blocksButton, 'blocks');
         requestAnimationFrame(() => {
           const inspector = blocksView.querySelector('#inspector') || blocksView.querySelector(options.inspectorSelector || 'input,textarea,[contenteditable="true"]')?.closest('section,div');
           inspector?.scrollIntoView({ block: 'start' });
