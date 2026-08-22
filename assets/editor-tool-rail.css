@@ -39,6 +39,20 @@
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Una sola família òptica per a imatge, plat amb imatge i servei amb imatge. */
+.tool-rail-ready :where(.block-symbol,.context-block-symbol) .block-photo-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 .tool-rail-ready .editor-tool-rail-button > span {
   position: absolute;
