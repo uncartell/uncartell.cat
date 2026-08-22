@@ -11,6 +11,7 @@
     edit: '<path d="m4 20 4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z"/><path d="m14.5 6.7 3 3"/>',
     typography: '<path d="M3.5 7V4.5h9V7M8 4.5V19M5.5 19h5"/><path d="M14 10.5h6.5M17.25 10.5V19M15.25 19h4"/>',
     layout: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M12 4v16"/>',
+    header: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 10h17"/><path d="m7 16 3-3 2.2 2.2 2.3-2.3 2.5 3.1"/>',
     colors: '<path d="M12 3a9 9 0 1 0 0 18h1.4a1.8 1.8 0 0 0 0-3.6H12a1.8 1.8 0 0 1 0-3.6h3.2A5.8 5.8 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="9" r=".8"/><circle cx="10" cy="6.5" r=".8"/><circle cx="14" cy="6.5" r=".8"/>',
     logo: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="m6.5 15 3.5-3.5 2.6 2.6 2.2-2.2 2.7 3.1"/><circle cx="16.5" cy="9" r="1.2"/>',
     watermark: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M6.5 16.5h11"/><path d="M8 13.5h8"/>',
@@ -19,11 +20,11 @@
 
   const copy = {
     ca: {
-      blocks: 'Afegir blocs', typography: 'Tipografia', layout: 'Columnes', colors: 'Colors',
+      blocks: 'Afegir blocs', typography: 'Tipografia', layout: 'Columnes', header: 'Capçalera', colors: 'Colors',
       logo: 'Logotip', watermark: 'Marca d’aigua al peu', brand: 'Kit de marca'
     },
     es: {
-      blocks: 'Añadir bloques', typography: 'Tipografía', layout: 'Columnas', colors: 'Colores',
+      blocks: 'Añadir bloques', typography: 'Tipografía', layout: 'Columnas', header: 'Cabecera', colors: 'Colores',
       logo: 'Logotipo', watermark: 'Marca de agua al pie', brand: 'Kit de marca'
     }
   };
@@ -202,7 +203,9 @@
     const styleKicker = stylePanel.querySelector('.panel-kicker');
     if (styleKicker) styleKicker.remove();
     createView('typography', [stylePanel.querySelector('#styleOptions')]);
-    createView('layout', [stylePanel.querySelector('.column-settings'), stylePanel.querySelector('.price-header-controls')]);
+    createView('layout', [stylePanel.querySelector('.column-settings')]);
+    const priceHeaderControls = stylePanel.querySelector('.price-header-controls');
+    if (priceHeaderControls) createView('header', [priceHeaderControls]);
     createView('colors', [stylePanel.querySelector('.premium-style')]);
     const logoHost = document.createElement('div');
     logoHost.className = 'editor-logo-tool-host';
@@ -212,7 +215,10 @@
     if (brandKit) brandKit.open = true;
     createView('brand', [brandKit]);
 
-    ['blocks', 'typography', 'layout', 'colors', 'logo', 'watermark', 'brand'].forEach((key) => {
+    const toolKeys = ['blocks', 'typography', 'layout'];
+    if (priceHeaderControls) toolKeys.push('header');
+    toolKeys.push('colors', 'logo', 'watermark', 'brand');
+    toolKeys.forEach((key) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'editor-tool-rail-button';
