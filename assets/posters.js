@@ -87,6 +87,7 @@
     const dictionary=es?iconNamesEs:iconNamesCa;return key.replace(/([a-z])([A-Z])/g,'$1-$2').split('-').filter(Boolean).map(word=>dictionary[word.toLowerCase()]||word.toLowerCase()).join(' ')
   }
   const catalogCategories=['Més populars','Restauració','Comerç','Horaris','Avisos','Promocions','Altres'];
+  const popularCategoryIcon='<svg class="poster-category-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>';
   const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
   const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|2x1/i;
   const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat/i;
@@ -135,7 +136,7 @@
   function renderFilters(){
     const categories=categoryNames();
     if(!categories.includes(activeCategory)) activeCategory=categories[0]||'';
-    categoryNav.innerHTML=categories.map(name=>`<button class="${!catalogQuery&&name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${!catalogQuery&&name===activeCategory}">${escapeHtml(name)}</button>`).join('');
+    categoryNav.innerHTML=categories.map(name=>`<button class="${!catalogQuery&&name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${!catalogQuery&&name===activeCategory}">${name==='Més populars'?popularCategoryIcon:''}<span>${escapeHtml(name)}</span></button>`).join('');
     if(catalogQuery){subcategoryNav.innerHTML='';subcategoryNav.hidden=true;qa('[data-category]').forEach(button=>button.onclick=()=>{catalogQuery='';if(catalogSearch)catalogSearch.value='';if(clearCatalogSearch)clearCatalogSearch.hidden=true;activeCategory=button.dataset.category;activeSubcategory='';renderFilters();renderCards()});return}
     subcategoryNav.hidden=false;
     const subs=subcategoryNames();
