@@ -106,7 +106,9 @@
   const projectBar=$('.qr-project-bar'),projectField=$('.tool-project-field'),colorsCard=$('[data-colors-card]'),watermarkCard=$('[data-watermark-card]'),logoCard=$('[data-logo-card]'),brandCard=$('[data-brand-card]'),analyticsCard=$('[data-analytics-card]');
   const applyEntitlements=()=>{
     plan=window.UncartellPlatform?.getPlan?.()||'basic';canPremium=plan==='premium'||plan==='ultra';canUltra=plan==='ultra';
-    projectField?.classList.toggle('is-locked',!canPremium);projectBar?.classList.toggle('is-locked',!canPremium);
+    // Only project management is gated. The whole header must never become a
+    // locked target because Basic users can still open the download chooser.
+    projectField?.classList.toggle('is-locked',!canPremium);projectBar?.classList.remove('is-locked');
     $$('[data-open-projects],[data-save-project]').forEach(button=>button.classList.toggle('is-plan-locked',!canPremium));
     const nameField=$('[data-project-name]');nameField.disabled=!canPremium;nameField.value=canPremium?(state.name||T.fallbackName):'';nameField.placeholder=canPremium?T.fallbackName:(lang==='ca'?'Premium · Desa i gestiona projectes':'Premium · Guarda y gestiona proyectos');
     $('[data-project-plan]').hidden=canPremium;
