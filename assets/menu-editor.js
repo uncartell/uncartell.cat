@@ -1567,6 +1567,20 @@
     }
   });
 
+  document.addEventListener("uncartell:editor-clear-selection", () => {
+    if (!state.selectedBlock) return;
+    state.selectedBlock = null;
+    renderInspector();
+    renderPage();
+  });
+  $("#menuPage").addEventListener("click", event => {
+    if (event.target.closest("[data-block],[data-mobile-page],[data-logo-placeholder],button,[contenteditable='true']")) return;
+    if (!state.selectedBlock) return;
+    state.selectedBlock = null;
+    renderInspector();
+    renderPage();
+  });
+
   $("#siteFooter").innerHTML = `<div class="foot-row"><span>${escapeHtml(L.footerClaim)}</span><nav class="foot-links"><a href="/${L.lang}/${L.contactRoute}/">${escapeHtml(L.contact)}</a><a href="/${L.lang}/faqs/">FAQs</a><a href="/${L.lang}/${L.legalRoute}/">${escapeHtml(L.legal)}</a><a href="/${L.lang}/${L.privacyRoute}/">${escapeHtml(L.privacy)}</a><a href="/${L.lang}/cookies/">Cookies</a><button type="button">${escapeHtml(L.cookieSettings)}</button></nav><a class="footer-admin-link" href="/${L.lang}/admin/" aria-label="Admin">© 2026</a></div>`;
 
   $("#customMenuBrief").innerHTML = `<div class="custom-menu-brief-copy"><span class="eyebrow">uncartell studio</span><h2>${escapeHtml(L.customMenuTitle)}</h2><p>${escapeHtml(L.customMenuCopy)}</p></div><form id="customMenuBriefForm"><div class="brief-grid"><label><span>${escapeHtml(L.briefName)}</span><input name="name" type="text" required></label><label><span>${escapeHtml(L.briefBusiness)}</span><input name="business" type="text" required></label><label><span>${escapeHtml(L.briefEmail)}</span><input name="email" type="email" required></label><label><span>${escapeHtml(L.briefFormat)}</span><input name="format" type="text"></label></div><label><span>${escapeHtml(L.briefDetails)}</span><textarea name="details" rows="5" required></textarea></label><button type="submit">${escapeHtml(L.briefSend)}</button></form>`;
