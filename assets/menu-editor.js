@@ -1144,12 +1144,14 @@
     $(".premium-style").classList.toggle("is-locked", !canSave);
     $("#projectSaveBar").hidden = false;
     $("#projectSaveBar").classList.toggle("is-locked", !canSave);
-    $("#projectName").disabled = !canSave;
+    const projectNameField = $("#projectName");
+    projectNameField.disabled = !canSave;
     $("#saveProjectButton").disabled = !canSave;
     $("#openProjectsButton").classList.toggle("is-plan-locked", !canSave);
     $("#editorOpenProjects").classList.toggle("is-plan-locked", !canSave);
     $("#projectLock").hidden = canSave;
-    $("#projectName").value = state.projectName;
+    projectNameField.value = canSave ? state.projectName : "";
+    projectNameField.placeholder = canSave ? L.defaultProject : (L.lang === "ca" ? "Premium · Desa i gestiona projectes" : "Premium · Guarda y gestiona proyectos");
     $("#saveStatus").textContent = state.lastAutoSavedAt ? autoSavedLabel(state.lastAutoSavedAt) : canSave ? (state.isDirty ? L.unsaved : L.saved) : (state.isDirty ? L.basicDraftStatus : L.sessionOnly);
     $$('[data-preview-plan]').forEach(button => button.classList.toggle("active", button.dataset.previewPlan === state.plan));
     $("#exportButton").textContent = state.format === "mobile-interactive" ? (state.mobilePublication?.status === "published" ? L.republishMobileMenu : L.publishMobileMenu) : L.export;
