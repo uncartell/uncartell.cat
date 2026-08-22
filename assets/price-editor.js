@@ -150,6 +150,7 @@
   });};
 
   let state = initialState();
+  window.UncartellEditorHasUnsavedChanges = () => Boolean(state.isDirty);
   window.addEventListener("uncartell:plan", event => {
     const globalPlan = event.detail?.plan;
     const nextPlan = globalPlan === "basic" ? "free" : globalPlan;
@@ -1607,7 +1608,7 @@
     focusPlanPreview();
   });
   window.addEventListener("beforeunload", event => {
-    if (state.plan === "free" && state.isDirty) {
+    if (state.isDirty) {
       event.preventDefault();
       event.returnValue = "";
     }

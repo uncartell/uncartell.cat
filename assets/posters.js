@@ -23,7 +23,8 @@
     crane:'<path d="M4 21h16M6 21V5h9M6 5l4-3h5v3M15 5h5M18 5v8M16 13h4M18 13v3M16.5 18h3L18 16zM6 9l6-4M6 13l8-8"/>',
     settings:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/>'
   });
-  let activeCategory='',activeSubcategory='',current=null,style='modern',font='Helvetica Neue',zoom=1,history=[],historyIndex=-1,historyTimer=null;
+  let activeCategory='',activeSubcategory='',current=null,style='modern',font='Helvetica Neue',zoom=1,history=[],historyIndex=-1,historyTimer=null,hasUnsavedChanges=false;
+  window.UncartellEditorHasUnsavedChanges=()=>hasUnsavedChanges;
   let plan=window.UncartellPlatform?.getPlan()||'basic';
   qa('[data-open-poster-projects]').forEach(button=>button.classList.toggle('is-plan-locked',plan!=='premium'&&plan!=='ultra'));
   const catalogPage=q('#posterCatalog'),editor=q('#posterEditor'),categoryNav=q('[data-categories]'),subcategoryNav=q('[data-subcategories]'),grid=q('[data-posters]');
@@ -128,14 +129,14 @@
     // shared rail can replace the legacy panel wrappers, but must never stop
     // the actual poster content from reaching the canvas.
     updatePreview();
-    history=[];historyIndex=-1;zoom=1;setPanel('content');applyPlan();updatePreview();pushHistory();setZoom(1);
+    history=[];historyIndex=-1;zoom=1;setPanel('content');applyPlan();updatePreview();pushHistory(false);hasUnsavedChanges=false;setZoom(1);
     // The shared tool rail may finish moving the legacy panels immediately
     // after the editor becomes visible. Repaint once that DOM pass is done so
     // a preset never opens as an apparently blank poster.
     requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!editor.hidden)updatePreview()}));
     if(keepCatalog){catalogPage.hidden=false;editor.hidden=true}else window.scrollTo({top:0,behavior:'smooth'});
   }
-  function closeEditor(){editor.hidden=true;catalogPage.hidden=false;window.scrollTo({top:0,behavior:'smooth'})}
+  function closeEditor(){hasUnsavedChanges=false;editor.hidden=true;catalogPage.hidden=false;window.scrollTo({top:0,behavior:'smooth'})}
   function setPanel(name){
     qa('[data-poster-panel]').forEach(button=>button.classList.toggle('active',button.dataset.posterPanel===name));
     const contentPanel=q('[data-content-panel]'),stylePanel=q('[data-style-panel]');
@@ -143,6 +144,9 @@
     // The shared application rail replaces the legacy two-tab wrappers.
     // Keep the old API harmless so opening a poster can continue rendering.
     const target=name==='style'?'typography':'blocks';
+    // On phones the canvas is the primary surface. The legacy initial panel
+    // selection must not open the mobile tool sheet automatically.
+    if(matchMedia('(max-width: 820px)').matches)return;
     q(`[data-tool-target="${target}"]`)?.click();
   }
   function paid(){return plan==='premium'||plan==='ultra'}
@@ -178,8 +182,8 @@
   function uploadIcon(file){if(!file||!paid())return;const reader=new FileReader();reader.onload=()=>{const key=`custom-${Date.now()}`;customIcons[key]=null;localStorage.setItem(ICON_KEY,JSON.stringify(customIcons));current.icon=key;current.image=reader.result;updatePreview();pushHistory();closeIconGallery()};reader.readAsDataURL(file)}
   function uploadLogo(file){if(!file||plan!=='ultra')return;if(file.size>500000){toast(es?'El logotipo debe pesar menos de 500 KB.':'El logotip ha de pesar menys de 500 KB.');return}const reader=new FileReader();reader.onload=()=>{current.logo=reader.result;updatePreview();scheduleHistory()};reader.readAsDataURL(file)}
   function snapshot(){return{title:q('[data-title]').value,subtitle:q('[data-subtitle]').value,primary:q('[data-color-primary]').value,secondary:q('[data-color-secondary]').value,footer:q('[data-footer-text]').value,style,font,icon:current.icon,image:current.image||null,logo:current.logo||null}}
-  function pushHistory(){const next=snapshot();if(historyIndex>=0&&JSON.stringify(history[historyIndex])===JSON.stringify(next))return;history=history.slice(0,historyIndex+1);history.push(next);historyIndex=history.length-1;updateHistoryButtons()}
-  function scheduleHistory(){clearTimeout(historyTimer);if(paid())updatePosterStatus(null);historyTimer=setTimeout(pushHistory,220)}
+  function pushHistory(markDirty=true){const next=snapshot();if(historyIndex>=0&&JSON.stringify(history[historyIndex])===JSON.stringify(next))return;if(markDirty)hasUnsavedChanges=true;history=history.slice(0,historyIndex+1);history.push(next);historyIndex=history.length-1;updateHistoryButtons()}
+  function scheduleHistory(){hasUnsavedChanges=true;clearTimeout(historyTimer);if(paid())updatePosterStatus(null);historyTimer=setTimeout(pushHistory,220)}
   function restoreHistory(index){if(index<0||index>=history.length)return;historyIndex=index;const state=history[index];q('[data-title]').value=state.title;q('[data-subtitle]').value=state.subtitle;q('[data-color-primary]').value=state.primary;q('[data-color-secondary]').value=state.secondary;q('[data-footer-text]').value=state.footer??(es?'uncartel.es':'uncartell.cat');style=state.style;font=state.font;Object.assign(current,{icon:state.icon,image:state.image,logo:state.logo});updatePreview();updateHistoryButtons()}
   function updateHistoryButtons(){q('[data-undo]').disabled=historyIndex<=0;q('[data-redo]').disabled=historyIndex>=history.length-1}
   function setZoom(value){zoom=Math.max(.6,Math.min(1.35,value));q('[data-live-poster]').style.transform=`scale(${zoom})`;q('[data-zoom-value]').textContent=`${Math.round(zoom*100)}%`}
@@ -257,7 +261,7 @@
   function closeProjectsDialog(){q('[data-projects-dialog]').hidden=true;document.body.classList.remove('poster-dialog-open')}
   function applyBrandKit(){if(plan!=='ultra')return;const kit=readBrandKit(),kitPrimary=q('[data-kit-primary]'),kitSecondary=q('[data-kit-secondary]');q('[data-color-primary]').value=kitPrimary?.value||kit.primary;q('[data-color-secondary]').value=kitSecondary?.value||kit.secondary;updatePreview();pushHistory();const status=q('[data-kit-status]');if(status)status.textContent=es?'Kit aplicado al cartel.':'Kit aplicat al cartell.'}
   function saveBrandKit(){if(plan!=='ultra')return;const existing=readBrandKit(),kitPrimary=q('[data-kit-primary]'),kitSecondary=q('[data-kit-secondary]');localStorage.setItem(BRAND_KIT_KEY,JSON.stringify({...existing,version:2,primary:kitPrimary?.value||q('[data-color-primary]').value,secondary:kitSecondary?.value||q('[data-color-secondary]').value,logo:current.logo||null,updatedAt:new Date().toISOString()}));applyBrandKit();const status=q('[data-kit-status]');if(status)status.textContent=es?'Kit guardado y aplicado por defecto.':'Kit desat i aplicat per defecte.'}
-  async function saveProject(){if(!paid()){window.UncartellPlatform?.openUpgradeModal?.();return}const projects=storedPosterProjects(),projectId=current.projectId||`poster-${Date.now()}`,title=q('[data-title]').value,subtitle=q('[data-subtitle]').value,name=q('#posterProjectName').value.trim()||title;const payload={...current,projectId,id:projectId,name,savedAt:Date.now(),title,subtitle,[`title${es?'Es':'Ca'}`]:title,[`subtitle${es?'Es':'Ca'}`]:subtitle};const next=[payload,...projects.filter(project=>(project.projectId||project.id)!==projectId)].slice(0,30);current=payload;localStorage.setItem(PROJECT_KEY,JSON.stringify(next));try{await window.UncartellPlatform?.saveUserProject?.('poster',payload);updatePosterStatus(payload.savedAt);toast(es?'Proyecto guardado':'Projecte desat')}catch(_){toast(es?'No se ha podido guardar en la nube':'No s’ha pogut desar al núvol')}}
+  async function saveProject(){if(!paid()){window.UncartellPlatform?.openUpgradeModal?.();return}const projects=storedPosterProjects(),projectId=current.projectId||`poster-${Date.now()}`,title=q('[data-title]').value,subtitle=q('[data-subtitle]').value,name=q('#posterProjectName').value.trim()||title;const payload={...current,projectId,id:projectId,name,savedAt:Date.now(),title,subtitle,[`title${es?'Es':'Ca'}`]:title,[`subtitle${es?'Es':'Ca'}`]:subtitle};const next=[payload,...projects.filter(project=>(project.projectId||project.id)!==projectId)].slice(0,30);current=payload;localStorage.setItem(PROJECT_KEY,JSON.stringify(next));try{await window.UncartellPlatform?.saveUserProject?.('poster',payload);hasUnsavedChanges=false;updatePosterStatus(payload.savedAt);toast(es?'Proyecto guardado':'Projecte desat')}catch(_){toast(es?'No se ha podido guardar en la nube':'No s’ha pogut desar al núvol')}}
   function toast(text){const node=document.createElement('div');node.className='poster-projects-note';node.textContent=text;document.body.appendChild(node);setTimeout(()=>node.remove(),2200)}
   function escapeHtml(value=''){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
 

@@ -38,6 +38,8 @@
 
   if(!$('.qr-page'))return;
   let state={id:uid(),url:'',foreground:'#181614',background:'#ffffff',level:'Q',watermark:lang==='ca'?'uncartell.cat':'uncartel.es',svg:'',name:$('[data-project-name]').value};
+  let hasUnsavedChanges=false;
+  window.UncartellEditorHasUnsavedChanges=()=>hasUnsavedChanges;
   const plan=window.UncartellPlatform?.getPlan?.()||'basic',canPremium=plan==='premium'||plan==='ultra',canUltra=plan==='ultra';
   let toastTimer;
   const toast=message=>{const el=$('[data-toast]');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2300)};
@@ -48,11 +50,12 @@
     const resultUrl=$('[data-result-url]');resultUrl.href=state.url;resultUrl.textContent=state.url;setEnabled(true);
   };
   const urlInputs=$$('[data-qr-url]'),urlErrors=$$('[data-url-error]');
+  $('[data-project-name]').addEventListener('input',()=>{hasUnsavedChanges=true});
   const sync=()=>{state.name=$('[data-project-name]').value.trim()||T.fallbackName;state.url=urlInputs[0].value.trim();state.foreground=$('[data-foreground]').value;state.background=$('[data-background]').value;state.level=$('[data-correction]').value;state.watermark=$('[data-watermark]').value.trim()};
   const generate=({quiet=false}={})=>{sync();if(!validUrl(state.url)){urlErrors.forEach(error=>error.textContent=T.invalid);(document.activeElement?.matches?.('[data-qr-url]')?document.activeElement:urlInputs[0]).focus();return false}urlErrors.forEach(error=>error.textContent='');state.svg=makeSvg(state.url,state);render();$('[data-save-status]').textContent=T.generated;if(!quiet)toast(T.generated);return true};
   $$('[data-generate]').forEach(button=>button.addEventListener('click',()=>generate()));
-  urlInputs.forEach(input=>{input.addEventListener('input',()=>{urlInputs.forEach(peer=>{if(peer!==input)peer.value=input.value});urlErrors.forEach(error=>error.textContent='')});input.addEventListener('keydown',event=>{if(event.key!=='Enter')return;event.preventDefault();generate()})});
-  $$('[data-foreground],[data-background],[data-correction],[data-watermark]').forEach(input=>input.addEventListener('input',()=>{if(state.svg)generate({quiet:true})}));
+  urlInputs.forEach(input=>{input.addEventListener('input',()=>{hasUnsavedChanges=true;urlInputs.forEach(peer=>{if(peer!==input)peer.value=input.value});urlErrors.forEach(error=>error.textContent='')});input.addEventListener('keydown',event=>{if(event.key!=='Enter')return;event.preventDefault();generate()})});
+  $$('[data-foreground],[data-background],[data-correction],[data-watermark]').forEach(input=>input.addEventListener('input',()=>{hasUnsavedChanges=true;if(state.svg)generate({quiet:true})}));
   const incomingParams=new URLSearchParams(location.search),incoming=incomingParams.get('url');
   if(incoming&&validUrl(incoming)){
     urlInputs.forEach(input=>input.value=incoming);state.url=incoming;
@@ -68,24 +71,38 @@
         const saved={...state,name:state.name||T.fallbackName,savedAt:new Date().toISOString()};
         const list=projects().filter(project=>project.id!==stableId);list.unshift(saved);saveProjects(list);
         await window.UncartellPlatform.saveUserProject('qr',saved);
-        $('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.savedAt))}`;
+        hasUnsavedChanges=false;$('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.savedAt))}`;
         toast(T.saved);
       }catch(error){console.error('Automatic QR save failed',error);toast(lang==='ca'?'QR generat; no s’ha pogut desar al núvol':'QR generado; no se ha podido guardar en la nube')}
     },0)
   }
-  $('[data-clear-watermark]').addEventListener('click',()=>{$('[data-watermark]').value='';if(state.svg)generate({quiet:true})});
+  $('[data-clear-watermark]').addEventListener('click',()=>{hasUnsavedChanges=true;$('[data-watermark]').value='';if(state.svg)generate({quiet:true})});
   $$('[data-tab]').forEach(button=>button.addEventListener('click',()=>{$$('[data-tab]').forEach(item=>item.classList.toggle('active',item===button));$$('[data-panel]').forEach(panel=>panel.hidden=panel.dataset.panel!==button.dataset.tab)}));
+  // Mobile behaves like a native editor: the QR preview remains the main
+  // surface and Content/Style open as a dismissible bottom sheet.
+  const qrControls=$('.qr-controls');
+  if(qrControls){
+    qrControls.classList.remove('qr-mobile-panel-open');
+    $$('[data-tab]').forEach(button=>button.addEventListener('click',()=>{
+      if(!matchMedia('(max-width:820px)').matches)return;
+      const sameOpen=qrControls.classList.contains('qr-mobile-panel-open')&&qrControls.dataset.mobileTab===button.dataset.tab;
+      qrControls.dataset.mobileTab=button.dataset.tab;
+      qrControls.classList.toggle('qr-mobile-panel-open',!sameOpen);
+    }));
+    document.addEventListener('keydown',event=>{if(event.key==='Escape')qrControls.classList.remove('qr-mobile-panel-open')});
+  }
   const projectBar=$('.qr-project-bar'),colorsCard=$('[data-colors-card]'),watermarkCard=$('[data-watermark-card]');projectBar.classList.toggle('is-locked',!canPremium);$$('[data-open-projects]').forEach(button=>button.classList.toggle('is-plan-locked',!canPremium));$('[data-project-name]').disabled=!canPremium;$('[data-project-plan]').hidden=canPremium;colorsCard.classList.toggle('is-locked',!canPremium);$$('input',colorsCard).forEach(input=>input.disabled=!canPremium);$('em',colorsCard).hidden=canPremium;watermarkCard.classList.toggle('is-locked',!canUltra);$$('input,button',watermarkCard).forEach(input=>input.disabled=!canUltra);$('em',watermarkCard).hidden=canUltra;
   $('em',$('[data-download-png]')).hidden=canPremium;$('em',$('[data-download-svg]')).hidden=canUltra;
   const projects=()=>{try{return JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(_){return[]}};
   const saveProjects=list=>localStorage.setItem(storageKey,JSON.stringify(list.slice(0,50)));
   window.UncartellPlatform?.syncProjectStore?.('qr',storageKey).catch(console.error);
   window.addEventListener('uncartell:projects-synced',event=>{if(event.detail?.toolType==='qr')renderProjects()});
-  $('[data-save-project]').addEventListener('click',async()=>{if(!canPremium){window.UncartellPlatform?.openUpgradeModal?.();return}if(!generate({quiet:true}))return;sync();const list=projects().filter(project=>project.id!==state.id);const saved={...state,name:state.name||state.title||'QR',savedAt:new Date().toISOString()};list.unshift(saved);saveProjects(list);try{await window.UncartellPlatform?.saveUserProject?.('qr',saved);$('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.savedAt))}`;toast(T.saved)}catch(_){toast(lang==='ca'?'No s’ha pogut desar al núvol':'No se ha podido guardar en la nube')}});
+  $('[data-save-project]').addEventListener('click',async()=>{if(!canPremium){window.UncartellPlatform?.openUpgradeModal?.();return}if(!generate({quiet:true}))return;sync();const list=projects().filter(project=>project.id!==state.id);const saved={...state,name:state.name||state.title||'QR',savedAt:new Date().toISOString()};list.unshift(saved);saveProjects(list);try{await window.UncartellPlatform?.saveUserProject?.('qr',saved);hasUnsavedChanges=false;$('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.savedAt))}`;toast(T.saved)}catch(_){toast(lang==='ca'?'No s’ha pogut desar al núvol':'No se ha podido guardar en la nube')}});
   const renderProjects=()=>{const list=projects();$('[data-project-list]').innerHTML=list.length?list.map(project=>`<article class="qr-project-card"><div><strong>${escapeHtml(project.name)}</strong><small>${escapeHtml(project.url)}</small></div><div><button type="button" data-open="${project.id}">${T.open}</button><button type="button" data-delete="${project.id}">${T.remove}</button></div></article>`).join(''):`<p class="qr-project-empty">${T.none}</p>`;
     $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{const project=projects().find(item=>item.id===button.dataset.open);if(!project)return;state={watermark:lang==='ca'?'uncartell.cat':'uncartel.es',...project};$('[data-project-name]').value=state.name;urlInputs.forEach(input=>input.value=state.url);$('[data-foreground]').value=state.foreground;$('[data-background]').value=state.background;$('[data-correction]').value=state.level;$('[data-watermark]').value=state.watermark;state.svg=makeSvg(state.url,state);render();$('[data-projects-modal]').hidden=true;$('[data-save-status]').textContent=`${T.savedAt} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(state.savedAt))}`;toast(T.opened)}));
     $$('[data-delete]').forEach(button=>button.addEventListener('click',async()=>{saveProjects(projects().filter(item=>item.id!==button.dataset.delete));try{await window.UncartellPlatform?.deleteUserProject?.('qr',button.dataset.delete)}catch(error){console.error(error)}renderProjects();toast(T.deleted)}));
   };
+  document.addEventListener('click',event=>{if(event.target.closest('[data-open]'))hasUnsavedChanges=false},true);
   $$('[data-open-projects]').forEach(button=>button.addEventListener('click',async()=>{if(!canPremium){window.UncartellPlatform?.openUpgradeModal?.();return}try{await window.UncartellPlatform?.syncProjectStore?.('qr',storageKey)}catch(error){console.error('Cloud projects sync',error)}renderProjects();$('[data-projects-modal]').hidden=false}));
   $$('[data-close-projects]').forEach(button=>button.addEventListener('click',()=>{$('[data-projects-modal]').hidden=true}));
   const consumeDownload=()=>window.UncartellPlatform?.consumeDownload({reload:false});
