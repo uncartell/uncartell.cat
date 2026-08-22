@@ -131,6 +131,30 @@
     });
   };
 
+  const projectOpenSelector = [
+    '.open-projects-cta',
+    '[data-open-poster-projects]',
+    '[data-open-projects]',
+    '#editorOpenProjects'
+  ].join(',');
+
+  const syncProjectOpenBadges = () => {
+    document.querySelectorAll(projectOpenSelector).forEach((button) => {
+      const locked = button.classList.contains('is-plan-locked');
+      button.classList.toggle('project-open-control', true);
+      let badge = button.querySelector(':scope > .project-open-plan-badge');
+      if (locked && !badge) {
+        badge = document.createElement('span');
+        badge.className = 'project-open-plan-badge';
+        badge.textContent = 'Premium';
+        badge.setAttribute('aria-hidden', 'true');
+        button.append(badge);
+      }
+      if (badge) badge.hidden = !locked;
+      button.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    });
+  };
+
   const update = () => {
     const active = isQr || !editor.hidden;
     document.body.classList.toggle('uncartell-editor-active', active);
@@ -140,10 +164,13 @@
       moveFinalAction();
       setCompactButtonCopy();
     }
+    syncProjectOpenBadges();
   };
 
   new MutationObserver(update).observe(editor, { attributes: true, attributeFilter: ['hidden', 'class'] });
+  new MutationObserver(syncProjectOpenBadges).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
   document.addEventListener('click', () => requestAnimationFrame(update));
+  window.addEventListener('uncartell:plan', () => requestAnimationFrame(syncProjectOpenBadges));
   window.addEventListener('beforeunload', event => {
     if (!document.body.classList.contains('uncartell-editor-active') || !hasUnsavedChanges()) return;
     event.preventDefault();
