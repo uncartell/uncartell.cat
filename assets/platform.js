@@ -1,4 +1,18 @@
 (()=>{
+  const requestedHost=location.hostname.replace(/^www\./,'');
+  const requestedPath=location.pathname;
+  const spanishRequest=requestedHost==='uncartel.es'||document.documentElement.lang==='es'||/^\/es(?:\/|$)/.test(requestedPath);
+  if(spanishRequest){
+    const routeMap={
+      carteles:'cartells','cartas-y-menus':'cartes-i-menus','tablas-de-precios':'taules-de-preus','codigos-qr':'codis-qr',
+      planes:'plans','preguntas-frecuentes':'faqs',manifiesto:'manifest',contacto:'contacte','aviso-legal':'legal',privacidad:'privacitat'
+    };
+    const parts=requestedPath.replace(/^\/es(?:\/|$)/,'/').split('/').filter(Boolean);
+    if(parts[0]&&routeMap[parts[0]])parts[0]=routeMap[parts[0]];
+    const destination=`https://uncartell.cat/${parts.join('/')}${parts.length?'/':''}${location.search}${location.hash}`;
+    location.replace(destination);
+    return;
+  }
   if(!document.querySelector('link[data-ui-shape-system]')){
     const shapeStyles=document.createElement('link');
     shapeStyles.rel='stylesheet';
@@ -13,8 +27,8 @@
     link.addEventListener('error',retry,{once:true});
     if(!link.sheet&&document.readyState!=='loading')retry();
   });
-  const lang=document.documentElement.lang==='es'?'es':'ca';
-  const localeRegistry=Object.freeze({ca:{enabled:true,fallback:'ca'},es:{enabled:true,fallback:'ca'},fr:{enabled:false,fallback:'ca'},it:{enabled:false,fallback:'ca'},de:{enabled:false,fallback:'ca'}});
+  const lang='ca';
+  const localeRegistry=Object.freeze({ca:{enabled:true,fallback:'ca'},es:{enabled:false,fallback:'ca'},fr:{enabled:false,fallback:'ca'},it:{enabled:false,fallback:'ca'},de:{enabled:false,fallback:'ca'}});
   window.UncartellI18n={locale:lang,locales:localeRegistry,fallback:'ca'};
   document.documentElement.classList.add(`u-lang-${lang}`);
   const host=location.hostname.replace(/^www\./,'');
@@ -36,8 +50,7 @@
   const current=location.pathname.endsWith('/')?location.pathname:`${location.pathname}/`;
   if(current===cfg.root){document.body.classList.add('u-home');const toolsSection=document.querySelector('.u-section');if(toolsSection)toolsSection.id='tools';const explore=document.querySelector('.u-hero .u-button.primary');if(explore)explore.href='#tools';document.querySelectorAll('.u-tool-link').forEach(link=>{link.innerHTML=link.textContent.replace(/\s*→\s*$/,'')+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'})}
   const header=document.querySelector('[data-platform-header]');
-  if(header)header.innerHTML=`<header class="u-header"><div class="u-shell u-header-inner"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><button class="u-mobile-toggle" aria-label="Menú" aria-controls="uNav" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><nav class="u-nav" id="uNav" aria-label="Menú principal"><button class="u-mobile-close" type="button" aria-label="Tanca el menú"><svg viewBox="0 0 24 24" aria-hidden="true">${icon('close')}</svg></button><span class="u-mobile-nav-heading">Menú</span><a class="${current===cfg.postersPath?'active':''}" href="${cfg.postersPath}">${cfg.posters}</a><a class="${current===cfg.menusPath?'active':''}" href="${cfg.menusPath}">${cfg.menus}</a><a class="${current===cfg.pricesPath?'active':''}" href="${cfg.pricesPath}">${cfg.prices}</a><a class="${current===cfg.qrPath?'active':''}" href="${cfg.qrPath}">${cfg.qr}</a><a class="u-plans-link ${current===cfg.plansPath?'active':''}" href="${cfg.plansPath}"><svg viewBox="0 0 24 24" aria-hidden="true">${icon('crown')}</svg><span>${cfg.plans}</span></a><div class="u-mobile-nav-divider"></div><button class="u-icon-action u-desktop-language" data-language aria-label="${words.language}" aria-expanded="false"><svg viewBox="0 0 24 24">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><button class="u-icon-action" data-account aria-label="${cfg.account}"><svg viewBox="0 0 24 24">${icon('user')}</svg><span class="u-mobile-label">${cfg.account}</span></button><div class="u-mobile-nav-brand">${cfg.brand}<i>.</i>${cfg.tld}</div></nav></div></header><button class="u-mobile-backdrop" type="button" aria-label="Tanca el menú" hidden></button><div class="u-language-strip" data-language-strip hidden><div class="u-shell"><strong>${words.languageTitle}</strong><div><a class="${lang==='ca'?'active':''}" href="${lang==='ca'?'#':cfg.alt}">CA</a><a class="${lang==='es'?'active':''}" href="${lang==='es'?'#':cfg.alt}">ES</a></div></div></div>`;
-  document.querySelector('[data-language]')?.insertAdjacentHTML('afterend',`<div class="u-mobile-language-options" data-mobile-language-options hidden><a class="${lang==='ca'?'active':''}" href="${lang==='ca'?'#':cfg.alt}"><span>CA</span><small>Català</small></a><a class="${lang==='es'?'active':''}" href="${lang==='es'?'#':cfg.alt}"><span>ES</span><small>Castellano</small></a></div>`);
+  if(header)header.innerHTML=`<header class="u-header"><div class="u-shell u-header-inner"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><button class="u-mobile-toggle" aria-label="Menú" aria-controls="uNav" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><nav class="u-nav" id="uNav" aria-label="Menú principal"><button class="u-mobile-close" type="button" aria-label="Tanca el menú"><svg viewBox="0 0 24 24" aria-hidden="true">${icon('close')}</svg></button><span class="u-mobile-nav-heading">Menú</span><a class="${current===cfg.postersPath?'active':''}" href="${cfg.postersPath}">${cfg.posters}</a><a class="${current===cfg.menusPath?'active':''}" href="${cfg.menusPath}">${cfg.menus}</a><a class="${current===cfg.pricesPath?'active':''}" href="${cfg.pricesPath}">${cfg.prices}</a><a class="${current===cfg.qrPath?'active':''}" href="${cfg.qrPath}">${cfg.qr}</a><a class="u-plans-link ${current===cfg.plansPath?'active':''}" href="${cfg.plansPath}"><svg viewBox="0 0 24 24" aria-hidden="true">${icon('crown')}</svg><span>${cfg.plans}</span></a><div class="u-mobile-nav-divider"></div><button class="u-icon-action" data-account aria-label="${cfg.account}"><svg viewBox="0 0 24 24">${icon('user')}</svg><span class="u-mobile-label">${cfg.account}</span></button><div class="u-mobile-nav-brand">${cfg.brand}<i>.</i>${cfg.tld}</div></nav></div></header><button class="u-mobile-backdrop" type="button" aria-label="Tanca el menú" hidden></button>`;
   const footer=document.querySelector('[data-platform-footer]');
   if(footer)footer.innerHTML=`<footer class="u-footer"><div class="u-shell"><div class="u-footer-grid"><div class="u-footer-brand"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><p>© 2026</p></div><div><h3>${cfg.tools}</h3><a href="${cfg.postersPath}">${cfg.posterCreator}</a><a href="${cfg.menusPath}">${cfg.menuCreator}</a><a href="${cfg.pricesPath}">${cfg.priceCreator}</a><a href="${cfg.qrPath}">${cfg.qrCreator}</a></div><div><h3>${cfg.about}</h3><a href="${cfg.plansPath}">${cfg.plans}</a><a href="${route(lang==='ca'?'faqs':'preguntas-frecuentes')}">${cfg.faqs}</a><a href="${route(lang==='ca'?'manifest':'manifiesto')}">${cfg.manifest}</a><a href="${route(lang==='ca'?'contacte':'contacto')}">${cfg.contact}</a></div><div><h3>${cfg.legal}</h3><a href="${route(lang==='ca'?'legal':'aviso-legal')}">${cfg.notice}</a><a href="${route(lang==='ca'?'privacitat':'privacidad')}">${cfg.privacy}</a><a href="${route('cookies')}">${cfg.cookies}</a><button data-cookie-settings>${cfg.settings}</button></div></div></div></footer>`;
   const mobileNav=document.querySelector('#uNav'),mobileToggle=document.querySelector('.u-mobile-toggle'),mobileBackdrop=document.querySelector('.u-mobile-backdrop');
@@ -66,8 +79,6 @@
     }
     if(link||event.target.closest('[data-account]'))setMobileMenu(false);
   });
-  const toggleLanguage=()=>{const button=document.querySelector('[data-language]');if(matchMedia('(max-width:980px)').matches){const options=document.querySelector('[data-mobile-language-options]');const open=options.hidden;options.hidden=!open;button?.setAttribute('aria-expanded',String(open));return}const strip=document.querySelector('[data-language-strip]');const open=strip.hidden;strip.hidden=!open;document.body.classList.toggle('u-language-open',open);button?.setAttribute('aria-expanded',String(open));setMobileMenu(false)};
-  document.querySelector('[data-language]')?.addEventListener('click',toggleLanguage);
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileMenu(false)});
   addEventListener('resize',()=>{syncMobileNavPortal();if(!matchMedia('(max-width:980px)').matches)setMobileMenu(false)});
 
