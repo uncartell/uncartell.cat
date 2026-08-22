@@ -295,11 +295,13 @@
     createView('blocks', [contentPanel]);
     createView('typography', [stylePanel.querySelector('.poster-style-options')]);
     createView('colors', [stylePanel.querySelector('.poster-premium-style')]);
+    const posterLogoTool = brandKit.querySelector('[data-poster-logo-tool]');
+    createView('logo', [posterLogoTool]);
     createView('watermark', [footerCard]);
     brandKit.open = true;
     createView('brand', [brandKit]);
 
-    ['blocks', 'typography', 'colors', 'watermark', 'brand'].forEach((key) => {
+    ['blocks', 'typography', 'colors', 'logo', 'watermark', 'brand'].forEach((key) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'editor-tool-rail-button';
