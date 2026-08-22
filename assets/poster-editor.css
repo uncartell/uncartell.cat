@@ -125,7 +125,8 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   right:0;
   width:52px;
   height:52px;
-  background:linear-gradient(to top right,transparent 46.5%,var(--fold-line,#d5d2ca) 47.5%,var(--fold-line,#d5d2ca) 49.5%,transparent 50.5%);
+  /* Mateix pes òptic que el contorn d'1 px del full. */
+  background:linear-gradient(to top right,transparent 49.35%,var(--fold-line,#d5d2ca) 49.4%,var(--fold-line,#d5d2ca) 50.6%,transparent 50.65%);
   pointer-events:none;
 }
 .poster-card-info{min-height:72px;padding:13px 12px 0}
