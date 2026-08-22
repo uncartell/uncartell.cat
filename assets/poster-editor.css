@@ -111,8 +111,6 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   right:0;
   width:52px;
   height:52px;
-  border-left:1px solid #d5d2ca;
-  border-bottom:1px solid #d5d2ca;
   background:var(--paper,#fafaf8);
   clip-path:polygon(0 0,100% 100%,0 100%);
   pointer-events:none;
@@ -125,8 +123,7 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   right:0;
   width:52px;
   height:52px;
-  /* Mateix pes òptic que el contorn d'1 px del full. */
-  background:linear-gradient(to top right,transparent 49.35%,var(--fold-line,#d5d2ca) 49.4%,var(--fold-line,#d5d2ca) 50.6%,transparent 50.65%);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Cpath d='M.5.5v51h51M.5.5l51 51' fill='none' stroke='%23d5d2ca' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat;
   pointer-events:none;
 }
 .poster-card-info{min-height:72px;padding:13px 12px 0}
@@ -140,7 +137,8 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   background:var(--green-soft,#e4ffe3);
   color:var(--ink);
 }
-.poster-create-card .poster-repository-preview::before{border-color:#20d82c;background:#fff}
+.poster-create-card .poster-repository-preview::before{background:#fff}
+.poster-create-card .poster-repository-preview::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Cpath d='M.5.5v51h51M.5.5l51 51' fill='none' stroke='%2320d82c' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E")}
 .poster-create-card .poster-repository-preview{--fold-line:#20d82c}
 .poster-create-card .poster-card-icon{width:74px;height:74px;margin-bottom:12px}
 .poster-create-card .poster-repository-preview strong{font-size:clamp(18px,2vw,30px);font-weight:500;text-transform:none}
