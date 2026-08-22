@@ -624,6 +624,13 @@
   function renderInspector() {
     const page = state.pages[state.activePage];
     const box = $("#inspector");
+    const contextualBlock = page.blocks?.find(item => item.id === state.selectedBlock);
+    document.dispatchEvent(new CustomEvent("uncartell:editor-selection", {
+      detail: {
+        selected: Boolean(contextualBlock && !["separator", "spacer-large"].includes(contextualBlock.type)),
+        open: true
+      }
+    }));
     if (page.role === "mobile-home") {
       box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(L.mobileHome)}</span></div>${field(L.inspector.restaurant, "restaurant", page.restaurant)}${field(L.inspector.title, "title", page.title)}${field(L.inspector.subtitle, "subtitle", page.subtitle, true)}${logoInspector(page)}<div class="mobile-section-manager"><strong>${escapeHtml(L.mobileSections)}</strong><small>${escapeHtml(L.mobileSectionsHelp)}</small>${state.pages.slice(1).map((item, index) => `<div class="mobile-section-row" data-section-index="${index + 1}"><span class="mobile-section-drag" data-section-drag aria-label="${escapeHtml(L.inspector.drag)}" title="${escapeHtml(L.inspector.drag)}">⠿</span><input type="text" value="${escapeHtml(item.title)}" maxlength="45" aria-label="${escapeHtml(L.mobileSectionName)}"><button type="button" data-section-delete aria-label="${escapeHtml(L.deleteSection)}">×</button></div>`).join("")}<button class="add-mobile-section" type="button" ${state.pages.length - 1 >= 7 ? "disabled" : ""}>＋ ${escapeHtml(L.addMobileSection)}</button><span>${escapeHtml(L.mobileSectionLimit)}</span></div>`;
       wireFields(page); wirePageLogo(page, box); wireMobileSections(box); return;
