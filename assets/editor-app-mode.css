@@ -361,6 +361,34 @@ body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-featur
 }
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
 
+/* Project access is one shared entitlement pattern across every editor. */
+.project-open-control{position:relative!important}
+.project-open-control.is-plan-locked{cursor:pointer!important}
+.project-open-plan-badge{
+  position:static!important;
+  flex:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:72px!important;
+  min-width:72px!important;
+  height:24px!important;
+  padding:0 8px!important;
+  border:1px solid #50c458!important;
+  border-radius:6px!important;
+  background:#73f172!important;
+  color:#181614!important;
+  font:900 8px/1 Arial,sans-serif!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  pointer-events:none!important;
+}
+.project-open-plan-badge[hidden]{display:none!important}
+@media(max-width:620px){
+  .tool-header-actions .project-open-control.is-plan-locked{padding-inline:8px!important}
+  .tool-header-actions .project-open-plan-badge{width:52px!important;min-width:52px!important;height:20px!important;padding-inline:5px!important;font-size:7px!important}
+}
+
 /* Revista: el control de pàgines comparteix l'eix dret del header i subheader. */
 @media (min-width:821px){
   body.uncartell-editor-active .page-tabs{position:relative;padding-right:24px!important}
