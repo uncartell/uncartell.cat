@@ -4,6 +4,7 @@
   L.contentImage = L.lang === "ca" ? "Imatge" : "Imagen";
   L.chooseContentImage = L.lang === "ca" ? "Afegeix una imatge 16:9" : "Añade una imagen 16:9";
   L.contentImageHelp = L.lang === "ca" ? "Disponible amb Ultra en composicions de dues columnes." : "Disponible con Ultra en composiciones de dos columnas.";
+  const editorImageIcon = '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m5.5 17 4.4-4.4 3.1 3.1 2.1-2.1 3.4 3.4"/></svg>';
   const projectStorageKey = `uncartell-menu-projects-preview-user-${L.lang}`;
   const brandKitStorageKey = "uncartell-brand-kit-preview-user";
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -428,7 +429,7 @@
     $("#blockButtons").innerHTML = L.blockTypes.map(block => {
       const ultraLocked = ["dish-image", "image"].includes(block.id) && !entitlements.canUploadMenuImages(state.plan);
       const crown = '<span class="block-plan-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>';
-      const symbol = ["dish-image", "image"].includes(block.id) ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(block.symbol);
+      const symbol = ["dish-image", "image"].includes(block.id) ? editorImageIcon : escapeHtml(block.symbol);
       return `<button class="block-add${["dish-image", "image"].includes(block.id) ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" draggable="${disabled ? "false" : "true"}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
     }).join("");
     $$(".block-add").forEach(button => button.addEventListener("click", () => {
@@ -763,7 +764,7 @@
   const dragHandle = block => `<span class="drag-handle" data-drag="${block.id}" title="${escapeHtml(L.inspector.drag)}" aria-label="${escapeHtml(L.inspector.drag)}">⠿</span>`;
   const textLengthClass = value => String(value || "").length > 150 ? " text-very-long" : String(value || "").length > 75 ? " text-long" : "";
   const editable = (field, value, className = "", multiline = false) => `<span class="${className} inline-editable${textLengthClass(value)}" data-inline-field="${field}" data-multiline="${multiline ? "true" : "false"}" contenteditable="true" spellcheck="true">${escapeHtml(value)}</span>`;
-  const floatingBlockSymbol = item => ["dish-image", "image"].includes(item.id) ? '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.7"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg>' : escapeHtml(item.symbol);
+  const floatingBlockSymbol = item => ["dish-image", "image"].includes(item.id) ? editorImageIcon : escapeHtml(item.symbol);
   const contextualBlockControls = block => `<span class="block-context-actions" aria-hidden="false"><button class="block-context-delete" type="button" data-context-delete="${block.id}" aria-label="${escapeHtml(L.inspector.delete)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button class="block-context-duplicate" type="button" data-context-duplicate="${block.id}" aria-label="${escapeHtml(L.duplicateBlock)}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></span><button class="block-context-add" type="button" data-context-add="${block.id}" aria-label="${escapeHtml(L.addBlockAfter || L.messages.added)}"><span>+</span></button><div class="block-insert-menu" data-insert-menu="${block.id}" hidden><button class="block-insert-close" type="button" data-context-close aria-label="${escapeHtml(L.closeBlockMenu)}">×</button>${L.blockTypes.map(item => { const isImage = ["dish-image", "image"].includes(item.id); const lockedImage = isImage && state.plan !== "ultra"; return `<button class="${isImage ? "context-dish-image" : ""}" type="button" data-context-type="${item.id}"><span class="context-block-symbol">${floatingBlockSymbol(item)}</span><b>${escapeHtml(item.label)}</b>${lockedImage ? `<em class="context-ultra-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</em>` : ""}</button>`; }).join("")}</div>`;
   function blockHtml(block) {
     const selected = block.id === state.selectedBlock ? " selected" : "";
