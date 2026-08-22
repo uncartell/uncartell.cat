@@ -288,9 +288,9 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
 .qr-empty-card button{height:46px;border:1px solid var(--qr-ink);border-radius:999px;background:var(--qr-ink);padding:0 21px;color:#fff;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
 .qr-empty-card small{display:block;min-height:15px;margin-top:6px;color:#d02e26;font-size:10px;font-weight:650}
 @media(max-width:620px){.qr-empty{min-height:350px;padding:18px}.qr-empty .qr-empty-watermark{width:82%;height:82%;opacity:.11}.qr-empty-card{padding:20px;border-radius:18px}.qr-empty-card label>div{grid-template-columns:1fr}.qr-empty-card button{width:100%}}
-.qr-empty{min-height:300px;padding:24px}
+.qr-empty{width:min(900px,100%);min-height:300px;padding:24px}
 .qr-empty .qr-empty-watermark{display:none}
-.qr-empty-card{width:min(480px,100%);padding:22px}
+.qr-empty-card{width:min(720px,100%);padding:22px}
 @media(max-width:620px){.qr-empty{min-height:290px;padding:16px}.qr-empty-card{padding:18px}}
 
 /* Barra de projecte compacta en mòbil, coherent amb la resta d'eines. */
