@@ -2,12 +2,13 @@
   if (!document.querySelector('link[href*="editor-tool-rail.css"]')) {
     const styles = document.createElement('link');
     styles.rel = 'stylesheet';
-    styles.href = '/assets/editor-tool-rail.css?v=4';
+    styles.href = '/assets/editor-tool-rail.css?v=5';
     document.head.append(styles);
   }
 
   const icons = {
     blocks: '<path d="M12 5v14M5 12h14"/>',
+    edit: '<path d="m4 20 4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z"/><path d="m14.5 6.7 3 3"/>',
     typography: '<path d="M3.5 7V4.5h9V7M8 4.5V19M5.5 19h5"/><path d="M14 10.5h6.5M17.25 10.5V19M15.25 19h4"/>',
     layout: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M12 4v16"/>',
     colors: '<path d="M12 3a9 9 0 1 0 0 18h1.4a1.8 1.8 0 0 0 0-3.6H12a1.8 1.8 0 0 1 0-3.6h3.2A5.8 5.8 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="9" r=".8"/><circle cx="10" cy="6.5" r=".8"/><circle cx="14" cy="6.5" r=".8"/>',
@@ -66,6 +67,62 @@
     rail.querySelectorAll('.editor-tool-rail-button').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
     views.querySelectorAll('.editor-tool-view').forEach((view) => { view.hidden = view.dataset.toolView !== key; });
     if (mobile) shell.classList.add('mobile-panel-open');
+  };
+
+  const installContextualMobileEditing = (shell, rail, views, options = {}) => {
+    const blocksButton = rail.querySelector('[data-tool-target="blocks"]');
+    const blocksView = views.querySelector('[data-tool-view="blocks"]');
+    const blockButtons = blocksView?.querySelector('#blockButtons');
+    if (!blocksButton || !blocksView) return;
+
+    const defaultLabel = blocksButton.getAttribute('aria-label') || 'Afegir blocs';
+    const editLabel = document.documentElement.lang === 'es' ? 'Editar el bloque' : 'Edita el bloc';
+    const title = blocksView.querySelector('.editor-tool-panel-title');
+    const icon = blocksButton.querySelector('svg');
+    const text = blocksButton.querySelector('span');
+
+    const setEditing = (editing, open = false) => {
+      if (!matchMedia('(max-width: 820px)').matches) return;
+      shell.classList.toggle('mobile-context-editing', editing);
+      blocksButton.classList.toggle('is-context-edit', editing);
+      blocksButton.setAttribute('aria-label', editing ? editLabel : defaultLabel);
+      blocksButton.setAttribute('title', editing ? editLabel : defaultLabel);
+      if (icon) icon.innerHTML = editing ? icons.edit : icons.blocks;
+      if (text) text.textContent = editing ? editLabel : defaultLabel;
+      if (title) title.textContent = editing ? editLabel : defaultLabel;
+      if (blockButtons) blockButtons.hidden = editing;
+      if (open) {
+        blocksButton.setAttribute('aria-selected', 'false');
+        shell.classList.remove('mobile-panel-open');
+        selectTool(shell, rail, views, blocksButton, 'blocks');
+        requestAnimationFrame(() => {
+          const inspector = blocksView.querySelector('#inspector') || blocksView.querySelector(options.inspectorSelector || 'input,textarea,[contenteditable="true"]')?.closest('section,div');
+          inspector?.scrollIntoView({ block: 'start' });
+        });
+      }
+    };
+
+    shell.addEventListener('click', (event) => {
+      if (!matchMedia('(max-width: 820px)').matches) return;
+      const selectedContent = event.target.closest(options.selectionSelector || '[data-block]');
+      if (selectedContent && shell.contains(selectedContent)) {
+        requestAnimationFrame(() => setEditing(true, true));
+        return;
+      }
+      if (event.target.closest('.page-tab,[data-mobile-page],.delete-button,[data-context-delete]')) {
+        requestAnimationFrame(() => setEditing(false));
+      }
+    });
+
+    blocksButton.addEventListener('click', () => {
+      if (!shell.classList.contains('mobile-context-editing') && blockButtons) blockButtons.hidden = false;
+    });
+    matchMedia('(max-width: 820px)').addEventListener?.('change', event => {
+      if (!event.matches) {
+        shell.classList.remove('mobile-context-editing');
+        if (blockButtons) blockButtons.hidden = false;
+      }
+    });
   };
 
   const initialiseDocumentEditor = () => {
@@ -135,6 +192,7 @@
     shell.classList.add('tool-rail-ready');
     shell.dataset.toolRailReady = 'true';
     installMobileSheet(shell, panel, rail, views);
+    installContextualMobileEditing(shell, rail, views);
     if (matchMedia('(max-width: 820px)').matches) {
       shell.classList.remove('mobile-panel-open');
       rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
@@ -217,6 +275,10 @@
     shell.classList.add('tool-rail-ready');
     shell.dataset.toolRailReady = 'true';
     installMobileSheet(shell, panel, rail, views);
+    installContextualMobileEditing(shell, rail, views, {
+      selectionSelector: '[data-live-title],[data-live-subtitle],[data-live-icon]',
+      inspectorSelector: '[data-content-panel]'
+    });
     if (matchMedia('(max-width: 820px)').matches) {
       shell.classList.remove('mobile-panel-open');
       rail.querySelectorAll('.editor-tool-rail-button').forEach((button) => button.setAttribute('aria-selected', 'false'));
