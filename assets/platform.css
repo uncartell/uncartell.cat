@@ -491,6 +491,24 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   color:#f7f8f7!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.58)!important;
 }
+/* El badge del pla del perfil comparteix el llenguatge global, però necessita
+   una caixa flex pròpia: la definició històrica `display:table` descentrava el
+   text dins l'alçada fixa del component. */
+.u-account-card [data-profile-plan].u-plan-badge{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:72px!important;
+  min-width:72px!important;
+  max-width:72px!important;
+  height:24px!important;
+  min-height:24px!important;
+  margin:18px auto 32px!important;
+  padding:0 9px!important;
+  border-radius:8px!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+}
 :where(.u-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
 :where(.u-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge) svg{
   width:12px!important;
