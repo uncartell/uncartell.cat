@@ -51,7 +51,10 @@
     bar.querySelector('button').addEventListener('click', close);
     shell.addEventListener('click', (event) => {
       if (!matchMedia('(max-width: 820px)').matches || !shell.classList.contains('mobile-panel-open')) return;
-      if (event.target.closest('.editor-panel,.editor-tool-rail')) return;
+      // A preview block is allowed to open the contextual editor. The preview
+      // may be re-rendered during the same tap, so treat the original block as
+      // an inside interaction even when it has already been detached.
+      if (event.target.closest('.editor-panel,.editor-tool-rail,[data-block],[data-price-block],[data-live-title],[data-live-subtitle],[data-live-icon]')) return;
       close();
     });
     views.addEventListener('touchmove', (event) => event.stopPropagation(), { passive: true });
