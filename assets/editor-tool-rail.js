@@ -137,7 +137,7 @@
       if (event.target.closest('.page-tab,[data-mobile-page],.delete-button,[data-context-delete]')) {
         requestAnimationFrame(() => setEditing(false));
       }
-    });
+    }, true);
 
     blocksButton.addEventListener('click', () => {
       if (!shell.classList.contains('mobile-context-editing') && blockButtons) blockButtons.hidden = false;
