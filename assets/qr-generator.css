@@ -356,6 +356,9 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
   font-weight:400!important;
   opacity:1!important;
 }
+.qr-project-bar .tool-project-field:not(.is-locked) [data-project-name]{
+  font-weight:400!important;
+}
 .qr-project-bar .tool-header-actions>.qr-download-trigger,
 .qr-project-bar .tool-header-actions>.qr-download-trigger:hover{
   border-color:var(--qr-accent)!important;
