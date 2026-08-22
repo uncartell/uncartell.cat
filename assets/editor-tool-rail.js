@@ -19,11 +19,11 @@
 
   const copy = {
     ca: {
-      blocks: 'Afegir blocs', typography: 'Tipografia', layout: 'Layout', colors: 'Colors',
+      blocks: 'Afegir blocs', typography: 'Tipografia', layout: 'Columnes', colors: 'Colors',
       logo: 'Logotip', watermark: 'Marca d’aigua al peu', brand: 'Kit de marca'
     },
     es: {
-      blocks: 'Añadir bloques', typography: 'Tipografía', layout: 'Layout', colors: 'Colores',
+      blocks: 'Añadir bloques', typography: 'Tipografía', layout: 'Columnas', colors: 'Colores',
       logo: 'Logotipo', watermark: 'Marca de agua al pie', brand: 'Kit de marca'
     }
   };
