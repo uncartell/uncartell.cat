@@ -139,8 +139,17 @@
   ].join(',');
 
   const syncProjectOpenBadges = () => {
+    // El pla efectiu és l'única font de veritat. Una classe de bloqueig pot
+    // haver quedat al HTML inicial (Basic) abans que Auth carregui el perfil.
+    // La jerarquia és acumulativa: Ultra també inclou totes les funcions
+    // Premium de gestió de projectes.
+    const platform = window.UncartellPlatform;
+    const effectivePlan = platform?.getPlan?.() || document.documentElement.dataset.plan || 'basic';
+    const canManageProjects = platform?.hasPlan?.('premium') ?? ['premium', 'ultra'].includes(effectivePlan);
     document.querySelectorAll(projectOpenSelector).forEach((button) => {
-      const locked = button.classList.contains('is-plan-locked');
+      const locked = !canManageProjects;
+      button.classList.toggle('is-plan-locked', locked);
+      if ('disabled' in button) button.disabled = false;
       const projectBar = button.closest('.project-save-bar, .qr-project-bar');
       const fieldBadge = projectBar?.querySelector('.project-lock:not([hidden]), [data-project-plan]:not([hidden])');
       // Dins del subheader el camp de projecte ja explica el bloqueig. Repetir
@@ -176,6 +185,8 @@
   new MutationObserver(syncProjectOpenBadges).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
   document.addEventListener('click', () => requestAnimationFrame(update));
   window.addEventListener('uncartell:plan', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.addEventListener('uncartell:auth-ready', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.addEventListener('uncartell:auth-change', () => requestAnimationFrame(syncProjectOpenBadges));
   window.addEventListener('beforeunload', event => {
     if (!document.body.classList.contains('uncartell-editor-active') || !hasUnsavedChanges()) return;
     event.preventDefault();
