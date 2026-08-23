@@ -26,7 +26,7 @@
   let activeCategory='Més populars',activeSubcategory='',catalogQuery='',current=null,style='modern',font='Helvetica Neue',zoom=1,history=[],historyIndex=-1,historyTimer=null,hasUnsavedChanges=false;
   window.UncartellEditorHasUnsavedChanges=()=>hasUnsavedChanges;
   let plan=window.UncartellPlatform?.getPlan()||'basic';
-  qa('[data-open-poster-projects]').forEach(button=>button.classList.toggle('is-plan-locked',plan!=='premium'&&plan!=='ultra'));
+  qa('[data-open-poster-projects]').forEach(button=>button.classList.toggle('is-plan-locked',!(window.UncartellPlatform?.hasPlan?.('premium')??(plan==='premium'||plan==='ultra'))));
   const catalogPage=q('#posterCatalog'),editor=q('#posterEditor'),categoryNav=q('[data-categories]'),subcategoryNav=q('[data-subcategories]'),grid=q('[data-posters]'),catalogSearch=q('[data-poster-search]'),clearCatalogSearch=q('[data-clear-poster-search]'),catalogResults=q('[data-poster-results]');
   const field=(item,name)=>item[`${name}${es?'Es':'Ca'}`]||item[`${name}Ca`]||'';
   const svgMarkup=key=>icons[key]?`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[key]}</svg>`:'';
