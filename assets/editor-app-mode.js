@@ -141,16 +141,21 @@
   const syncProjectOpenBadges = () => {
     document.querySelectorAll(projectOpenSelector).forEach((button) => {
       const locked = button.classList.contains('is-plan-locked');
+      const projectBar = button.closest('.project-save-bar, .qr-project-bar');
+      const fieldBadge = projectBar?.querySelector('.project-lock:not([hidden]), [data-project-plan]:not([hidden])');
+      // Dins del subheader el camp de projecte ja explica el bloqueig. Repetir
+      // "Premium" dins d'Obre fragmenta el grup i duplica informació.
+      const showBadge = locked && !fieldBadge;
       button.classList.toggle('project-open-control', true);
       let badge = button.querySelector(':scope > .project-open-plan-badge');
-      if (locked && !badge) {
+      if (showBadge && !badge) {
         badge = document.createElement('span');
         badge.className = 'project-open-plan-badge';
         badge.textContent = 'Premium';
         badge.setAttribute('aria-hidden', 'true');
         button.append(badge);
       }
-      if (badge) badge.hidden = !locked;
+      if (badge) badge.hidden = !showBadge;
       button.setAttribute('aria-disabled', locked ? 'true' : 'false');
     });
   };
