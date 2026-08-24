@@ -950,3 +950,52 @@ body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{grid-column:3!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{grid-column:4!important;justify-self:end!important}
 }
+
+/* Shared interaction language — project actions v31.
+   Accessible controls feel active; plan-gated controls explain the lock without
+   pretending to execute the underlying action. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:not(.editor-app-final-action):not([data-open-downloads]),
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control{
+  transform:translateY(0)!important;
+  transition:background-color .14s ease,border-color .14s ease,color .14s ease,box-shadow .14s ease,transform .14s ease!important;
+  will-change:transform;
+}
+
+/* Premium / Ultra: enabled secondary action. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:not(.is-plan-locked):not([aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]):hover,
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:not(.is-plan-locked):hover{
+  border-color:#73f172!important;
+  background:#f0ffef!important;
+  color:#181614!important;
+  box-shadow:0 5px 12px rgba(24,22,20,.1)!important;
+  transform:translateY(-1px)!important;
+}
+
+/* Basic: still clickable to explain/upgrade, but visually reads as locked. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]):hover,
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked:hover{
+  border-color:#aaa59c!important;
+  background:#ebe9e4!important;
+  color:#615d56!important;
+  box-shadow:0 3px 8px rgba(24,22,20,.07)!important;
+  transform:translateY(0)!important;
+}
+
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:not(.editor-app-final-action):not([data-open-downloads]):active,
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:active{
+  transform:translateY(0) scale(.985)!important;
+  box-shadow:0 2px 5px rgba(24,22,20,.08)!important;
+}
+
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:focus-visible,
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:focus-visible{
+  outline:3px solid rgba(115,241,114,.48)!important;
+  outline-offset:3px!important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button,
+  :where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control{
+    transition:none!important;
+  }
+}
