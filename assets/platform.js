@@ -16,7 +16,7 @@
   if(!document.querySelector('link[data-ui-shape-system]')){
     const shapeStyles=document.createElement('link');
     shapeStyles.rel='stylesheet';
-    shapeStyles.href='/assets/ui-shape-system.css?v=20260822-quota1';
+    shapeStyles.href='/assets/ui-shape-system.css?v=20260824-mobile-quota';
     shapeStyles.dataset.uiShapeSystem='true';
     document.head.append(shapeStyles);
   }

@@ -309,7 +309,28 @@ body.uncartell-editor-active .qr-editor-shell{
   }
   .u-quota{
     border-radius:var(--u-control-radius)!important;
-    padding:10px 13px 10px 21px!important;
+    min-height:54px!important;
+    gap:10px!important;
+    padding:8px 14px!important;
+  }
+  .u-quota-dot{
+    width:10px!important;
+    height:10px!important;
+    flex-basis:10px!important;
+  }
+  .u-quota strong{
+    min-width:54px!important;
+    font-size:27px!important;
+  }
+  .u-quota small{
+    max-width:100px!important;
+    font-size:12px!important;
+    line-height:1.05!important;
+  }
+  .u-quota.is-unlimited strong{
+    min-width:38px!important;
+    font-size:31px!important;
+    transform:translateY(-2px)!important;
   }
 }
 /* Locked project naming explains the entitlement instead of looking broken. */
