@@ -109,8 +109,8 @@
     // Only project management is gated. The whole header must never become a
     // locked target because Basic users can still open the download chooser.
     projectField?.classList.toggle('is-locked',!canPremium);projectBar?.classList.remove('is-locked');
-    $$('[data-open-projects],[data-save-project]').forEach(button=>button.classList.toggle('is-plan-locked',!canPremium));
-    const nameField=$('[data-project-name]');nameField.disabled=!canPremium;nameField.value=canPremium?(state.name||T.fallbackName):'';nameField.placeholder=canPremium?T.fallbackName:(lang==='ca'?'Premium · Desa i gestiona projectes':'Premium · Guarda y gestiona proyectos');
+    $$('[data-open-projects],[data-save-project]').forEach(button=>{button.classList.toggle('is-plan-locked',!canPremium);button.setAttribute('aria-disabled',canPremium?'false':'true')});
+    const nameField=$('[data-project-name]');nameField.disabled=false;nameField.readOnly=!canPremium;nameField.setAttribute('aria-disabled',canPremium?'false':'true');nameField.value=canPremium?(state.name||T.fallbackName):'';nameField.placeholder=canPremium?T.fallbackName:(lang==='ca'?'Premium · Desa i gestiona projectes':'Premium · Guarda y gestiona proyectos');
     $('[data-project-plan]').hidden=canPremium;
     [colorsCard,watermarkCard,logoCard].forEach(card=>{if(!card)return;card.classList.toggle('is-locked',!canPremium);$$('input,button',card).forEach(input=>input.disabled=!canPremium);const badge=$('em',card);if(badge)badge.hidden=canPremium});
     [brandCard,analyticsCard].forEach(card=>{if(!card)return;card.classList.toggle('is-locked',!canUltra);$$('input,button',card).forEach(input=>input.disabled=!canUltra);const badge=$('em',card);if(badge)badge.hidden=canUltra});
