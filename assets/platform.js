@@ -16,7 +16,7 @@
   if(!document.querySelector('link[data-ui-shape-system]')){
     const shapeStyles=document.createElement('link');
     shapeStyles.rel='stylesheet';
-    shapeStyles.href='/assets/ui-shape-system.css?v=20260824-mobile-quota-align';
+    shapeStyles.href='/assets/ui-shape-system.css?v=20260824-mobile-quota-corners';
     shapeStyles.dataset.uiShapeSystem='true';
     document.head.append(shapeStyles);
   }
