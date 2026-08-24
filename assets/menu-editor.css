@@ -452,6 +452,26 @@ h1{font-size:clamp(38px,5vw,65px);letter-spacing:-.055em;line-height:.98;margin-
 /* La previsualització del format mòbil aprofita millor l'amplada disponible. */
 @media(max-width:620px){.canvas-stage>.menu-page.format-mobile-interactive{width:min(calc(100vw - 40px),330px)!important;flex:none}}
 
+/* Vista mòbil: proporció realista d'un iPhone estàndard (393 × 852).
+   La maqueta conserva aquesta geometria i només es redueix quan el visor
+   disponible és més estret. */
+.canvas-stage>.menu-page.format-mobile-interactive{
+  width:min(100%,393px);
+  height:auto;
+  min-height:0;
+  max-height:none;
+  aspect-ratio:393/852;
+  flex:none;
+}
+.canvas-stage>.menu-page.format-mobile-interactive .mobile-scroll-viewport{min-height:0}
+@media(max-width:620px){
+  .canvas-stage>.menu-page.format-mobile-interactive{
+    width:min(calc(100vw - 40px),393px)!important;
+    height:auto;
+    aspect-ratio:393/852;
+  }
+}
+
 /* El format web mòbil és una eina Premium/Ultra. */
 .format-plan-badge{position:absolute;right:14px;top:14px;z-index:3;display:inline-flex;align-items:center;justify-content:center;height:28px;box-sizing:border-box;border:1px solid #43c84c;border-radius:999px;background:var(--green);padding:0 10px;color:var(--ink);font-size:8px;font-weight:900;line-height:1;letter-spacing:.06em;text-transform:uppercase}
 .format-card.is-premium-locked{border-color:#cbc7bd;background:#f2f0eb;box-shadow:none}
@@ -469,21 +489,14 @@ h1{font-size:clamp(38px,5vw,65px);letter-spacing:-.055em;line-height:.98;margin-
   .tool-header-actions button::after{content:none!important;display:none!important}
   .tool-header-actions button svg{width:18px!important;height:18px!important;margin:0!important}
 }
-.project-save-bar.is-locked .tool-header-actions button:not(.editor-app-final-action),
-.project-save-bar.is-locked .tool-header-actions button.is-plan-locked:not(.editor-app-final-action),
-.project-save-bar.is-locked .tool-header-actions button:not(.editor-app-final-action):hover{
+.project-save-bar.is-locked .tool-header-actions button,
+.project-save-bar.is-locked .tool-header-actions button.is-plan-locked,
+.project-save-bar.is-locked .tool-header-actions button:hover{
   border-color:var(--ink)!important;
   background:var(--ink)!important;
   color:#fff!important;
   opacity:.32!important;
   box-shadow:none!important;
-}
-.project-save-bar.is-locked .tool-header-actions .editor-app-final-action{
-  border-color:var(--green)!important;
-  background:var(--green)!important;
-  color:var(--ink)!important;
-  opacity:1!important;
-  pointer-events:auto!important;
 }
 .format-card.is-premium-locked [data-format-action="personalize"]:hover{filter:none}
 
