@@ -21,7 +21,7 @@
     document.head.append(shapeStyles);
   }
   const platformStyles=document.querySelector('link[href*="/assets/platform.css"]');
-  if(platformStyles)platformStyles.href='/assets/platform.css?v=20260824-mobile-hero-visuals';
+  if(platformStyles)platformStyles.href='/assets/platform.css?v=20260824-mobile-testimonial-arrows';
   // GitHub Pages can briefly return a stale/missing asset while a deployment is
   // propagating. Retry failed stylesheets once instead of leaving a naked page.
   document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{

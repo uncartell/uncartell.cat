@@ -601,7 +601,7 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   .u-testimonials{padding:40px 0 52px}.u-testimonial-head{margin-bottom:20px}.u-testimonial-stage{min-height:520px}
   .u-testimonial{min-height:520px;padding:52px 40px 62px;grid-template-columns:1fr;text-align:center;justify-items:center;gap:28px}
   .u-testimonial-avatar{grid-row:1;width:130px}.u-testimonial blockquote{font-size:28px;margin:18px 0 20px}
-  .u-testimonial-arrow{top:auto;bottom:8px;font-size:36px}.u-testimonial-arrow.is-prev{left:8px}.u-testimonial-arrow.is-next{right:8px}
+  .u-testimonial-arrow{top:50%;bottom:auto;transform:translateY(-50%);font-size:0}.u-testimonial-arrow.is-prev{left:8px}.u-testimonial-arrow.is-next{right:8px}
 }
 
 /* Home: visuals d'eina complets i sense retalls a cap breakpoint. */
