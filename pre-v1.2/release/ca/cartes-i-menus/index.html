@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <title>Cartes i menús — Proposta V1.2</title><meta name="description" content="Crea, personalitza i descarrega cartells, cartes, menús, tarifes i codis QR amb un disseny clar i professional.">
+  <link rel="stylesheet" href="/assets/menu-editor.css?v=1.27-project-download">
+  <link rel="stylesheet" href="/assets/editor-tool-rail.css?v=6-grid"><link rel="stylesheet" href="/assets/editor-app-mode.css?v=20-project-download">
+  <link rel="stylesheet" href="/assets/platform.css?v=55" onerror="this.onerror=null;this.href='/assets/platform.css?v=55&amp;retry='+Date.now()">
+    <link rel="stylesheet" href="/assets/menu-platform-bridge.css?v=2">
+<style>.production-plan-preview{display:none!important}</style><link rel="canonical" href="https://uncartell.cat/cartes-i-menus/"><link rel="alternate" hreflang="ca" href="https://uncartell.cat/cartes-i-menus/"><meta property="og:type" content="website"><meta property="og:locale" content="ca_ES"><meta property="og:title" content="Eines de disseny gratuïtes per imprimir | uncartell.cat"><meta property="og:description" content="Crea, personalitza i descarrega cartells, cartes, menús, tarifes i codis QR amb un disseny clar i professional."><meta property="og:url" content="https://uncartell.cat/cartes-i-menus/"><meta property="og:image" content="https://uncartell.cat/og-uncartell-cat.jpg"><meta name="twitter:card" content="summary_large_image"></head>
+<body>
+  <div data-platform-header></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/">uncartell<i>.</i>cat</a>
+      <nav id="mainNav" aria-label="Navegació principal">
+        <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Tanca el menú">×</button>
+        <span class="mobile-nav-heading">Menú</span>
+        <a href="/" data-i18n="posters">Cartells</a>
+        <a href="/plans/" class="nav-premium"><svg class="nav-lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Personalitza</a>
+        <a class="active" href="#formats" data-i18n="menus">Cartes i menús</a>
+        <a href="/manifest/">Manifest</a>
+        <a href="/contacte/">Contacte</a>
+        <button class="mobile-account-nav" type="button">Compte</button>
+      </nav>
+      <div class="header-actions">
+        <div class="language-wrap">
+          <button class="language-button" id="languageToggle" type="button" aria-label="Veure en castellà" aria-expanded="false" aria-controls="languageMenu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/></svg>
+          </button>
+        </div>
+        <button class="account-button" type="button" aria-label="Compte">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"/></svg>
+        </button>
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Obre el menú" aria-expanded="false" aria-controls="mainNav">☰</button>
+    </div>
+    <div class="language-menu" id="languageMenu">
+      <div class="language-menu-inner">
+        <a href="/cartes-i-menus/">CA</a>
+        <a href="https://uncartel.es/cartas-y-menus/">ES</a>
+      </div>
+    </div>
+  </header>
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+
+  <main>
+    <section class="format-step" id="formats">
+      <div class="intro-row">
+        <div class="intro">
+          <span class="eyebrow">CARTES I MENÚS</span>
+          <h1>Crea la teva carta o menú</h1>
+          <p>Tria el tipus de carta i l’estil, afegeix el contingut i nosaltres ens encarreguem que tot quedi ben ordenat i llest per imprimir.</p>
+        </div>
+        <button class="open-projects-cta is-plan-locked" id="openProjectsButton" type="button">Obre un projecte<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></button>
+      </div>
+      <div class="format-grid" id="formatGrid" aria-label="Formats de carta"></div>
+      <p class="format-note">Tots els formats respecten marges generosos, àrea segura i impressió domèstica sense sang.</p>
+    </section>
+
+    <section class="editor-section" id="editor" hidden>
+      <div class="editor-head">
+        <button class="ghost-button" id="changeFormat" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Torna enrere</button>
+      </div>
+
+      <div class="production-plan-preview" id="planPreview">
+        <strong>Prova els plans</strong>
+        <div><button type="button" data-preview-plan="free">Basic</button><button type="button" data-preview-plan="premium">Premium</button><button type="button" data-preview-plan="ultra">Ultra</button></div>
+      </div>
+      <div class="project-save-bar" id="projectSaveBar">
+        <strong class="tool-title">Editor</strong>
+        <div class="tool-project-field">
+          <div class="tool-project-label"><label for="projectName">Nom del projecte</label></div>
+          <div class="project-name-input-wrap">
+            <input id="projectName" type="text" maxlength="70" value="Carta del restaurant">
+            <span class="project-lock" id="projectLock" title="Només disponible amb Premium i Ultra"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Premium</span></span>
+          </div>
+        </div>
+        <div class="tool-header-actions"><button id="saveProjectButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.8Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Desa el projecte</button><button id="editorOpenProjects" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>Obre un projecte</button></div>
+      </div>
+
+      <div class="editor-shell">
+        <aside class="editor-panel">
+          <div class="panel-tabs" role="tablist">
+            <button class="active" type="button" data-panel="blocks">Contingut</button>
+            <button type="button" data-panel="style">Estil</button>
+          </div>
+          <div class="panel-view" id="blocksPanel">
+            <p class="panel-kicker">Afegeix un bloc</p>
+            <div class="block-buttons" id="blockButtons"></div>
+            <div class="inspector" id="inspector"></div>
+          </div>
+          <div class="panel-view" id="stylePanel" hidden>
+            <p class="panel-kicker">Estil de la carta</p>
+            <div class="style-options" id="styleOptions"></div>
+            <div class="column-settings">
+              <strong>Columnes de contingut</strong>
+              <div class="column-choice" id="columnChoice">
+                <button type="button" data-columns="1">1 columna</button>
+                <button type="button" data-columns="2">2 columnes</button>
+              </div>
+            </div>
+            <div class="premium-style" data-locked-title="Colors" data-locked-subtitle="Afegeix colors amb Premium">
+              <span class="locked-feature-status"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Premium</span></span>
+              <div class="premium-colors-copy">
+                <strong>Colors</strong>
+                <small>Afegeix colors amb Premium</small>
+              </div>
+              <label><span>Títols</span><input id="accentColor" type="color" value="#e5372a"></label>
+              <label><span>Text</span><input id="textColor" type="color" value="#181614"></label>
+            </div>
+            <section class="footer-style-card" id="footerStyleCard">
+              <div class="footer-style-head">
+                <span><strong id="footerStyleTitle"></strong><small id="footerStyleCopy"></small></span>
+                <span class="plan-style-badge" id="footerStyleBadge"></span>
+              </div>
+              <div class="footer-style-editor" id="footerStyleEditor" hidden>
+                <input id="styleFooterText" type="text" maxlength="70">
+                <button id="styleFooterClear" type="button" aria-label="">×</button>
+              </div>
+            </section>
+            <details class="brand-kit" id="brandKit">
+              <summary><span class="brand-kit-copy"><strong>Kit de marca</strong><small>Aplica la identitat visual del teu negoci.</small></span><span class="ultra-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span></summary>
+              <div class="brand-kit-body">
+                <p>Desa el logotip, el nom, dos colors i la tipografia per reutilitzar-los a totes les cartes.</p>
+                <label class="kit-field"><span>Nom de marca</span><input id="kitBusinessName" type="text" maxlength="70"></label>
+                <div class="kit-field"><span>Logotip</span><div class="kit-logo-row"><label class="kit-logo-button" for="kitLogo">Tria un logotip</label><button id="kitLogoRemove" type="button">Esborra</button></div><input id="kitLogo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><div class="kit-logo-preview" id="kitLogoPreview"></div></div>
+                <div class="kit-color-grid"><label class="kit-field"><span>Color principal</span><input id="kitPrimary" type="color" value="#e5372a"></label><label class="kit-field"><span>Color secundari</span><input id="kitSecondary" type="color" value="#181614"></label></div>
+                <label class="kit-field"><span>Tipografia</span><select id="kitFont"><option value="modern">Helvetica</option><option value="classic">Garamond</option><option value="elegant">Serif contemporània</option></select></label>
+                <div class="kit-actions"><button id="applyBrandKit" type="button">Aplica el kit</button><button id="saveBrandKit" type="button">Desa el kit</button></div>
+                <span class="kit-status" id="kitStatus"></span>
+              </div>
+            </details>
+          </div>
+        </aside>
+
+        <div class="workspace">
+          <div class="page-tabs" id="pageTabs"></div>
+          <div class="canvas-stage">
+            <div class="history-controls"><button id="undoButton" type="button" aria-label="Desfés" title="Desfés"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7 4.5 11.5 9 16"/><path d="M5 11.5h7.2c4.6 0 7.3 2.7 7.3 7"/></svg></button><button id="redoButton" type="button" aria-label="Refés" title="Refés"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 7 4.5 4.5L15 16"/><path d="M19 11.5h-7.2c-4.6 0-7.3 2.7-7.3 7"/></svg></button><span class="zoom-controls"><button id="zoomOutButton" type="button" aria-label="Redueix el zoom" title="Redueix el zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><output id="zoomValue" aria-live="polite">100%</output><button id="zoomInButton" type="button" aria-label="Augmenta el zoom" title="Augmenta el zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button></span></div>
+            <div class="menu-page style-modern" id="menuPage" aria-live="polite"></div>
+          </div>
+          <div class="workspace-actions">
+            <span id="saveStatus">Canvis desats en aquest dispositiu</span>
+            <button class="primary-button" id="exportButton" type="button">Descarrega</button>
+          </div>
+        </div>
+      </div>
+      <section class="custom-menu-brief" id="customMenuBrief"></section>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer><div data-platform-footer></div><div data-global-quota></div>
+
+  <div class="demo-modal" id="demoModal" hidden>
+    <button class="modal-backdrop" type="button" data-close-demo></button>
+    <section class="demo-modal-card" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
+      <button class="modal-close" type="button" data-close-demo aria-label="Tanca">×</button>
+      <span class="eyebrow" id="demoEyebrow"></span><h2 id="demoModalTitle"></h2><p id="demoModalCopy"></p>
+      <div class="demo-preview" id="demoPreview"></div>
+    </section>
+  </div>
+
+  <div class="plan-gate-modal" id="planGateModal" hidden>
+    <button class="modal-backdrop" type="button" data-close-plan-gate></button>
+    <section class="leave-modal-card" role="dialog" aria-modal="true" aria-labelledby="planGateTitle">
+      <button class="modal-close" type="button" data-close-plan-gate aria-label="Tanca">×</button>
+      <span class="leave-mark"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+      <h2 id="planGateTitle"></h2><p id="planGateCopy"></p>
+      <div class="leave-actions"><button type="button" data-close-plan-gate id="continueEditing"></button><button class="leave-primary" type="button" id="viewPlans"></button></div>
+    </section>
+  </div>
+
+  <div class="remove-pages-modal" id="removePagesModal" hidden>
+    <button class="modal-backdrop" type="button" data-cancel-remove-pages></button>
+    <section class="leave-modal-card" role="alertdialog" aria-modal="true" aria-labelledby="removePagesTitle"><span class="leave-mark">!</span><h2 id="removePagesTitle"></h2><p id="removePagesCopy"></p><div class="leave-actions"><button type="button" data-cancel-remove-pages id="cancelRemovePages"></button><button class="destructive-button" type="button" id="confirmRemovePages"></button></div></section>
+  </div>
+
+  <div class="projects-modal" id="projectsModal" hidden>
+    <button class="projects-modal-backdrop" type="button" data-close-projects aria-label="Tanca la galeria"></button>
+    <section class="projects-modal-card" role="dialog" aria-modal="true" aria-labelledby="projectsModalTitle">
+      <div id="projectsGalleryView">
+        <div class="projects-modal-head"><div><span class="eyebrow">Els meus projectes</span><h2 id="projectsModalTitle">Les meves cartes i menús</h2></div><button class="projects-modal-close" type="button" data-close-projects aria-label="Tanca la galeria">×</button></div>
+        <div class="projects-gallery" id="projectsModalList"></div>
+      </div>
+      <div class="project-delete-view" id="projectDeleteView" role="alertdialog" aria-labelledby="deleteProjectTitle" aria-describedby="deleteProjectCopy" hidden>
+        <span class="leave-mark destructive-mark">!</span>
+        <h2 id="deleteProjectTitle"></h2>
+        <p id="deleteProjectCopy"></p>
+        <strong class="delete-project-name" id="deleteProjectName"></strong>
+        <div class="leave-actions"><button type="button" data-cancel-delete-project id="cancelDeleteProject"></button><button class="destructive-button" type="button" id="confirmDeleteProject"></button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="leave-modal" id="leaveModal" hidden>
+    <button class="leave-modal-backdrop" type="button" data-leave-action="stay" aria-label="Continua editant"></button>
+    <section class="leave-modal-card" role="dialog" aria-modal="true" aria-labelledby="leaveModalTitle"><span class="leave-mark">!</span><h2 id="leaveModalTitle">Ep! Estàs sortint</h2><p id="leaveModalCopy"></p><div class="leave-actions"><button type="button" data-leave-action="stay">Continua editant</button><button type="button" data-leave-action="discard">Surt sense desar</button><button class="leave-primary" id="leavePrimary" type="button" data-leave-action="save"></button></div></section>
+  </div>
+  <div class="free-changes-modal" id="freeChangesModal" hidden><div class="free-changes-backdrop"></div><section class="leave-modal-card" role="dialog" aria-modal="true" aria-labelledby="freeChangesTitle"><span class="leave-mark">!</span><h2 id="freeChangesTitle">Vols continuar sense desar?</h2><p>Aquesta versió no desa els canvis. Pots continuar o canviar de pla per conservar el projecte.</p><div class="leave-actions"><button id="continueFree" type="button">Continua sense desar</button><button class="leave-primary" id="freeChangePlan" type="button">Canvia el pla</button></div></section></div>
+
+  <div class="mobile-publish-modal" id="mobilePublishModal" hidden>
+    <button class="modal-backdrop" type="button" data-close-mobile-publish></button>
+    <section class="mobile-publish-modal-card" id="mobilePublishModalCard" role="dialog" aria-modal="true" aria-labelledby="mobilePublishModalTitle"></section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <div class="print-document" id="printDocument" aria-hidden="true"></div>
+  <script>window.UNCARTELL_LOCALE = {"lang":"ca","altLang":"es","altRoute":"cartas-y-menus","altLangLabel":"ES","brand":"uncartell","tld":"cat","customize":"Personalitza","customizeRoute":"personalitza","manifest":"Manifest","manifestRoute":"manifest","contact":"Contacte","contactRoute":"contacte","menuLabel":"Menú","openMenu":"Obre el menú","closeMenu":"Tanca el menú","title":"Cartes i menús — Proposta V1.2","navLabel":"Navegació principal","posters":"Cartells","menus":"Cartes i menús","account":"Compte","language":"Veure en castellà","eyebrow":"CARTES I MENÚS","heading":"Crea la teva carta o menú","demo":"Demo","personalizeFormat":"Personalitza","intro":"Tria el tipus de carta i l’estil, afegeix el contingut i nosaltres ens encarreguem que tot quedi ben ordenat i llest per imprimir.","formatLabel":"Formats de carta","formatNote":"Tots els formats respecten marges generosos, àrea segura i impressió domèstica sense sang.","editorEyebrow":"Cartes i menús","editorTitle":"Edita la teva carta","editorIntro":"Afegeix el contingut. El disseny i la composició s’ajusten automàticament.","changeFormat":"Torna enrere","editorOpenProject":"Obre un projecte existent","leaveTitle":"Ep! Estàs sortint","leavePaidCopy":"Vols desar el projecte abans de continuar?","leaveFreeCopy":"Perdràs els canvis. Actualitza el teu pla per desar el projecte.","stayEditing":"Continua editant","leaveWithoutSaving":"Surt sense desar","saveAndLeave":"Desa i continua","upgradePlan":"Actualitza a Premium","projectPremiumOnly":"Només disponible amb Premium i Ultra","changePlan":"Canvia el pla","freeChangesTitle":"Vols continuar sense desar?","freeChangesCopy":"Aquesta versió no desa els canvis. Pots continuar o canviar de pla per conservar el projecte.","continueWithoutSaving":"Continua sense desar","lockedFeatureTitle":"Aquesta funció està bloquejada","lockedFeatureCopy":"Està disponible amb el pla {plan}. Pots canviar de pla sense perdre cap canvi del projecte.","viewPlans":"Veure els plans","basicDraftStatus":"Esborrany temporal · disponible durant 7 hores","autoSavedPrefix":"Autodesat el dia","atTime":"a les","planLabel":"Previsualització dels plans","plan":"Pla","free":"Gratuït","soon":"Properament","blocks":"Contingut","style":"Estil","addBlock":"Afegeix un bloc","coverStyle":"Estil de la carta","colors":"Colors","colorsNote":"Afegeix colors amb Premium","accent":"Títols","textColor":"Text","ultraNote":"Logo, colors i tipografies corporatives. Properament.","saved":"Canvis desats en aquest dispositiu","freeNoticeTitle":"Aquesta versió no desa els canvis.","freeNotice":"Pots crear i descarregar la carta, però el projecte es perdrà quan tanquis o actualitzis la pàgina.","projectName":"Nom del projecte","defaultProject":"Carta del restaurant","saveProject":"Desa el projecte","sessionOnly":"Canvis temporals · no es desaran","unsaved":"Hi ha canvis sense desar","savedProject":"Projecte desat al teu compte","previewSavedProject":"Projecte desat localment en aquesta previsualització","export":"Descarrega","myProjects":"Els meus projectes","noProjects":"Encara no tens cap projecte desat.","openProject":"Obre","duplicateProject":"Duplica","deleteProject":"Esborra","copySuffix":"còpia","projectDuplicated":"Projecte duplicat","projectDeleted":"Projecte esborrat","deleteProjectTitle":"Vols esborrar aquest projecte?","deleteProjectCopy":"Esborraràs definitivament el projecte i tot el seu contingut. Aquesta acció no es pot desfer.","confirmDeleteProject":"Sí, esborra el projecte","cancel":"Cancel·la","planPreview":"Prova els plans","openExistingProject":"Obre un projecte existent","projectsGalleryTitle":"Les meves cartes i menús","closeProjects":"Tanca la galeria","brandKit":"Kit de marca","brandKitSubtitle":"Aplica la identitat visual del teu negoci.","brandKitIntro":"Desa el logotip, el nom, dos colors i la tipografia per reutilitzar-los a totes les cartes.","businessName":"Nom de marca","brandLogo":"Logotip","chooseLogo":"Tria un logotip","removeLogo":"Esborra","primaryColor":"Color principal","secondaryColor":"Color secundari","brandTypography":"Tipografia","applyBrandKit":"Aplica el kit","saveBrandKit":"Desa el kit","brandKitSaved":"Kit de marca desat","logoTooLarge":"El logotip ha de pesar menys de 500 KB.","formats":[{"id":"mobile-interactive","name":"Carta per a mòbil","tag":"Novetat ✨","detail":"Una carta web ràpida i navegable, amb portada, seccions, al·lèrgens i una URL permanent per compartir","fold":"Web responsive · mòbil, tauleta i escriptori","columns":1},{"id":"a3-landscape","name":"Carta tipus revista","tag":"Carta completa","detail":"Una carta àmplia, còmoda de fullejar i pensada per ordenar molts plats per seccions","fold":"Format desplegat A3 · format plegat A4","columns":4},{"id":"a4-portrait","name":"Carta de vins i postres","tag":"Format estret","detail":"Un format estret i elegant per separar vins, postres, cafès o una selecció especial","fold":"Format desplegat A4 · format plegat 29 × 10,5 cm","columns":2},{"id":"a4-landscape","name":"Menú tipus díptic","tag":"Carta breu","detail":"Compacta i fàcil de manipular, ideal per a tapes, bars i cartes de rotació curta","fold":"Format desplegat A4 · format plegat A5","columns":2},{"id":"a4-single-1","name":"Menú del dia","tag":"Menú diari","detail":"Una base A4 flexible que pots utilitzar a una o dues columnes segons el contingut","fold":"Format A4 a una sola cara","columns":1}],"footerClaim":"uncartell.cat – cartells gratuïts a punt per imprimir","legal":"Avís legal","legalRoute":"legal","privacy":"Política de privacitat","privacyRoute":"privacitat","cookieSettings":"Configura les cookies","pages":["Portada","Interior esquerra","Interior dreta","Contraportada"],"doubleSidedPages":["Anvers","Revers"],"extraPage":"Pàgina extra","columnsTitle":"Columnes de contingut","oneColumn":"1 columna","twoColumns":"2 columnes","addUltraPages":"Afegeix 4 pàgines A4","ultraPagesAdded":"S’han afegit 4 pàgines A4 al document.","removeUltraPages":"Treu les 4 pàgines","ultraPagesRemoved":"S’han tret les 4 pàgines addicionals.","removePagesTitle":"Vols eliminar aquesta part de la carta?","removePagesCopy":"Aquestes pàgines contenen canvis. Si continues, n’eliminaràs tot el contingut i no es podrà recuperar.","confirmRemovePages":"Sí, elimina les pàgines","duplicateBlock":"Duplica el bloc","blockDuplicated":"Bloc duplicat","undo":"Desfés","redo":"Refés","logoPlacementTitle":"On vols mostrar el logotip?","logoOnCover":"Portada","logoOnBack":"Contraportada","logoOnFooter":"Peu de pàgina","footerText":"Text del peu","withLogo":"Amb logotip","withoutLogo":"Sense logotip","addLogoHere":"Afegeix el teu logotip aquí","addFooterText":"Afegeix text al peu","interiorPages":"Visible a les pàgines interiors","footerTextPlaceholder":"uncartell.cat o el nom del restaurant","removeFooterText":"Elimina el text del peu","watermarkFooterTitle":"Marca d’aigua al peu","watermarkFooterBasicCopy":"Edita el text uncartell.cat amb el pla Ultra.","watermarkFooterPremiumCopy":"La marca uncartell.cat es manté en aquesta modalitat freemium.","watermarkFooterUltraCopy":"Edita o elimina el text que apareix al peu.","printFront":"Anvers · contraportada + portada","printBack":"Revers · pàgina 1 + pàgina 2","pageShort":["Portada","Int. esq.","Int. dreta","Contraportada"],"blockTypes":[{"id":"section","label":"Títol","symbol":"Tt"},{"id":"dish","label":"Plat","symbol":"+"},{"id":"separator","label":"Separador","symbol":"—"},{"id":"text","label":"Text","symbol":"¶"},{"id":"note","label":"Avís","symbol":"!"},{"id":"spacer-large","label":"Espaiat","symbol":"↕↕"},{"id":"dish-image","label":"Plat + imatge","symbol":"▧"}],"imageDish":"Imatge del plat","chooseDishImage":"Afegeix una fotografia","removeDishImage":"Elimina la fotografia","imageDishHelp":"La fotografia apareix a sobre de la informació del plat.","dishImageTooLarge":"La imatge del plat ha de pesar menys de 4 MB.","swapDishImage":"Intercanvia l’ordre de la fotografia i el text","photoFirst":"Fotografia a dalt","textFirst":"Text a dalt","mobileHome":"Inici","mobileExplore":"Explora la carta","mobilePhoto":"Veure fotografia","mobileNavigation":"Navegació entre apartats","previousPage":"Apartat anterior","nextPage":"Apartat següent","backToMenu":"Tornar al menú","mobileSections":"Apartats del menú","mobileSectionsHelp":"Canvia el nom, l’ordre o els apartats. El menú s’actualitza automàticament.","mobileSectionName":"Nom de l’apartat","moveUp":"Mou amunt","moveDown":"Mou avall","deleteSection":"Elimina l’apartat","addMobileSection":"Afegeix un apartat","mobileNewSection":"Nou apartat","mobileSectionLimit":"Màxim de 7 apartats.","mobilePublicationTitle":"Publica la carta mòbil","mobilePublicationHelp":"Tria una adreça permanent per al negoci. En aquesta previsualització es valida i es desa localment.","businessSlug":"Nom del negoci a l’adreça","slugRequired":"Escriu un nom per comprovar-lo.","slugAvailable":"Aquesta adreça està disponible.","slugUnavailable":"Aquesta adreça ja està ocupada.","publishMobileMenu":"Desa i publica","updateMobileMenu":"Actualitza la carta publicada","mobilePublishedPreview":"Carta publicada en mode de previsualització local.","previewMobileMenu":"Previsualitza la carta web","republishMobileMenu":"Torna a publicar","pageFull":"Aquesta pàgina ja ha arribat al seu espai màxim.","addBlockAfter":"Afegeix un bloc a continuació","closeBlockMenu":"Tanca el selector de blocs","mobileWebReady":"La previsualització responsive està activa al visualitzador.","customMenuTitle":"Necessites una carta o menú a mida?","customMenuCopy":"Explica’ns el projecte i l’estudi d’uncartell prepararà una proposta única per al teu negoci.","briefName":"Nom i cognoms","briefBusiness":"Restaurant o negoci","briefEmail":"Correu electrònic","briefFormat":"Quin tipus de carta necessites?","briefDetails":"Explica’ns la idea, el contingut i què la farà especial","briefSend":"Envia el briefing","briefSent":"Briefing preparat. Connectarem aquest formulari abans de publicar.","styles":[{"id":"classic","label":"Clàssic","font":"Garamond"},{"id":"modern","label":"Modern","font":"Helvetica"},{"id":"elegant","label":"Elegant","font":"Serif contemporània"}],"defaults":{"restaurant":"Restaurant L’Olivera","coverTitle":"La nostra carta","coverSubtitle":"Cuina honesta, producte de temporada","section":"Per començar","dish":"Croquetes de rostit","description":"Fetes a casa, cremoses i cruixents","price":"9,50 €","note":"Pregunta’ns pels plats del dia.","backTitle":"T’hi esperem","backBody":"De dimarts a diumenge · 13–16 h / 20–23 h\n@restaurantolivera · restaurantolivera.cat\nCarrer Major, 24 · Barcelona"},"allergens":{"gluten":"Cereals amb gluten","crustaceans":"Crustacis","egg":"Ous","fish":"Peix","peanuts":"Cacauets","soy":"Soja","milk":"Llet","nuts":"Fruits de closca","celery":"Api","mustard":"Mostassa","sesame":"Sèsam","sulphites":"Sulfits","lupin":"Tramussos","molluscs":"Mol·luscs"},"inspector":{"selected":"Bloc seleccionat","name":"Nom","description":"Descripció","price":"Preu","allergens":"Al·lèrgens","text":"Text","title":"Títol","subtitle":"Subtítol","restaurant":"Nom del restaurant","delete":"Elimina el bloc","empty":"Selecciona un element de la carta per editar-lo.","coverHelp":"Edita els textos principals de la portada.","backHelp":"Afegeix horaris, xarxes, web, adreça o telèfon.","drag":"Arrossega per reordenar"},"messages":{"added":"Bloc afegit","deleted":"Bloc eliminat","premium":"Colors Premium activats per a aquesta demostració.","free":"Vista del pla gratuït: paleta limitada i marca inferior.","pdf":"S’obrirà el diàleg d’impressió. Tria «Desa com a PDF» per revisar la proposta.","projectNameRequired":"Escriu un nom per al projecte.","premiumRequired":"Disponible amb Premium. Activa’l per desar projectes i personalitzar colors.","ultraRequired":"Disponible amb Ultra. Permetrà afegir quatre pàgines A4 extres de cop."}};</script>
+  <script src="/assets/platform.js?v=29"></script><script src="/assets/menu-editor.js?v=1.2-entitlements13"></script><script src="/assets/menu-platform-bridge.js?v=1.3"></script><script src="/assets/editor-tool-rail.js?v=17-grid"></script><script src="/assets/editor-app-mode.js?v=11-project-download"></script>
+</body>
+</html>
