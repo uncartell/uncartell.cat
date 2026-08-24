@@ -895,6 +895,7 @@ body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions :is(.project-open-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge){display:none!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan]){display:inline-flex!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan])[hidden]{display:none!important}
+body.uncartell-editor-active .project-save-bar:not(.is-locked) .tool-project-field .project-lock{display:none!important}
 @media (min-width:821px){
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){display:grid!important;grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto!important;min-height:70px!important;height:70px!important;gap:12px!important;padding:10px 24px!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{grid-column:1!important;justify-self:start!important;place-self:center start!important}
