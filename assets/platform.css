@@ -669,3 +669,37 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     min-height:420px;
   }
 }
+
+/* Accés i perfil mòbil: copy compacte i modal sempre dins del viewport. */
+@media(max-width:620px){
+  .u-account-modal{
+    z-index:1300!important;
+    place-items:center!important;
+    padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important;
+  }
+  .u-account-card{
+    width:calc(100vw - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+    margin:0!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+  }
+  .u-account-methods .u-auth-apple{
+    justify-content:flex-start!important;
+    gap:10px!important;
+    padding-inline:14px!important;
+  }
+  .u-account-methods .u-auth-apple span{
+    font-size:0;
+  }
+  .u-account-methods .u-auth-apple span::after{
+    content:"Apple";
+    font-size:15px;
+    font-weight:750;
+  }
+  .u-account-methods .u-auth-apple small{
+    position:static!important;
+    margin-left:auto;
+    flex:none;
+  }
+}
