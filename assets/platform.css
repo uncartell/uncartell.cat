@@ -599,6 +599,17 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   .u-testimonial-arrow{top:auto;bottom:8px;font-size:36px}.u-testimonial-arrow.is-prev{left:8px}.u-testimonial-arrow.is-next{right:8px}
 }
 
+/* Home: visuals d'eina complets i sense retalls a cap breakpoint. */
+.u-home .u-tool-visual,
+.u-tools-grid .u-tool-card .u-tool-visual{
+  height:auto;
+  aspect-ratio:965/563;
+}
+.u-home .u-tool-visual img{
+  object-fit:contain;
+  object-position:center;
+}
+
 /* Home mòbil: peces completes i visuals d'eina sense retalls. */
 @media(max-width:620px){
   .u-home .u-hero-next .u-hero-box{
@@ -651,14 +662,5 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   }
   .u-home .u-tool-card{
     min-height:420px;
-  }
-  .u-home .u-tool-visual,
-  .u-tools-grid .u-tool-card .u-tool-visual{
-    height:auto;
-    aspect-ratio:965/563;
-  }
-  .u-home .u-tool-visual img{
-    object-fit:contain;
-    object-position:center;
   }
 }
