@@ -1,0 +1,926 @@
+/* Proposta local: l'edició es comporta com una aplicació a sang. */
+body.uncartell-editor-active { overflow: hidden; }
+body.uncartell-editor-active > [data-platform-footer],
+body.uncartell-editor-active > [data-global-quota] { display: none !important; }
+
+body.uncartell-editor-active .editor-section,
+body.uncartell-editor-active .qr-editor {
+  position: fixed;
+  z-index: 90;
+  inset: 78px 0 0;
+  width: 100%;
+  max-width: none;
+  height: calc(100dvh - 78px);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fcfcfb;
+}
+body.uncartell-editor-active .plan-preview,
+body.uncartell-editor-active .custom-menu-brief,
+body.uncartell-editor-active .poster-custom-brief,
+body.uncartell-editor-active .qr-intro { display: none !important; }
+
+body.uncartell-editor-active .editor-section {
+  display: grid;
+  grid-template-rows: 70px minmax(0, 1fr);
+}
+body.uncartell-editor-active .editor-head {
+  display: none;
+}
+body.uncartell-editor-active .project-save-bar {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 36px minmax(24px, 1fr) minmax(260px, 420px) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background-color: #fff;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148' viewBox='0 0 148 148'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.085'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 18% 130% at 3% 48%, rgba(225,255,47,.88) 0%, rgba(192,252,72,.5) 29%, rgba(192,252,72,0) 70%),
+    linear-gradient(96deg, rgba(115,241,114,.96) 0%, rgba(164,247,154,.74) 12%, rgba(227,253,224,.4) 22%, #fff 34%, #fff 100%);
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: none;
+}
+body.uncartell-editor-active .project-save-bar .tool-title { display: none; }
+body.uncartell-editor-active .project-save-bar > .editor-app-context,
+body.uncartell-editor-active .qr-project-bar > .editor-app-context {
+  grid-column: 1;
+  justify-self: center;
+}
+body.uncartell-editor-active .project-save-bar > .tool-project-field,
+body.uncartell-editor-active .qr-project-bar > .tool-project-field { grid-column: 3; }
+body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+body.uncartell-editor-active .qr-project-bar > .tool-header-actions { grid-column: 4; }
+body.uncartell-editor-active .tool-header-actions { justify-content: flex-end; }
+body.uncartell-editor-active .tool-project-field,
+body.uncartell-editor-active .tool-header-actions,
+body.uncartell-editor-active .editor-app-context {
+  position: relative;
+  z-index: 1;
+}
+body.uncartell-editor-active .tool-project-field input,
+body.uncartell-editor-active .tool-header-actions > button {
+  min-height: 46px !important;
+  height: 46px;
+  border: 1px solid rgba(24,22,20,.32) !important;
+  background: rgba(255,255,255,.96) !important;
+  color: var(--ink) !important;
+  opacity: 1 !important;
+  box-shadow: 0 1px 2px rgba(24,22,20,.07), 0 6px 18px rgba(24,22,20,.035);
+}
+body.uncartell-editor-active .tool-project-field input {
+  background: rgba(255,255,255,.96) !important;
+  border-color: rgba(24,22,20,.14) !important;
+}
+body.uncartell-editor-active .tool-header-actions > button {
+  padding-inline: 18px !important;
+  border-radius: 10px !important;
+  white-space: nowrap;
+}
+body.uncartell-editor-active .tool-header-actions > button:not(.editor-app-final-action) {
+  min-width: 104px !important;
+  width: auto !important;
+  padding-inline: 12px !important;
+}
+body.uncartell-editor-active .tool-header-actions .editor-app-final-action {
+  border-color: var(--green) !important;
+  background: var(--green) !important;
+  color: var(--ink) !important;
+}
+body.uncartell-editor-active .editor-shell {
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.uncartell-editor-active .editor-shell .workspace,
+body.uncartell-editor-active .editor-shell .canvas-stage { min-height: 0; }
+body.uncartell-editor-active .editor-shell .workspace { height: 100%; }
+body.uncartell-editor-active .workspace-actions { min-height: 54px; }
+
+/* Capa final de geometria: totes les eines comparteixen el mateix centre visual. */
+body.uncartell-editor-active .editor-shell { grid-template-columns:minmax(310px,420px) minmax(0,1fr);background:#f7f8f6; }
+body.uncartell-editor-active .editor-shell.tool-rail-ready { grid-template-columns:72px 300px minmax(0,1fr); }
+body.uncartell-editor-active .editor-panel { min-width:0;background:#fbfbfa; }
+body.uncartell-editor-active .workspace { min-width:0;background:#f6f7f4; }
+body.uncartell-editor-active .page-tabs { justify-content:center;gap:8px;padding-inline:clamp(16px,3vw,42px);background:rgba(255,255,255,.94); }
+body.uncartell-editor-active .page-tab {
+  border:1px solid transparent !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#69665f !important;
+}
+body.uncartell-editor-active .page-tabs .page-tab.active,
+body.uncartell-editor-active .page-tabs .page-tab[aria-selected="true"] {
+  border-color:var(--ink) !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  color:var(--ink) !important;
+}
+body.uncartell-editor-active .page-tab:not(.active):hover {
+  background:rgba(24,22,20,.05) !important;
+  color:var(--ink) !important;
+}
+body.uncartell-editor-active .canvas-stage,
+body.uncartell-editor-active .poster-canvas-stage { box-sizing:border-box;align-items:center;justify-content:center;padding:clamp(28px,4vw,58px);scroll-padding:clamp(28px,4vw,58px);background-color:#f7f7f4;background-image:linear-gradient(rgba(24,22,20,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(24,22,20,.055) 1px,transparent 1px);background-size:48px 48px;background-position:-1px -1px; }
+body.uncartell-editor-active .qr-canvas { box-sizing:border-box;align-items:center;justify-content:center;padding:clamp(28px,4vw,58px);scroll-padding:clamp(28px,4vw,58px);background-color:transparent;background-image:none; }
+body.uncartell-editor-active .canvas-stage>.menu-page,
+body.uncartell-editor-active .poster-canvas-stage>.u-live-poster,
+body.uncartell-editor-active .qr-result-card { margin:auto; }
+body.uncartell-editor-active .workspace-actions { padding-inline:clamp(18px,3vw,36px);background:rgba(255,255,255,.96); }
+
+/* QR: mateix marc d'aplicació, conservant els controls específics. */
+body.uncartell-editor-active .qr-editor {
+  display: grid;
+  grid-template-rows: 70px minmax(0, 1fr);
+}
+body.uncartell-editor-active .qr-project-bar {
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  margin: 0;
+  grid-template-columns: 72px minmax(24px, 1fr) minmax(260px, 420px) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--qr-line);
+  border-radius: 0;
+  background-color: #fff;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148' viewBox='0 0 148 148'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.085'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 18% 130% at 3% 48%, rgba(225,255,47,.88) 0%, rgba(192,252,72,.5) 29%, rgba(192,252,72,0) 70%),
+    linear-gradient(96deg, rgba(115,241,114,.96) 0%, rgba(164,247,154,.74) 12%, rgba(227,253,224,.4) 22%, #fff 34%, #fff 100%);
+  background-blend-mode: soft-light, normal, normal;
+}
+body.uncartell-editor-active .qr-editor-shell {
+  grid-row: 2;
+  min-height: 0;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+body.uncartell-editor-active .qr-workspace,
+body.uncartell-editor-active .qr-canvas { min-height: 0; }
+body.uncartell-editor-active .qr-workspace { height: 100%; }
+body.uncartell-editor-active .editor-app-context {
+  display: inline-flex;
+  width: 50px !important;
+  min-width: 50px !important;
+  min-height: 50px !important;
+  height: 50px !important;
+  align-items: center;
+  justify-content: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: var(--ink) !important;
+  cursor: pointer;
+  white-space: nowrap;
+  position:relative;
+  z-index:5;
+  isolation:isolate;
+  opacity:1 !important;
+  mix-blend-mode:normal;
+}
+body.uncartell-editor-active .editor-app-context:hover { background: transparent !important;opacity:1 !important; }
+.editor-app-context:focus-visible { outline: 2px solid var(--ink);outline-offset: 2px; }
+.editor-app-context svg { position:relative;z-index:2;width: 25px !important; height: 25px !important; flex: none; fill: none; stroke:#181614 !important; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; opacity:1 !important; }
+body.uncartell-editor-active .qr-project-bar > strong { display: none; }
+
+@media (max-width: 820px) {
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor {
+    inset: 68px 0 0;
+    height: calc(100dvh - 68px);
+  }
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor { overflow-y: auto; }
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor { grid-template-rows: auto auto; }
+  body.uncartell-editor-active .editor-head { display: none; }
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    position: sticky;
+    top: 0;
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    min-height: 68px;
+  }
+  body.uncartell-editor-active .project-save-bar > .editor-app-context,
+  body.uncartell-editor-active .qr-project-bar > .editor-app-context { grid-column: 1; }
+  body.uncartell-editor-active .project-save-bar > .tool-project-field,
+  body.uncartell-editor-active .qr-project-bar > .tool-project-field { grid-column: 2; }
+  body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+  body.uncartell-editor-active .qr-project-bar > .tool-header-actions { grid-column: 3; }
+  body.uncartell-editor-active .editor-shell,
+  body.uncartell-editor-active .qr-editor-shell { height: auto; min-height: calc(100dvh - 68px); }
+  .editor-app-context { width: 46px !important; min-width: 46px !important; height: 46px !important; min-height: 46px !important; justify-content: center !important; padding: 0 !important; }
+  .editor-app-context strong { display: none; }
+  body.uncartell-editor-active .editor-shell.tool-rail-ready { grid-template-columns:1fr; }
+}
+
+/* Final phone action bar: keep only the actions that fit and prevent the
+   project field from crushing icon buttons on narrow viewports. */
+@media (max-width: 620px) {
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    grid-template-columns: 40px minmax(0,1fr) !important;
+    gap: 6px !important;
+    padding-inline: 8px !important;
+  }
+  body.uncartell-editor-active .project-save-bar > .tool-project-field,
+  body.uncartell-editor-active .qr-project-bar > .tool-project-field {
+    display: none !important;
+  }
+  body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+  body.uncartell-editor-active .qr-project-bar > .tool-header-actions {
+    grid-column: 2 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+  body.uncartell-editor-active .tool-header-actions > button,
+  body.uncartell-editor-active .tool-header-actions > a {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+  }
+  body.uncartell-editor-active .tool-header-actions > button span,
+  body.uncartell-editor-active .tool-header-actions > a span { display: none !important; }
+}
+
+/* Geometria final compartida del subheader: context, fitxer i accions
+   comparteixen eix, alçada i ritme a tots quatre editors. */
+@media (min-width: 821px) {
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;
+    min-height:70px!important;
+    height:70px;
+    gap:12px!important;
+    padding:10px 24px!important;
+    align-items:center!important;
+  }
+  body.uncartell-editor-active .project-save-bar>.editor-app-context,
+  body.uncartell-editor-active .qr-project-bar>.editor-app-context {
+    grid-column:1;
+    justify-self:center;
+  }
+  body.uncartell-editor-active .project-save-bar>.tool-project-field,
+  body.uncartell-editor-active .qr-project-bar>.tool-project-field {
+    grid-column:3;
+    display:grid!important;
+    grid-template-columns:auto minmax(220px,1fr)!important;
+    align-items:center!important;
+    gap:12px!important;
+    width:100%!important;
+    min-width:0;
+    margin:0!important;
+  }
+  body.uncartell-editor-active .project-save-bar>.tool-header-actions,
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions {
+    grid-column:4;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    width:auto!important;
+    margin:0!important;
+  }
+  body.uncartell-editor-active .tool-project-field input,
+  body.uncartell-editor-active .tool-header-actions>button {
+    height:46px!important;
+    min-height:46px!important;
+    margin:0!important;
+  }
+  body.uncartell-editor-active .tool-project-label,
+  body.uncartell-editor-active .tool-project-field>span:first-child {
+    margin:0!important;
+    align-self:center;
+  }
+}
+
+/* Els badges dins dels editors hereten exactament el component global,
+   encara que un full específic antic es carregui després de platform.css. */
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){
+  width:72px!important;
+  min-width:72px!important;
+  max-width:72px!important;
+  height:24px!important;
+  min-height:24px!important;
+  padding:0 9px!important;
+  border-radius:8px!important;
+  font-family:Arial,sans-serif!important;
+  font-size:8px!important;
+  font-style:normal!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+}
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em):not(.ultra){
+  border:1px solid #50c458!important;
+  background:#73f172!important;
+  color:#181614!important;
+  box-shadow:none!important;
+}
+body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-feature-card>em.ultra,.footer-style-card.plan-ultra .plan-style-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){
+  border:1px solid #91999e!important;
+  background:linear-gradient(145deg,#3a3e40 0%,#111314 48%,#2d3133 100%)!important;
+  color:#f7f8f7!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.58)!important;
+}
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
+
+/* Shared tool subheader v28: one geometry and one entitlement cue. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){box-sizing:border-box!important;align-items:center!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{align-self:center!important;margin-top:0!important;margin-bottom:0!important;transform:none!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-name-input-wrap,.qr-project-input),
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field input,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{box-sizing:border-box!important;height:46px!important;min-height:46px!important;max-height:46px!important;margin-top:0!important;margin-bottom:0!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions{display:flex!important;align-items:center!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;opacity:1!important;filter:none!important;translate:none!important}
+
+/* Basic controls stay white, legible and clickable; their existing handlers open Plans. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]){border:1px solid #d5d1c8!important;background:#fff!important;color:#181614!important;box-shadow:0 2px 7px rgba(24,22,20,.08)!important;opacity:1!important;filter:none!important;cursor:pointer!important;pointer-events:auto!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]) svg{color:currentColor!important;opacity:1!important}
+
+/* Explain Premium once: in the project-name field, never in header actions. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions :is(.project-open-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge){display:none!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan]){display:inline-flex!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan])[hidden]{display:none!important}
+
+@media (min-width:821px){
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){display:grid!important;grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto!important;min-height:70px!important;height:70px!important;gap:12px!important;padding:10px 24px!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{grid-column:1!important;justify-self:start!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{grid-column:3!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{grid-column:4!important;justify-self:end!important}
+}
+
+/* Shared tool subheader v28.
+   QR, posters, menus and price tables use one geometry and one entitlement cue. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+  box-sizing:border-box!important;
+  align-items:center!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+  align-self:center!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+  transform:none!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-name-input-wrap,.qr-project-input),
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field input,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{
+  box-sizing:border-box!important;
+  height:46px!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions{
+  display:flex!important;
+  align-items:center!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  opacity:1!important;
+  filter:none!important;
+  translate:none!important;
+}
+
+/* Basic keeps project controls visible and discoverable. They remain real
+   buttons so their existing click handlers can open the plan dialog. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]){
+  border:1px solid #d5d1c8!important;
+  background:#fff!important;
+  color:#181614!important;
+  box-shadow:0 2px 7px rgba(24,22,20,.08)!important;
+  opacity:1!important;
+  filter:none!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]) svg{
+  color:currentColor!important;
+  opacity:1!important;
+}
+
+/* The entitlement is explained once, inside the project-name field. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions :is(.project-open-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge){
+  display:none!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan]){
+  display:inline-flex!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan])[hidden]{
+  display:none!important;
+}
+
+@media (min-width:821px){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+    display:grid!important;
+    grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto!important;
+    min-height:70px!important;
+    height:70px!important;
+    gap:12px!important;
+    padding:10px 24px!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{
+    grid-column:1!important;
+    justify-self:start!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+    grid-column:3!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{
+    grid-column:4!important;
+    justify-self:end!important;
+  }
+}
+
+/* v27: absolute final authority for the four editor subheaders. */
+@media (min-width:821px){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+    display:grid!important;grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;
+    align-items:center!important;height:70px!important;min-height:70px!important;padding:10px 24px!important;gap:12px!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{
+    position:static!important;inset:auto!important;grid-column:1!important;place-self:center center!important;
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;
+    margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+    grid-column:3!important;align-self:center!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{
+    grid-column:4!important;align-self:center!important;display:flex!important;align-items:center!important;
+    justify-content:flex-end!important;gap:8px!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions>button{
+    align-self:center!important;height:46px!important;min-height:46px!important;margin:0!important;transform:none!important;
+  }
+}
+
+/* QR: tots els controls del subheader comparteixen exactament el mateix eix. */
+@media (min-width:821px){
+  body.uncartell-editor-active .qr-project-bar>.qr-back-link{
+    display:inline-flex!important;
+    place-self:center start!important;
+    align-items:center!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+    width:auto!important;
+    min-width:96px!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:0!important;
+    padding:0 14px!important;
+    line-height:1!important;
+    top:auto!important;
+    transform:none!important;
+  }
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{
+    box-sizing:border-box!important;
+    align-self:center!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:0!important;
+    transform:none!important;
+  }
+}
+
+/* Project access is one shared entitlement pattern across every editor. */
+.project-open-control{position:relative!important}
+.project-open-control.is-plan-locked{cursor:pointer!important}
+.project-open-plan-badge{
+  position:static!important;
+  flex:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:72px!important;
+  min-width:72px!important;
+  height:24px!important;
+  padding:0 8px!important;
+  border:1px solid #50c458!important;
+  border-radius:8px!important;
+  background:#73f172!important;
+  color:#181614!important;
+  font:900 8px/1 Arial,sans-serif!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  pointer-events:none!important;
+}
+.project-open-plan-badge[hidden]{display:none!important}
+@media(max-width:620px){
+  .tool-header-actions .project-open-control.is-plan-locked{padding-inline:8px!important}
+  .tool-header-actions .project-open-plan-badge{width:72px!important;min-width:72px!important;height:24px!important;padding-inline:8px!important;font-size:8px!important}
+}
+
+/* Project management is Premium; downloads remain available on Basic. */
+body.uncartell-editor-active .tool-header-actions :where(button.is-plan-locked,button[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]){
+  border-color:#cbc7bd!important;
+  background:#fff!important;
+  color:#181614!important;
+  box-shadow:0 2px 7px rgba(24,22,20,.08)!important;
+  opacity:1!important;
+  cursor:pointer!important;
+}
+
+/* Definitive shared desktop subheader geometry. Keep this last so legacy
+   editor styles cannot move one tool off the common vertical axis. */
+@media (min-width:821px){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+    box-sizing:border-box!important;display:grid!important;
+    grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;
+    align-items:center!important;min-height:70px!important;height:70px!important;
+    padding:10px 24px!important;gap:12px!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{
+    position:static!important;inset:auto!important;grid-column:1!important;
+    place-self:center center!important;box-sizing:border-box!important;
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;
+    margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+    grid-column:3!important;align-self:center!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{
+    grid-column:4!important;align-self:center!important;display:flex!important;
+    align-items:center!important;justify-content:flex-end!important;gap:8px!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions>button{
+    align-self:center!important;box-sizing:border-box!important;height:46px!important;
+    min-height:46px!important;margin:0!important;transform:none!important;
+  }
+}
+
+/* The project-name field carries the entitlement label; header actions do not duplicate it. */
+body.uncartell-editor-active .project-save-bar .tool-header-actions .project-open-plan-badge,
+body.uncartell-editor-active .qr-project-bar .tool-header-actions .project-open-plan-badge{
+  display:none!important;
+}
+
+/* Revista: el control de pàgines comparteix l'eix dret del header i subheader. */
+@media (min-width:821px){
+  body.uncartell-editor-active .page-tabs{position:relative;padding-right:24px!important}
+  body.uncartell-editor-active .page-tabs>.ultra-pages-button{
+    position:absolute;
+    right:24px;
+    top:50%;
+    margin:0!important;
+    transform:translateY(-50%);
+  }
+}
+
+/* Mobile app shell: no document flow stacking, no desktop minimum widths. */
+@media (max-width: 820px) {
+  body.uncartell-editor-active { overflow: hidden !important; }
+  body.uncartell-editor-active .u-header { z-index: 1100; }
+  body.uncartell-editor-active .editor-section,
+  body.uncartell-editor-active .qr-editor {
+    position: fixed;
+    z-index: 90;
+    inset: 68px 0 0;
+    display: grid;
+    width: 100% !important;
+    height: calc(100dvh - 68px) !important;
+    min-height: 0 !important;
+    grid-template-rows: 58px minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    background: #f4f5f2;
+  }
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    position: relative !important;
+    z-index: 40;
+    top: auto;
+    display: grid;
+    min-width: 0;
+    min-height: 58px !important;
+    height: 58px;
+    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    align-items: center;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+    overflow: visible;
+  }
+  body.uncartell-editor-active .editor-app-context {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+  }
+  body.uncartell-editor-active .editor-app-context svg { width: 22px !important; height: 22px !important; }
+  body.uncartell-editor-active .tool-project-field {
+    min-width: 0;
+    width: 100%;
+  }
+  body.uncartell-editor-active .tool-project-label,
+  body.uncartell-editor-active .tool-title { display: none !important; }
+  body.uncartell-editor-active .tool-project-field input {
+    width: 100%;
+    min-width: 0;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 8px 76px 8px 10px !important;
+    font-size: 12px !important;
+  }
+  body.uncartell-editor-active .project-lock {
+    right: 6px;
+    transform: translateY(-50%) scale(.82);
+    transform-origin: right center;
+  }
+  body.uncartell-editor-active .tool-header-actions { display: flex; gap: 5px; min-width: 0; }
+  body.uncartell-editor-active .tool-header-actions > button {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 0 !important;
+    border-radius: 9px !important;
+  }
+  body.uncartell-editor-active .tool-header-actions > button svg {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    flex: 0 0 18px;
+  }
+  body.uncartell-editor-active .tool-header-actions .editor-app-final-action { width: 44px !important; min-width: 44px !important; }
+  body.uncartell-editor-active .editor-shell,
+  body.uncartell-editor-active .qr-editor-shell {
+    grid-row: 2;
+    width: 100%;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden;
+  }
+  body.uncartell-editor-active .history-controls,
+  body.uncartell-editor-active .poster-history {
+    top: 8px;
+    left: 8px;
+    transform: scale(.88);
+    transform-origin: top left;
+  }
+}
+
+/* Phone toolbar: keep the canvas and the three primary file actions readable.
+   Project naming remains available on larger mobile/tablet widths. */
+@media (max-width: 520px) {
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    grid-template-columns: 40px minmax(0,1fr) !important;
+    gap: 8px !important;
+    padding-inline: 10px !important;
+  }
+  body.uncartell-editor-active .project-save-bar > .tool-project-field,
+  body.uncartell-editor-active .qr-project-bar > .tool-project-field {
+    display: none !important;
+  }
+  body.uncartell-editor-active .project-save-bar > .tool-header-actions,
+  body.uncartell-editor-active .qr-project-bar > .tool-header-actions {
+    grid-column: 2 !important;
+    justify-self: end;
+  }
+  body.uncartell-editor-active .qr-project-bar > label { display:none!important; }
+  body.uncartell-editor-active .qr-project-bar > div {
+    grid-column:2!important;
+    justify-self:end;
+    width:auto!important;
+  }
+  body.uncartell-editor-active .tool-header-actions > button {
+    width: 46px !important;
+    min-width: 46px !important;
+  }
+}
+
+/* Navegació contextual transversal dels editors. */
+body.uncartell-editor-active .project-save-bar,
+body.uncartell-editor-active .qr-project-bar {
+  grid-template-columns: auto minmax(24px, 1fr) minmax(260px, 420px) auto;
+}
+body.uncartell-editor-active .project-save-bar > .editor-app-context,
+body.uncartell-editor-active .qr-project-bar > .editor-app-context {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 0 14px !important;
+  gap: 8px !important;
+  border: 1px solid rgba(24,22,20,.22) !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,.92) !important;
+  box-shadow: 0 1px 2px rgba(24,22,20,.06) !important;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+body.uncartell-editor-active .editor-app-context:hover {
+  background: #fff !important;
+  border-color: rgba(24,22,20,.42) !important;
+}
+body.uncartell-editor-active .editor-app-context svg {
+  width: 19px !important;
+  height: 19px !important;
+}
+body.uncartell-editor-active .editor-app-context strong {
+  display: inline !important;
+  font: inherit;
+}
+
+.editor-leave-modal[hidden] { display: none !important; }
+.editor-leave-modal {
+  position: fixed;
+  z-index: 4000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.editor-leave-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: rgba(24,22,20,.46);
+  backdrop-filter: blur(3px);
+}
+.editor-leave-card {
+  position: relative;
+  width: min(100%, 480px);
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(24,22,20,.2);
+}
+.editor-leave-card h2 { margin: 0 0 10px; font-size: clamp(25px, 4vw, 34px); line-height: 1.05; }
+.editor-leave-card p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.45; }
+.editor-leave-card > div { display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+.editor-leave-card button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.editor-leave-card [data-editor-leave-confirm] { border-color: var(--ink); background: var(--ink); color: #fff; }
+
+@media (max-width: 820px) {
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    grid-template-columns: auto minmax(0,1fr) auto !important;
+  }
+}
+@media (max-width: 620px) {
+  body.uncartell-editor-active .project-save-bar,
+  body.uncartell-editor-active .qr-project-bar {
+    grid-template-columns: auto minmax(0,1fr) !important;
+  }
+  body.uncartell-editor-active .project-save-bar > .editor-app-context,
+  body.uncartell-editor-active .qr-project-bar > .editor-app-context {
+    height: 42px !important;
+    min-height: 42px !important;
+    padding-inline: 10px !important;
+    font-size: 12px;
+  }
+  .editor-leave-card { padding: 24px 20px; }
+  .editor-leave-card > div { flex-direction: column-reverse; }
+  .editor-leave-card button { width: 100%; }
+}
+
+/* Final authority — shared desktop subheader and plan badges. */
+@media (min-width:821px){
+body.uncartell-editor-active .project-save-bar,body.uncartell-editor-active .qr-project-bar{grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;height:70px!important;min-height:70px!important;align-items:center!important;gap:12px!important;padding:10px 24px!important}
+body.uncartell-editor-active .project-save-bar>.editor-app-context,body.uncartell-editor-active .qr-project-bar>.editor-app-context{position:static!important;inset:auto!important;grid-column:1;place-self:center center!important;width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important}
+body.uncartell-editor-active .project-save-bar>.tool-project-field,body.uncartell-editor-active .qr-project-bar>.tool-project-field{display:grid!important;grid-column:3;grid-template-columns:auto minmax(220px,1fr)!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0;margin:0!important}
+body.uncartell-editor-active .project-save-bar>.tool-header-actions,body.uncartell-editor-active .qr-project-bar>.tool-header-actions{display:flex!important;grid-column:4;align-items:center!important;justify-content:flex-end!important;gap:8px!important;width:auto!important;margin:0!important}
+body.uncartell-editor-active .tool-project-field input,body.uncartell-editor-active .tool-header-actions>button{height:46px!important;min-height:46px!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-name-input-wrap{position:relative!important;display:flex!important;height:46px!important;min-height:46px!important;align-items:center!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-name-input-wrap>input{display:block!important;width:100%!important;height:46px!important;margin:0!important}
+body.uncartell-editor-active .poster-editor-section .project-save-bar.is-locked .project-lock{top:50%!important;right:11px!important;bottom:auto!important;margin:0!important;transform:translateY(-50%)!important}
+}
+
+/* Eixos comuns: el retorn comparteix marge amb la rail i les accions amb el perfil. */
+body.uncartell-editor-active .tool-header-actions>button,
+body.uncartell-editor-active .tool-header-actions>a,
+body.uncartell-editor-active .u-icon-action {
+  align-items:center!important;
+  justify-content:center!important;
+}
+body.uncartell-editor-active :where(.tool-header-actions,.u-icon-action) svg {
+  display:block;
+  flex:none;
+  margin:0!important;
+  transform:none!important;
+  transform-origin:center;
+}
+@media (max-width:820px){
+  body.uncartell-editor-active .project-save-bar>.editor-app-context,
+  body.uncartell-editor-active .qr-project-bar>.editor-app-context{
+    justify-self:start!important;
+    margin-left:6px!important;
+  }
+}
+@media (max-width:520px){
+  body.uncartell-editor-active .project-save-bar>.editor-app-context,
+  body.uncartell-editor-active .qr-project-bar>.editor-app-context{margin-left:4px!important}
+}
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){display:inline-flex!important;width:72px!important;min-width:72px!important;max-width:72px!important;height:24px!important;min-height:24px!important;box-sizing:border-box!important;align-items:center!important;justify-content:center!important;gap:4px!important;margin:0!important;padding:0 8px!important;border-radius:8px!important;font:900 8px/1 Arial,sans-serif!important;letter-spacing:.055em!important;text-transform:uppercase!important;white-space:nowrap!important}
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em):not(.ultra){border:1px solid #50c458!important;background:#73f172!important;color:#181614!important;box-shadow:none!important}
+body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-feature-card>em.ultra,.footer-style-card.plan-ultra .plan-style-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){border:1px solid #91999e!important;background:linear-gradient(145deg,#3a3e40 0%,#111314 48%,#2d3133 100%)!important;color:#f7f8f7!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.58)!important}
+body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
+
+/* Final authority — transversal editor subheader v28. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){box-sizing:border-box!important;align-items:center!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{align-self:center!important;margin-block:0!important;transform:none!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-name-input-wrap,.qr-project-input),
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field input,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{box-sizing:border-box!important;height:46px!important;min-height:46px!important;max-height:46px!important;margin-block:0!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions{display:flex!important;align-items:center!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button{display:inline-flex!important;align-items:center!important;justify-content:center!important;opacity:1!important;filter:none!important;translate:none!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]){border:1px solid #d5d1c8!important;background:#fff!important;color:#181614!important;box-shadow:0 2px 7px rgba(24,22,20,.08)!important;opacity:1!important;filter:none!important;cursor:pointer!important;pointer-events:auto!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions>button:is(.is-plan-locked,[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]) svg{color:currentColor!important;opacity:1!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions :is(.project-open-plan-badge,.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge){display:none!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan]){display:inline-flex!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan])[hidden]{display:none!important}
+body.uncartell-editor-active .project-save-bar:not(.is-locked) .tool-project-field .project-lock{display:none!important}
+
+/* Download is the primary action for every plan: keep it visibly interactive. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]{
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  opacity:1!important;
+  filter:none!important;
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important;
+  will-change:transform;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action:hover,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]:hover{
+  transform:translateY(-1px)!important;
+  filter:brightness(.975)!important;
+  box-shadow:0 5px 12px rgba(24,22,20,.12)!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action:active,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]:active{
+  transform:translateY(0) scale(.985)!important;
+  box-shadow:0 2px 5px rgba(24,22,20,.1)!important;
+}
+@media (min-width:821px){
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){display:grid!important;grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto!important;min-height:70px!important;height:70px!important;gap:12px!important;padding:10px 24px!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{grid-column:1!important;justify-self:start!important;place-self:center start!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{grid-column:3!important}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{grid-column:4!important;justify-self:end!important}
+}
