@@ -598,3 +598,67 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   .u-testimonial-avatar{grid-row:1;width:130px}.u-testimonial blockquote{font-size:28px;margin:18px 0 20px}
   .u-testimonial-arrow{top:auto;bottom:8px;font-size:36px}.u-testimonial-arrow.is-prev{left:8px}.u-testimonial-arrow.is-next{right:8px}
 }
+
+/* Home mòbil: peces completes i visuals d'eina sense retalls. */
+@media(max-width:620px){
+  .u-home .u-hero-next .u-hero-box{
+    min-height:600px;
+    padding:92px 14px 112px;
+  }
+  .u-home .u-hero-content{
+    width:100%;
+    max-width:100%;
+  }
+  .u-home .u-hero-content h1{
+    width:100%;
+    max-width:360px;
+    font-size:clamp(32px,9vw,39px);
+    letter-spacing:-.045em;
+  }
+  .u-home .u-hero-actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .u-home .u-hero-actions .u-button{
+    flex:0 1 auto;
+  }
+  .u-home .u-hero-float-sign{
+    left:14px;
+    top:24px;
+    width:92px;
+    opacity:.9;
+  }
+  .u-home .u-hero-float-download{
+    right:16px;
+    top:30px;
+    width:60px;
+    opacity:.92;
+  }
+  .u-home .u-hero-float-qr{
+    left:18px;
+    bottom:25px;
+    width:68px;
+    opacity:.92;
+  }
+  .u-home .u-hero-float-menu{
+    right:14px;
+    bottom:32px;
+    width:150px;
+    opacity:.9;
+  }
+  .u-home .u-tools-grid{
+    padding-right:14px;
+  }
+  .u-home .u-tool-card{
+    min-height:420px;
+  }
+  .u-home .u-tool-visual,
+  .u-tools-grid .u-tool-card .u-tool-visual{
+    height:auto;
+    aspect-ratio:965/563;
+  }
+  .u-home .u-tool-visual img{
+    object-fit:contain;
+    object-position:center;
+  }
+}
