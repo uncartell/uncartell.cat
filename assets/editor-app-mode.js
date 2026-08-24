@@ -139,18 +139,27 @@
   ].join(',');
 
   const syncProjectOpenBadges = () => {
+    const currentPlan = String(window.UncartellPlatform?.getPlan?.() || document.documentElement.dataset.plan || 'basic').toLowerCase();
+    const hasProjectAccess = currentPlan === 'premium' || currentPlan === 'ultra';
     document.querySelectorAll(projectOpenSelector).forEach((button) => {
-      const locked = button.classList.contains('is-plan-locked');
+      // Entitlements are authoritative here. Some catalog/editor components are
+      // rendered before the async profile arrives and used to retain their
+      // initial Basic class after a Premium/Ultra session had been restored.
+      button.classList.toggle('is-plan-locked', !hasProjectAccess);
+      const locked = !hasProjectAccess;
       button.classList.toggle('project-open-control', true);
       let badge = button.querySelector(':scope > .project-open-plan-badge');
-      if (locked && !badge) {
+      // The project-name field already explains the Premium restriction in
+      // editor subheaders. A second badge inside Obre would duplicate it.
+      const showsOwnBadge = button.matches('.open-projects-cta') || !button.closest('.project-save-bar,.qr-project-bar');
+      if (locked && showsOwnBadge && !badge) {
         badge = document.createElement('span');
         badge.className = 'project-open-plan-badge';
         badge.textContent = 'Premium';
         badge.setAttribute('aria-hidden', 'true');
         button.append(badge);
       }
-      if (badge) badge.hidden = !locked;
+      if (badge) badge.hidden = !locked || !showsOwnBadge;
       button.setAttribute('aria-disabled', locked ? 'true' : 'false');
     });
   };
@@ -171,6 +180,9 @@
   new MutationObserver(syncProjectOpenBadges).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
   document.addEventListener('click', () => requestAnimationFrame(update));
   window.addEventListener('uncartell:plan', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.addEventListener('uncartell:auth-ready', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.addEventListener('uncartell:auth-change', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.UncartellPlatform?.whenReady?.().then(syncProjectOpenBadges);
   window.addEventListener('beforeunload', event => {
     if (!document.body.classList.contains('uncartell-editor-active') || !hasUnsavedChanges()) return;
     event.preventDefault();

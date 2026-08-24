@@ -896,6 +896,54 @@ body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan]){display:inline-flex!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-project-field :is(.project-lock,[data-project-plan])[hidden]{display:none!important}
 body.uncartell-editor-active .project-save-bar:not(.is-locked) .tool-project-field .project-lock{display:none!important}
+
+/* Download is the primary action for every plan: keep it visibly interactive. */
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]{
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  opacity:1!important;
+  filter:none!important;
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important;
+  will-change:transform;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action:hover,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]:hover{
+  transform:translateY(-1px)!important;
+  filter:brightness(.975)!important;
+  box-shadow:0 5px 12px rgba(24,22,20,.12)!important;
+}
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button.editor-app-final-action:active,
+body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header-actions > button[data-open-downloads]:active{
+  transform:translateY(0) scale(.985)!important;
+  box-shadow:0 2px 5px rgba(24,22,20,.1)!important;
+}
+
+/* Project access cards: Basic remains an inviting, clickable white control.
+   Premium/Ultra lose the plan label and use the regular enabled appearance. */
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control{
+  opacity:1!important;
+  filter:none!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  transition:background-color .14s ease,border-color .14s ease,box-shadow .14s ease,transform .14s ease!important;
+}
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked{
+  border-color:#d5d1c8!important;
+  background:#fff!important;
+  color:#181614!important;
+  opacity:1!important;
+  filter:none!important;
+}
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked:hover{
+  background:#f5f4f0!important;
+  border-color:#bdb8ae!important;
+  box-shadow:0 4px 10px rgba(24,22,20,.08)!important;
+  transform:translateY(-1px)!important;
+}
+:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:not(.is-plan-locked) > .project-open-plan-badge{
+  display:none!important;
+}
 @media (min-width:821px){
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){display:grid!important;grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto!important;min-height:70px!important;height:70px!important;gap:12px!important;padding:10px 24px!important}
 body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{grid-column:1!important;justify-self:start!important;place-self:center start!important}
