@@ -684,10 +684,13 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     overflow-y:auto!important;
     overscroll-behavior:contain;
   }
-  .u-account-methods .u-auth-apple{
-    justify-content:flex-start!important;
-    gap:10px!important;
+  .u-account-methods button{
+    display:grid!important;
+    grid-template-columns:24px minmax(0,180px);
+    justify-content:center!important;
+    column-gap:12px!important;
     padding-inline:14px!important;
+    text-align:left;
   }
   .u-account-methods .u-auth-apple span{
     font-size:0;
@@ -698,8 +701,9 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     font-weight:750;
   }
   .u-account-methods .u-auth-apple small{
-    position:static!important;
-    margin-left:auto;
+    position:absolute!important;
+    right:14px;
+    margin:0;
     flex:none;
   }
 }
