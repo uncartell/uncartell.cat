@@ -362,6 +362,30 @@ body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-featur
 }
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
 
+/* v27: absolute final authority for the four editor subheaders. */
+@media (min-width:821px){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+    display:grid!important;grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;
+    align-items:center!important;height:70px!important;min-height:70px!important;padding:10px 24px!important;gap:12px!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{
+    position:static!important;inset:auto!important;grid-column:1!important;place-self:center center!important;
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;
+    margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+    grid-column:3!important;align-self:center!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{
+    grid-column:4!important;align-self:center!important;display:flex!important;align-items:center!important;
+    justify-content:flex-end!important;gap:8px!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions>button{
+    align-self:center!important;height:46px!important;min-height:46px!important;margin:0!important;transform:none!important;
+  }
+}
+
 /* QR: tots els controls del subheader comparteixen exactament el mateix eix. */
 @media (min-width:821px){
   body.uncartell-editor-active .qr-project-bar>.qr-back-link{
@@ -426,6 +450,35 @@ body.uncartell-editor-active .tool-header-actions :where(button.is-plan-locked,b
   box-shadow:0 2px 7px rgba(24,22,20,.08)!important;
   opacity:1!important;
   cursor:pointer!important;
+}
+
+/* Definitive shared desktop subheader geometry. Keep this last so legacy
+   editor styles cannot move one tool off the common vertical axis. */
+@media (min-width:821px){
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar){
+    box-sizing:border-box!important;display:grid!important;
+    grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;
+    align-items:center!important;min-height:70px!important;height:70px!important;
+    padding:10px 24px!important;gap:12px!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.editor-app-context{
+    position:static!important;inset:auto!important;grid-column:1!important;
+    place-self:center center!important;box-sizing:border-box!important;
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;
+    margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-project-field{
+    grid-column:3!important;align-self:center!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions{
+    grid-column:4!important;align-self:center!important;display:flex!important;
+    align-items:center!important;justify-content:flex-end!important;gap:8px!important;margin:0!important;
+  }
+  body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar)>.tool-header-actions>button{
+    align-self:center!important;box-sizing:border-box!important;height:46px!important;
+    min-height:46px!important;margin:0!important;transform:none!important;
+  }
 }
 
 /* The project-name field carries the entitlement label; header actions do not duplicate it. */
@@ -674,8 +727,7 @@ body.uncartell-editor-active .editor-app-context strong {
 /* Final authority — shared desktop subheader and plan badges. */
 @media (min-width:821px){
 body.uncartell-editor-active .project-save-bar,body.uncartell-editor-active .qr-project-bar{grid-template-columns:72px minmax(24px,1fr) minmax(430px,620px) auto!important;height:70px!important;min-height:70px!important;align-items:center!important;gap:12px!important;padding:10px 24px!important}
-body.uncartell-editor-active .project-save-bar>.editor-app-context,body.uncartell-editor-active .qr-project-bar>.editor-app-context{grid-column:1;justify-self:start;margin-left:-13px!important}
-body.uncartell-editor-active .qr-project-bar>.editor-app-context{margin-left:-15px!important}
+body.uncartell-editor-active .project-save-bar>.editor-app-context,body.uncartell-editor-active .qr-project-bar>.editor-app-context{position:static!important;inset:auto!important;grid-column:1;place-self:center center!important;width:auto!important;min-width:96px!important;height:46px!important;min-height:46px!important;margin:0!important;padding:0 14px!important;line-height:1!important;transform:none!important}
 body.uncartell-editor-active .project-save-bar>.tool-project-field,body.uncartell-editor-active .qr-project-bar>.tool-project-field{display:grid!important;grid-column:3;grid-template-columns:auto minmax(220px,1fr)!important;align-items:center!important;gap:12px!important;width:100%!important;min-width:0;margin:0!important}
 body.uncartell-editor-active .project-save-bar>.tool-header-actions,body.uncartell-editor-active .qr-project-bar>.tool-header-actions{display:flex!important;grid-column:4;align-items:center!important;justify-content:flex-end!important;gap:8px!important;width:auto!important;margin:0!important}
 body.uncartell-editor-active .tool-project-field input,body.uncartell-editor-active .tool-header-actions>button{height:46px!important;min-height:46px!important;margin:0!important}
