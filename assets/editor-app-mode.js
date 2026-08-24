@@ -138,7 +138,7 @@
     '#editorOpenProjects'
   ].join(',');
 
-  const syncProjectOpenBadges = () => {
+  const syncProjectEntitlements = () => {
     // El pla efectiu és l'única font de veritat. Una classe de bloqueig pot
     // haver quedat al HTML inicial (Basic) abans que Auth carregui el perfil.
     // La jerarquia és acumulativa: Ultra també inclou totes les funcions
@@ -146,6 +146,26 @@
     const platform = window.UncartellPlatform;
     const effectivePlan = platform?.getPlan?.() || document.documentElement.dataset.plan || 'basic';
     const canManageProjects = platform?.hasPlan?.('premium') ?? ['premium', 'ultra'].includes(effectivePlan);
+
+    document.querySelectorAll('.project-save-bar, .qr-project-bar').forEach((bar) => {
+      // El bloqueig pertany només a la gestió de projectes. L'acció final de
+      // descàrrega és transversal i continua disponible també a Basic.
+      bar.querySelectorAll('.editor-app-final-action, [data-open-downloads], [data-download]').forEach((button) => {
+        button.classList.remove('is-plan-locked');
+        button.removeAttribute('aria-disabled');
+      });
+
+      bar.querySelectorAll('.project-lock, [data-project-plan]').forEach((badge) => {
+        badge.hidden = canManageProjects;
+        badge.setAttribute('aria-hidden', canManageProjects ? 'true' : 'false');
+      });
+
+      bar.querySelectorAll('[data-save-project], [data-save-poster], #saveProjectButton').forEach((button) => {
+        button.classList.toggle('is-plan-locked', !canManageProjects);
+        button.setAttribute('aria-disabled', canManageProjects ? 'false' : 'true');
+      });
+    });
+
     document.querySelectorAll(projectOpenSelector).forEach((button) => {
       const locked = !canManageProjects;
       button.classList.toggle('is-plan-locked', locked);
@@ -178,15 +198,15 @@
       moveFinalAction();
       setCompactButtonCopy();
     }
-    syncProjectOpenBadges();
+    syncProjectEntitlements();
   };
 
   new MutationObserver(update).observe(editor, { attributes: true, attributeFilter: ['hidden', 'class'] });
-  new MutationObserver(syncProjectOpenBadges).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  new MutationObserver(syncProjectEntitlements).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
   document.addEventListener('click', () => requestAnimationFrame(update));
-  window.addEventListener('uncartell:plan', () => requestAnimationFrame(syncProjectOpenBadges));
-  window.addEventListener('uncartell:auth-ready', () => requestAnimationFrame(syncProjectOpenBadges));
-  window.addEventListener('uncartell:auth-change', () => requestAnimationFrame(syncProjectOpenBadges));
+  window.addEventListener('uncartell:plan', () => requestAnimationFrame(syncProjectEntitlements));
+  window.addEventListener('uncartell:auth-ready', () => requestAnimationFrame(syncProjectEntitlements));
+  window.addEventListener('uncartell:auth-change', () => requestAnimationFrame(syncProjectEntitlements));
   window.addEventListener('beforeunload', event => {
     if (!document.body.classList.contains('uncartell-editor-active') || !hasUnsavedChanges()) return;
     event.preventDefault();

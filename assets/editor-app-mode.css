@@ -97,6 +97,8 @@ body.uncartell-editor-active .tool-header-actions .editor-app-final-action {
   border-color: var(--green) !important;
   background: var(--green) !important;
   color: var(--ink) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 body.uncartell-editor-active .editor-shell {
   grid-row: 2;

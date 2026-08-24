@@ -501,14 +501,21 @@ h1{font-size:clamp(38px,5vw,65px);letter-spacing:-.055em;line-height:.98;margin-
   .tool-header-actions button::after{content:none!important;display:none!important}
   .tool-header-actions button svg{width:18px!important;height:18px!important;margin:0!important}
 }
-.project-save-bar.is-locked .tool-header-actions button,
-.project-save-bar.is-locked .tool-header-actions button.is-plan-locked,
-.project-save-bar.is-locked .tool-header-actions button:hover{
+.project-save-bar.is-locked .tool-header-actions button:not(.editor-app-final-action),
+.project-save-bar.is-locked .tool-header-actions button.is-plan-locked:not(.editor-app-final-action),
+.project-save-bar.is-locked .tool-header-actions button:not(.editor-app-final-action):hover{
   border-color:var(--ink)!important;
   background:var(--ink)!important;
   color:#fff!important;
   opacity:.32!important;
   box-shadow:none!important;
+}
+.project-save-bar.is-locked .tool-header-actions .editor-app-final-action{
+  border-color:var(--green)!important;
+  background:var(--green)!important;
+  color:var(--ink)!important;
+  opacity:1!important;
+  pointer-events:auto!important;
 }
 
 /* Accent exclusiu per a les etiquetes de novetat. */
