@@ -97,8 +97,6 @@ body.uncartell-editor-active .tool-header-actions .editor-app-final-action {
   border-color: var(--green) !important;
   background: var(--green) !important;
   color: var(--ink) !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
 }
 body.uncartell-editor-active .editor-shell {
   grid-row: 2;
@@ -334,8 +332,9 @@ body.uncartell-editor-active .qr-project-bar > strong { display: none; }
 /* Els badges dins dels editors hereten exactament el component global,
    encara que un full específic antic es carregui després de platform.css. */
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge,.locked-logo-control small,.locked-footer-control em,.ultra-pages-button span){
-  width:auto!important;
-  min-width:64px!important;
+  width:72px!important;
+  min-width:72px!important;
+  max-width:72px!important;
   height:24px!important;
   min-height:24px!important;
   padding:0 9px!important;
@@ -363,6 +362,24 @@ body.uncartell-editor-active :where(.ultra-badge,.context-ultra-badge,.qr-featur
 }
 body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-plan-badge,.plan-style-badge,.locked-feature-status>span,.qr-feature-card>em,.context-ultra-badge,.ultra-badge)[hidden]{display:none!important}
 
+/* QR: tots els controls del subheader comparteixen exactament el mateix eix. */
+@media (min-width:821px){
+  body.uncartell-editor-active .qr-project-bar>.qr-back-link{
+    display:inline-flex!important;
+    align-self:center!important;
+    align-items:center!important;
+    height:46px!important;
+    min-height:46px!important;
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+  body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{
+    height:46px!important;
+    min-height:46px!important;
+    transform:none!important;
+  }
+}
+
 /* Project access is one shared entitlement pattern across every editor. */
 .project-open-control{position:relative!important}
 .project-open-control.is-plan-locked{cursor:pointer!important}
@@ -377,7 +394,7 @@ body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-p
   height:24px!important;
   padding:0 8px!important;
   border:1px solid #50c458!important;
-  border-radius:6px!important;
+  border-radius:8px!important;
   background:#73f172!important;
   color:#181614!important;
   font:900 8px/1 Arial,sans-serif!important;
@@ -388,7 +405,23 @@ body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-p
 .project-open-plan-badge[hidden]{display:none!important}
 @media(max-width:620px){
   .tool-header-actions .project-open-control.is-plan-locked{padding-inline:8px!important}
-  .tool-header-actions .project-open-plan-badge{width:52px!important;min-width:52px!important;height:20px!important;padding-inline:5px!important;font-size:7px!important}
+  .tool-header-actions .project-open-plan-badge{width:72px!important;min-width:72px!important;height:24px!important;padding-inline:8px!important;font-size:8px!important}
+}
+
+/* Project management is Premium; downloads remain available on Basic. */
+body.uncartell-editor-active .tool-header-actions :where(button.is-plan-locked,button[aria-disabled="true"]):not(.editor-app-final-action):not([data-open-downloads]){
+  border-color:#cbc7bd!important;
+  background:#fff!important;
+  color:#181614!important;
+  box-shadow:0 2px 7px rgba(24,22,20,.08)!important;
+  opacity:1!important;
+  cursor:pointer!important;
+}
+
+/* The project-name field carries the entitlement label; header actions do not duplicate it. */
+body.uncartell-editor-active .project-save-bar .tool-header-actions .project-open-plan-badge,
+body.uncartell-editor-active .qr-project-bar .tool-header-actions .project-open-plan-badge{
+  display:none!important;
 }
 
 /* Revista: el control de pàgines comparteix l'eix dret del header i subheader. */
