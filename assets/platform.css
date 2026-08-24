@@ -639,27 +639,27 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     flex:0 1 auto;
   }
   .u-home .u-hero-float-sign{
-    left:14px;
-    top:24px;
-    width:92px;
+    left:10px;
+    top:18px;
+    width:118px;
     opacity:.9;
   }
   .u-home .u-hero-float-download{
-    right:16px;
-    top:30px;
-    width:60px;
+    right:12px;
+    top:22px;
+    width:78px;
     opacity:.92;
   }
   .u-home .u-hero-float-qr{
-    left:18px;
-    bottom:25px;
-    width:68px;
+    left:14px;
+    bottom:20px;
+    width:88px;
     opacity:.92;
   }
   .u-home .u-hero-float-menu{
-    right:14px;
-    bottom:32px;
-    width:150px;
+    right:8px;
+    bottom:26px;
+    width:190px;
     opacity:.9;
   }
   .u-home .u-tools-grid{
