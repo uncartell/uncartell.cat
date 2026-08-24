@@ -16,7 +16,7 @@
   if(!document.querySelector('link[data-ui-shape-system]')){
     const shapeStyles=document.createElement('link');
     shapeStyles.rel='stylesheet';
-    shapeStyles.href='/assets/ui-shape-system.css?v=20260824-mobile-quota';
+    shapeStyles.href='/assets/ui-shape-system.css?v=20260824-mobile-quota-align';
     shapeStyles.dataset.uiShapeSystem='true';
     document.head.append(shapeStyles);
   }
@@ -137,78 +137,7 @@
   function getPlan(){return localStorage.getItem(planKey)||'basic'}
   function setPlan(plan){localStorage.setItem(planKey,plan);document.documentElement.dataset.plan=plan;renderQuota();window.dispatchEvent(new CustomEvent('uncartell:plan',{detail:{plan}}))}
 
-  document.body.insertAdjacentHTML('beforeend',`<div class="u-account-modal" data-account-modal hidden><button class="u-modal-shade" data-account-close aria-label="${words.back}"></button><section class="u-account-card" role="dialog" aria-modal="true"><button class="u-account-close" data-account-close aria-label="Tanca"><svg viewBox="0 0 24 24">${icon('close')}</svg></button><div data-account-view="login"><h2>${words.loginTitle}</h2><p>${words.loginCopy}</p><div class="u-account-methods"><button data-auth-google><b>G</b>${words.google}</button><button disabled class="disabled"><b>●</b>${words.apple}<small>${lang==='ca'?'Properament':'Próximamente'}</small></button><button data-auth-email><b>✉</b>${words.email}</button></div><form class="u-account-email" data-auth-form hidden data-auth-mode="login"><input name="name" autocomplete="name" placeholder="${words.name}" hidden><input name="email" type="email" autocomplete="email" required placeholder="${words.emailField}"><input name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="${words.password}"><label class="u-marketing-consent" data-auth-marketing hidden><input name="marketing_consent" type="checkbox"><span>${words.marketing}</span></label><button class="u-button primary" type="submit" data-auth-submit>${words.continue}</button><button class="u-text-button" type="button" data-auth-toggle>${words.newHere}</button><button class="u-text-button" type="button" data-auth-back>${words.back}</button></form><p class="u-account-feedback" data-auth-feedback></p></div><div data-account-view="profile" hidden><img class="u-account-avatar" src="/${lang==='ca'?'profile-ca.png':'profile-es.png'}" alt=""><div class="u-profile-name-row"><h2 data-profile-greeting>${words.hello}</h2><button type="button" data-profile-edit aria-label="${words.editName}">✎</button></div><form class="u-profile-name-form" data-profile-name-form hidden><input name="display_name" maxlength="80" required><button class="u-button primary" type="submit">${words.saveName}</button></form><p data-profile-email></p><span class="u-plan-badge" data-profile-plan>Basic</span><button class="u-account-action u-invoices-action" type="button" data-profile-invoices>${words.invoices}</button><div class="u-account-actions"><a class="u-account-action" href="${cfg.plansPath}"><svg viewBox="0 0 24 24">${icon('layers')}</svg>${words.manage}</a><button class="u-account-action" data-auth-logout><svg viewBox="0 0 24 24">${icon('logout')}</svg>${words.logout}</button></div><button class="u-delete-account" data-auth-delete>${words.delete}</button><p class="u-account-feedback" data-profile-feedback></p></div><div data-account-view="invoices" hidden><h2>${words.invoices}</h2><div class="u-invoices-empty">${words.noInvoices}</div><button class="u-text-button" type="button" data-invoices-back>${words.backProfile}</button></div><div data-account-view="delete" hidden><div class="u-sad-face">☹</div><h2>${words.deleteTitle}</h2><p>${words.deleteCopy}</p><div class="u-confirm-actions"><button class="u-button" data-delete-back>${words.cancel}</button><button class="u-button danger" data-delete-confirm>${words.confirmDelete}</button></div><p class="u-account-feedback" data-delete-feedback></p></div></section></div>`);
-
-  const upgradeWords=lang==='ca'?{
-    title:'Canvia de pla per utilitzar més eines',copy:'Tria Premium o Ultra i desbloqueja les funcions que necessites.',view:'Veure plans',choose:'Tria el pla que encaixa amb tu',chooseCopy:'Comença amb Basic o desbloqueja més eines quan les necessitis.',current:'Pla actual',recommended:'Recomanat',soon:'Properament',basicCopy:'Crea i descarrega sense registrar-te.',premiumCopy:'Desa projectes i personalitza colors i tipografies.',ultraCopy:'Kit de marca, logotip i control total de la marca d’aigua.',basicFeatures:['Crea cartells i cartes','Edita tots els textos','10 descàrregues diàries','PDF preparats per imprimir'],premiumFeatures:['Tot el que inclou Basic','Colors i tipografies personalitzades','Descàrregues il·limitades','Desa i recupera projectes'],ultraFeatures:['Tot el que inclou Premium','Afegeix imatges','Retira la marca d’aigua','Kit de marca i logotip'],premiumCta:'Activa Premium gratis',ultraCta:'Avisa’m',ultraEmail:'El teu correu',ultraSent:'T’avisarem ✓',close:'Tanca',back:'Torna enrere'
-  }:{
-    title:'Cambia de plan para utilizar más herramientas',copy:'Elige Premium o Ultra y desbloquea las funciones que necesitas.',view:'Ver planes',choose:'Elige el plan que encaja contigo',chooseCopy:'Empieza con Basic o desbloquea más herramientas cuando las necesites.',current:'Plan actual',recommended:'Recomendado',soon:'Próximamente',basicCopy:'Crea y descarga sin registrarte.',premiumCopy:'Guarda proyectos y personaliza colores y tipografías.',ultraCopy:'Kit de marca, logotipo y control total de la marca de agua.',basicFeatures:['Crea carteles y cartas','Edita todos los textos','10 descargas diarias','PDF listos para imprimir'],premiumFeatures:['Todo lo que incluye Basic','Colores y tipografías personalizadas','Descargas ilimitadas','Guarda y recupera proyectos'],ultraFeatures:['Todo lo que incluye Premium','Añade imágenes','Retira la marca de agua','Kit de marca y logotipo'],premiumCta:'Activa Premium gratis',ultraCta:'Avísame',ultraEmail:'Tu correo',ultraSent:'Te avisaremos ✓',close:'Cerrar',back:'Volver'
-  };
-  const upgradeFeatures=items=>`<ul class="u-upgrade-features">${items.map(item=>`<li>${item}</li>`).join('')}</ul>`;
-  document.body.insertAdjacentHTML('beforeend',`<div class="u-upgrade-modal" data-upgrade-modal hidden><button class="u-modal-shade" type="button" data-upgrade-close aria-label="${upgradeWords.close}"></button><section class="u-upgrade-card" role="dialog" aria-modal="true" aria-labelledby="uUpgradeTitle"><button class="u-account-close" type="button" data-upgrade-close aria-label="${upgradeWords.close}"><svg viewBox="0 0 24 24">${icon('close')}</svg></button><div data-upgrade-step="intro"><h2 id="uUpgradeTitle">${upgradeWords.title}</h2><p>${upgradeWords.copy}</p><button class="u-button primary u-upgrade-view" type="button" data-upgrade-view>${upgradeWords.view}</button></div><div data-upgrade-step="plans" hidden><h2>${upgradeWords.choose}</h2><p>${upgradeWords.chooseCopy}</p><div class="u-upgrade-plans"><article data-upgrade-plan="basic"><header data-upgrade-label>${upgradeWords.current}</header><div class="u-upgrade-plan-body"><h3>Basic</h3><p>${upgradeWords.basicCopy}</p>${upgradeFeatures(upgradeWords.basicFeatures)}<strong>0 €</strong><button type="button" data-upgrade-basic>${upgradeWords.current}</button></div></article><article class="featured" data-upgrade-plan="premium"><header data-upgrade-label>${upgradeWords.recommended}</header><div class="u-upgrade-plan-body"><h3>Premium</h3><p>${upgradeWords.premiumCopy}</p>${upgradeFeatures(upgradeWords.premiumFeatures)}<strong>0 € <del>29,99 €</del></strong><button type="button" data-upgrade-premium>${upgradeWords.premiumCta}</button></div></article><article class="ultra" data-upgrade-plan="ultra"><header data-upgrade-label>${upgradeWords.soon}</header><div class="u-upgrade-plan-body"><h3>Ultra</h3><p>${upgradeWords.ultraCopy}</p>${upgradeFeatures(upgradeWords.ultraFeatures)}<strong>59,99 €</strong><button type="button" data-upgrade-ultra-notify>${upgradeWords.ultraCta}</button><div class="u-upgrade-ultra-email" data-upgrade-ultra-email hidden><input type="email" inputmode="email" autocomplete="email" placeholder="${upgradeWords.ultraEmail}" aria-label="${upgradeWords.ultraEmail}"><button type="button" aria-label="Envia">→</button></div><small class="u-upgrade-ultra-feedback" data-upgrade-ultra-feedback></small></div></article></div></div></section></div>`);
-
-  const modal=document.querySelector('[data-account-modal]'),view=name=>document.querySelector(`[data-account-view="${name}"]`),feedback=document.querySelector('[data-auth-feedback]');
-  const authToggle=document.querySelector('[data-auth-toggle]');
-  const forgotPasswordButton=document.createElement('button');
-  forgotPasswordButton.type='button';forgotPasswordButton.className='u-text-button';forgotPasswordButton.dataset.authForgot='';forgotPasswordButton.textContent=words.forgotPassword;authToggle?.after(forgotPasswordButton);
-  const resetView=document.createElement('div');
-  resetView.dataset.accountView='reset';resetView.hidden=true;resetView.innerHTML=`<h2>${words.resetTitle}</h2><form class="u-account-email" data-auth-reset><input name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="${words.newPassword}"><button class="u-button primary" type="submit">${words.savePassword}</button></form><p class="u-account-feedback" data-reset-feedback></p>`;
-  view('login')?.after(resetView);
-  const accountPlansBack=document.createElement('button');
-  accountPlansBack.type='button';accountPlansBack.className='u-text-button u-account-plans-back';accountPlansBack.textContent=lang==='ca'?'Torna als plans':'Volver a los planes';accountPlansBack.hidden=true;
-  document.querySelector('.u-account-methods')?.after(accountPlansBack);
-  const googleButton=document.querySelector('[data-auth-google]'),emailButton=document.querySelector('[data-auth-email]');
-  googleButton.classList.add('u-auth-google');
-  googleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.4Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2 1-3.4 1a5.9 5.9 0 0 1-5.5-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.5 14a6 6 0 0 1 0-3.9V7.4H3.1a10 10 0 0 0 0 9.2L6.5 14Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.9 1.5l2.9-2.8A9.7 9.7 0 0 0 3.1 7.4l3.4 2.7A5.9 5.9 0 0 1 12 5.9Z"/></svg><span>${words.google}</span>`;
-  emailButton.classList.add('u-auth-email');
-  emailButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v11H3zM3.5 7l8.5 6 8.5-6"/></svg><span>${lang==='ca'?'Registra’t amb correu':'Regístrate con correo'}</span>`;
-  const appleButton=document.querySelector('.u-account-methods .disabled');
-  appleButton?.classList.add('u-auth-apple');
-  if(appleButton)appleButton.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.8c0-2.4 2-3.6 2.1-3.7a4.5 4.5 0 0 0-3.5-1.9c-1.5-.2-2.9.9-3.6.9-.7 0-1.8-.9-3-.9a4.7 4.7 0 0 0-4 2.4c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3.1 2.4 1.2 0 1.7-.8 3.3-.8 1.5 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-3.3-1.3-3.3-3.8ZM14.3 5.6c.7-.9 1.2-2.2 1.1-3.4-1.1 0-2.4.7-3.2 1.6-.7.8-1.3 2.1-1.1 3.3 1.2.1 2.4-.6 3.2-1.5Z"/></svg><span>${words.apple}</span><small>${lang==='ca'?'Properament':'Próximamente'}</small>`;
-  const upgradeModal=document.querySelector('[data-upgrade-modal]');
-  const upgradePlansStep=upgradeModal?.querySelector('[data-upgrade-step="plans"]');
-  if(upgradePlansStep){const login=document.createElement('button');login.type='button';login.className='u-text-button u-upgrade-login';login.dataset.upgradeLogin='';login.textContent=words.alreadyAccount;upgradePlansStep.append(login)}
-  const showUpgradeStep=name=>upgradeModal?.querySelectorAll('[data-upgrade-step]').forEach(step=>step.hidden=step.dataset.upgradeStep!==name);
-  const closeUpgrade=()=>{if(!upgradeModal)return;upgradeModal.hidden=true;document.body.classList.remove('u-modal-open')};
-  const syncUpgradePlans=()=>{
-    if(!upgradeModal)return;
-    const plan=getPlan();
-    upgradeModal.querySelectorAll('[data-upgrade-plan]').forEach(card=>{
-      const cardPlan=card.dataset.upgradePlan,isCurrent=cardPlan===plan;
-      card.classList.toggle('is-current',isCurrent);
-      const label=card.querySelector('[data-upgrade-label]');
-      if(label)label.textContent=isCurrent?upgradeWords.current:cardPlan==='premium'?upgradeWords.recommended:cardPlan==='ultra'?upgradeWords.soon:'Basic';
-    });
-    const premiumButton=upgradeModal.querySelector('[data-upgrade-premium]');
-    if(premiumButton){premiumButton.disabled=plan==='premium'||plan==='ultra';premiumButton.textContent=plan==='premium'?upgradeWords.current:plan==='ultra'?(lang==='ca'?'Inclòs amb Ultra':'Incluido en Ultra'):upgradeWords.premiumCta}
-    const basicButton=upgradeModal.querySelector('[data-upgrade-basic]');
-    if(basicButton){basicButton.disabled=plan==='basic';basicButton.textContent=plan==='basic'?upgradeWords.current:(lang==='ca'?'Canvia a Basic':'Cambia a Basic')}
-  };
-  const openUpgradeModal=()=>{if(!upgradeModal)return;syncUpgradePlans();showUpgradeStep('plans');upgradeModal.hidden=false;document.body.classList.add('u-modal-open')};
-  // The Premium badge inside every locked project-save field is itself a CTA.
-  // Keep this delegated so it also covers editors rendered after platform init.
-  const projectPremiumSelector='.project-save-bar.is-locked .tool-project-field, .tool-project-field.is-locked, [data-premium-controls].is-locked, [data-colors-card].is-locked';
-  const openProjectPremiumGate=event=>{
-    const badge=event.target.closest(projectPremiumSelector);
-    if(!badge)return;
-    event.preventDefault();event.stopPropagation();openUpgradeModal();
-  };
-  document.addEventListener('click',openProjectPremiumGate);
-  document.addEventListener('keydown',event=>{
-    if(event.key!=='Enter'&&event.key!==' ')return;
-    const badge=event.target.closest(projectPremiumSelector);
-    if(!badge)return;
-    event.preventDefault();openUpgradeModal();
-  });
-  const prepareProjectPremiumBadges=()=>document.querySelectorAll('.project-lock,[data-project-plan],[data-premium-controls],[data-colors-card]').forEach(badge=>{badge.setAttribute('role','button');badge.setAttribute('tabindex','0')});
-  prepareProjectPremiumBadges();
-  addEventListener('uncartell:plan',syncUpgradePlans);
-  let supabaseClient=null,currentUser=null,currentProfile=null,supportContext=null,pendingPremium=localStorage.getItem('uncartell-pending-premium')==='1';
-  const supportSessionKey='uncartell_support_session';
-  const readSupportSession=()=>{try{return JSON.parse(sessionStorage.getItem(supportSessionKey)||'null')}catch(_){return null}};
-  const callAdmin=async(action,payload={})=>{const {data,error}=await supabaseClient.functions.invoke('admin-dashboard',{body:{action,...payload}});if(error)throw error;if(data?.error)throw new Error(data.error);return data};
-  const endSupportSession=async()=>{const session=readSupportSession();try{if(session?.token&&supabaseClient)await callAdmin('stop_impersonation',{token:session.token})}catch(error){console.error(error)}sessionStorage.removeItem(supportSessionKey);location.href=`${base}/admin/`.replace(/\/+/g,'/')};
-  const renderSupportBanner=()=>{document.querySelector('[data-support-banner]')?.remove();if(!supportContext)return;const banner=document.createElement('aside');banner.className='u-support-banner';banner.dataset.supportBanner='';banner.innerHTML=`<strong>${lang==='ca'?'Estàs navegant com':'Estás navegando como'} ${supportContext.email||supportContext.user_id}</strong><button type="button">${lang==='ca'?'Tornar a Admin':'Volver a Admin'}</button>`;banner.querySelector('button').addEventListener('click',endSupportSession);document.body.prepend(banner)};
+  document.body.insertAdjacentHTML('beforeend',`<div class="u-account-modal" data-account-modal hidden><button class="u-modal-shade" data-account-close aria-label="${words.back}"></button><section class="u-account-card" role="dialog" aria-modal="true"><button class="u-account-close" data-account-close aria-label="Tanca"><svg viewBox="0 0 24 24">${icon('close')}</svg></button><div data-account-view="login"><h2>${words.loginTitle}</h2><p>${words.loginCopy}</p><div class="u-account-methods"><button data-auth-google><b>G</b>${words.google}</button><button disabled class="disabled"><b>●</b>${words.apple}<small>${lang==='ca'?'Properament':'Próximamente'}</small></button><button data-auth-email><b>✉</b>${words.email}</button></div><form class="u-account-email" data-auth-form hidden data-auth-mode="login"><input name="name" autocomplete="name" placeholder="${words.name}" hidden><input name="email" type="email" autocomplete="email" requiren:�[h��춻�q�^wtàs navegant com':'Estás navegando como'} ${supportContext.email||supportContext.user_id}</strong><button type="button">${lang==='ca'?'Tornar a Admin':'Volver a Admin'}</button>`;banner.querySelector('button').addEventListener('click',endSupportSession);document.body.prepend(banner)};
   const loadSupportContext=async()=>{const session=readSupportSession();if(!session?.token)return;try{supportContext=await callAdmin('support_context',{token:session.token});renderSupportBanner()}catch(error){console.error('Support session',error);sessionStorage.removeItem(supportSessionKey);supportContext=null}};
   let resolveAuthReady;
   const authReady=new Promise(resolve=>{resolveAuthReady=resolve});
