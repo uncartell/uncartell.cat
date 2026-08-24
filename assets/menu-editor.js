@@ -1140,7 +1140,7 @@
 
   const watermark = () => `<div class="watermark">${L.lang === "ca" ? "CREAT AMB UNCARTELL.CAT" : "CREADO CON UNCARTEL.ES"}</div>`;
   function renderPlans() {
-    const canSave = window.UncartellPlatform?.hasPlan?.("premium") ?? (state.plan === "premium" || state.plan === "ultra");
+    const canSave = state.plan === "premium" || state.plan === "ultra";
     $(".premium-style").classList.toggle("is-locked", !canSave);
     $("#projectSaveBar").hidden = false;
     $("#projectSaveBar").classList.toggle("is-locked", !canSave);

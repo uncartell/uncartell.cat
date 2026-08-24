@@ -105,7 +105,7 @@
   }
   const projectBar=$('.qr-project-bar'),projectField=$('.tool-project-field'),colorsCard=$('[data-colors-card]'),watermarkCard=$('[data-watermark-card]'),logoCard=$('[data-logo-card]'),brandCard=$('[data-brand-card]'),analyticsCard=$('[data-analytics-card]');
   const applyEntitlements=()=>{
-    plan=window.UncartellPlatform?.getPlan?.()||'basic';canPremium=window.UncartellPlatform?.hasPlan?.('premium')??(plan==='premium'||plan==='ultra');canUltra=window.UncartellPlatform?.hasPlan?.('ultra')??plan==='ultra';
+    plan=window.UncartellPlatform?.getPlan?.()||'basic';canPremium=plan==='premium'||plan==='ultra';canUltra=plan==='ultra';
     // Only project management is gated. The whole header must never become a
     // locked target because Basic users can still open the download chooser.
     projectField?.classList.toggle('is-locked',!canPremium);projectBar?.classList.remove('is-locked');
