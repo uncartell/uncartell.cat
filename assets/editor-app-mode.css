@@ -366,16 +366,26 @@ body.uncartell-editor-active :where(.project-lock,[data-project-plan],.feature-p
 @media (min-width:821px){
   body.uncartell-editor-active .qr-project-bar>.qr-back-link{
     display:inline-flex!important;
-    align-self:center!important;
+    place-self:center start!important;
     align-items:center!important;
-    height:46px!important;
-    min-height:46px!important;
-    margin-top:0!important;
-    margin-bottom:0!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+    width:auto!important;
+    min-width:96px!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:0!important;
+    padding:0 14px!important;
+    line-height:1!important;
+    top:auto!important;
+    transform:none!important;
   }
   body.uncartell-editor-active .qr-project-bar>.tool-header-actions>button{
-    height:46px!important;
-    min-height:46px!important;
+    box-sizing:border-box!important;
+    align-self:center!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:0!important;
     transform:none!important;
   }
 }
