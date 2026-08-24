@@ -240,7 +240,7 @@
   };
   const saveProject = async (silent = false) => {
     if (state.plan !== "premium" && state.plan !== "ultra") {
-      toast(L.messages.premiumRequired);
+      openPlanGate("Premium");
       return false;
     }
     const name = state.projectName.trim();
@@ -1145,8 +1145,12 @@
     $("#projectSaveBar").hidden = false;
     $("#projectSaveBar").classList.toggle("is-locked", !canSave);
     const projectNameField = $("#projectName");
-    projectNameField.disabled = !canSave;
-    $("#saveProjectButton").disabled = !canSave;
+    projectNameField.disabled = false;
+    projectNameField.readOnly = !canSave;
+    projectNameField.setAttribute("aria-disabled", canSave ? "false" : "true");
+    $("#saveProjectButton").disabled = false;
+    $("#saveProjectButton").classList.toggle("is-plan-locked", !canSave);
+    $("#saveProjectButton").setAttribute("aria-disabled", canSave ? "false" : "true");
     $("#openProjectsButton").classList.toggle("is-plan-locked", !canSave);
     $("#editorOpenProjects").classList.toggle("is-plan-locked", !canSave);
     $("#projectLock").hidden = canSave;
@@ -1479,7 +1483,8 @@
     toast(`${L.plan}: ${button.textContent}`);
   }));
   $("#projectSaveBar").addEventListener("click", event => {
-    if (state.plan === "free" && !event.target.closest("#editorOpenProjects")) {
+    const canSave = state.plan === "premium" || state.plan === "ultra";
+    if (!canSave && !event.target.closest("#editorOpenProjects")) {
       event.preventDefault();
       openPlanGate("Premium");
     }
