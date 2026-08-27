@@ -215,6 +215,20 @@
   font-size:15px!important;
   line-height:1.42!important;
 }
+.format-landing .format-step>.intro-row{
+  justify-content:center!important;
+  text-align:center!important;
+}
+.format-landing .format-step>.intro-row .intro{
+  width:100%!important;
+  max-width:none!important;
+  text-align:center!important;
+}
+.format-landing .format-step>.intro-row .intro p{
+  margin-right:auto!important;
+  margin-left:auto!important;
+  text-align:center!important;
+}
 .format-landing .format-carousel-shell{padding:0 0 8px!important}
 .format-landing .format-grid{
   gap:clamp(18px,2vw,34px)!important;
