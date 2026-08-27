@@ -224,6 +224,40 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-upgrade-modal[hidden]{display:none}.u-upgrade-modal{position:fixed;z-index:1200;inset:0;display:grid;place-items:center;padding:22px}.u-upgrade-card{position:relative;width:min(1040px,100%);max-height:calc(100vh - 44px);overflow:auto;border:1px solid var(--line);border-radius:28px;background:#fff;padding:54px}.u-upgrade-card>[data-upgrade-step="intro"]{max-width:590px;margin:auto;text-align:center}.u-upgrade-card h2{margin:0;font-size:clamp(36px,5vw,58px);line-height:1;letter-spacing:-.045em}.u-upgrade-card>div>p{margin:20px auto 30px;max-width:670px;color:var(--muted);font-size:20px;line-height:1.45}.u-upgrade-view{min-width:210px}.u-upgrade-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}.u-upgrade-plans article{display:flex;min-height:370px;overflow:hidden;flex-direction:column;border:1px solid var(--line);border-radius:22px;padding:0}.u-upgrade-plans article.featured{border-color:#4ed65a}.u-upgrade-plans article>header{display:flex;min-height:42px;align-items:center;padding:0 24px;background:#deddda;color:var(--ink);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.u-upgrade-plans article.featured>header{background:var(--accent,var(--green))}.u-upgrade-plans article.ultra>header{background:var(--ink);color:#fff}.u-upgrade-plan-body{display:flex;flex:1;flex-direction:column;padding:24px}.u-upgrade-plans h3{margin:0 0 10px;font-size:30px}.u-upgrade-plans article p{margin:0;color:var(--muted);font-size:15px;line-height:1.45}.u-upgrade-plans strong{margin:auto 0 18px;font-size:38px;letter-spacing:-.04em}.u-upgrade-plans del{color:var(--muted);font-size:15px;font-weight:400}.u-upgrade-plans button,.u-upgrade-plans a{display:flex;min-height:50px;align-items:center;justify-content:center;border:1px solid var(--ink);border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:850;text-decoration:none;cursor:pointer}.u-upgrade-plans button:focus,.u-upgrade-plans a:focus{outline:none}.u-upgrade-plans button:focus-visible,.u-upgrade-plans a:focus-visible{box-shadow:0 0 0 3px rgba(20,20,18,.18)}.u-upgrade-plans button:disabled{border-color:var(--line);background:#efede8;color:#8b877f;cursor:default}.u-upgrade-back{display:block;margin:24px auto 0}.u-upgrade-modal .u-account-close{z-index:2}
 @media(max-width:760px){.u-upgrade-card{padding:48px 18px 24px;border-radius:22px}.u-upgrade-card h2{font-size:36px}.u-upgrade-card>div>p{font-size:16px}.u-upgrade-plans{grid-template-columns:1fr}.u-upgrade-plans article{min-height:285px}.u-upgrade-plans strong{margin-top:28px}}
 
+/* Unified pricing matrix and compact responsive presentation */
+.u-upgrade-card{width:min(1120px,calc(100vw - 36px));padding:30px 34px 22px;overflow:visible}
+.u-upgrade-card [data-upgrade-step="plans"]>h2{font-size:clamp(32px,3.8vw,48px)}
+.u-upgrade-card [data-upgrade-step="plans"]>p{margin:10px auto 18px;font-size:17px}
+.u-upgrade-plans{gap:14px;margin-top:16px}
+.u-upgrade-plans article{min-height:0;border-radius:16px}
+.u-upgrade-plans article>header{min-height:36px;padding:0 18px}
+.u-upgrade-plan-body{padding:18px}
+.u-upgrade-plans h3{margin-bottom:5px;font-size:27px}
+.u-upgrade-plans article p{font-size:13px}
+.u-upgrade-plan-body>p{min-height:38px}
+.u-upgrade-features{gap:5px;margin-top:10px;padding-top:10px}
+.u-upgrade-features li{font-size:11px}
+.u-upgrade-plans strong{margin:14px 0 10px;font-size:32px}
+.u-upgrade-plans button,.u-upgrade-plans a{min-height:42px;flex-basis:42px;border-radius:12px}
+.u-upgrade-login{margin:12px auto 0}
+@media(max-height:700px) and (min-width:761px){.u-upgrade-card{max-height:calc(100vh - 24px);overflow:auto}}
+@media(max-width:760px){
+  .u-plans-grid,.u-upgrade-plans{display:grid;grid-template-columns:1fr;gap:10px}
+  .u-plan,.u-upgrade-plans article{min-height:0;border-radius:14px}
+  .u-plan-head,.u-upgrade-plans article>header{position:relative;min-height:56px;padding-right:46px;cursor:pointer}
+  .u-plan-head::after,.u-upgrade-plans article>header::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400}
+  .u-plan.is-open>.u-plan-head::after,.u-upgrade-plans article.is-open>header::after{content:"−"}
+  .u-plan:not(.is-open)>.u-plan-body,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body{display:none}
+  .u-plan-body,.u-upgrade-plan-body{padding:20px}
+  .u-price{margin-top:18px;font-size:44px}
+  .u-feature-list{padding-top:17px;margin-top:14px}
+  .u-upgrade-card{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);padding:44px 14px 18px;overflow:auto}
+  .u-upgrade-card [data-upgrade-step="plans"]>h2{font-size:30px}
+  .u-upgrade-card [data-upgrade-step="plans"]>p{margin:8px auto 14px;font-size:15px}
+  .u-upgrade-plans{margin-top:10px}
+  .u-upgrade-login{margin-top:14px}
+}
+
 /* Els passos de plans i autenticació comparteixen exactament el mateix marc. */
 @media(min-width:621px){
   .u-account-card,.u-upgrade-card{width:min(1040px,calc(100vw - 44px));height:min(650px,calc(100vh - 44px));max-height:none}
