@@ -1643,8 +1643,7 @@
   $("#customMenuBrief").innerHTML = `<div class="custom-menu-brief-copy"><span class="eyebrow">uncartell studio</span><h2>${escapeHtml(L.customMenuTitle)}</h2><p>${escapeHtml(L.customMenuCopy)}</p></div><form id="customMenuBriefForm"><div class="brief-grid"><label><span>${escapeHtml(L.briefName)}</span><input name="name" type="text" required></label><label><span>${escapeHtml(L.briefBusiness)}</span><input name="business" type="text" required></label><label><span>${escapeHtml(L.briefEmail)}</span><input name="email" type="email" required></label><label><span>${escapeHtml(L.briefFormat)}</span><input name="format" type="text"></label></div><label><span>${escapeHtml(L.briefDetails)}</span><textarea name="details" rows="5" required></textarea></label><button type="submit">${escapeHtml(L.briefSend)}</button></form>`;
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
-  let selectedPickerFormat = "";
-  let pickerStage = "formats";
+  let selectedPickerFormat = "a4-single-1";
   const pickerFormatNames = { "mobile-interactive": "Carta mòbil", "a3-landscape": "Revista", "a4-portrait": "Vins i postres", "a4-landscape": "Díptic", "a4-single-1": "Menú del dia" };
   const pickerFormatCopy = {
     "a4-single-1": { detail: "Una sola pàgina A4", icon: "single" },
@@ -1688,35 +1687,23 @@
     const tabs = $("#formatTabs");
     const grid = $("#formatGrid");
     const back = $("#pickerBack");
-    if (pickerStage === "formats") {
-      back.hidden = true;
-      $("#pickerStep").textContent = "PAS 1 DE 2";
-      $("#pickerTitle").textContent = "Quin format necessites?";
-      $("#pickerHelp").textContent = "Escull com vols presentar la carta. Ho podràs personalitzar tot després.";
-      tabs.className = "format-tabs format-type-grid";
-      tabs.innerHTML = orderedFormats.map(format => { const copy = pickerFormatCopy[format.id]; return `<button type="button" class="format-type-card" data-picker-format="${format.id}"><span class="format-type-icon">${pickerFormatIcon(copy.icon)}</span><span class="format-type-copy"><strong>${escapeHtml(pickerFormatNames[format.id])}</strong><small>${escapeHtml(copy.detail)}</small></span><span class="format-type-arrow" aria-hidden="true">→</span></button>`; }).join("") + (mobileFormat ? `<button type="button" class="format-type-card format-type-mobile" data-picker-format="mobile-interactive"><span class="format-type-icon">${pickerFormatIcon("mobile")}</span><span class="format-type-copy"><span class="format-type-label">CARTA WEB</span><strong>Carta per a mòbil</strong><small>${escapeHtml(pickerFormatCopy["mobile-interactive"].detail)}</small></span><span class="format-type-arrow" aria-hidden="true">→</span></button>` : "");
-      grid.innerHTML = "";
-      grid.hidden = true;
-      $(".format-note").hidden = false;
-      $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; pickerStage = "templates"; renderTemplatePicker(); }));
-      return;
-    }
-    if (!formats.some(format => format.id === selectedPickerFormat)) { pickerStage = "formats"; renderTemplatePicker(); return; }
-    back.hidden = false;
-    $("#pickerStep").textContent = "PAS 2 DE 2";
+    if (!formats.some(format => format.id === selectedPickerFormat)) selectedPickerFormat = orderedFormats[0]?.id || formats[0]?.id;
+    back.hidden = true;
+    $("#pickerStep").textContent = "3 DISSENYS";
     $("#pickerTitle").textContent = `Tria un disseny per a ${pickerFormatNames[selectedPickerFormat].toLowerCase()}`;
-    $("#pickerHelp").textContent = "Comença amb una proposta i adapta’n després els textos, colors i contingut.";
-    tabs.innerHTML = "";
-    tabs.className = "format-tabs";
-    tabs.hidden = true;
+    $("#pickerHelp").textContent = "Escull una base i adapta’n després els textos, colors i contingut.";
+    tabs.hidden = false;
+    tabs.className = "format-tabs format-visual-tabs";
+    const allFormats = [...orderedFormats, ...(mobileFormat ? [mobileFormat] : [])];
+    tabs.innerHTML = allFormats.map(format => { const copy = pickerFormatCopy[format.id]; const active = format.id === selectedPickerFormat; return `<button type="button" role="tab" aria-selected="${active}" class="format-visual-tab${active ? " is-active" : ""}" data-picker-format="${format.id}"><span class="format-type-icon">${pickerFormatIcon(copy.icon)}</span><span class="format-type-copy"><strong>${escapeHtml(format.id === "mobile-interactive" ? "Carta mòbil" : pickerFormatNames[format.id])}</strong></span></button>`; }).join("");
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
     grid.hidden = false;
     grid.innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
     $(".format-note").hidden = true;
     grid.animate?.([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: "cubic-bezier(.2,.7,.2,1)" });
+    $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); }));
     $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
-    back.onclick = () => { pickerStage = "formats"; selectedPickerFormat = ""; tabs.hidden = false; renderTemplatePicker(); };
     $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
   }
 
