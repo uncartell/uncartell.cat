@@ -306,9 +306,9 @@
 
   function renderFormats() {
     const landingNames = {
-      "a3-landscape": "Carta completa",
+      "a3-landscape": "Carta tipus revista",
       "a4-portrait": "Carta de vins i postres",
-      "a4-landscape": "Carta breu",
+      "a4-landscape": "Menú tipus díptic",
       "a4-single-1": "Menú del dia"
     };
     $("#formatGrid").innerHTML = L.formats.map((format, index) => {
