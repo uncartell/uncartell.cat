@@ -58,3 +58,118 @@
 @media(max-width:980px){.format-landing .format-workspace-bar{grid-template-columns:auto 1fr auto}.format-landing .format-workspace-bar>button:not(.format-open-project){display:none}.format-landing .format-card.format-option{flex-basis:42vw}}
 @media(max-width:680px){.format-landing .format-workspace-bar{grid-template-columns:auto 1fr;min-height:64px;padding:8px 12px}.format-landing .format-workspace-bar .format-project-preview{display:none}.format-landing .format-workspace-bar>a,.format-landing .format-workspace-bar>button{min-height:44px;padding:0 13px}.format-landing .format-step>.intro-row{padding:26px 18px 4px}.format-landing .format-step>.intro-row .intro h1{font-size:42px!important}.format-landing .format-grid{gap:14px!important;padding:20px 28px 30px!important}.format-landing .format-card.format-option{flex-basis:78vw;min-height:430px!important;grid-template-rows:225px auto auto}.format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:225px!important}.format-landing .format-carousel-arrow{display:none}}
 @media(prefers-reduced-motion:reduce){.format-landing .format-card.format-option{animation:none!important;transition:none!important}}
+
+/* Floating, full-bleed format gallery (no card containers). */
+.format-landing main{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding-inline:0!important;
+}
+.format-landing .format-step{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  overflow:hidden;
+}
+.format-landing .format-step>.intro-row{
+  width:min(1540px,calc(100% - 56px));
+}
+.format-landing .format-carousel-shell{
+  width:100vw!important;
+  max-width:none!important;
+  margin-inline:calc(50% - 50vw)!important;
+}
+.format-landing .format-grid{
+  width:100%!important;
+  gap:clamp(28px,3vw,58px)!important;
+  padding:24px 4vw 44px!important;
+  scroll-padding-inline:4vw!important;
+}
+.format-landing .format-card.format-option{
+  flex:0 0 clamp(270px,25.5vw,430px);
+  display:grid!important;
+  grid-template-rows:minmax(310px,46vh) auto auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  opacity:.6;
+  transform:scale(.94);
+}
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option.is-current{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  opacity:1;
+  transform:scale(1);
+}
+.format-landing .format-card-media,
+.format-landing .format-paper-wrap{
+  display:grid!important;
+  min-height:310px!important;
+  overflow:visible!important;
+  place-items:end center!important;
+  border:0!important;
+  background:transparent!important;
+}
+.format-landing .format-card.is-mobile .format-card-media,
+.format-landing-prices .format-card.is-mobile .format-card-media{
+  background:transparent!important;
+}
+.format-landing .format-card-media img{
+  width:100%!important;
+  height:100%!important;
+  max-height:46vh!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 18px 20px rgba(26,24,20,.13));
+}
+.format-landing .format-paper{
+  filter:drop-shadow(0 18px 20px rgba(26,24,20,.13));
+  transform:scale(1.1)!important;
+  transform-origin:center bottom;
+}
+.format-landing .format-card:hover .format-paper,
+.format-landing .format-card.is-current .format-paper{
+  transform:translateY(-4px) rotate(-.35deg) scale(1.13)!important;
+}
+.format-landing .format-card>.format-copy{
+  padding:26px 4px 10px!important;
+  text-align:center;
+}
+.format-landing .format-card>.format-copy h2{
+  font-size:24px!important;
+}
+.format-landing .format-card>.format-copy p{
+  max-width:34ch;
+  margin-inline:auto!important;
+}
+.format-landing .format-card>.format-actions{
+  padding:4px 4px 0!important;
+  text-align:center;
+}
+.format-landing .format-card>.format-actions button{
+  width:auto!important;
+  min-width:158px;
+  padding-inline:24px!important;
+}
+.format-landing .format-card>.format-tag{left:10px!important;top:6px!important}
+.format-landing .format-card>.format-plan-badge{right:10px!important;top:6px!important}
+.format-landing .format-carousel-arrow{
+  top:42%;
+  background:transparent!important;
+}
+
+@media(max-width:980px){
+  .format-landing .format-card.format-option{flex-basis:42vw}
+}
+@media(max-width:680px){
+  .format-landing .format-step>.intro-row{width:calc(100% - 36px)}
+  .format-landing .format-grid{gap:22px!important;padding:18px 9vw 34px!important;scroll-padding-inline:9vw!important}
+  .format-landing .format-card.format-option{flex-basis:72vw;grid-template-rows:285px auto auto!important}
+  .format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:285px!important}
+  .format-landing .format-card-media img{max-height:285px!important}
+}
