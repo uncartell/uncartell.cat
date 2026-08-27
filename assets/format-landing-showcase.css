@@ -173,3 +173,127 @@
   .format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:285px!important}
   .format-landing .format-card-media img{max-height:285px!important}
 }
+
+/* Compact selector: same workspace rhythm as the editors. */
+.format-landing .format-step{
+  background-size:48px 48px!important;
+  background-position:-1px -1px!important;
+  background-image:linear-gradient(rgba(24,22,20,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(24,22,20,.055) 1px,transparent 1px)!important;
+}
+.format-landing .format-workspace-bar{
+  box-sizing:border-box;
+  grid-template-columns:112px minmax(20px,1fr) minmax(430px,620px) auto auto auto!important;
+  min-height:70px!important;
+  height:70px!important;
+  gap:8px!important;
+  padding:10px 24px!important;
+}
+.format-landing .format-workspace-bar>a,
+.format-landing .format-workspace-bar>button{
+  box-sizing:border-box;
+  height:46px!important;
+  min-height:46px!important;
+  margin:0!important;
+  border-radius:10px!important;
+}
+.format-landing .format-home-link{grid-column:1;justify-self:start;min-width:96px}
+.format-landing .format-project-preview{grid-column:3;width:100%;margin:0!important}
+.format-landing .format-workspace-bar>button{min-width:92px;padding-inline:16px!important}
+.format-landing .format-step>.intro-row{
+  width:min(1540px,calc(100% - 48px));
+  margin:0 auto!important;
+  padding:24px 0 2px!important;
+}
+.format-landing .format-step>.intro-row .intro h1{
+  font-size:clamp(38px,3.55vw,54px)!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+}
+.format-landing .format-step>.intro-row .intro p{
+  max-width:760px!important;
+  margin-top:8px!important;
+  font-size:15px!important;
+  line-height:1.42!important;
+}
+.format-landing .format-carousel-shell{padding:0 0 8px!important}
+.format-landing .format-grid{
+  gap:clamp(18px,2vw,34px)!important;
+  padding:18px 3vw 30px!important;
+  scroll-padding-inline:3vw!important;
+}
+.format-landing .format-card.format-option{
+  flex-basis:clamp(210px,20.5vw,335px)!important;
+  grid-template-rows:minmax(248px,36vh) auto!important;
+}
+.format-landing .format-card-media,
+.format-landing .format-paper-wrap{
+  position:relative;
+  min-height:248px!important;
+}
+.format-landing .format-card-media img{max-height:36vh!important}
+.format-landing .format-paper{transform:scale(.93)!important}
+.format-landing .format-card:hover .format-paper,
+.format-landing .format-card.is-current .format-paper{transform:translateY(-3px) rotate(-.25deg) scale(.965)!important}
+.format-landing .format-card>.format-copy{
+  padding:15px 4px 0!important;
+  text-align:center!important;
+}
+.format-landing .format-card>.format-copy h2{
+  margin-bottom:5px!important;
+  font-size:19px!important;
+  line-height:1.1!important;
+}
+.format-landing .format-card>.format-copy p{
+  font-size:12px!important;
+  line-height:1.35!important;
+  text-align:center!important;
+}
+.format-landing .format-card>.format-copy .format-meta{
+  margin-top:7px!important;
+  text-align:center!important;
+}
+.format-landing .format-card>.format-actions{
+  position:absolute!important;
+  inset:0 0 auto 0!important;
+  z-index:5!important;
+  display:flex!important;
+  height:min(248px,36vh)!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  opacity:0!important;
+  transform:translateY(5px)!important;
+  transition:opacity .18s ease,transform .18s ease!important;
+  pointer-events:none!important;
+}
+.format-landing .format-card:hover>.format-actions,
+.format-landing .format-card:focus-within>.format-actions,
+.format-landing .format-card.is-current>.format-actions{
+  opacity:1!important;
+  transform:none!important;
+  pointer-events:auto!important;
+}
+.format-landing .format-card>.format-actions button{
+  min-width:132px!important;
+  min-height:44px!important;
+  box-shadow:0 10px 26px rgba(20,19,17,.2)!important;
+}
+.format-landing .format-note{font-size:11px!important}
+
+@media(max-width:1100px){
+  .format-landing .format-workspace-bar{grid-template-columns:96px minmax(16px,1fr) minmax(300px,460px) auto auto auto!important}
+  .format-landing .format-card.format-option{flex-basis:31vw!important}
+}
+@media(max-width:760px){
+  .format-landing .format-workspace-bar{grid-template-columns:auto minmax(0,1fr) auto!important;height:64px!important;min-height:64px!important;padding:8px 12px!important}
+  .format-landing .format-workspace-bar .format-project-preview{display:none!important}
+  .format-landing .format-workspace-bar>button:not(.format-open-project){display:none!important}
+  .format-landing .format-home-link{min-width:84px}
+  .format-landing .format-step>.intro-row{width:calc(100% - 32px);padding-top:18px!important}
+  .format-landing .format-step>.intro-row .intro h1{font-size:36px!important}
+  .format-landing .format-step>.intro-row .intro p{font-size:14px!important}
+  .format-landing .format-grid{padding:14px 10vw 28px!important;scroll-padding-inline:10vw!important}
+  .format-landing .format-card.format-option{flex-basis:72vw!important;grid-template-rows:260px auto!important}
+  .format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:260px!important}
+  .format-landing .format-card>.format-actions{height:260px!important;opacity:1!important;transform:none!important;pointer-events:auto!important;align-items:flex-end!important;padding-bottom:18px!important}
+}
