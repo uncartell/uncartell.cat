@@ -91,6 +91,67 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
 .u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}
 .u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
 
+/* Selector visual de sectors: lleuger, editorial i coherent amb els selectors de formats. */
+.poster-category-tabs{
+  align-items:stretch;
+  gap:0;
+  border-bottom:1px solid #dedbd3;
+}
+.poster-category-tabs button{
+  position:relative;
+  display:flex;
+  min-width:126px;
+  min-height:112px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-direction:column;
+  gap:10px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  padding:14px 16px 17px;
+  color:#625e57;
+  font-size:12px;
+  transition:color .18s ease,background-color .18s ease;
+}
+.poster-category-tabs button::after{
+  content:"";
+  position:absolute;
+  right:16px;
+  bottom:-1px;
+  left:16px;
+  height:3px;
+  border-radius:3px 3px 0 0;
+  background:var(--green);
+  opacity:0;
+  transform:scaleX(.45);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.poster-category-tabs button:hover{background:rgba(115,241,114,.07)!important;color:var(--ink)}
+.poster-category-tabs button.active{color:var(--ink)}
+.poster-category-tabs button.active::after{opacity:1;transform:scaleX(1)}
+.poster-category-visual{
+  display:grid;
+  width:54px;
+  height:54px;
+  place-items:center;
+  border:1px solid rgba(62,190,70,.24);
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(115,241,114,.20),rgba(115,241,114,.055));
+  color:#208b2b;
+  transition:transform .18s ease,background-color .18s ease,border-color .18s ease;
+}
+.poster-category-tabs button:hover .poster-category-visual{transform:translateY(-2px);border-color:rgba(62,190,70,.42);background:rgba(115,241,114,.18)}
+.poster-category-tabs button.active .poster-category-visual{border-color:rgba(62,190,70,.55);background:rgba(115,241,114,.26);color:var(--ink)}
+.poster-category-icon{width:27px;height:27px;stroke-width:1.65}
+@media(max-width:620px){
+  .poster-category-tabs{margin-inline:-14px;padding-inline:14px;scroll-padding-inline:14px}
+  .poster-category-tabs button{min-width:103px;min-height:94px;gap:7px;padding:10px 10px 14px;font-size:10px}
+  .poster-category-tabs button::after{right:10px;left:10px}
+  .poster-category-visual{width:45px;height:45px;border-radius:12px}
+  .poster-category-icon{width:23px;height:23px}
+}
+
 /* Aparador editorial: cada miniatura es llegeix com un document imprimible. */
 .poster-format-grid{gap:28px 34px}
 .poster-repository-card{overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none}
