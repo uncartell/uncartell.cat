@@ -1643,7 +1643,7 @@
   $("#customMenuBrief").innerHTML = `<div class="custom-menu-brief-copy"><span class="eyebrow">uncartell studio</span><h2>${escapeHtml(L.customMenuTitle)}</h2><p>${escapeHtml(L.customMenuCopy)}</p></div><form id="customMenuBriefForm"><div class="brief-grid"><label><span>${escapeHtml(L.briefName)}</span><input name="name" type="text" required></label><label><span>${escapeHtml(L.briefBusiness)}</span><input name="business" type="text" required></label><label><span>${escapeHtml(L.briefEmail)}</span><input name="email" type="email" required></label><label><span>${escapeHtml(L.briefFormat)}</span><input name="format" type="text"></label></div><label><span>${escapeHtml(L.briefDetails)}</span><textarea name="details" rows="5" required></textarea></label><button type="submit">${escapeHtml(L.briefSend)}</button></form>`;
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
-  let selectedPickerFormat = "a4-single-1";
+  let selectedPickerFormat = "mobile-interactive";
   const pickerFormatNames = { "mobile-interactive": "Carta mòbil", "a3-landscape": "Revista", "a4-portrait": "Vins i postres", "a4-landscape": "Díptic", "a4-single-1": "Menú del dia" };
   const pickerFormatCopy = {
     "a4-single-1": { detail: "Una sola pàgina A4", icon: "single" },
@@ -1694,8 +1694,9 @@
     $("#pickerHelp").textContent = "Escull una base i adapta’n després els textos, colors i contingut.";
     tabs.hidden = false;
     tabs.className = "format-tabs format-visual-tabs";
-    const allFormats = [...orderedFormats, ...(mobileFormat ? [mobileFormat] : [])];
-    tabs.innerHTML = allFormats.map(format => { const copy = pickerFormatCopy[format.id]; const active = format.id === selectedPickerFormat; return `<button type="button" role="tab" aria-selected="${active}" class="format-visual-tab${active ? " is-active" : ""}" data-picker-format="${format.id}"><span class="format-type-icon">${pickerFormatIcon(copy.icon)}</span><span class="format-type-copy"><strong>${escapeHtml(format.id === "mobile-interactive" ? "Carta mòbil" : pickerFormatNames[format.id])}</strong></span></button>`; }).join("");
+    const allFormats = [...(mobileFormat ? [mobileFormat] : []), ...orderedFormats];
+    const mobileLocked = !entitlements.canCreateMobileMenu(state.plan);
+    tabs.innerHTML = allFormats.map(format => { const copy = pickerFormatCopy[format.id]; const active = format.id === selectedPickerFormat; const mobileBadges = format.id === "mobile-interactive" ? `<span class="format-tab-badges"><span class="format-new-badge">Nou</span>${mobileLocked ? '<span class="format-premium-badge">Premium</span>' : ""}</span>` : ""; return `<button type="button" role="tab" aria-selected="${active}" class="format-visual-tab${active ? " is-active" : ""}" data-picker-format="${format.id}">${mobileBadges}<span class="format-type-icon">${pickerFormatIcon(copy.icon)}</span><span class="format-type-copy"><strong>${escapeHtml(format.id === "mobile-interactive" ? "Carta mòbil" : pickerFormatNames[format.id])}</strong></span></button>`; }).join("");
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
     grid.hidden = false;
