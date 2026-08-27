@@ -305,13 +305,18 @@
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 
   function renderFormats() {
+    const featuredIds = new Set(["mobile-interactive", "a3-landscape", "a4-single-1"]);
+    const templates = {
+      "a3-landscape": `<span class="template-preview template-menu-editorial"><span class="template-kicker">RESTAURANT L’OLIVERA</span><strong>La nostra carta</strong><span class="template-rule"></span><span class="template-columns"><i><b>Per començar</b><small>Croquetes de rostit <em>9,50 €</em></small><small>Amanida de temporada <em>12 €</em></small></i><i><b>Principals</b><small>Arròs melós <em>18,50 €</em></small><small>Peix del dia <em>s/m</em></small></i></span></span>`,
+      "a4-single-1": `<span class="template-preview template-menu-daily"><span class="template-orbit" aria-hidden="true">✦</span><span class="template-kicker">CUINA DE MERCAT</span><strong>Menú del dia</strong><small>Primer · Segon · Postres</small><span class="template-price">19,50 €</span><span class="template-rule"></span><small>Producte fresc i de temporada</small></span>`
+    };
     const landingNames = {
       "a3-landscape": "Carta tipus revista",
       "a4-portrait": "Carta de vins i postres",
       "a4-landscape": "Menú tipus díptic",
       "a4-single-1": "Menú del dia"
     };
-    $("#formatGrid").innerHTML = L.formats.map((format, index) => {
+    $("#formatGrid").innerHTML = L.formats.filter(format => featuredIds.has(format.id)).map((format, index) => {
       const mobileLocked = format.id === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
       if (format.id === "mobile-interactive") return `
       <article class="format-card format-option is-mobile${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
@@ -319,15 +324,15 @@
         <span class="format-tag">Novetat</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-copy"><h2>Carta per a mòbil</h2><p>Una carta web navegable per compartir amb QR, sense imprimir.</p><p class="format-meta">WEB · RESPONSIVE · QR</p></span>
-        <span class="format-actions"><button type="button" data-format-action="personalize">Crea una carta web</button></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize">Comença amb aquesta plantilla</button></span>
       </article>`;
       return `
       <article class="format-card format-option" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
-        <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
+        <span class="format-paper-wrap"><span class="format-paper ${format.id}">${templates[format.id] || ""}</span></span>
         <span class="format-copy"><h2>${escapeHtml(landingNames[format.id] || format.name)}</h2><p>${escapeHtml(format.detail)}</p><p class="format-meta">${escapeHtml(format.fold)}</p></span>
-        <span class="format-actions"><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize">Comença amb aquesta plantilla</button></span>
       </article>`;
     }).join("");
     $$("[data-format-action]").forEach(button => button.addEventListener("click", () => {
