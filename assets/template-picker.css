@@ -9,3 +9,41 @@
 .format-landing .format-card>.format-copy{padding:20px 22px 8px!important;text-align:left!important}.format-landing .format-card>.format-copy h2{font-size:22px!important}.format-landing .format-card>.format-copy p{font-size:13px!important;text-align:left!important}.format-landing .format-card>.format-copy .format-meta{font-size:10px!important;text-align:left!important}.format-landing .format-card>.format-actions{position:static!important;display:block!important;height:auto!important;padding:10px 22px 22px!important;opacity:1!important;transform:none!important;pointer-events:auto!important}.format-landing .format-card>.format-actions button{width:100%!important;min-height:46px!important;box-shadow:none!important}.format-landing .format-note{margin-top:24px!important}
 @media(max-width:820px){.format-landing .format-step{padding:28px 16px 48px!important}.format-landing .format-step>.intro-row{margin-bottom:22px!important}.format-landing .format-step>.intro-row .intro h1{font-size:34px!important}.format-landing .format-tabs{width:100%;justify-content:flex-start;margin-bottom:24px}.format-landing .format-tabs button{padding-inline:16px}.format-landing .format-grid{display:flex!important;width:calc(100% + 16px)!important;gap:14px!important;overflow-x:auto!important;scroll-snap-type:x mandatory;padding:0 16px 12px 0!important}.format-landing .format-card.format-option{flex:0 0 min(84vw,360px)!important;grid-template-rows:300px auto auto!important;scroll-snap-align:start}.format-landing .format-paper-wrap{min-height:300px!important}.format-landing .format-card>.format-actions{height:auto!important;padding:10px 22px 22px!important}}
 @media(prefers-reduced-motion:reduce){.format-landing .format-card.format-option,.format-landing .format-tabs button{transition:none!important}}
+
+/* Selector de format en dos passos — Cartes i menús */
+.format-landing-menus .format-step{padding-top:32px!important}
+.format-landing-menus .format-step>.intro-row{margin-bottom:32px!important}
+.format-landing-menus .picker-stage-head{position:relative;display:flex;width:min(1240px,100%);min-height:78px;align-items:flex-start;justify-content:center;margin:0 auto 22px;text-align:center}
+.format-landing-menus .picker-stage-head>div{max-width:680px}
+.format-landing-menus .picker-step{display:block;margin-bottom:6px;color:#77736c;font-size:11px;font-weight:800;letter-spacing:.14em}
+.format-landing-menus .picker-stage-head h2{margin:0;color:#181614;font-size:clamp(24px,2.4vw,36px);line-height:1.08}
+.format-landing-menus .picker-stage-head p{margin:8px 0 0;color:#747068;font-size:15px;line-height:1.45}
+.format-landing-menus .picker-back{position:absolute;top:12px;left:0;min-height:42px;padding:0 14px;border:1px solid #d8d4cc;border-radius:10px;background:#fff;color:#181614;font:inherit;font-weight:750;cursor:pointer;transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.format-landing-menus .picker-back:hover{border-color:#8f8a81;background:#f5f4f0;transform:translateX(-2px)}
+.format-landing-menus .format-tabs.format-type-grid{display:grid!important;width:min(1240px,100%)!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0 auto!important;padding:0!important;overflow:visible;border:0;border-radius:0;background:transparent}
+.format-landing-menus .format-type-card{position:relative!important;display:grid!important;min-width:0;min-height:250px!important;grid-template-rows:154px auto;align-items:stretch!important;padding:0!important;overflow:hidden;border:1px solid #d8d4cc!important;border-radius:14px!important;background:#fff!important;color:#181614!important;text-align:left;box-shadow:none!important;cursor:pointer;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important}
+.format-landing-menus .format-type-card:hover{border-color:#71e877!important;background:#fff!important;box-shadow:0 18px 38px rgba(24,22,20,.09)!important;transform:translateY(-4px)}
+.format-landing-menus .format-type-icon{display:flex;align-items:center;justify-content:center;background:#f4f3ef}
+.format-landing-menus .format-type-icon svg{width:132px;height:106px;overflow:visible;fill:none;stroke:#181614;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.format-landing-menus .format-type-icon svg .paper{fill:#fff}.format-landing-menus .format-type-icon svg .fold-fill{fill:#dfffe0}.format-landing-menus .format-type-icon svg .fold{stroke:#68e96c;stroke-width:2.6}
+.format-landing-menus .format-type-copy{display:flex;flex-direction:column;padding:18px 44px 20px 18px}
+.format-landing-menus .format-type-copy strong{font-size:18px;line-height:1.15}.format-landing-menus .format-type-copy small{margin-top:6px;color:#77736c;font-size:13px;line-height:1.35}
+.format-landing-menus .format-type-arrow{position:absolute;right:18px;bottom:21px;font-size:22px;transition:transform .16s ease}.format-landing-menus .format-type-card:hover .format-type-arrow{transform:translateX(4px)}
+.format-landing-menus .format-type-mobile{grid-column:1/-1;min-height:142px!important;grid-template-columns:190px 1fr!important;grid-template-rows:1fr!important;border-color:#b9b2f4!important;background:#f5f2ff!important}
+.format-landing-menus .format-type-mobile .format-type-icon{background:#d9d2ff}.format-landing-menus .format-type-mobile .format-type-icon svg{width:92px;height:94px}
+.format-landing-menus .format-type-mobile .format-type-copy{justify-content:center}.format-landing-menus .format-type-label{width:max-content;margin-bottom:8px;padding:4px 7px;border-radius:6px;background:#181614;color:#fff;font-size:9px;font-weight:800;letter-spacing:.1em}
+.format-landing-menus .format-carousel-shell{width:100%}.format-landing-menus .format-grid[hidden]{display:none!important}
+.format-landing-menus .format-note{margin:18px auto 0!important;color:#817d76!important;font-size:12px!important;text-align:center}
+@media(max-width:820px){
+ .format-landing-menus .format-step{padding:22px 14px 42px!important}
+ .format-landing-menus .format-step>.intro-row{margin-bottom:24px!important}
+ .format-landing-menus .picker-stage-head{min-height:104px;margin-bottom:14px;padding-top:0}
+ .format-landing-menus .picker-stage-head h2{font-size:26px}.format-landing-menus .picker-stage-head p{font-size:14px}
+ .format-landing-menus .picker-back{position:static;flex:0 0 auto;margin:3px 12px 0 0}.format-landing-menus .picker-stage-head>div{text-align:left}
+ .format-landing-menus .format-tabs.format-type-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .format-landing-menus .format-type-card{min-height:205px!important;grid-template-rows:122px auto!important}
+ .format-landing-menus .format-type-icon svg{width:100px;height:82px}.format-landing-menus .format-type-copy{padding:14px 28px 15px 14px}.format-landing-menus .format-type-copy strong{font-size:15px}.format-landing-menus .format-type-copy small{font-size:11px}.format-landing-menus .format-type-arrow{right:12px;bottom:15px;font-size:18px}
+ .format-landing-menus .format-type-mobile{grid-column:1/-1;min-height:116px!important;grid-template-columns:116px 1fr!important;grid-template-rows:1fr!important}.format-landing-menus .format-type-mobile .format-type-icon svg{width:64px;height:76px}
+ .format-landing-menus .format-grid{width:calc(100% + 14px)!important}.format-landing-menus .format-card.format-option{flex-basis:min(82vw,350px)!important}
+}
+@media(prefers-reduced-motion:reduce){.format-landing-menus .format-type-card,.format-landing-menus .format-type-arrow,.format-landing-menus .picker-back{transition:none!important}}
