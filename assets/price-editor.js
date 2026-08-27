@@ -301,14 +301,28 @@
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 
   function renderFormats() {
+    const landingNames = {
+      "price-a3-portrait": "Taula vertical",
+      "price-a3-landscape": "Taula horitzontal"
+    };
     $("#formatGrid").innerHTML = L.formats.map(format => {
       const mobileLocked = format.id === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
+      if (format.id === "mobile-interactive") return `
+      <article class="format-card format-featured${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
+        <span class="format-featured-media"><img src="/assets/home/taules-de-preus.png" alt="Exemple visual d’una taula de preus" loading="eager"></span>
+        <span class="format-featured-content">
+          <span class="format-tag">NOU · Tarifes mòbils</span>
+          ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
+          <span class="format-copy"><h2>Comparteix els teus preus amb QR</h2><p>Crea una taula de preus navegable per consultar serveis i tarifes des de qualsevol mòbil.</p></span>
+          <span class="format-actions"><button type="button" data-format-action="personalize">Crear tarifes mòbils</button></span>
+        </span>
+      </article><h2 class="format-section-title">Formats per imprimir</h2>`;
       return `
       <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
-        <span class="format-copy"><h2>${escapeHtml(format.name)}</h2><p>${escapeHtml(format.detail)}</p><p>${escapeHtml(format.fold)}</p></span>
+        <span class="format-copy"><h2>${escapeHtml(landingNames[format.id] || format.name)}</h2><p>${escapeHtml(format.detail)}</p><p class="format-meta">${escapeHtml(format.fold)}</p></span>
         <span class="format-actions"><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
       </article>`;
     }).join("");
