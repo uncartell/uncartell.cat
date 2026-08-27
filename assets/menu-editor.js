@@ -1643,8 +1643,16 @@
   $("#customMenuBrief").innerHTML = `<div class="custom-menu-brief-copy"><span class="eyebrow">uncartell studio</span><h2>${escapeHtml(L.customMenuTitle)}</h2><p>${escapeHtml(L.customMenuCopy)}</p></div><form id="customMenuBriefForm"><div class="brief-grid"><label><span>${escapeHtml(L.briefName)}</span><input name="name" type="text" required></label><label><span>${escapeHtml(L.briefBusiness)}</span><input name="business" type="text" required></label><label><span>${escapeHtml(L.briefEmail)}</span><input name="email" type="email" required></label><label><span>${escapeHtml(L.briefFormat)}</span><input name="format" type="text"></label></div><label><span>${escapeHtml(L.briefDetails)}</span><textarea name="details" rows="5" required></textarea></label><button type="submit">${escapeHtml(L.briefSend)}</button></form>`;
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
-  let selectedPickerFormat = "a3-landscape";
+  let selectedPickerFormat = "";
+  let pickerStage = "formats";
   const pickerFormatNames = { "mobile-interactive": "Carta mòbil", "a3-landscape": "Revista", "a4-portrait": "Vins i postres", "a4-landscape": "Díptic", "a4-single-1": "Menú del dia" };
+  const pickerFormatCopy = {
+    "a4-single-1": { detail: "Una sola pàgina A4", icon: "single" },
+    "a4-landscape": { detail: "Un full plegat per la meitat", icon: "diptych" },
+    "a4-portrait": { detail: "Format estret i elegant", icon: "narrow" },
+    "a3-landscape": { detail: "Diverses pàgines, estil llibret", icon: "booklet" },
+    "mobile-interactive": { detail: "Web responsive per compartir amb QR", icon: "mobile" }
+  };
   const pickerTemplates = [
     { name: "Essencial", detail: "Neta, directa i fàcil de llegir.", accent: "#e5372a" },
     { name: "Editorial", detail: "Jerarquia marcada i aire de revista.", accent: "#2e5b47" },
@@ -1654,6 +1662,14 @@
     if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">RESTAURANT L’OLIVERA</span><strong>La nostra carta</strong><i>Entrants</i><i>Principals</i><i>Postres</i></span>`;
     const title = format === "a4-single-1" ? "Menú del dia" : format === "a4-portrait" ? "Carta de vins" : format === "a4-landscape" ? "Menú de temporada" : "La nostra carta";
     return `<span class="template-preview template-variant-${index}"><span class="template-kicker">RESTAURANT L’OLIVERA</span><strong>${title}</strong><span class="template-rule"></span><span class="template-columns"><i><b>${index === 1 ? "Selecció" : "Per començar"}</b><small>Croquetes de rostit <em>9,50 €</em></small><small>Amanida de temporada <em>12 €</em></small></i><i><b>Principals</b><small>Arròs de temporada <em>18,50 €</em></small><small>Peix del dia <em>s/m</em></small></i></span></span>`;
+  }
+  function pickerFormatIcon(icon) {
+    const common = 'viewBox="0 0 120 96" aria-hidden="true"';
+    if (icon === "single") return `<svg ${common}><path class="paper" d="M35 10h50v76H35z"/><path d="M43 24h34M43 34h26M43 64h34M43 72h24"/></svg>`;
+    if (icon === "diptych") return `<svg ${common}><path class="paper" d="M23 18h74v60H23z"/><path class="fold" d="M60 18v60"/><path d="M32 29h18M32 38h18M69 29h18M69 38h18"/></svg>`;
+    if (icon === "narrow") return `<svg ${common}><path class="fold-fill" d="m25 17 35 8v60l-35-8z"/><path class="paper" d="m60 25 35-8v60l-35 8z"/><path d="M70 33l16-4M70 42l16-4M34 31l16 4M34 40l16 4"/></svg>`;
+    if (icon === "booklet") return `<svg ${common}><path class="fold-fill" d="m17 22 42-9v66l-42 8z"/><path class="paper" d="m59 13 44 9v65l-44-8z"/><path class="fold" d="M59 13v66"/><path d="m26 33 23-5m-23 14 23-5m20-9 24 5m-24 4 24 5"/></svg>`;
+    return `<svg ${common}><rect class="paper" x="40" y="8" width="40" height="80" rx="9"/><path d="M49 23h22M49 33h22M49 50h22M49 60h22M55 77h10"/></svg>`;
   }
   function applyPickerTemplate(format, index) {
     if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) return openPlanGate("Premium");
@@ -1666,13 +1682,41 @@
   }
   function renderTemplatePicker() {
     const formats = L.formats.filter(format => pickerFormatNames[format.id]);
-    if (!formats.some(format => format.id === selectedPickerFormat)) selectedPickerFormat = formats[0]?.id;
-    $("#formatTabs").innerHTML = formats.map(format => `<button type="button" role="tab" aria-selected="${format.id === selectedPickerFormat}" class="${format.id === selectedPickerFormat ? "is-active" : ""}" data-picker-format="${format.id}">${escapeHtml(pickerFormatNames[format.id])}</button>`).join("");
+    const printOrder = ["a4-single-1", "a4-landscape", "a4-portrait", "a3-landscape"];
+    const orderedFormats = printOrder.map(id => formats.find(format => format.id === id)).filter(Boolean);
+    const mobileFormat = formats.find(format => format.id === "mobile-interactive");
+    const tabs = $("#formatTabs");
+    const grid = $("#formatGrid");
+    const back = $("#pickerBack");
+    if (pickerStage === "formats") {
+      back.hidden = true;
+      $("#pickerStep").textContent = "PAS 1 DE 2";
+      $("#pickerTitle").textContent = "Quin format necessites?";
+      $("#pickerHelp").textContent = "Escull com vols presentar la carta. Ho podràs personalitzar tot després.";
+      tabs.className = "format-tabs format-type-grid";
+      tabs.innerHTML = orderedFormats.map(format => { const copy = pickerFormatCopy[format.id]; return `<button type="button" class="format-type-card" data-picker-format="${format.id}"><span class="format-type-icon">${pickerFormatIcon(copy.icon)}</span><span class="format-type-copy"><strong>${escapeHtml(pickerFormatNames[format.id])}</strong><small>${escapeHtml(copy.detail)}</small></span><span class="format-type-arrow" aria-hidden="true">→</span></button>`; }).join("") + (mobileFormat ? `<button type="button" class="format-type-card format-type-mobile" data-picker-format="mobile-interactive"><span class="format-type-icon">${pickerFormatIcon("mobile")}</span><span class="format-type-copy"><span class="format-type-label">CARTA WEB</span><strong>Carta per a mòbil</strong><small>${escapeHtml(pickerFormatCopy["mobile-interactive"].detail)}</small></span><span class="format-type-arrow" aria-hidden="true">→</span></button>` : "");
+      grid.innerHTML = "";
+      grid.hidden = true;
+      $(".format-note").hidden = false;
+      $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; pickerStage = "templates"; renderTemplatePicker(); }));
+      return;
+    }
+    if (!formats.some(format => format.id === selectedPickerFormat)) { pickerStage = "formats"; renderTemplatePicker(); return; }
+    back.hidden = false;
+    $("#pickerStep").textContent = "PAS 2 DE 2";
+    $("#pickerTitle").textContent = `Tria un disseny per a ${pickerFormatNames[selectedPickerFormat].toLowerCase()}`;
+    $("#pickerHelp").textContent = "Comença amb una proposta i adapta’n després els textos, colors i contingut.";
+    tabs.innerHTML = "";
+    tabs.className = "format-tabs";
+    tabs.hidden = true;
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
-    $("#formatGrid").innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Utilitza aquesta plantilla</button></span></article>`).join("");
-    $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); $("#formatGrid")?.animate?.([{ opacity: .35, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: "ease-out" }); }));
+    grid.hidden = false;
+    grid.innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
+    $(".format-note").hidden = true;
+    grid.animate?.([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: "cubic-bezier(.2,.7,.2,1)" });
     $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
+    back.onclick = () => { pickerStage = "formats"; selectedPickerFormat = ""; tabs.hidden = false; renderTemplatePicker(); };
     $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
   }
 
