@@ -301,6 +301,10 @@
   const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 
   function renderFormats() {
+    const templates = {
+      "price-a3-portrait": `<span class="template-preview template-price-calm"><span class="template-illustration" aria-hidden="true">◇</span><span class="template-kicker">AURA SPA</span><strong>Serveis i preus</strong><span class="template-rule"></span><span class="template-columns"><i><b>Massatges</b><small>Relaxant <em>65 €</em></small><small>Teixit profund <em>85 €</em></small></i><i><b>Tractaments</b><small>Facial exprés <em>45 €</em></small><small>Ritual orgànic <em>95 €</em></small></i></span></span>`,
+      "price-a3-landscape": `<span class="template-preview template-price-bold"><span class="template-sun" aria-hidden="true"></span><span class="template-kicker">ESTUDI HANOI</span><strong>Tarifes</strong><small>Bellesa · Benestar · Rituals</small><span class="template-rule"></span><span class="template-list"><i>Massatge holístic <em>75 €</em></i><i>Facial revitalitzant <em>55 €</em></i><i>Ritual sensorial <em>120 €</em></i></span></span>`
+    };
     const landingNames = {
       "price-a3-portrait": "Taula vertical",
       "price-a3-landscape": "Taula horitzontal"
@@ -313,15 +317,15 @@
         <span class="format-tag">Novetat</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-copy"><h2>Tarifes per a mòbil</h2><p>Preus i serveis en una pàgina web navegable per compartir amb QR.</p><p class="format-meta">WEB · RESPONSIVE · QR</p></span>
-        <span class="format-actions"><button type="button" data-format-action="personalize">Crea tarifes web</button></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize">Comença amb aquesta plantilla</button></span>
       </article>`;
       return `
       <article class="format-card format-option" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
-        <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
+        <span class="format-paper-wrap"><span class="format-paper ${format.id}">${templates[format.id] || ""}</span></span>
         <span class="format-copy"><h2>${escapeHtml(landingNames[format.id] || format.name)}</h2><p>${escapeHtml(format.detail)}</p><p class="format-meta">${escapeHtml(format.fold)}</p></span>
-        <span class="format-actions"><button type="button" data-format-action="personalize"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 0-3.6H12a1.5 1.5 0 0 1 0-3h2.5A6.5 6.5 0 0 0 21 8c0-2.8-4-5-9-5Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg>${escapeHtml(L.personalizeFormat)}</button></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize">Comença amb aquesta plantilla</button></span>
       </article>`;
     }).join("");
     $$("[data-format-action]").forEach(button => button.addEventListener("click", () => {
