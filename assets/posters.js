@@ -1,4 +1,6 @@
 (()=>{
+  const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
+  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260827-sector-tabs-1';
   const es=document.documentElement.lang==='es';
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
@@ -87,7 +89,16 @@
     const dictionary=es?iconNamesEs:iconNamesCa;return key.replace(/([a-z])([A-Z])/g,'$1-$2').split('-').filter(Boolean).map(word=>dictionary[word.toLowerCase()]||word.toLowerCase()).join(' ')
   }
   const catalogCategories=['Més populars','Restauració','Comerç','Horaris','Avisos','Promocions','Altres'];
-  const popularCategoryIcon='<svg class="poster-category-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>';
+  const categoryIcons={
+    'Més populars':'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>',
+    'Restauració':'<path d="M4 3v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3M7 3v18M20 3v18M20 3c-3 1-4 4-4 8h4"/>',
+    'Comerç':'<path d="M4 10v10h16V10M3 10l2-6h14l2 6M3 10c0 2 3 2 4 0 1 2 4 2 5 0 1 2 4 2 5 0 1 2 4 2 4 0M9 20v-6h6v6"/>',
+    'Horaris':'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>',
+    'Avisos':'<path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5M12 17h.01"/>',
+    'Promocions':'<path d="M20 13 13 20l-9-9V4h7l9 9Z"/><circle cx="8.5" cy="8.5" r="1"/>',
+    'Altres':'<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><rect x="14" y="14" width="6.5" height="6.5" rx="1"/>'
+  };
+  const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 24 24">${categoryIcons[name]||categoryIcons.Altres}</svg></span>`;
   const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
   const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|2x1/i;
   const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat/i;
@@ -136,7 +147,7 @@
   function renderFilters(){
     const categories=categoryNames();
     if(!categories.includes(activeCategory)) activeCategory=categories[0]||'';
-    categoryNav.innerHTML=categories.map(name=>`<button class="${!catalogQuery&&name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${!catalogQuery&&name===activeCategory}">${name==='Més populars'?popularCategoryIcon:''}<span>${escapeHtml(name)}</span></button>`).join('');
+    categoryNav.innerHTML=categories.map(name=>`<button class="${!catalogQuery&&name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${!catalogQuery&&name===activeCategory}">${categoryIcon(name)}<span>${escapeHtml(name)}</span></button>`).join('');
     if(catalogQuery){subcategoryNav.innerHTML='';subcategoryNav.hidden=true;qa('[data-category]').forEach(button=>button.onclick=()=>{catalogQuery='';if(catalogSearch)catalogSearch.value='';if(clearCatalogSearch)clearCatalogSearch.hidden=true;activeCategory=button.dataset.category;activeSubcategory='';renderFilters();renderCards()});return}
     subcategoryNav.hidden=false;
     const subs=subcategoryNames();
