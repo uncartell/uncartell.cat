@@ -174,19 +174,21 @@
     if(!root)return;
     const grids=root.querySelectorAll('.u-upgrade-plans,.u-plans-grid');
     grids.forEach(grid=>{
-      const cards=[...grid.querySelectorAll(':scope > article')];
+      const cards=[...grid.children].filter(card=>card.tagName==='ARTICLE');
       cards.forEach(card=>{
-        const head=card.querySelector(':scope > header,.u-plan-head');
+        const head=card.firstElementChild?.matches('header,.u-plan-head')?card.firstElementChild:card.querySelector('.u-plan-head');
         if(!head||head.dataset.accordionReady)return;
         head.dataset.accordionReady='';head.setAttribute('role','button');head.setAttribute('tabindex','0');head.setAttribute('aria-expanded','false');
-        const toggle=()=>{if(!matchMedia('(max-width:760px)').matches)return;cards.forEach(item=>{const open=item===card&&!item.classList.contains('is-open');item.classList.toggle('is-open',open);item.querySelector(':scope > header,.u-plan-head')?.setAttribute('aria-expanded',String(open))})};
+        const toggle=()=>{if(window.innerWidth>760)return;const shouldOpen=!card.classList.contains('is-open');cards.forEach(item=>{const open=item===card&&shouldOpen;item.classList.toggle('is-open',open);const itemHead=item.firstElementChild?.matches('header,.u-plan-head')?item.firstElementChild:item.querySelector('.u-plan-head');itemHead?.setAttribute('aria-expanded',String(open))})};
         head.addEventListener('click',toggle);head.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}});
       });
       const preferred=cards.find(card=>card.classList.contains('is-current'))||cards.find(card=>card.dataset.upgradePlan==='premium'||card.classList.contains('premium'))||cards[0];
-      preferred?.classList.add('is-open');preferred?.querySelector(':scope > header,.u-plan-head')?.setAttribute('aria-expanded','true');
+      preferred?.classList.add('is-open');
+      const preferredHead=preferred?.firstElementChild?.matches('header,.u-plan-head')?preferred.firstElementChild:preferred?.querySelector('.u-plan-head');
+      preferredHead?.setAttribute('aria-expanded','true');
     });
   };
-  setupPlanAccordions(upgradeModal);
+  try{setupPlanAccordions(upgradeModal)}catch(error){console.error('Pricing accordion:',error)}
   const showUpgradeStep=name=>upgradeModal?.querySelectorAll('[data-upgrade-step]').forEach(step=>step.hidden=step.dataset.upgradeStep!==name);
   const closeUpgrade=()=>{if(!upgradeModal)return;upgradeModal.hidden=true;document.body.classList.remove('u-modal-open')};
   const syncUpgradePlans=()=>{
