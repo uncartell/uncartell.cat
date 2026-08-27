@@ -247,7 +247,11 @@ body:has(.plan-preview) .u-quota{bottom:74px}
   .u-plan-head,.u-upgrade-plans article>header{position:relative;min-height:56px;padding-right:46px;cursor:pointer}
   .u-plan-head::after,.u-upgrade-plans article>header::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400}
   .u-plan.is-open>.u-plan-head::after,.u-upgrade-plans article.is-open>header::after{content:"−"}
-  .u-plan:not(.is-open)>.u-plan-body,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body{display:none}
+  .u-plan:not(.is-open)>.u-plan-body,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 14px;padding:15px 18px}
+  .u-plan:not(.is-open)>.u-plan-body>p,.u-plan:not(.is-open) .u-feature-list,.u-plan:not(.is-open) .u-price-note,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body>p,.u-upgrade-plans article:not(.is-open) .u-upgrade-features{display:none}
+  .u-plan:not(.is-open) h2,.u-upgrade-plans article:not(.is-open) h3{margin:0;font-size:24px}
+  .u-plan:not(.is-open) .u-price,.u-upgrade-plans article:not(.is-open) strong{margin:0;font-size:25px;white-space:nowrap}
+  .u-plan:not(.is-open) .u-button,.u-plan:not(.is-open) .u-ultra-interest,.u-upgrade-plans article:not(.is-open) button,.u-upgrade-plans article:not(.is-open) a{grid-column:1/-1}
   .u-plan-body,.u-upgrade-plan-body{padding:20px}
   .u-price{margin-top:18px;font-size:44px}
   .u-feature-list{padding-top:17px;margin-top:14px}
