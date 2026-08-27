@@ -83,7 +83,7 @@
       faq:{eyebrow:'Ajuda',title:'Preguntes freqüents',intro:'Tot el que cal saber per crear, personalitzar, desar i descarregar els teus projectes.',items:[
         ['Què puc fer sense registrar-me?','Pots utilitzar les eines bàsiques per crear cartells, cartes i menús, taules de preus i codis QR. El pla Basic permet editar continguts i fer fins a 10 descàrregues diàries compartides entre totes les eines.'],
         ['Quines eines hi ha disponibles?','Ara mateix pots crear cartells, cartes i menús, taules de preus i codis QR. Continuarem incorporant noves eines mantenint el mateix sistema d’edició.'],
-        ['Què inclou Premium?','Premium afegeix colors i tipografies personalitzades, descàrregues il·limitades i la possibilitat de desar i recuperar projectes. També desbloqueja els formats mòbils i les funcions Premium indicades a cada eina.'],
+        ['Què inclou Premium?','Premium afegeix colors personalitzats, descàrregues il·limitades i la possibilitat de desar i recuperar projectes. També desbloqueja els formats mòbils i les funcions Premium indicades a cada eina.'],
         ['Premium és gratuït durant 6 mesos?','Sí. L’activació és gratuïta durant 6 mesos, sense targeta ni renovació automàtica. T’avisarem abans de qualsevol canvi perquè puguis decidir què vols fer.'],
         ['Què inclourà Ultra?','Ultra està pensat per a marques i empreses: permetrà retirar o editar la marca d’aigua, aplicar un kit de marca, utilitzar logotips i imatges i accedir als formats i descàrregues avançats marcats com a Ultra.'],
         ['Per què necessito un compte?','El compte identifica el teu pla i permet desar i recuperar projectes entre sessions. Només demanem les dades imprescindibles per prestar el servei.'],
