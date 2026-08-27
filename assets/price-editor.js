@@ -161,7 +161,7 @@
     if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
     state.plan = nextPlan;
     if (nextPlan === "ultra") state.brandKit = readBrandKit();
-    renderFormats();
+    renderTemplatePicker();
     renderAll();
   });
   window.UncartellPlatform?.whenReady?.().then(() => {
@@ -170,7 +170,7 @@
     if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
     state.plan = nextPlan;
     if (nextPlan === "ultra") state.brandKit = readBrandKit();
-    renderFormats();
+    renderTemplatePicker();
     renderAll();
   });
   let autoSaveTimer = null;
@@ -1698,8 +1698,39 @@
   $("#customMenuBrief").innerHTML = `<div class="custom-menu-brief-copy"><span class="eyebrow">uncartell studio</span><h2>${escapeHtml(L.customMenuTitle)}</h2><p>${escapeHtml(L.customMenuCopy)}</p></div><form id="customMenuBriefForm"><div class="brief-grid"><label><span>${escapeHtml(L.briefName)}</span><input name="name" type="text" required></label><label><span>${escapeHtml(L.briefBusiness)}</span><input name="business" type="text" required></label><label><span>${escapeHtml(L.briefEmail)}</span><input name="email" type="email" required></label><label><span>${escapeHtml(L.briefFormat)}</span><input name="format" type="text"></label></div><label><span>${escapeHtml(L.briefDetails)}</span><textarea name="details" rows="5" required></textarea></label><button type="submit">${escapeHtml(L.briefSend)}</button></form>`;
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
+  let selectedPickerFormat = "price-a3-portrait";
+  const pickerFormatNames = { "mobile-interactive": "Tarifes mòbils", "price-a3-portrait": "Vertical", "price-a3-landscape": "Horitzontal" };
+  const pickerTemplates = [
+    { name: "Serena", detail: "Neta, clara i fàcil de consultar.", accent: "#5b9e62" },
+    { name: "Editorial", detail: "Jerarquia marcada i aire professional.", accent: "#e5372a" },
+    { name: "Contrast", detail: "Més caràcter per destacar serveis i preus.", accent: "#181614" }
+  ];
+  function pickerPreview(format, index) {
+    if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>Serveis i preus</strong><i>Massatges</i><i>Tractaments</i><i>Rituals</i></span>`;
+    return `<span class="template-preview template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>${index === 1 ? "Tarifes" : "Serveis i preus"}</strong><span class="template-rule"></span><span class="template-columns"><i><b>Massatges</b><small>Relaxant <em>65 €</em></small><small>Teixit profund <em>85 €</em></small></i><i><b>Tractaments</b><small>Facial exprés <em>45 €</em></small><small>Ritual orgànic <em>95 €</em></small></i></span></span>`;
+  }
+  function applyPickerTemplate(format, index) {
+    if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) return openPlanGate("Premium");
+    openEditor(format);
+    state.accent = pickerTemplates[index]?.accent || pickerTemplates[0].accent;
+    state.textColor = "#181614";
+    state.priceHeader.title = index === 1 ? "Tarifes" : index === 2 ? "Experiències" : L.defaults.coverTitle;
+    renderAll();
+  }
+  function renderTemplatePicker() {
+    const formats = L.formats.filter(format => pickerFormatNames[format.id]);
+    if (!formats.some(format => format.id === selectedPickerFormat)) selectedPickerFormat = formats[0]?.id;
+    $("#formatTabs").innerHTML = formats.map(format => `<button type="button" role="tab" aria-selected="${format.id === selectedPickerFormat}" class="${format.id === selectedPickerFormat ? "is-active" : ""}" data-picker-format="${format.id}">${escapeHtml(pickerFormatNames[format.id])}</button>`).join("");
+    const definition = formats.find(format => format.id === selectedPickerFormat);
+    const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
+    $("#formatGrid").innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Utilitza aquesta plantilla</button></span></article>`).join("");
+    $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); $("#formatGrid")?.animate?.([{ opacity: .35, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: "ease-out" }); }));
+    $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
+    $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
+  }
+
   window.openPriceEditor = openEditor;
-  renderFormats();
+  renderTemplatePicker();
   const requestedFormat = new URLSearchParams(location.search).get("format");
   if (L.formats.some(item => item.id === requestedFormat)) openEditor(requestedFormat);
   $("#formatGrid").addEventListener("click", event => {
