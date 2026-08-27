@@ -336,6 +336,25 @@
       else if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) openPlanGate("Premium");
       else openEditor(format);
     }));
+    setupFormatCarousel();
+  }
+
+  function setupFormatCarousel() {
+    const rail = $("#formatGrid");
+    const cards = $$(".format-option", rail);
+    let active = Math.min(1, cards.length - 1);
+    const select = (index, scroll = true) => {
+      active = Math.max(0, Math.min(cards.length - 1, index));
+      cards.forEach((card, i) => card.classList.toggle("is-current", i === active));
+      if (scroll) cards[active]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    };
+    cards.forEach((card, index) => card.addEventListener("click", event => {
+      if (!event.target.closest("button")) select(index);
+    }));
+    $(".format-carousel-arrow.prev")?.addEventListener("click", () => select(active - 1));
+    $(".format-carousel-arrow.next")?.addEventListener("click", () => select(active + 1));
+    $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
+    requestAnimationFrame(() => select(active, false));
   }
 
   function openDemo(format) {
