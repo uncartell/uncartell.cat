@@ -322,7 +322,7 @@
           <span class="format-copy"><h2>Crea una carta per compartir amb QR</h2><p>Crea una carta web ràpida i navegable, ideal per compartir amb QR i consultar sense imprimir.</p></span>
           <span class="format-actions"><button type="button" data-format-action="personalize">Crea carta mòbil</button></span>
         </span>
-      </article><h2 class="format-section-title">Formats per imprimir</h2>`;
+      </article>`;
       return `
       <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
