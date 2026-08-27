@@ -316,7 +316,7 @@
           <span class="format-copy"><h2>Comparteix els teus preus amb QR</h2><p>Crea una taula de preus navegable per consultar serveis i tarifes des de qualsevol mòbil.</p></span>
           <span class="format-actions"><button type="button" data-format-action="personalize">Crear tarifes mòbils</button></span>
         </span>
-      </article><h2 class="format-section-title">Formats per imprimir</h2>`;
+      </article>`;
       return `
       <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
