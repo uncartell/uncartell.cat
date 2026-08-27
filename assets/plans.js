@@ -16,6 +16,18 @@
     premium?.closest('.u-plan')?.classList.toggle('is-current',plan==='premium');
   };
   syncPlanCards();
+  const planGrid=document.querySelector('.u-plans-grid');
+  if(planGrid){
+    const cards=[...planGrid.querySelectorAll(':scope > .u-plan')];
+    cards.forEach(card=>{
+      const head=card.querySelector('.u-plan-head');
+      if(!head)return;
+      head.setAttribute('role','button');head.setAttribute('tabindex','0');
+      const toggle=()=>{if(!matchMedia('(max-width:760px)').matches)return;cards.forEach(item=>item.classList.toggle('is-open',item===card&&!item.classList.contains('is-open')))};
+      head.addEventListener('click',toggle);head.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}});
+    });
+    (cards.find(card=>card.classList.contains('is-current'))||cards.find(card=>card.classList.contains('premium'))||cards[0])?.classList.add('is-open');
+  }
   addEventListener('uncartell:plan',syncPlanCards);
   addEventListener('uncartell:auth-ready',syncPlanCards);
   addEventListener('uncartell:auth-change',syncPlanCards);
