@@ -1,238 +1,55 @@
-/* Landing-only presentation for menus and price tables. Editor structure stays untouched. */
-.format-step{
-  padding-top:42px!important;
-}
-.format-step>.intro-row{
-  margin-bottom:30px!important;
-}
-.format-step>.intro-row .intro h1{
-  min-height:0!important;
-  margin:0!important;
-}
-.format-step>.intro-row .intro p{
-  min-height:0!important;
-  max-width:670px;
-  margin-top:10px!important;
-}
-.format-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:20px!important;
-}
-.format-section-title{
-  grid-column:1/-1;
-  margin:14px 0 0;
-  font-size:18px;
-  letter-spacing:-.02em;
-}
-.format-card:not(.format-featured){
-  min-height:390px!important;
-  padding:0 0 74px!important;
-  overflow:hidden;
-  border-radius:12px!important;
-}
-.format-card:not(.format-featured) .format-paper-wrap{
-  height:230px!important;
-  margin:0!important;
-  border-bottom:1px solid #dedbd3;
-  background:#f3f1ec;
-}
-.format-card:not(.format-featured)>.format-tag{
-  top:14px!important;
-  left:14px!important;
-  z-index:4;
-  border-radius:8px!important;
-}
-.format-card:not(.format-featured) .format-paper{
-  transform:scale(1.12);
-}
-.format-card:not(.format-featured):hover .format-paper{
-  transform:rotate(-1deg) scale(1.15)!important;
-}
-.format-card:not(.format-featured)>.format-copy{
-  padding:18px 20px 0!important;
-}
-.format-card:not(.format-featured)>.format-actions{
-  left:20px!important;
-  right:20px!important;
-  bottom:16px!important;
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  opacity:1!important;
-  transform:none!important;
-  pointer-events:auto!important;
-}
-.format-card:not(.format-featured)>.format-actions button{
-  width:100%!important;
-}
-.format-card:not(.format-featured) .format-copy h2{
-  font-size:18px!important;
-}
-.format-card:not(.format-featured) .format-copy p{
-  display:-webkit-box;
-  overflow:hidden;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-}
-.format-card .format-meta{
-  margin-top:8px!important;
-  color:#77736c!important;
-  font-size:10px!important;
-  font-weight:750;
-}
-.format-card.format-featured{
-  display:grid!important;
-  grid-column:1/-1;
-  grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr)!important;
-  min-height:340px!important;
-  padding:0!important;
-  overflow:hidden;
-  border-color:#cbc7bd!important;
-  background:#fff!important;
-  box-shadow:none!important;
-  border-radius:12px!important;
-}
-.format-featured-media{
-  display:grid;
-  min-width:0;
-  place-items:center;
-  overflow:hidden;
-  background:#f0ede8;
-  min-height:340px;
-}
-.format-featured-media img{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.format-featured-content{
-  position:relative;
-  display:flex;
-  min-width:0;
-  flex-direction:column;
-  justify-content:center;
-  padding:42px 42px 36px;
-}
-.format-featured-content>.format-tag{
-  position:static!important;
-  align-self:flex-start;
-  margin-bottom:24px;
-  border:1px solid #0074d9!important;
-  background:#0088ff!important;
-  color:#fff!important;
-  border-radius:8px!important;
-}
-.format-featured-content>.format-plan-badge{
-  top:20px!important;
-  right:20px!important;
-}
-.format-card .format-plan-badge{
-  min-width:76px!important;
-  height:28px!important;
-  justify-content:center;
-  border-radius:8px!important;
-  padding:0 12px!important;
-}
-.format-featured-content>.format-copy{
-  display:block!important;
-  padding:0!important;
-}
-.format-featured-content>.format-copy h2{
-  max-width:520px;
-  margin:0 0 14px;
-  font-size:clamp(28px,3vw,44px)!important;
-  line-height:1.02;
-}
-.format-featured-content>.format-copy p{
-  max-width:510px;
-  margin:0;
-  font-size:15px!important;
-  line-height:1.45;
-}
-.format-featured-content>.format-actions{
-  position:static!important;
-  display:block!important;
-  width:max-content;
-  margin-top:28px;
-  opacity:1!important;
-  transform:none!important;
-  pointer-events:auto!important;
-}
-.format-featured-content>.format-actions button{
-  width:auto!important;
-  min-height:46px!important;
-  padding:0 19px!important;
-  border-radius:10px!important;
-  font-size:12px!important;
-}
-.format-card.format-featured:hover{
-  transform:translateY(-2px)!important;
-  border-color:#8f8a81!important;
-  box-shadow:0 14px 34px rgba(24,22,20,.07)!important;
-}
-.format-card.format-featured.is-premium-locked .format-featured-media,
-.format-card.format-featured.is-premium-locked .format-copy{
-  opacity:1!important;
-}
-.format-card.format-featured.is-premium-locked .format-actions button{
-  border-color:#cbc7bd!important;
-  background:#efede8!important;
-  color:#625e57!important;
-}
-
-@media(max-width:820px){
-  .format-card.format-featured{
-    grid-template-columns:1fr!important;
-  }
-  .format-featured-media{
-    min-height:240px;
-  }
-  .format-featured-content{
-    padding:32px 26px 28px;
-  }
-}
-
+/* Compact format selector shared by menus and price tables. Editor structure stays untouched. */
+.format-step{padding-top:34px!important}
+.format-step>.intro-row{margin-bottom:28px!important}
+.format-step>.intro-row .intro h1{min-height:0!important;margin:0!important}
+.format-step>.intro-row .intro p{min-height:0!important;max-width:680px;margin-top:9px!important}
+.format-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch;gap:18px!important}
+.format-section-title{display:none!important}
+.format-card{overflow:hidden;border:1px solid #d8d4cb!important;border-radius:12px!important;background:#fff!important;box-shadow:none!important;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease!important}
+.format-card:hover{transform:translateY(-2px)!important;border-color:#969087!important;box-shadow:0 12px 28px rgba(24,22,20,.07)!important}
+.format-card:not(.format-featured){min-height:340px!important;padding:0 0 68px!important}
+.format-card:not(.format-featured) .format-paper-wrap{height:190px!important;margin:0!important;border-bottom:1px solid #dedbd3;background:#f4f2ed}
+.format-card:not(.format-featured)>.format-tag{top:12px!important;left:12px!important;z-index:4;border-radius:8px!important}
+.format-card:not(.format-featured) .format-paper{transform:scale(1.04)}
+.format-card:not(.format-featured):hover .format-paper{transform:rotate(-.6deg) scale(1.08)!important}
+.format-card:not(.format-featured)>.format-copy{padding:17px 18px 0!important}
+.format-card:not(.format-featured)>.format-actions{left:18px!important;right:18px!important;bottom:14px!important;display:grid!important;grid-template-columns:1fr!important;opacity:1!important;transform:none!important;pointer-events:auto!important}
+.format-card:not(.format-featured)>.format-actions button{width:100%!important;min-height:42px!important;border-radius:9px!important}
+.format-card:not(.format-featured) .format-copy h2{margin-bottom:5px!important;font-size:19px!important}
+.format-card:not(.format-featured) .format-copy p{display:-webkit-box;overflow:hidden;margin-top:0!important;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.format-card .format-meta{margin-top:7px!important;color:#77736c!important;font-size:10px!important;font-weight:750}
+.format-card.format-featured{display:grid!important;min-height:340px!important;padding:0!important}
+.format-landing-menus .format-card.format-featured{grid-column:span 2;grid-template-columns:minmax(0,1fr) minmax(300px,.92fr)!important}
+.format-landing-prices .format-card.format-featured{grid-column:span 1;grid-template-rows:190px 1fr!important}
+.format-featured-media{display:grid;min-width:0;min-height:0;place-items:center;overflow:hidden;background:#eeeae5}
+.format-landing-menus .format-featured-media{min-height:340px}
+.format-featured-media img{display:block;width:100%;height:100%;object-fit:cover}
+.format-featured-content{position:relative;display:flex;min-width:0;flex-direction:column;justify-content:center;padding:34px 30px 27px}
+.format-landing-prices .format-featured-content{justify-content:flex-start;padding:17px 18px 14px}
+.format-featured-content>.format-tag{position:static!important;align-self:flex-start;margin-bottom:18px;border:1px solid #0074d9!important;border-radius:8px!important;background:#0088ff!important;color:#fff!important}
+.format-landing-prices .format-featured-content>.format-tag{position:absolute!important;top:-178px!important;left:12px!important;margin:0}
+.format-featured-content>.format-plan-badge{top:16px!important;right:16px!important}
+.format-landing-prices .format-featured-content>.format-plan-badge{top:-178px!important;right:12px!important}
+.format-card .format-plan-badge{display:inline-flex!important;min-width:76px!important;height:28px!important;align-items:center;justify-content:center;padding:0 12px!important;border-radius:8px!important}
+.format-featured-content>.format-copy{display:block!important;padding:0!important}
+.format-featured-content>.format-copy h2{max-width:500px;margin:0 0 10px;font-size:clamp(26px,2.6vw,38px)!important;line-height:1.04}
+.format-landing-prices .format-featured-content>.format-copy h2{font-size:19px!important;line-height:1.15}
+.format-featured-content>.format-copy p{max-width:500px;margin:0;font-size:14px!important;line-height:1.42}
+.format-landing-prices .format-featured-content>.format-copy p{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.format-featured-content>.format-actions{position:static!important;display:block!important;width:max-content;margin-top:21px;opacity:1!important;transform:none!important;pointer-events:auto!important}
+.format-landing-prices .format-featured-content>.format-actions{width:100%;margin-top:auto;padding-top:14px}
+.format-featured-content>.format-actions button{width:auto!important;min-height:42px!important;padding:0 18px!important;border-radius:9px!important;font-size:12px!important}
+.format-landing-prices .format-featured-content>.format-actions button{width:100%!important}
+.format-card.format-featured.is-premium-locked .format-featured-media,.format-card.format-featured.is-premium-locked .format-copy{opacity:1!important}
+.format-card.format-featured.is-premium-locked .format-actions button{border-color:#cbc7bd!important;background:#efede8!important;color:#625e57!important}
+@media(max-width:1000px){.format-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.format-landing-prices .format-card.format-featured{grid-column:span 1}}
+@media(max-width:760px){.format-landing-menus .format-card.format-featured{grid-template-columns:1fr!important}.format-landing-menus .format-featured-media{min-height:225px}.format-featured-content{padding:26px 22px 23px}}
 @media(max-width:620px){
-  .format-step{
-    padding-top:28px!important;
-  }
-  .format-step>.intro-row{
-    margin-bottom:24px!important;
-  }
-  .format-grid{
-    grid-template-columns:1fr!important;
-    gap:14px!important;
-  }
-  .format-section-title{
-    margin-top:12px;
-    font-size:17px;
-  }
-  .format-card.format-featured{
-    min-height:0!important;
-  }
-  .format-featured-media{
-    min-height:200px;
-  }
-  .format-featured-content{
-    padding:26px 20px 22px;
-  }
-  .format-featured-content>.format-tag{
-    margin-bottom:18px;
-  }
-  .format-featured-content>.format-copy h2{
-    font-size:27px!important;
-  }
-  .format-featured-content>.format-actions{
-    width:100%;
-    margin-top:22px;
-  }
-  .format-featured-content>.format-actions button{
-    width:100%!important;
-  }
-  .format-card:not(.format-featured){
-    min-height:370px!important;
-  }
-  .format-card:not(.format-featured) .format-paper-wrap{
-    height:215px!important;
-  }
+  .format-step{padding-top:25px!important}.format-step>.intro-row{margin-bottom:22px!important}.format-grid{grid-template-columns:1fr!important;gap:14px!important}
+  .format-landing-menus .format-card.format-featured,.format-landing-prices .format-card.format-featured{grid-column:span 1}
+  .format-card:not(.format-featured),.format-card.format-featured{min-height:330px!important}
+  .format-landing-prices .format-card.format-featured{grid-template-rows:180px 1fr!important}.format-card:not(.format-featured) .format-paper-wrap{height:180px!important}
+  .format-landing-menus .format-featured-media{min-height:210px}.format-featured-content>.format-copy h2{font-size:26px!important}
+  .format-featured-content>.format-actions{width:100%}.format-featured-content>.format-actions button{width:100%!important}
+  .format-landing-prices .format-featured-content>.format-tag,.format-landing-prices .format-featured-content>.format-plan-badge{top:-168px!important}
 }
