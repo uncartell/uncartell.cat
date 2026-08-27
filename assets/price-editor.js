@@ -308,17 +308,15 @@
     $("#formatGrid").innerHTML = L.formats.map(format => {
       const mobileLocked = format.id === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
       if (format.id === "mobile-interactive") return `
-      <article class="format-card format-featured${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
-        <span class="format-featured-media"><img src="/assets/home/taules-de-preus.png" alt="Exemple visual d’una taula de preus" loading="eager"></span>
-        <span class="format-featured-content">
-          <span class="format-tag">NOU · Tarifes mòbils</span>
-          ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
-          <span class="format-copy"><h2>Comparteix els teus preus amb QR</h2><p>Crea una taula de preus navegable per consultar serveis i tarifes des de qualsevol mòbil.</p></span>
-          <span class="format-actions"><button type="button" data-format-action="personalize">Crear tarifes mòbils</button></span>
-        </span>
+      <article class="format-card format-option is-mobile${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
+        <span class="format-card-media"><img src="/assets/home/taules-de-preus.png" alt="Exemple visual d’una taula de preus" loading="eager"></span>
+        <span class="format-tag">Novetat</span>
+        ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
+        <span class="format-copy"><h2>Tarifes per a mòbil</h2><p>Preus i serveis en una pàgina web navegable per compartir amb QR.</p><p class="format-meta">WEB · RESPONSIVE · QR</p></span>
+        <span class="format-actions"><button type="button" data-format-action="personalize">Crea tarifes web</button></span>
       </article>`;
       return `
-      <article class="format-card${format.id === "mobile-interactive" ? " format-featured" : ""}${mobileLocked ? " is-premium-locked" : ""}" data-format="${format.id}">
+      <article class="format-card format-option" data-format="${format.id}">
         <span class="format-tag">${escapeHtml(format.tag)}</span>
         ${mobileLocked ? '<span class="format-plan-badge">Premium</span>' : ""}
         <span class="format-paper-wrap"><span class="format-paper ${format.id}"><span class="format-columns cols-${format.columns}">${Array.from({length:format.columns}, () => '<i class="format-column"></i>').join("")}</span></span></span>
