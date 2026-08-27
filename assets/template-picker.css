@@ -68,7 +68,7 @@
 }
 
 /* Badges contextuals del format mòbil */
-.format-tab-badges{position:absolute;top:-3px;left:50%;display:flex;z-index:2;gap:5px;transform:translateX(-50%)}
+.format-tab-badges{position:absolute;top:-12px;left:50%;display:flex;z-index:2;gap:5px;transform:translateX(-50%)}
 .format-tab-badges>span{display:inline-flex;min-height:22px;align-items:center;padding:0 8px;border-radius:5px;font-size:9px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .format-new-badge{background:#168cf0;color:#fff}.format-premium-badge{border:1px solid #42c64b;background:#69eb6d;color:#181614}
 
