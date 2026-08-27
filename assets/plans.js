@@ -11,7 +11,7 @@
     if(basic){basic.disabled=plan==='basic';basic.textContent=plan==='basic'?(es?'Plan actual':'Pla actual'):(es?'Cambiar a Basic':'Canvia a Basic')}
     if(premium){premium.disabled=plan==='premium'||plan==='ultra';premium.textContent=plan==='premium'?(es?'Plan actual':'Pla actual'):plan==='ultra'?(es?'Incluido en Ultra':'Inclòs amb Ultra'):(es?'Activa Premium gratis':'Activa Premium gratis')}
     if(basicHead)basicHead.textContent=plan==='basic'?(es?'Plan actual':'Pla actual'):(es?'Basic':'Basic');
-    if(premiumHead)premiumHead.textContent=plan==='premium'?(es?'Plan actual':'Pla actual'):(es?'Recomendado':'Recomanat');
+    if(premiumHead)premiumHead.textContent=plan==='premium'?(es?'Plan actual':'Pla actual'):(es?'Recomendado':'Premium · Més popular');
     basic?.closest('.u-plan')?.classList.toggle('is-current',plan==='basic');
     premium?.closest('.u-plan')?.classList.toggle('is-current',plan==='premium');
   };
