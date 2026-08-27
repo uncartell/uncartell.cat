@@ -21,10 +21,10 @@
   const desktop=window.matchMedia('(min-width: 1024px) and (pointer: fine)');
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
   const depth=[
-    {x:14,y:9},
-    {x:20,y:13},
-    {x:16,y:10},
-    {x:22,y:14}
+    {x:-7,y:-5},
+    {x:-10,y:-7},
+    {x:-8,y:-5},
+    {x:-11,y:-7}
   ];
   let targetX=0;
   let targetY=0;
