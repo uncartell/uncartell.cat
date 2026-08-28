@@ -724,6 +724,7 @@
     }));
     const dishImageInput = $("#dishImageInput", box);
     dishImageInput?.addEventListener("change", async event => {
+      if (block.templateImageLocked && state.plan !== "ultra") return openPlanGate("Ultra");
       const file = event.target.files?.[0];
       if (!file) return;
       if (file.size > 4 * 1024 * 1024) return toast(L.dishImageTooLarge);
@@ -1644,6 +1645,7 @@
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
   let selectedPickerFormat = "mobile-interactive";
+  let cloudPickerTemplates = [];
   const pickerFormatNames = { "mobile-interactive": "Carta mòbil", "a3-landscape": "Revista", "a4-portrait": "Vins i postres", "a4-landscape": "Díptic", "a4-single-1": "Menú del dia" };
   const pickerFormatCopy = {
     "a4-single-1": { detail: "Una sola pàgina A4", icon: "single" },
@@ -1657,6 +1659,13 @@
     { name: "Editorial", detail: "Jerarquia marcada i aire de revista.", accent: "#2e5b47" },
     { name: "Càlida", detail: "Amable, equilibrada i contemporània.", accent: "#b45832" }
   ];
+  const visiblePickerTemplates = format => {
+    const cloud = cloudPickerTemplates.filter(item => item.format_id === format).slice(0, 2).map(item => ({ id:item.id, name:item.name, detail:item.description || "Disseny preparat per Uncartell.", payload:item.payload, cloud:true }));
+    return cloud.length ? [...cloud, { name:"Comença de zero", detail:"Una base neta per crear la teva carta.", accent:"#e5372a", blank:true }] : pickerTemplates;
+  };
+  async function loadCloudPickerTemplates(){
+    try{await window.UncartellPlatform?.whenReady?.();const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data,error}=await supabase.from("editor_templates").select("id,format_id,name,description,payload,sort_order,version").eq("tool_type","menu").eq("is_published",true).order("sort_order").order("updated_at",{ascending:false});if(error)throw error;cloudPickerTemplates=data||[];renderTemplatePicker()}catch(error){console.warn("Editor templates",error)}
+  }
   function pickerPreview(format, index) {
     if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">RESTAURANT L’OLIVERA</span><strong>La nostra carta</strong><i>Entrants</i><i>Principals</i><i>Postres</i></span>`;
     const title = format === "a4-single-1" ? "Menú del dia" : format === "a4-portrait" ? "Carta de vins" : format === "a4-landscape" ? "Menú de temporada" : "La nostra carta";
@@ -1672,8 +1681,10 @@
   }
   function applyPickerTemplate(format, index) {
     if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) return openPlanGate("Premium");
+    const template=visiblePickerTemplates(format)[index];
     openEditor(format);
-    state.accent = pickerTemplates[index]?.accent || pickerTemplates[0].accent;
+    if(template?.payload?.document&&!template.blank){const document=JSON.parse(JSON.stringify(template.payload.document));(document.pages||[]).forEach(page=>(page.blocks||[]).forEach(block=>{block.id=uid()}));state={...state,projectId:uid(),projectName:L.defaultProject,format:document.format||format,style:document.style||state.style,accent:document.accent||state.accent,textColor:document.text_color||state.textColor,contentColumns:document.content_columns||state.contentColumns,brandKit:{...state.brandKit,...(document.brand_kit||{}),logo:document.brand_kit?.logo||state.brandKit.logo},pages:document.pages||pagesForFormat(format),mobilePublication:{slug:"",status:"draft",publishedAt:null},activePage:0,selectedBlock:null,isDirty:true,sourceTemplateId:template.id};resetHistory();renderAll();return}
+    state.accent = template?.accent || pickerTemplates[0].accent;
     state.textColor = "#181614";
     const first = state.pages[0];
     if (first?.role === "cover" || first?.role === "mobile-home") first.title = index === 1 ? "Carta de temporada" : index === 2 ? "Cuina de casa" : L.defaults.coverTitle;
@@ -1700,7 +1711,7 @@
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
     grid.hidden = false;
-    grid.innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
+    grid.innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
     $(".format-note").hidden = true;
     grid.animate?.([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: "cubic-bezier(.2,.7,.2,1)" });
     $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); }));
@@ -1709,6 +1720,7 @@
   }
 
   renderTemplatePicker();
+  loadCloudPickerTemplates();
   const requestedFormat = new URLSearchParams(window.location.search).get("format");
   if (requestedFormat && L.formats.some(format => format.id === requestedFormat)) {
     openEditor(requestedFormat);

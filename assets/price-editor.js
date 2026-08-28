@@ -724,6 +724,7 @@
     }));
     const dishImageInput = $("#dishImageInput", box);
     dishImageInput?.addEventListener("change", async event => {
+      if (block.templateImageLocked && state.plan !== "ultra") return openPlanGate("Ultra");
       const file = event.target.files?.[0];
       if (!file) return;
       if (file.size > 4 * 1024 * 1024) return toast(L.dishImageTooLarge);
@@ -1699,6 +1700,7 @@
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
   let selectedPickerFormat = "mobile-interactive";
+  let cloudPickerTemplates = [];
   const pickerFormatNames = { "mobile-interactive": "Tarifes mòbils", "price-a3-portrait": "Vertical", "price-a3-landscape": "Horitzontal" };
   const pickerFormatCopy = {
     "mobile-interactive": { icon: "mobile" },
@@ -1710,6 +1712,13 @@
     { name: "Editorial", detail: "Jerarquia marcada i aire professional.", accent: "#e5372a" },
     { name: "Contrast", detail: "Més caràcter per destacar serveis i preus.", accent: "#181614" }
   ];
+  const visiblePickerTemplates = format => {
+    const cloud = cloudPickerTemplates.filter(item => item.format_id === format).slice(0, 2).map(item => ({ id:item.id, name:item.name, detail:item.description || "Disseny preparat per Uncartell.", payload:item.payload, cloud:true }));
+    return cloud.length ? [...cloud, { name:"Comença de zero", detail:"Una base neta per crear la teva taula.", accent:"#5b9e62", blank:true }] : pickerTemplates;
+  };
+  async function loadCloudPickerTemplates(){
+    try{await window.UncartellPlatform?.whenReady?.();const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data,error}=await supabase.from("editor_templates").select("id,format_id,name,description,payload,sort_order,version").eq("tool_type","services").eq("is_published",true).order("sort_order").order("updated_at",{ascending:false});if(error)throw error;cloudPickerTemplates=data||[];renderTemplatePicker()}catch(error){console.warn("Editor templates",error)}
+  }
   function pickerPreview(format, index) {
     if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>Serveis i preus</strong><i>Massatges</i><i>Tractaments</i><i>Rituals</i></span>`;
     return `<span class="template-preview template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>${index === 1 ? "Tarifes" : "Serveis i preus"}</strong><span class="template-rule"></span><span class="template-columns"><i><b>Massatges</b><small>Relaxant <em>65 €</em></small><small>Teixit profund <em>85 €</em></small></i><i><b>Tractaments</b><small>Facial exprés <em>45 €</em></small><small>Ritual orgànic <em>95 €</em></small></i></span></span>`;
@@ -1722,8 +1731,10 @@
   }
   function applyPickerTemplate(format, index) {
     if (format === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan)) return openPlanGate("Premium");
+    const template=visiblePickerTemplates(format)[index];
     openEditor(format);
-    state.accent = pickerTemplates[index]?.accent || pickerTemplates[0].accent;
+    if(template?.payload?.document&&!template.blank){const document=JSON.parse(JSON.stringify(template.payload.document));(document.pages||[]).forEach(page=>(page.blocks||[]).forEach(block=>{block.id=uid()}));state={...state,projectId:uid(),projectName:L.defaultProject,format:document.format||format,style:document.style||state.style,accent:document.accent||state.accent,textColor:document.text_color||state.textColor,contentColumns:document.content_columns||state.contentColumns,priceHeader:document.price_header||state.priceHeader,brandKit:{...state.brandKit,...(document.brand_kit||{}),logo:document.brand_kit?.logo||state.brandKit.logo},pages:document.pages||pagesForFormat(format),mobilePublication:{slug:"",status:"draft",publishedAt:null},activePage:0,selectedBlock:null,isDirty:true,sourceTemplateId:template.id};resetHistory();renderAll();return}
+    state.accent = template?.accent || pickerTemplates[0].accent;
     state.textColor = "#181614";
     state.priceHeader.title = index === 1 ? "Tarifes" : index === 2 ? "Experiències" : L.defaults.coverTitle;
     renderAll();
@@ -1739,7 +1750,7 @@
     $("#pickerTitle").textContent = `Tria un disseny per a ${pickerFormatNames[selectedPickerFormat].toLowerCase()}`;
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
-    $("#formatGrid").innerHTML = pickerTemplates.map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Utilitza aquesta plantilla</button></span></article>`).join("");
+    $("#formatGrid").innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Utilitza aquesta plantilla</button></span></article>`).join("");
     $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); $("#formatGrid")?.animate?.([{ opacity: .35, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: "ease-out" }); }));
     $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
     $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
@@ -1747,6 +1758,7 @@
 
   window.openPriceEditor = openEditor;
   renderTemplatePicker();
+  loadCloudPickerTemplates();
   const requestedFormat = new URLSearchParams(location.search).get("format");
   if (L.formats.some(item => item.id === requestedFormat)) openEditor(requestedFormat);
   $("#formatGrid").addEventListener("click", event => {
