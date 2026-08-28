@@ -153,14 +153,14 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
 }
 
 /* Capçalera i pestanyes transversals: el mateix llenguatge que Cartes i Taules. */
-.poster-catalog-step{padding-top:42px}
+.poster-catalog-step{padding-top:32px}
 .poster-catalog-step .intro-row{
   display:flex!important;
   width:min(920px,100%);
   align-items:center!important;
   flex-direction:column;
   gap:0!important;
-  margin:0 auto 30px!important;
+  margin:0 auto 28px!important;
   text-align:center;
 }
 .poster-catalog-intro{width:100%;max-width:none;text-align:center}
@@ -178,9 +178,9 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   line-height:1.45;
   text-align:center;
 }
-.poster-search{margin:24px auto 0}
-.poster-catalog-step .open-projects-cta{margin-top:18px}
-.poster-filters{width:min(1180px,100%);margin:22px auto 26px}
+.poster-search{margin:0}
+.poster-filters{width:min(1180px,100%);margin:0 auto 26px}
+.poster-catalog-step .catalog-utility-row{display:flex;width:min(1180px,100%);align-items:center;justify-content:space-between;gap:18px;margin:-10px auto 20px}.poster-catalog-step .catalog-utility-row .poster-search{flex:1}.poster-catalog-step .catalog-utility-row .open-projects-cta{flex:none;margin:0}
 .poster-category-tabs{justify-content:center}
 .poster-category-tabs button{
   min-width:138px;
@@ -211,7 +211,7 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-catalog-step .intro-row{width:100%;margin-bottom:24px!important}
   .poster-catalog-intro h1{font-size:34px}
   .poster-catalog-intro>p{font-size:14px}
-  .poster-catalog-step .open-projects-cta{width:auto;align-self:center;justify-content:center}
+  .poster-catalog-step .catalog-utility-row{width:100%;align-items:stretch;flex-direction:column;gap:10px;margin:-6px auto 18px}.poster-catalog-step .catalog-utility-row .open-projects-cta{width:100%;align-self:center;justify-content:center}
   .poster-category-tabs{justify-content:flex-start}
   .poster-category-tabs button{min-width:126px;min-height:116px;padding:8px 10px 16px}
   .poster-category-visual{height:66px}

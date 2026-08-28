@@ -1,6 +1,6 @@
 (()=>{
   const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
-  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-sector-tabs-2';
+  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-sector-tabs-3';
   const es=document.documentElement.lang==='es';
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
