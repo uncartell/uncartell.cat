@@ -1711,11 +1711,21 @@
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
     grid.hidden = false;
-    grid.innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
+    grid.innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}" data-picker-card="${index}" tabindex="0" aria-label="Edita el disseny ${escapeHtml(template.name)}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Edita aquest disseny</button></span></article>`).join("");
     $(".format-note").hidden = true;
     grid.animate?.([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: "cubic-bezier(.2,.7,.2,1)" });
     $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); }));
     $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
+    $$('[data-picker-card]').forEach(card => {
+      const open = event => {
+        if (event.type === "click" && event.target.closest("[data-picker-template]")) return;
+        if (event.type === "keydown" && !["Enter", " "].includes(event.key)) return;
+        event.preventDefault();
+        applyPickerTemplate(selectedPickerFormat, Number(card.dataset.pickerCard));
+      };
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", open);
+    });
     $(".format-open-project")?.addEventListener("click", () => $("#openProjectsButton")?.click());
   }
 
