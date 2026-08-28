@@ -178,6 +178,7 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   line-height:1.45;
   text-align:center;
 }
+.poster-catalog-step>.intro-row .poster-catalog-intro>p{margin-top:13px!important}
 .poster-search{margin:0}
 .poster-filters{width:min(1180px,100%);margin:0 auto 26px}
 .poster-catalog-step .catalog-utility-row{display:flex;width:min(1180px,100%);align-items:center;justify-content:space-between;gap:18px;margin:-10px auto 20px}.poster-catalog-step .catalog-utility-row .poster-search{flex:1}.poster-catalog-step .catalog-utility-row .open-projects-cta{flex:none;margin:0}
