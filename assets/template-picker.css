@@ -143,3 +143,40 @@
     pointer-events:auto!important;
   }
 }
+
+/* Barra funcional del catàleg: accions útils sense simular que l'editor ja és obert. */
+.format-landing .format-step>.intro-row{margin-bottom:14px!important}
+.format-landing .catalog-utility-row{
+  width:min(1180px,100%)!important;
+  min-height:48px!important;
+  justify-content:flex-end!important;
+  margin:0 auto 8px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.format-landing .catalog-utility-row .open-projects-cta{
+  min-height:44px!important;
+  max-width:none!important;
+  gap:10px!important;
+  margin:0!important;
+  padding:0 15px!important;
+  border:1px solid #d5d1c8!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#181614!important;
+  box-shadow:none!important;
+  transition:border-color .16s ease,background-color .16s ease,transform .16s ease!important;
+}
+.format-landing .catalog-utility-row .open-projects-cta:hover{
+  border-color:#8e8a82!important;
+  background:#f5f4f0!important;
+  transform:translateY(-1px)!important;
+}
+.format-landing-menus .format-tabs.format-visual-tabs,
+.format-landing-prices .format-tabs.format-visual-tabs{margin-top:0!important}
+@media(max-width:820px){
+  .format-landing .format-step>.intro-row{margin-bottom:12px!important}
+  .format-landing .catalog-utility-row{min-height:44px!important;justify-content:flex-end!important;margin-bottom:6px!important}
+  .format-landing .catalog-utility-row .open-projects-cta{width:auto!important;min-height:42px!important;justify-content:center!important}
+}
