@@ -756,7 +756,7 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
 }
 
 /* Home v57 final — franges contínues i footer fosc. */
-.u-home .u-tools-section{padding-bottom:0!important}
+.u-home .u-tools-section{padding-bottom:clamp(38px,4vw,58px)!important}
 .u-home .u-testimonials{border-top:0}
 .u-home .u-footer{margin-top:0}
 .u-footer{background:#1b1a18;color:#f7f7f4;border-top:0}
@@ -825,7 +825,7 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
 }
 
 /* Home v58 — franges sense separadors i footer fosc. */
-.u-home .u-tools-section{padding-bottom:0!important}
+.u-home .u-tools-section{padding-bottom:clamp(38px,4vw,58px)!important}
 .u-home .u-testimonials{border-top:0!important;padding-top:clamp(38px,4vw,58px)!important;padding-bottom:0!important}
 .u-home .u-footer{margin-top:0!important}
 .u-footer{background:#1b1a18!important;color:#f7f7f4!important;border-top:0!important}
