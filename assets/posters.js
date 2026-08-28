@@ -1,6 +1,6 @@
 (()=>{
   const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
-  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-heading-project-2';
+  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-category-icons-1';
   const es=document.documentElement.lang==='es';
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
@@ -90,11 +90,11 @@
   }
   const catalogCategories=['Més populars','Horaris','Restauració','Comerç','Avisos i promocions'];
   const categoryIcons={
-    'Més populars':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="m57.8 38 4.4 8.9 9.8 1.4-7.1 6.9 1.7 9.8-8.8-4.6L49 65l1.7-9.8-7.1-6.9 9.8-1.4Z"/>',
-    'Horaris':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><circle cx="58" cy="53" r="15"/><path d="M58 43v10l7 4"/>',
-    'Restauració':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="M43 39v13c0 4 3 6 7 6s7-2 7-6V39M50 39v29M72 39v29M72 39c-6 3-8 9-8 17h8"/>',
-    'Comerç':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="M42 51v17h33V51M39 51l5-12h29l5 12M39 51c0 5 6 5 9 0 2 5 8 5 11 0 2 5 8 5 11 0 2 5 8 5 8 0M53 68V57h12v11"/>',
-    'Avisos i promocions':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="M58 38 75 68H41Z"/><path d="M58 48v9M58 62h.01"/>'
+    'Més populars':'<path class="icon-main" d="m58 17 9.2 18.6 20.5 3-14.9 14.5 3.5 20.4L58 63.9 39.7 73.5l3.5-20.4-14.9-14.5 20.5-3Z"/><path class="icon-accent" d="M86 17v10M81 22h10"/>',
+    'Horaris':'<circle class="icon-main" cx="58" cy="47" r="29"/><path class="icon-main" d="M58 29v19l13 8"/><path class="icon-accent" d="M32 68 25 75"/>',
+    'Restauració':'<path class="icon-main" d="M32 18v22c0 7 5 11 12 11s12-4 12-11V18M44 18v59M82 18v59M82 18c-10 5-14 16-14 30h14"/><path class="icon-accent" d="M27 77h60"/>',
+    'Comerç':'<path class="icon-main" d="M29 42v33h58V42M24 42l8-22h52l8 22M24 42c0 8 10 8 15 0 4 8 14 8 19 0 4 8 14 8 19 0 4 8 15 8 15 0M49 75V55h20v20"/><path class="icon-accent" d="M32 20h52"/>',
+    'Avisos i promocions':'<path class="icon-main" d="M58 15 91 75H25Z"/><path class="icon-accent" d="M58 35v21M58 65h.01"/>'
   };
   const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 116 96">${categoryIcons[name]||categoryIcons['Avisos i promocions']}</svg></span>`;
   const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
