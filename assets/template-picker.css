@@ -180,3 +180,15 @@
   .format-landing .catalog-utility-row{min-height:44px!important;justify-content:flex-end!important;margin-bottom:6px!important}
   .format-landing .catalog-utility-row .open-projects-cta{width:auto!important;min-height:42px!important;justify-content:center!important}
 }
+
+/* Catalogue heading: share the title's left-hand alignment and preserve a
+   little breathing room before the format tabs. This file loads last. */
+.format-landing .format-step>.intro-row.format-catalog-heading .intro p{
+  width:100%!important;
+  max-width:760px!important;
+  margin:12px 0 0!important;
+  text-align:left!important;
+}
+.format-landing .format-step>.intro-row.format-catalog-heading + .open-projects-cta + .format-tabs{
+  margin-top:22px!important;
+}

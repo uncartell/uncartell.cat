@@ -921,27 +921,27 @@ body.uncartell-editor-active :is(.project-save-bar,.qr-project-bar) .tool-header
 
 /* Project access cards: Basic remains an inviting, clickable white control.
    Premium/Ultra lose the plan label and use the regular enabled appearance. */
-:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control{
+:where(.format-open-project,.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control{
   opacity:1!important;
   filter:none!important;
   cursor:pointer!important;
   pointer-events:auto!important;
   transition:background-color .14s ease,border-color .14s ease,box-shadow .14s ease,transform .14s ease!important;
 }
-:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked{
+:where(.format-open-project,.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked{
   border-color:#d5d1c8!important;
   background:#fff!important;
   color:#181614!important;
   opacity:1!important;
   filter:none!important;
 }
-:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked:hover{
+:where(.format-open-project,.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control.is-plan-locked:hover{
   background:#f5f4f0!important;
   border-color:#bdb8ae!important;
   box-shadow:0 4px 10px rgba(24,22,20,.08)!important;
   transform:translateY(-1px)!important;
 }
-:where(.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:not(.is-plan-locked) > .project-open-plan-badge{
+:where(.format-open-project,.open-projects-cta,.qr-open-projects,[data-open-poster-projects],[data-open-projects]).project-open-control:not(.is-plan-locked) > .project-open-plan-badge{
   display:none!important;
 }
 @media (min-width:821px){

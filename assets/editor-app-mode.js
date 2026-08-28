@@ -132,6 +132,7 @@
   };
 
   const projectOpenSelector = [
+    '.format-open-project',
     '.open-projects-cta',
     '[data-open-poster-projects]',
     '[data-open-projects]',
