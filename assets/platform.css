@@ -156,6 +156,7 @@
   .u-footer-brand .u-logo{font-size:29px}
 }
 
+
 @media(max-width:620px){.u-home #tools{padding-top:2px}}
 
 /* Logotip amb més presència, mantenint l'alineació del header. */
@@ -775,5 +776,25 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     right:14px;
     margin:0;
     flex:none;
+  }
+}
+
+/* Pricing mòbil: capçalera i control d'acordió comparteixen el mateix eix. */
+@media(max-width:760px){
+  .u-plan-head,
+  .u-upgrade-plans article>header{
+    display:flex;
+    align-items:center;
+    line-height:1.2;
+  }
+  .u-plan-head::after,
+  .u-upgrade-plans article>header::after{
+    right:16px;
+    display:grid;
+    width:32px;
+    height:32px;
+    place-items:center;
+    font-size:26.4px;
+    line-height:1;
   }
 }
