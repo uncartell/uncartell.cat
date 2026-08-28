@@ -1,6 +1,6 @@
 (()=>{
   const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
-  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-sector-tabs-4';
+  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-utility-bar-1';
   const es=document.documentElement.lang==='es';
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
@@ -88,17 +88,15 @@
     const used=catalog.find(item=>item.icon===key);if(used)return field(used,'title').toLocaleLowerCase();
     const dictionary=es?iconNamesEs:iconNamesCa;return key.replace(/([a-z])([A-Z])/g,'$1-$2').split('-').filter(Boolean).map(word=>dictionary[word.toLowerCase()]||word.toLowerCase()).join(' ')
   }
-  const catalogCategories=['Més populars','Restauració','Comerç','Horaris','Avisos','Promocions','Altres'];
+  const catalogCategories=['Més populars','Restauració','Comerç','Informació','Promocions i altres'];
   const categoryIcons={
-    'Més populars':'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>',
-    'Restauració':'<path d="M4 3v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3M7 3v18M20 3v18M20 3c-3 1-4 4-4 8h4"/>',
-    'Comerç':'<path d="M4 10v10h16V10M3 10l2-6h14l2 6M3 10c0 2 3 2 4 0 1 2 4 2 5 0 1 2 4 2 5 0 1 2 4 2 4 0M9 20v-6h6v6"/>',
-    'Horaris':'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>',
-    'Avisos':'<path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5M12 17h.01"/>',
-    'Promocions':'<path d="M20 13 13 20l-9-9V4h7l9 9Z"/><circle cx="8.5" cy="8.5" r="1"/>',
-    'Altres':'<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><rect x="14" y="14" width="6.5" height="6.5" rx="1"/>'
+    'Més populars':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="m57.8 38 4.4 8.9 9.8 1.4-7.1 6.9 1.7 9.8-8.8-4.6L49 65l1.7-9.8-7.1-6.9 9.8-1.4Z"/>',
+    'Restauració':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="M43 39v13c0 4 3 6 7 6s7-2 7-6V39M50 39v29M72 39v29M72 39c-6 3-8 9-8 17h8"/>',
+    'Comerç':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="M42 51v17h33V51M39 51l5-12h29l5 12M39 51c0 5 6 5 9 0 2 5 8 5 11 0 2 5 8 5 11 0 2 5 8 5 8 0M53 68V57h12v11"/>',
+    'Informació':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><circle cx="58" cy="53" r="15"/><path d="M58 43v10l7 4"/>',
+    'Promocions i altres':'<path class="paper" d="M24 13h51l17 17v52H24Z"/><path class="fold" d="M75 13v17h17"/><path d="m70 55-13 13-16-16V40h12l17 15Z"/><circle cx="48" cy="47" r="2"/>'
   };
-  const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 24 24">${categoryIcons[name]||categoryIcons.Altres}</svg></span>`;
+  const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 116 96">${categoryIcons[name]||categoryIcons['Promocions i altres']}</svg></span>`;
   const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
   const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|2x1/i;
   const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat/i;
@@ -109,10 +107,8 @@
     if(activeCategory==='Més populars')return popularTitles.some(value=>normalizeSearch(value)===normalizeSearch(title));
     if(activeCategory==='Restauració')return sourceCategory==='restauracio';
     if(activeCategory==='Comerç')return sourceCategory==='comerc';
-    if(activeCategory==='Horaris')return sourceCategory==='horaris'||sourceSubcategory==='horaris';
-    if(activeCategory==='Promocions')return promotionPattern.test(normalizeSearch(`${title} ${field(item,'subtitle')} ${field(item,'subcategory')}`));
-    if(activeCategory==='Avisos')return sourceCategory==='seguretat'||noticePattern.test(normalizeSearch(`${title} ${field(item,'subtitle')}`));
-    return !['restauracio','comerc','horaris','seguretat'].includes(sourceCategory)&&!promotionPattern.test(normalizeSearch(title));
+    if(activeCategory==='Informació')return sourceCategory==='horaris'||sourceSubcategory==='horaris'||sourceCategory==='seguretat'||noticePattern.test(normalizeSearch(`${title} ${field(item,'subtitle')}`));
+    return promotionPattern.test(normalizeSearch(`${title} ${field(item,'subtitle')} ${field(item,'subcategory')}`))||!['restauracio','comerc','horaris','seguretat'].includes(sourceCategory);
   };
   const categoryNames=()=>catalogCategories;
   const categoryItems=()=>catalog.filter(categoryFor);
