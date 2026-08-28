@@ -634,10 +634,28 @@
 .format-landing .format-card>.format-copy p,
 .format-landing .format-card>.format-copy .format-meta{margin-right:0!important;margin-left:0!important;text-align:left!important}
 .format-landing .format-card>.format-actions{inset:0 0 auto 0!important;height:auto!important;aspect-ratio:1/1!important;align-items:center!important;justify-content:center!important;background:rgba(24,22,20,.08)!important;backdrop-filter:blur(1.5px)!important}
-.format-landing .format-card>.format-actions button{min-width:168px!important;min-height:46px!important;border:1px solid #181614!important;border-radius:9px!important;background:#181614!important;color:#fff!important;box-shadow:0 10px 26px rgba(20,19,17,.2)!important}
+.format-landing .format-card>.format-actions{
+  position:absolute!important;
+  display:flex!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:0!important;
+  transform:translateY(5px)!important;
+  pointer-events:none!important;
+}
+.format-landing .format-card:hover>.format-actions,
+.format-landing .format-card:focus-within>.format-actions,
+.format-landing .format-card.is-current>.format-actions{
+  opacity:1!important;
+  transform:none!important;
+  pointer-events:auto!important;
+}
+.format-landing .format-card>.format-actions button{width:auto!important;min-width:168px!important;min-height:46px!important;border:1px solid #181614!important;border-radius:9px!important;background:var(--green,#73f172)!important;color:#181614!important;box-shadow:0 10px 26px rgba(20,19,17,.2)!important}
+.format-landing .format-card.is-premium-locked>.format-actions button{border-color:#181614!important;background:#fff!important;color:#181614!important}
 .format-landing .format-card:focus-visible{outline:3px solid var(--green,#73f172)!important;outline-offset:3px!important}
 @media(max-width:760px){
   .format-landing .format-card.format-option{grid-template-rows:auto auto!important}
   .format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:0!important;height:auto!important}
-  .format-landing .format-card>.format-actions{height:auto!important;align-items:flex-end!important;padding:0 0 16px!important;background:linear-gradient(transparent 55%,rgba(24,22,20,.12))!important}
+  .format-landing .format-card>.format-actions{height:auto!important;align-items:flex-end!important;padding:0 0 16px!important;background:linear-gradient(transparent 55%,rgba(24,22,20,.12))!important;opacity:1!important;transform:none!important;pointer-events:auto!important}
 }
