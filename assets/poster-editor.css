@@ -79,6 +79,17 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-catalog-step,.poster-editor-section{width:100%;max-width:none;margin-inline:auto}
   .poster-editor-shell,.poster-editor-shell .workspace,.poster-editor-shell .project-save-bar{box-sizing:border-box;width:100%;min-width:0}
 }
+
+/* Mateixa capçalera compacta que als catàlegs de cartes i taules. */
+.poster-catalog-step{padding-top:0!important}
+.poster-catalog-step>.intro-row.poster-catalog-heading{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;width:min(1180px,calc(100% - 48px))!important;max-width:1180px!important;align-items:start!important;gap:32px!important;margin:0 auto 8px!important;padding:34px 0 8px!important}
+.poster-catalog-heading .poster-catalog-intro{max-width:820px!important;margin:0!important;text-align:left!important}
+.poster-catalog-heading .poster-catalog-intro h1,.poster-catalog-heading .poster-catalog-intro>p{margin-inline:0!important;text-align:left!important}
+.poster-catalog-heading .catalog-open-project{display:inline-flex!important;min-height:48px!important;align-items:center!important;justify-content:center!important;align-self:start!important;gap:9px!important;margin-top:7px!important;padding:0 18px!important;border:1px solid #cfcac1!important;border-radius:10px!important;background:#fff!important;color:#181614!important;font:inherit!important;font-weight:750!important;cursor:pointer!important}
+.poster-catalog-heading .catalog-open-project svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}
+.poster-catalog-heading .catalog-open-project:hover{border-color:#8e8a82!important;background:#f5f4f0!important}
+.poster-catalog-heading+.poster-filters{margin-top:0!important}
+@media(max-width:720px){.poster-catalog-step>.intro-row.poster-catalog-heading{grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}.poster-catalog-heading .poster-catalog-intro h1{font-size:clamp(30px,9vw,40px)!important}.poster-catalog-heading .catalog-open-project{width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}.poster-catalog-heading .catalog-open-project svg{width:21px;height:21px}}
 .custom-brief-success{margin-top:22px}
 .u-lang-es .poster-category-tabs button.active{border-color:var(--green)!important;background:var(--green)!important}.u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}.u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
 /* Catalan and Spanish use the same corporate green. */
@@ -323,3 +334,14 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-catalog-step .catalog-utility-row .open-projects-cta svg{width:20px;height:20px}
 }
 .u-live-logo[data-position=left]{left:7%;transform:none}.u-live-logo[data-position=right]{left:auto;right:7%;transform:none}.poster-logo-tool{position:relative}.poster-logo-badge{position:absolute;right:0;top:-2px}.poster-logo-tool:not(.is-locked) .poster-logo-badge{display:none}.poster-logo-tool.is-locked .kit-logo-row,.poster-logo-tool.is-locked .kit-logo-preview,.poster-logo-tool.is-locked .poster-logo-position{opacity:.42;pointer-events:none}.poster-logo-position{border:0;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.poster-logo-position legend{grid-column:1/-1;margin-bottom:8px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}.poster-logo-position button{min-height:42px;border:1px solid var(--line,#d8d4ca);border-radius:10px;background:#fff;color:#181614;font:inherit;font-weight:750}.poster-logo-position button.active{border-color:#61ed6b;background:#dfffe2;box-shadow:inset 0 0 0 1px #61ed6b}
+
+/* Final catalog heading overrides. */
+.poster-catalog-step{padding-top:0!important}
+.poster-catalog-step>.intro-row.poster-catalog-heading{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;width:min(1180px,calc(100% - 48px))!important;max-width:1180px!important;align-items:start!important;gap:32px!important;margin:0 auto 8px!important;padding:34px 0 8px!important}
+.poster-catalog-heading .poster-catalog-intro{max-width:820px!important;margin:0!important;text-align:left!important}
+.poster-catalog-heading .poster-catalog-intro h1,.poster-catalog-heading .poster-catalog-intro>p{margin-inline:0!important;text-align:left!important}
+.poster-catalog-heading .catalog-open-project{display:inline-flex!important;min-height:48px!important;align-items:center!important;justify-content:center!important;align-self:start!important;gap:9px!important;margin-top:7px!important;padding:0 18px!important;border:1px solid #cfcac1!important;border-radius:10px!important;background:#fff!important;color:#181614!important;font:inherit!important;font-weight:750!important;cursor:pointer!important}
+.poster-catalog-heading .catalog-open-project svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}
+.poster-catalog-heading .catalog-open-project:hover{border-color:#8e8a82!important;background:#f5f4f0!important}
+.poster-catalog-heading+.poster-filters{margin-top:0!important}
+@media(max-width:720px){.poster-catalog-step>.intro-row.poster-catalog-heading{grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}.poster-catalog-heading .poster-catalog-intro h1{font-size:clamp(30px,9vw,40px)!important}.poster-catalog-heading .catalog-open-project{width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}.poster-catalog-heading .catalog-open-project svg{width:21px;height:21px}}
