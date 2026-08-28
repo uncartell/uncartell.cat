@@ -159,6 +159,17 @@
 
 @media(max-width:620px){.u-home #tools{padding-top:2px}}
 
+/* Home v57 — franges contínues i tancament fosc. */
+.u-home .u-tools-section{padding-bottom:0}
+.u-home .u-testimonials{border-top:0}
+.u-home .u-footer{margin-top:0}
+.u-footer{background:#1b1a18;color:#f7f7f4;border-top:0}
+.u-footer h3{color:#a9a59d}
+.u-footer a,.u-footer button{color:#e8e6e1}
+.u-footer a:hover,.u-footer button:hover{color:var(--green)}
+.u-footer-brand .u-logo{color:#fff}
+.u-footer-brand p{color:#a9a59d}
+
 /* Logotip amb més presència, mantenint l'alineació del header. */
 .u-header .u-logo{font-size:31px;line-height:1}
 @media (min-width:981px) and (max-width:1180px){.u-header .u-logo{font-size:26px}}
@@ -739,6 +750,17 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
     min-height:420px;
   }
 }
+
+/* Home v57 final — franges contínues i footer fosc. */
+.u-home .u-tools-section{padding-bottom:0!important}
+.u-home .u-testimonials{border-top:0}
+.u-home .u-footer{margin-top:0}
+.u-footer{background:#1b1a18;color:#f7f7f4;border-top:0}
+.u-footer h3{color:#a9a59d}
+.u-footer a,.u-footer button{color:#e8e6e1}
+.u-footer a:hover,.u-footer button:hover{color:var(--green)}
+.u-footer-brand .u-logo{color:#fff}
+.u-footer-brand p{color:#a9a59d}
 
 /* Accés i perfil mòbil: copy compacte i modal sempre dins del viewport. */
 @media(max-width:620px){
