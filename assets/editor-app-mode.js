@@ -152,7 +152,8 @@
       let badge = button.querySelector(':scope > .project-open-plan-badge');
       // The project-name field already explains the Premium restriction in
       // editor subheaders. A second badge inside Obre would duplicate it.
-      const showsOwnBadge = button.matches('.open-projects-cta') || !button.closest('.project-save-bar,.qr-project-bar');
+      const isCatalogueHeadingAction = button.matches('.format-open-project, .catalog-open-project') || button.closest('.format-catalog-heading, .poster-catalog-heading');
+      const showsOwnBadge = !isCatalogueHeadingAction && (button.matches('.open-projects-cta') || !button.closest('.project-save-bar,.qr-project-bar'));
       if (locked && showsOwnBadge && !badge) {
         badge = document.createElement('span');
         badge.className = 'project-open-plan-badge';
