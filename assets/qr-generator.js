@@ -106,7 +106,15 @@
   const projectBar=$('.qr-project-bar'),projectField=$('.tool-project-field'),colorsCard=$('[data-colors-card]'),watermarkCard=$('[data-watermark-card]'),logoCard=$('[data-logo-card]'),brandCard=$('[data-brand-card]'),analyticsCard=$('[data-analytics-card]');
   const applyEntitlements=()=>{
     plan=window.UncartellPlatform?.getPlan?.()||'basic';canPremium=plan==='premium'||plan==='ultra';canUltra=plan==='ultra';
-    const dynamicPromo=$('[data-dynamic-promo]');if(dynamicPromo)dynamicPromo.hidden=canPremium;
+    const dynamicPromo=$('[data-dynamic-promo]');if(dynamicPromo){
+      dynamicPromo.hidden=canPremium;
+      dynamicPromo.setAttribute('role','button');
+      dynamicPromo.setAttribute('tabindex','0');
+      dynamicPromo.innerHTML='<span><strong>QR dinàmics</strong><small>Canvia la destinació sense tornar-los a imprimir.</small></span><em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>Premium</em>';
+      const openUpgrade=()=>window.UncartellPlatform?.openUpgradeModal?.();
+      dynamicPromo.addEventListener('click',openUpgrade);
+      dynamicPromo.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openUpgrade()}});
+    }
     // Only project management is gated. The whole header must never become a
     // locked target because Basic users can still open the download chooser.
     projectField?.classList.toggle('is-locked',!canPremium);projectBar?.classList.remove('is-locked');

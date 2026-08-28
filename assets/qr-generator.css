@@ -295,8 +295,14 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
 .qr-empty{width:min(1050px,100%)}
 .qr-empty-card{width:min(900px,100%)}
 @media(max-width:620px){.qr-empty,.qr-empty-card{width:100%}}
-.qr-dynamic-promo{display:flex;align-items:flex-start;gap:9px}
-.qr-dynamic-promo .feature-plan-badge{flex:none;margin-top:-2px}
+.qr-dynamic-promo{box-sizing:border-box;display:grid;width:100%;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;margin:18px 0 0;border:1px solid var(--qr-line);border-radius:14px;background:#efede7;padding:17px;color:var(--qr-ink);text-align:left;cursor:pointer;transition:background-color .15s ease,border-color .15s ease,transform .15s ease}
+.qr-dynamic-promo:hover{border-color:#bdb8ae;background:#e9e6df;transform:translateY(-1px)}
+.qr-dynamic-promo:focus-visible{outline:2px solid var(--qr-accent);outline-offset:2px}
+.qr-dynamic-promo>span{min-width:0}
+.qr-dynamic-promo strong{display:block;color:var(--qr-ink);font-size:15px;font-weight:800}
+.qr-dynamic-promo small{display:block;margin-top:5px;color:var(--qr-muted);font-size:11px;line-height:1.35}
+.qr-dynamic-promo>em{display:inline-flex;align-items:center;gap:6px;border:1px solid #43c84c;border-radius:10px;background:var(--qr-accent);padding:9px 13px;color:var(--qr-ink);font-size:10px;font-style:normal;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+.qr-dynamic-promo>em svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .qr-dynamic-promo[hidden]{display:none!important}
 
 /* Barra de projecte compacta en mòbil, coherent amb la resta d'eines. */
