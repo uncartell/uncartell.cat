@@ -1,0 +1,92 @@
+/*
+ * Sistema transversal de pestanyes visuals dels catàlegs.
+ * Cartells, Cartes i menús i Taules de preus comparteixen geometria,
+ * escala òptica, traç i indicador de selecció.
+ */
+:root{
+  --u-catalog-tab-height:160px;
+  --u-catalog-icon-width:116px;
+  --u-catalog-icon-height:96px;
+  --u-catalog-stroke:2.2;
+  --u-catalog-fold-stroke:2.6;
+  --u-catalog-indicator-height:3px;
+  --u-catalog-indicator-inset:16px;
+}
+
+.format-landing .format-tabs.format-visual-tabs,
+.poster-category-tabs{
+  gap:0!important;
+  border-bottom:1px solid #dedbd3!important;
+}
+
+.format-landing .format-visual-tab,
+.poster-category-tabs button{
+  min-height:var(--u-catalog-tab-height)!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  padding:10px 12px 18px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+
+.format-landing .format-visual-tab::after,
+.poster-category-tabs button::after{
+  right:var(--u-catalog-indicator-inset)!important;
+  bottom:-1px!important;
+  left:var(--u-catalog-indicator-inset)!important;
+  height:var(--u-catalog-indicator-height)!important;
+  border-radius:3px 3px 0 0!important;
+  background:var(--green,#67eb6b)!important;
+}
+
+.format-landing .format-visual-tab .format-type-icon,
+.poster-category-visual{
+  width:100%!important;
+  height:110px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.format-landing .format-visual-tab .format-type-icon svg,
+.poster-category-icon{
+  width:var(--u-catalog-icon-width)!important;
+  height:var(--u-catalog-icon-height)!important;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor!important;
+  stroke-width:var(--u-catalog-stroke)!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  vector-effect:non-scaling-stroke;
+}
+
+.format-landing .format-visual-tab .format-type-icon svg .paper,
+.poster-category-icon .paper{fill:#fff!important}
+.format-landing .format-visual-tab .format-type-icon svg .fold,
+.poster-category-icon .fold{
+  stroke:var(--green,#67eb6b)!important;
+  stroke-width:var(--u-catalog-fold-stroke)!important;
+}
+
+.format-landing .format-visual-tab .format-type-copy strong,
+.poster-category-tabs button{font-size:12px!important;line-height:1.2!important}
+
+@media(max-width:820px){
+  :root{
+    --u-catalog-tab-height:142px;
+    --u-catalog-icon-width:104px;
+    --u-catalog-icon-height:82px;
+    --u-catalog-indicator-inset:10px;
+  }
+  .format-landing .format-visual-tab,
+  .poster-category-tabs button{
+    min-width:138px!important;
+    min-height:var(--u-catalog-tab-height)!important;
+    flex:0 0 138px!important;
+    padding:8px 8px 16px!important;
+  }
+  .format-landing .format-visual-tab .format-type-icon,
+  .poster-category-visual{height:88px!important}
+}

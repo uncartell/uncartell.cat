@@ -91,6 +91,17 @@
   @keyframes u-mobile-language-in{from{opacity:0;transform:translateY(-9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 }
 
+/* Icona d'edició del perfil: traç lineal coherent amb el sistema Uncartell. */
+.u-profile-name-row button{
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  padding:0;
+  transition:background-color .16s ease,color .16s ease;
+}
+.u-profile-name-row button:hover,.u-profile-name-row button:focus-visible{background:#efede8;color:var(--ink)}
+.u-profile-name-row button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
 /* Modal geometry: one restrained radius across every product surface. */
 .u-modal-card,
 .u-account-card,
