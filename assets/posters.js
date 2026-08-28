@@ -1,6 +1,6 @@
 (()=>{
   const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
-  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-utility-bar-1';
+  if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260828-heading-project-1';
   const es=document.documentElement.lang==='es';
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
@@ -25,11 +25,11 @@
     crane:'<path d="M4 21h16M6 21V5h9M6 5l4-3h5v3M15 5h5M18 5v8M16 13h4M18 13v3M16.5 18h3L18 16zM6 9l6-4M6 13l8-8"/>',
     settings:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/>'
   });
-  let activeCategory='Més populars',activeSubcategory='',catalogQuery='',current=null,style='modern',font='Helvetica Neue',zoom=1,history=[],historyIndex=-1,historyTimer=null,hasUnsavedChanges=false;
+  let activeCategory='Més populars',activeSubcategory='',current=null,style='modern',font='Helvetica Neue',zoom=1,history=[],historyIndex=-1,historyTimer=null,hasUnsavedChanges=false;
   window.UncartellEditorHasUnsavedChanges=()=>hasUnsavedChanges;
   let plan=window.UncartellPlatform?.getPlan()||'basic';
   qa('[data-open-poster-projects]').forEach(button=>button.classList.toggle('is-plan-locked',plan!=='premium'&&plan!=='ultra'));
-  const catalogPage=q('#posterCatalog'),editor=q('#posterEditor'),categoryNav=q('[data-categories]'),subcategoryNav=q('[data-subcategories]'),grid=q('[data-posters]'),catalogSearch=q('[data-poster-search]'),clearCatalogSearch=q('[data-clear-poster-search]'),catalogResults=q('[data-poster-results]');
+  const catalogPage=q('#posterCatalog'),editor=q('#posterEditor'),categoryNav=q('[data-categories]'),subcategoryNav=q('[data-subcategories]'),grid=q('[data-posters]');
   const field=(item,name)=>item[`${name}${es?'Es':'Ca'}`]||item[`${name}Ca`]||'';
   const svgMarkup=key=>icons[key]?`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[key]}</svg>`:'';
   const iconMarkup=(key,image)=>image?`<img src="${image}" alt="">`:svgMarkup(key);
@@ -114,37 +114,15 @@
   const categoryItems=()=>catalog.filter(categoryFor);
   const subcategoryNames=()=>[...new Set(categoryItems().map(item=>field(item,'subcategory')))].filter(Boolean);
 
-  const synonymGroups=[
-    ['fumar','tabac','tabaco','fumador','fumadora','cigarreta','cigarro','cigarret','cigarrillo'],
-    ['lavabo','lavabos','bany','bano','aseo','wc','serveis'],
-    ['horari','horaris','hora','obert','obertura','tancat','tancament','vacances'],
-    ['wifi','wi-fi','internet','contrasenya','password','xarxa'],
-    ['rebaixes','oferta','ofertes','promocio','descompte','liquidacio','sale'],
-    ['sortida','emergencia','evacuacio','exit'],
-    ['targeta','tarjeta','credit','debit','pagament','pago'],
-    ['prohibit','prohibicio','no','vetat'],
-    ['restaurant','restauracio','bar','cafeteria','menjar','beguda'],
-    ['botiga','comerc','establiment','negoci']
-  ].map(group=>group.map(normalizeSearch));
-  const expandSynonyms=token=>synonymGroups.find(group=>group.includes(token))||[token];
-  const editDistance=(a,b)=>{const rows=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)rows[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)rows[i][j]=Math.min(rows[i-1][j]+1,rows[i][j-1]+1,rows[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return rows[a.length][b.length]};
   const posterMetadata=item=>{
-    const title=field(item,'title'),subtitle=field(item,'subtitle'),category=field(item,'category'),subcategory=field(item,'subcategory');
-    const iconTerms=iconSearchText(item.icon);
-    const explicit=normalizeSearch(title).includes('fumar')?'fumar tabac tabaco fumador fumadora cigarreta cigarro cigarrillo':'';
-    return {title,description:subtitle||'Cartell editable i llest per imprimir',category,subcategory,tags:['A4','PDF','editable'],synonyms:`${explicit} ${iconTerms}`};
-  };
-  const matchesCatalogSearch=item=>{
-    if(!catalogQuery)return true;
-    const meta=posterMetadata(item);const haystack=normalizeSearch([meta.title,meta.description,meta.category,meta.subcategory,meta.tags.join(' '),meta.synonyms].join(' '));const words=haystack.split(/[^a-z0-9]+/).filter(Boolean);
-    return normalizeSearch(catalogQuery).split(/\s+/).filter(Boolean).every(token=>expandSynonyms(token).some(variant=>haystack.includes(variant)||words.some(word=>variant.length>3&&Math.abs(word.length-variant.length)<=1&&editDistance(word,variant)<=1)));
+    const title=field(item,'title'),subtitle=field(item,'subtitle');
+    return {title,description:subtitle||'Cartell editable i llest per imprimir'};
   };
 
   function renderFilters(){
     const categories=categoryNames();
     if(!categories.includes(activeCategory)) activeCategory=categories[0]||'';
-    categoryNav.innerHTML=categories.map(name=>`<button class="${!catalogQuery&&name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${!catalogQuery&&name===activeCategory}">${categoryIcon(name)}<span>${escapeHtml(name)}</span></button>`).join('');
-    if(catalogQuery){subcategoryNav.innerHTML='';subcategoryNav.hidden=true;qa('[data-category]').forEach(button=>button.onclick=()=>{catalogQuery='';if(catalogSearch)catalogSearch.value='';if(clearCatalogSearch)clearCatalogSearch.hidden=true;activeCategory=button.dataset.category;activeSubcategory='';renderFilters();renderCards()});return}
+    categoryNav.innerHTML=categories.map(name=>`<button class="${name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${name===activeCategory}">${categoryIcon(name)}<span>${escapeHtml(name)}</span></button>`).join('');
     subcategoryNav.hidden=false;
     const subs=subcategoryNames();
     if(activeCategory==='Més populars')activeSubcategory='';else if(!subs.includes(activeSubcategory)) activeSubcategory=subs[0]||'';
@@ -158,17 +136,15 @@
     return `<div class="poster-repository-preview" style="--poster-color:${item.color||'#e5372a'}"><div class="poster-card-icon">${iconMarkup(item.icon,item.image)}</div><strong>${escapeHtml(title)}</strong>${subtitle?`<small>${escapeHtml(subtitle)}</small>`:''}<span class="u-watermark">${es?'uncartel.es':'uncartell.cat'}</span></div>`;
   }
   function renderCards(){
-    const filtered=(catalogQuery?catalog.filter(matchesCatalogSearch):categoryItems().filter(item=>!activeSubcategory||field(item,'subcategory')===activeSubcategory));
+    const filtered=categoryItems().filter(item=>!activeSubcategory||field(item,'subcategory')===activeSubcategory);
     const create=`<article class="poster-repository-card poster-create-card" data-create-card><div class="poster-repository-preview"><div class="poster-card-icon poster-create-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><strong>${es?'CREA UN CARTEL':'CREA UN CARTELL'}</strong></div><div class="poster-card-info"><div><strong>${es?'Crear cartel':'Crea un cartell'}</strong><small>${es?'Cartel editable y listo para imprimir':'Cartell editable i llest per imprimir'}</small></div></div><div class="poster-card-hover poster-create-hover"><button type="button" data-create-customize>${es?'Personaliza':'Personalitza'}</button></div></article>`;
-    if(!filtered.length){grid.innerHTML=`<section class="poster-empty-state"><div class="poster-empty-icon" aria-hidden="true">?</div><h2>No hem trobat cap cartell per a aquesta cerca</h2><p>Però pots crear-lo tu des de zero i deixar-lo llest per imprimir</p><button type="button" data-empty-create>Crea un cartell</button></section>`;catalogResults.textContent='Cap resultat';q('[data-empty-create]').onclick=()=>openEditor({id:'new',titleCa:'El teu títol',subtitleCa:'Afegeix un subtítol',icon:'search',color:'#e5372a'});return}
-    catalogResults.textContent=catalogQuery?`${filtered.length} ${filtered.length===1?'cartell trobat':'cartells trobats'}`:'';
+    if(!filtered.length){grid.innerHTML=create;return}
     grid.innerHTML=create+filtered.map(item=>{const meta=posterMetadata(item);return `<article class="poster-repository-card" data-poster-id="${item.id}">${posterPreview(item)}<div class="poster-card-info"><div><strong>${escapeHtml(meta.title)}</strong><small>${escapeHtml(meta.description)}</small></div><ul aria-label="Formats"><li>A4</li><li>PDF</li><li>Editable</li></ul></div><div class="poster-card-hover"><button type="button" data-card-download="${item.id}">${es?'Descarga':'Descarrega'}</button><button type="button" data-card-customize="${item.id}">${es?'Personaliza':'Personalitza'}</button></div></article>`}).join('');fitLegacyIconSvgs(grid);
     const createPoster=()=>openEditor({id:'new',titleCa:'El teu títol',titleEs:'Tu título',subtitleCa:'Afegeix un subtítol',subtitleEs:'Añade un subtítulo',icon:'search',color:'#e5372a'});q('[data-create-card]').onclick=createPoster;q('[data-create-customize]').onclick=event=>{event.stopPropagation();createPoster()};
     qa('[data-card-download]').forEach(button=>button.onclick=event=>{event.stopPropagation();openEditor(catalog.find(item=>item.id===button.dataset.cardDownload),true);openDownloadDialog()});
     qa('[data-card-customize]').forEach(button=>button.onclick=event=>{event.stopPropagation();openEditor(catalog.find(item=>item.id===button.dataset.cardCustomize))});
     qa('[data-poster-id]').forEach(card=>card.onclick=()=>openEditor(catalog.find(item=>item.id===card.dataset.posterId)));
   }
-  if(catalogSearch){catalogSearch.addEventListener('input',()=>{catalogQuery=catalogSearch.value.trim();clearCatalogSearch.hidden=!catalogQuery;activeSubcategory='';renderFilters();renderCards()});clearCatalogSearch.onclick=()=>{catalogSearch.value='';catalogQuery='';clearCatalogSearch.hidden=true;renderFilters();renderCards();catalogSearch.focus()}}
   function openEditor(item,keepCatalog=false){
     const normalizedStyle=['classic','modern','elegant'].includes(item.style)?item.style:'modern';
     const normalizedFont=normalizedStyle==='classic'?'EB Garamond':normalizedStyle==='elegant'?'Georgia':'Helvetica Neue';
