@@ -659,3 +659,73 @@
   .format-landing .format-card-media,.format-landing .format-paper-wrap{min-height:0!important;height:auto!important}
   .format-landing .format-card>.format-actions{height:auto!important;align-items:flex-end!important;padding:0 0 16px!important;background:linear-gradient(transparent 55%,rgba(24,22,20,.12))!important;opacity:1!important;transform:none!important;pointer-events:auto!important}
 }
+
+/* Targetes serenes: cap element canvia de mida ni de posició en passar-hi per damunt. */
+.format-landing .format-card.format-option,
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option.is-current{
+  overflow:hidden!important;
+  border:1px solid var(--line,#d9d5cc)!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  opacity:1!important;
+  transform:none!important;
+  transition:border-color .16s ease,box-shadow .16s ease!important;
+}
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option:focus-within{
+  border-color:#aaa69d!important;
+  box-shadow:0 10px 28px rgba(24,22,20,.07)!important;
+}
+.format-landing .format-card .format-paper,
+.format-landing .format-card:hover .format-paper,
+.format-landing .format-card.is-current .format-paper{
+  transform:none!important;
+  transition:none!important;
+}
+.format-landing .format-card-media img,
+.format-landing .format-card:hover .format-card-media img,
+.format-landing .format-card.is-current .format-card-media img{
+  transform:none!important;
+  transition:none!important;
+}
+.format-landing .format-card>.format-actions{
+  background:rgba(255,255,255,.38)!important;
+  backdrop-filter:blur(2px)!important;
+  transition:opacity .16s ease!important;
+  transform:none!important;
+}
+.format-landing .format-card>.format-actions button{
+  min-width:146px!important;
+  min-height:44px!important;
+  border:5px solid var(--ink,#181614)!important;
+  border-radius:12px!important;
+  background:var(--green,#73f172)!important;
+  color:var(--ink,#181614)!important;
+  box-shadow:0 8px 22px rgba(24,22,20,.13)!important;
+}
+.format-landing .format-card>.format-actions button:hover{
+  filter:brightness(.97)!important;
+}
+.format-landing .format-card.is-current:not(:hover):not(:focus-within)>.format-actions{
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.format-landing .format-card.is-premium-locked>.format-actions button{
+  background:#fff!important;
+}
+@media(max-width:760px){
+  .format-landing .format-card>.format-actions{
+    background:linear-gradient(transparent 58%,rgba(255,255,255,.55))!important;
+    backdrop-filter:none!important;
+  }
+  .format-landing .format-card.is-current:not(:hover):not(:focus-within)>.format-actions{
+    opacity:1!important;
+    pointer-events:auto!important;
+  }
+  .format-landing .format-card>.format-actions button{
+    min-width:138px!important;
+    min-height:42px!important;
+  }
+}
