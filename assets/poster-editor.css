@@ -280,4 +280,46 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-repository-preview::after{width:38px;height:38px}
 }
 .u-lang-es .poster-editor-tabs button.active{box-shadow:inset 0 -4px 0 var(--green)!important}
+
+/* Cerca i projectes: una sola barra lleugera abans de les categories. */
+.poster-catalog-step>.intro-row{margin-bottom:14px!important}
+.poster-catalog-step .catalog-utility-row{
+  width:min(1180px,100%)!important;
+  min-height:48px!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  margin:0 auto 8px!important;
+  padding:0!important;
+}
+.poster-catalog-step .catalog-utility-row .poster-search{
+  width:min(520px,100%)!important;
+  height:44px!important;
+  flex:0 1 520px!important;
+  margin:0!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+}
+.poster-catalog-step .catalog-utility-row .open-projects-cta{
+  min-height:44px!important;
+  max-width:none!important;
+  flex:none!important;
+  gap:10px!important;
+  margin:0!important;
+  padding:0 15px!important;
+  border:1px solid #d5d1c8!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#181614!important;
+  box-shadow:none!important;
+}
+.poster-catalog-step .catalog-utility-row .open-projects-cta:hover{border-color:#8e8a82!important;background:#f5f4f0!important}
+.poster-catalog-step .poster-filters{margin-top:0!important}
+@media(max-width:620px){
+  .poster-catalog-step>.intro-row{margin-bottom:12px!important}
+  .poster-catalog-step .catalog-utility-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;margin-bottom:6px!important}
+  .poster-catalog-step .catalog-utility-row .poster-search{width:100%!important;height:42px!important;min-width:0!important}
+  .poster-catalog-step .catalog-utility-row .open-projects-cta{width:44px!important;min-width:44px!important;padding:0!important;font-size:0!important}
+  .poster-catalog-step .catalog-utility-row .open-projects-cta svg{width:20px;height:20px}
+}
 .u-live-logo[data-position=left]{left:7%;transform:none}.u-live-logo[data-position=right]{left:auto;right:7%;transform:none}.poster-logo-tool{position:relative}.poster-logo-badge{position:absolute;right:0;top:-2px}.poster-logo-tool:not(.is-locked) .poster-logo-badge{display:none}.poster-logo-tool.is-locked .kit-logo-row,.poster-logo-tool.is-locked .kit-logo-preview,.poster-logo-tool.is-locked .poster-logo-position{opacity:.42;pointer-events:none}.poster-logo-position{border:0;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.poster-logo-position legend{grid-column:1/-1;margin-bottom:8px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}.poster-logo-position button{min-height:42px;border:1px solid var(--line,#d8d4ca);border-radius:10px;background:#fff;color:#181614;font:inherit;font-weight:750}.poster-logo-position button.active{border-color:#61ed6b;background:#dfffe2;box-shadow:inset 0 0 0 1px #61ed6b}
