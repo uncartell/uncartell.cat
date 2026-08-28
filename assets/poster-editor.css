@@ -221,6 +221,9 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   transform:translateY(-3px);
 }
 .poster-category-icon{width:116px;height:96px;stroke-width:2.2}
+.poster-category-icon .icon-main{stroke:#716d66!important}
+.poster-category-icon .icon-accent{stroke:var(--green)!important;stroke-width:2.7!important}
+.poster-subcategory-tabs{border-top:0!important}
 @media(max-width:820px){
   .poster-catalog-step{padding-top:28px}
   .poster-catalog-step .intro-row{width:100%;margin-bottom:24px!important}
@@ -230,7 +233,7 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-category-tabs{justify-content:flex-start}
   .poster-category-tabs button{min-width:138px;min-height:142px;padding:8px 8px 16px}
   .poster-category-visual{height:88px}
-  .poster-category-icon{width:104px;height:82px}
+  .poster-category-icon{width:108px;height:86px}
 }
 
 /* Aparador editorial: cada miniatura es llegeix com un document imprimible. */
