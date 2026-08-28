@@ -152,6 +152,72 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   .poster-category-icon{width:23px;height:23px}
 }
 
+/* Capçalera i pestanyes transversals: el mateix llenguatge que Cartes i Taules. */
+.poster-catalog-step{padding-top:42px}
+.poster-catalog-step .intro-row{
+  display:flex!important;
+  width:min(920px,100%);
+  align-items:center!important;
+  flex-direction:column;
+  gap:0!important;
+  margin:0 auto 30px!important;
+  text-align:center;
+}
+.poster-catalog-intro{width:100%;max-width:none;text-align:center}
+.poster-catalog-intro .eyebrow{text-align:center}
+.poster-catalog-intro h1{
+  min-height:0!important;
+  margin:0!important;
+  font-size:clamp(34px,4vw,58px);
+  line-height:1!important;
+}
+.poster-catalog-intro>p{
+  max-width:680px;
+  margin:12px auto 0!important;
+  font-size:16px;
+  line-height:1.45;
+  text-align:center;
+}
+.poster-search{margin:24px auto 0}
+.poster-catalog-step .open-projects-cta{margin-top:18px}
+.poster-filters{width:min(1180px,100%);margin:22px auto 26px}
+.poster-category-tabs{justify-content:center}
+.poster-category-tabs button{
+  min-width:138px;
+  min-height:132px;
+  gap:8px;
+  padding:10px 12px 18px;
+  font-size:12px;
+}
+.poster-category-tabs button:hover{background:#f7f7f4!important}
+.poster-category-visual{
+  width:100%;
+  height:76px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:#2f9e38;
+}
+.poster-category-tabs button:hover .poster-category-visual,
+.poster-category-tabs button.active .poster-category-visual{
+  border:0;
+  background:transparent;
+  color:#21852a;
+  transform:translateY(-3px);
+}
+.poster-category-icon{width:48px;height:48px;stroke-width:1.5}
+@media(max-width:820px){
+  .poster-catalog-step{padding-top:28px}
+  .poster-catalog-step .intro-row{width:100%;margin-bottom:24px!important}
+  .poster-catalog-intro h1{font-size:34px}
+  .poster-catalog-intro>p{font-size:14px}
+  .poster-catalog-step .open-projects-cta{width:auto;align-self:center;justify-content:center}
+  .poster-category-tabs{justify-content:flex-start}
+  .poster-category-tabs button{min-width:126px;min-height:116px;padding:8px 10px 16px}
+  .poster-category-visual{height:66px}
+  .poster-category-icon{width:42px;height:42px}
+}
+
 /* Aparador editorial: cada miniatura es llegeix com un document imprimible. */
 .poster-format-grid{gap:28px 34px}
 .poster-repository-card{overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none}
