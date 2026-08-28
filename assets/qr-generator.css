@@ -292,6 +292,9 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
 .qr-empty .qr-empty-watermark{display:none}
 .qr-empty-card{width:min(720px,100%);padding:22px}
 @media(max-width:620px){.qr-empty{min-height:290px;padding:16px}.qr-empty-card{padding:18px}}
+.qr-empty{width:min(1050px,100%)}
+.qr-empty-card{width:min(900px,100%)}
+@media(max-width:620px){.qr-empty,.qr-empty-card{width:100%}}
 
 /* Barra de projecte compacta en mòbil, coherent amb la resta d'eines. */
 @media(max-width:620px){
