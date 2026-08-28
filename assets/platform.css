@@ -270,8 +270,8 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 @media(max-width:760px){
   .u-plans-grid,.u-upgrade-plans{display:grid;grid-template-columns:1fr;gap:10px}
   .u-plan,.u-upgrade-plans article{min-height:0;border-radius:14px}
-  .u-plan-head,.u-upgrade-plans article>header{position:relative;min-height:56px;padding-right:46px;cursor:pointer}
-  .u-plan-head::after,.u-upgrade-plans article>header::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400}
+  .u-plan-head,.u-upgrade-plans article>header{position:relative;display:flex;min-height:56px;align-items:center;padding-right:54px;cursor:pointer;line-height:1.15}
+  .u-plan-head::after,.u-upgrade-plans article>header::after{content:"+";position:absolute;right:16px;top:0;display:grid;width:34px;height:100%;place-items:center;transform:none;font-size:27px;font-weight:400;line-height:1}
   .u-plan.is-open>.u-plan-head::after,.u-upgrade-plans article.is-open>header::after{content:"−"}
   .u-plan:not(.is-open)>.u-plan-body,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 14px;padding:15px 18px}
   .u-plan:not(.is-open)>.u-plan-body>p,.u-plan:not(.is-open) .u-feature-list,.u-plan:not(.is-open) .u-price-note,.u-upgrade-plans article:not(.is-open)>.u-upgrade-plan-body>p,.u-upgrade-plans article:not(.is-open) .u-upgrade-features{display:none}
