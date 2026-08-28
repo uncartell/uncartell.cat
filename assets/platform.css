@@ -91,6 +91,9 @@
   @keyframes u-mobile-language-in{from{opacity:0;transform:translateY(-9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 }
 
+/* Premium beta: make the 12-month trial duration explicit in the upgrade modal. */
+.u-upgrade-trial{display:block;margin:-10px 0 14px;color:var(--muted);font-size:12px;line-height:1.35}
+
 /* Icona d'edició del perfil: traç lineal coherent amb el sistema Uncartell. */
 .u-profile-name-row button{
   display:grid;
