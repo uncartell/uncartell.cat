@@ -317,12 +317,11 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-upgrade-features li{font-size:11.5px}
 .u-upgrade-plans strong{margin:12px 0 9px;font-size:30px}
 .u-upgrade-plans button,.u-upgrade-plans a{min-height:42px;flex-basis:42px}
-.u-upgrade-all-features{display:flex;width:max-content;align-items:center;gap:8px;margin:14px auto 0;color:#181614;font-size:13px;font-weight:800;text-underline-offset:4px}
-.u-upgrade-all-features span{font-size:18px;transition:transform .16s ease}
-.u-upgrade-all-features:hover span{transform:translateX(3px)}
+.u-upgrade-plan-features-link{display:inline-flex;width:max-content;min-height:34px!important;flex:0 0 auto!important;align-items:center;justify-content:center;margin:10px 0 0;padding:0 13px;border:1px solid var(--line)!important;border-radius:10px!important;background:#fff!important;color:var(--ink)!important;font-size:12px;font-weight:750;text-decoration:none}
+.u-upgrade-plan-features-link:hover{border-color:var(--ink)!important;background:#f4f3f0!important}
 @media(max-width:760px){
   .u-upgrade-card{padding:44px 14px 18px}
-  .u-upgrade-all-features{margin-top:12px}
+  .u-upgrade-plans article:not(.is-open) .u-upgrade-plan-features-link{display:none}
 }
 /* Tics outline, coherents amb el sistema d'icones d'uncartell. */
 .u-feature-list li::before,.u-upgrade-features li::before{content:"";width:7px;height:12px;flex:0 0 7px;margin:1px 5px 0 3px;border:0;border-right:2px solid #00a57e;border-bottom:2px solid #00a57e;border-radius:1px;transform:rotate(45deg)}
