@@ -415,7 +415,7 @@
     const tabs = labels.map((page, index) => `<button class="page-tab ${index === state.activePage ? "active" : ""}" type="button" data-page="${index}">${index + 1}. ${escapeHtml(page)}</button>`).join("");
     const supportsUltraPages = state.format === "a3-landscape" || state.format === "a4-portrait";
     const ultraControl = supportsUltraPages && state.pages.length === 4
-      ? `<button class="ultra-pages-button ${state.plan === "ultra" ? "" : "locked"}" id="addUltraPages" type="button">${state.plan === "ultra" ? "＋" : '<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>'} ${escapeHtml(L.addUltraPages)}</button>`
+      ? `<button class="ultra-pages-button ${state.plan === "ultra" ? "" : "locked"}" id="addUltraPages" type="button">${state.plan === "ultra" ? "＋" : '<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>'} Afegeix 4 pàgines extres</button>`
       : supportsUltraPages && state.pages.length > 4 ? `<button class="ultra-pages-button remove-pages-button" id="removeUltraPages" type="button">− ${escapeHtml(L.removeUltraPages)}</button>` : "";
     $("#pageTabs").innerHTML = tabs + ultraControl;
     $$(".page-tab").forEach(button => button.addEventListener("click", () => {
@@ -442,7 +442,7 @@
       save();
       state.extraPagesDirty = false;
       renderAll();
-      toast(L.ultraPagesAdded);
+      toast("S’han afegit 4 pàgines extres al document.");
     });
     $("#removeUltraPages")?.addEventListener("click", () => {
       if (state.extraPagesDirty) {
