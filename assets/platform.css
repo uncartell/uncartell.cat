@@ -333,6 +333,7 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-upgrade-price-stack{display:flex;min-height:64px;flex-direction:column;justify-content:flex-end;margin-top:auto}
 .u-upgrade-price-stack strong{margin:0!important;line-height:1.05}
 .u-upgrade-price-stack small{display:block;min-height:17px;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.2}
+.u-upgrade-price-offer{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.u-upgrade-price-offer del{color:var(--muted);font-size:15px;font-weight:400;letter-spacing:0}
 .u-upgrade-price-stack+button{margin-top:10px}
 .u-upgrade-plans{align-items:stretch}
 .u-upgrade-plans article,.u-upgrade-plan-body{height:100%}
