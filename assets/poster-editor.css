@@ -102,6 +102,14 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
 .u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}
 .u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
 
+/* Keep catalog actions over the poster preview, clear of its metadata. */
+@media (min-width:621px) and (hover:hover) and (pointer:fine){
+  .poster-catalog-step .poster-repository-card .poster-card-hover{
+    top:auto!important;
+    bottom:143px!important;
+  }
+}
+
 /* Selector visual de sectors: lleuger, editorial i coherent amb els selectors de formats. */
 .poster-category-tabs{
   display:grid;
