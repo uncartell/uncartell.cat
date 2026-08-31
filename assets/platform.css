@@ -858,3 +858,12 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   .u-plan-head,.u-upgrade-plans article>header{box-sizing:border-box;min-height:58px!important;align-items:center!important;padding:0 56px 0 18px!important;line-height:1.15!important}
   .u-plan-head::after,.u-upgrade-plans article>header::after{top:50%!important;right:14px!important;bottom:auto!important;width:36px!important;height:36px!important;transform:translateY(-50%)!important;line-height:1!important}
 }
+
+/* Pricing mobile optical alignment 2026-08-31 */
+@media(max-width:760px){
+.u-plan-head,.u-upgrade-plans article>header{min-height:58px!important;padding-block:0!important;align-items:center!important}
+.u-plan-head::after,.u-upgrade-plans article>header::after{top:50%!important;width:38px!important;height:38px!important;align-items:center!important;justify-items:center!important;padding:0 0 2px!important;transform:translateY(-50%)!important;font-family:Arial,sans-serif!important;font-size:27px!important;line-height:1!important}
+.u-upgrade-plans article.is-open .u-upgrade-plan-features-link{margin:9px 0 0!important}
+.u-upgrade-plans article.is-open .u-upgrade-price-stack{margin-top:14px!important}
+.u-upgrade-plans article.is-open .u-upgrade-price-stack strong{margin:0!important}
+}
