@@ -288,6 +288,54 @@ body:has(.plan-preview) .u-quota{bottom:74px}
   .u-upgrade-login{margin-top:14px}
 }
 
+/* The footer wordmark keeps its brand colour on interaction. */
+.u-footer-brand .u-logo:hover,
+.u-footer-brand .u-logo:focus-visible{
+  color:#fff!important;
+}
+
+/* Autoritat responsive final del modal de plans: queda per damunt del header i
+   el control de cada acordió comparteix exactament el centre de la capçalera. */
+@media(max-width:760px){
+  .u-upgrade-modal{
+    z-index:5000!important;
+    align-items:flex-start!important;
+    padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important;
+  }
+  .u-upgrade-card{
+    width:100%!important;
+    max-height:calc(100dvh - max(16px,env(safe-area-inset-top) + env(safe-area-inset-bottom)))!important;
+    margin:0!important;
+    padding:52px 14px 18px!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+  }
+  .u-upgrade-card [data-upgrade-step="plans"]>h2{
+    margin:0 auto!important;
+    padding:0 22px;
+    font-size:clamp(25px,7.4vw,31px)!important;
+    line-height:1.02!important;
+  }
+  .u-plan-head,
+  .u-upgrade-plans article>header{
+    box-sizing:border-box;
+    min-height:58px!important;
+    align-items:center!important;
+    padding:0 56px 0 18px!important;
+    line-height:1.15!important;
+  }
+  .u-plan-head::after,
+  .u-upgrade-plans article>header::after{
+    top:50%!important;
+    right:14px!important;
+    bottom:auto!important;
+    width:36px!important;
+    height:36px!important;
+    transform:translateY(-50%)!important;
+    line-height:1!important;
+  }
+}
+
 /* Els passos de plans i autenticació comparteixen exactament el mateix marc. */
 @media(min-width:621px){
   .u-account-card,.u-upgrade-card{width:min(1040px,calc(100vw - 44px));height:min(650px,calc(100vh - 44px));max-height:none}
@@ -849,8 +897,7 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
 .u-footer-brand .u-logo{color:#fff!important}
 .u-footer-brand p{color:#a9a59d!important}
 
-
-/* Mobile pricing modal alignment — 2026-08-31 */
+/* Autoritat final mòbil del modal de plans. */
 @media(max-width:760px){
   .u-upgrade-modal{z-index:5000!important;align-items:flex-start!important;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important}
   .u-upgrade-card{width:100%!important;max-height:calc(100dvh - 16px)!important;margin:0!important;padding:52px 14px 18px!important;overflow-y:auto!important;overscroll-behavior:contain}
@@ -859,11 +906,34 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
   .u-plan-head::after,.u-upgrade-plans article>header::after{top:50%!important;right:14px!important;bottom:auto!important;width:36px!important;height:36px!important;transform:translateY(-50%)!important;line-height:1!important}
 }
 
-/* Pricing mobile optical alignment 2026-08-31 */
+/* Pricing mòbil final: alineació òptica dels controls i respiració del preu. */
 @media(max-width:760px){
-.u-plan-head,.u-upgrade-plans article>header{min-height:58px!important;padding-block:0!important;align-items:center!important}
-.u-plan-head::after,.u-upgrade-plans article>header::after{top:50%!important;width:38px!important;height:38px!important;align-items:center!important;justify-items:center!important;padding:0 0 2px!important;transform:translateY(-50%)!important;font-family:Arial,sans-serif!important;font-size:27px!important;line-height:1!important}
-.u-upgrade-plans article.is-open .u-upgrade-plan-features-link{margin:9px 0 0!important}
-.u-upgrade-plans article.is-open .u-upgrade-price-stack{margin-top:14px!important}
-.u-upgrade-plans article.is-open .u-upgrade-price-stack strong{margin:0!important}
+  .u-plan-head,
+  .u-upgrade-plans article>header{
+    min-height:58px!important;
+    padding-block:0!important;
+    align-items:center!important;
+  }
+  .u-plan-head::after,
+  .u-upgrade-plans article>header::after{
+    top:50%!important;
+    width:38px!important;
+    height:38px!important;
+    align-items:center!important;
+    justify-items:center!important;
+    padding:0 0 2px!important;
+    transform:translateY(-50%)!important;
+    font-family:Arial,sans-serif!important;
+    font-size:27px!important;
+    line-height:1!important;
+  }
+  .u-upgrade-plans article.is-open .u-upgrade-plan-features-link{
+    margin:9px 0 0!important;
+  }
+  .u-upgrade-plans article.is-open .u-upgrade-price-stack{
+    margin-top:14px!important;
+  }
+  .u-upgrade-plans article.is-open .u-upgrade-price-stack strong{
+    margin:0!important;
+  }
 }
