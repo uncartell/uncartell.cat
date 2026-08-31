@@ -58,8 +58,8 @@
   padding-top:var(--catalog-heading-top)!important;
   padding-bottom:0!important;
 }
-:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro)>p{
-  margin-top:var(--catalog-title-copy-gap)!important;
+body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro)>p{
+  margin:var(--catalog-title-copy-gap) 0 0!important;
 }
 :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){
   margin-top:0!important;
