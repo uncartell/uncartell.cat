@@ -96,6 +96,25 @@ body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .
     --catalog-copy-tabs-gap:28px;
     --catalog-tabs-content-gap:24px;
   }
+  body :is(.poster-catalog-step,.format-landing .format-step)>
+  :is(.poster-catalog-heading,.format-catalog-heading){
+    position:relative!important;
+    display:block!important;
+    width:calc(100% - 28px)!important;
+    min-height:0!important;
+    padding-right:60px!important;
+  }
+  body :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){
+    position:absolute!important;
+    top:var(--catalog-heading-top)!important;
+    right:0!important;
+    width:46px!important;
+    min-width:46px!important;
+    height:46px!important;
+    min-height:46px!important;
+    margin:0!important;
+    padding:0!important;
+  }
 }
 
 /* Desktop category rails must never behave like an inner scrolling frame. */
