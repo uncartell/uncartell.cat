@@ -129,3 +129,10 @@ body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .
     flex-wrap:wrap!important;
   }
 }
+
+/* Mobile catalogue heading grid 2026-08-31 */
+@media(max-width:720px){
+body :is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){position:relative!important;display:grid!important;grid-template-columns:minmax(0,1fr) 46px!important;column-gap:14px!important;align-items:start!important;width:calc(100vw - 28px)!important;max-width:calc(100vw - 28px)!important;min-height:0!important;margin-inline:auto!important;padding:var(--catalog-heading-top) 0 0!important;box-sizing:border-box!important}
+body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro){grid-column:1!important;grid-row:1!important;min-width:0!important}
+body :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){position:static!important;grid-column:2!important;grid-row:1!important;align-self:start!important;justify-self:end!important;width:46px!important;min-width:46px!important;height:46px!important;min-height:46px!important;margin:0!important;padding:0!important}
+}
