@@ -52,6 +52,10 @@
 .format-landing .format-step{
   padding-top:0!important;
 }
+.poster-catalog-step{
+  padding-right:0!important;
+  padding-left:0!important;
+}
 :is(.poster-catalog-step,.format-landing .format-step)>
 :is(.poster-catalog-heading,.format-catalog-heading){
   margin:0 auto!important;
