@@ -47,7 +47,7 @@
   const formatAllowed=format=>window.UncartellPlatform?.canDownloadFormat?.(format)??(format==='pdf'||format==='print'||format==='png'&&canPremium||format==='svg'&&canUltra);
   const setEnabled=enabled=>{const png=$('[data-download-png]'),svg=$('[data-download-svg]');$('[data-print]').disabled=!enabled;png.disabled=!enabled;svg.disabled=!enabled;png.classList.toggle('is-plan-locked',enabled&&!formatAllowed('png'));svg.classList.toggle('is-plan-locked',enabled&&!formatAllowed('svg'))};
   const downloadModal=$('[data-download-modal]');
-  $$('[data-open-downloads]').forEach(button=>button.addEventListener('click',()=>{downloadModal.hidden=false}));
+  $$('[data-open-downloads]').forEach(button=>button.addEventListener('click',event=>{event.stopPropagation();downloadModal.hidden=false}));
   $$('[data-close-downloads]').forEach(button=>button.addEventListener('click',()=>{downloadModal.hidden=true}));
   const encodedUrl=()=>state.dynamicId?(state.publicUrl||`${location.origin}/qr/?id=${state.dynamicId}`):state.url;
   const renderDynamicEditor=()=>{const dynamic=$('[data-dynamic-link-editor]'),fresh=$('[data-new-link-editor]');if(!dynamic||!fresh)return;dynamic.hidden=!state.dynamicId;fresh.hidden=!!state.dynamicId;if(state.dynamicId){$('[data-current-destination]').value=state.url||'';$('[data-replacement-url]').value=''}};
