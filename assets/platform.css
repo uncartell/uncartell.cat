@@ -337,6 +337,14 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 .u-upgrade-plans{align-items:stretch}
 .u-upgrade-plans article,.u-upgrade-plan-body{height:100%}
 .u-upgrade-plan-body>.u-upgrade-price-stack{margin-top:auto!important}
+/* Keep the pricing footer perfectly aligned across plans, regardless of copy length. */
+@media(min-width:761px){
+  .u-upgrade-plan-body{padding-bottom:138px}
+  .u-upgrade-plan-body>.u-upgrade-price-stack{position:absolute;right:18px;bottom:68px;left:18px;min-height:58px;margin:0!important;justify-content:flex-end}
+  .u-upgrade-plan-body>button[data-upgrade-basic],
+  .u-upgrade-plan-body>button[data-upgrade-premium],
+  .u-upgrade-plan-body>button[data-upgrade-ultra-notify]{position:absolute;right:18px;bottom:16px;left:18px;width:auto;margin:0}
+}
 @media(max-width:760px){
   .u-upgrade-card{padding:44px 14px 18px}
   .u-upgrade-plans article:not(.is-open) .u-upgrade-plan-features-link{display:none}
