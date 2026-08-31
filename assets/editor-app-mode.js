@@ -73,10 +73,10 @@
     contextButton.setAttribute('aria-label', editorContext.buttonLabel);
     contextButton.setAttribute('title', editorContext.buttonLabel);
     contextButton.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg><strong>${editorContext.buttonLabel}</strong>`;
-    contextButton.addEventListener('click', () => {
-      const existingBack = editor.querySelector('#changeFormat, [data-back-to-posters]');
-      if (existingBack?.id === 'changeFormat') { existingBack.click(); return; }
-      confirmLeave(() => existingBack ? existingBack.click() : window.location.assign(editorContext.href));
+    contextButton.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      confirmLeave(() => window.location.assign(editorContext.href));
     });
     projectBar.prepend(contextButton);
 
