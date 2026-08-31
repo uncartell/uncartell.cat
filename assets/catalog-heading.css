@@ -44,7 +44,7 @@
 /* Shared vertical rhythm for all three tool-selection catalogues. */
 :root{
   --catalog-heading-top:52px;
-  --catalog-title-copy-gap:9px;
+  --catalog-title-copy-gap:5px;
   --catalog-copy-tabs-gap:36px;
   --catalog-tabs-content-gap:28px;
 }
@@ -88,7 +88,7 @@
 @media(max-width:720px){
   :root{
     --catalog-heading-top:32px;
-    --catalog-title-copy-gap:8px;
+    --catalog-title-copy-gap:4px;
     --catalog-copy-tabs-gap:28px;
     --catalog-tabs-content-gap:24px;
   }
