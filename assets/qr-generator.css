@@ -305,6 +305,23 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
 .qr-dynamic-promo>em svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .qr-dynamic-promo[hidden]{display:none!important}
 
+/* El reclam de QR dinàmic utilitza el mateix badge Premium compacte que la
+   resta de caixetins de funcionalitat. */
+.qr-dynamic-promo>em{
+  box-sizing:border-box;
+  width:72px;
+  min-width:72px;
+  max-width:72px;
+  height:24px;
+  min-height:24px;
+  justify-content:center;
+  gap:4px;
+  padding:0 8px;
+  border-radius:8px;
+  font:900 8px/1 Arial,sans-serif;
+}
+.qr-dynamic-promo>em svg{width:12px;height:12px;flex:none;stroke-width:2}
+
 /* Barra de projecte compacta en mòbil, coherent amb la resta d'eines. */
 @media(max-width:620px){
   .qr-project-bar{grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;min-height:64px;padding:10px 12px!important}
