@@ -28,8 +28,8 @@
 .poster-catalog-step > .poster-format-grid{
   width:min(1180px,calc(100% - 48px))!important;
   margin-inline:auto!important;
-  grid-template-columns:repeat(3,minmax(0,260px))!important;
-  justify-content:center!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  justify-content:stretch!important;
   gap:24px!important;
 }
 
