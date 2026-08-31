@@ -456,6 +456,10 @@
   // Every plan-gated control opens the same upgrade journey, including
   // controls that editors render after platform initialisation.
   document.addEventListener('click',event=>{
+    // Context navigation (Plantilles / Inici) must never inherit the locked
+    // state of the project bar that contains it. Plan gates only apply to
+    // project management actions, not to leaving the editor.
+    if(event.target.closest('.editor-app-context'))return;
     // The primary download action is available on every plan. Format-level
     // permissions are enforced inside each editor's download chooser.
     if(event.target.closest('[data-open-downloads],.editor-app-final-action,#exportButton,[data-download]'))return;
