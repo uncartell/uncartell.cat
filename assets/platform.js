@@ -100,10 +100,10 @@
       observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:['hidden','class','style']});
       setTimeout(()=>observer.disconnect(),120000);return;
     }
-    const copy=lang==='ca'?['Edita el contingut arrossegant blocs des del panell o directament sobre la previsualització.','Arrossega i edita el contingut directament des de la previsualització.','Descarrega arxius en PDF a punt per imprimir.']:['Edita el contenido arrastrando bloques desde el panel o directamente sobre la vista previa.','Arrastra y edita el contenido directamente desde la vista previa.','Descarga archivos en PDF listos para imprimir.'];
-    const titles=lang==='ca'?['Afegeix blocs','Arrossega i edita','Descarrega i imprimeix']:['Añade bloques','Arrastra y edita','Descarga e imprime'];
+    const copy=tool==='posters'?(lang==='ca'?['Fes clic damunt la icona del cartell i tria’n una o penja la teva.','Descarrega arxius en PDF a punt per imprimir.']:['Haz clic sobre el icono del cartel y elige uno o sube el tuyo.','Descarga archivos en PDF listos para imprimir.']):(lang==='ca'?['Edita el contingut arrossegant blocs des del panell o directament sobre la previsualització.','Arrossega i edita el contingut directament des de la previsualització.','Descarrega arxius en PDF a punt per imprimir.']:['Edita el contenido arrastrando bloques desde el panel o directamente sobre la vista previa.','Arrastra y edita el contenido directamente desde la vista previa.','Descarga archivos en PDF listos para imprimir.']);
+    const titles=tool==='posters'?(lang==='ca'?['Escull una icona','Descarrega']:['Elige un icono','Descarga']):(lang==='ca'?['Afegeix blocs','Arrossega i edita','Descarrega i imprimeix']:['Añade bloques','Arrastra y edita','Descarga e imprime']);
     const images={posters:'/assets/home/cartells.png',menus:'/assets/home/cartes-i-menus.png',services:'/assets/home/taules-de-preus.png',qr:'/assets/home/codis-qr.png'};
-    const doneKey=`uncartell-onboarding-${tool}-v3`;
+    const doneKey=`uncartell-onboarding-${tool}-${tool==='posters'?'v4':'v3'}`;
     let step=0;
     const backdrop=document.createElement('div');backdrop.className='u-onboarding-backdrop';backdrop.hidden=true;
     const box=document.createElement('aside');box.className='u-tool-onboarding';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('aria-label',lang==='ca'?'Tutorial de l’eina':'Tutorial de la herramienta');box.hidden=true;
