@@ -1700,7 +1700,6 @@
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
   let selectedPickerFormat = "mobile-interactive";
-  let cloudPickerTemplates = [];
   const pickerFormatNames = { "mobile-interactive": "Tarifes mòbils", "price-a3-portrait": "Vertical", "price-a3-landscape": "Horitzontal" };
   const pickerFormatCopy = {
     "mobile-interactive": { icon: "mobile" },
@@ -1708,17 +1707,9 @@
     "price-a3-landscape": { icon: "landscape" }
   };
   const pickerTemplates = [
-    { name: "Serena", detail: "Neta, clara i fàcil de consultar.", accent: "#5b9e62" },
-    { name: "Editorial", detail: "Jerarquia marcada i aire professional.", accent: "#e5372a" },
-    { name: "Contrast", detail: "Més caràcter per destacar serveis i preus.", accent: "#181614" }
+    { name: "Plantilla genèrica", detail: "Una base neta i totalment editable.", accent: "#5b9e62", blank: true }
   ];
-  const visiblePickerTemplates = format => {
-    const cloud = cloudPickerTemplates.filter(item => item.format_id === format).slice(0, 2).map(item => ({ id:item.id, name:item.name, detail:item.description || "Disseny preparat per Uncartell.", payload:item.payload, cloud:true }));
-    return cloud.length ? [...cloud, { name:"Comença de zero", detail:"Una base neta per crear la teva taula.", accent:"#5b9e62", blank:true }] : pickerTemplates;
-  };
-  async function loadCloudPickerTemplates(){
-    try{await window.UncartellPlatform?.whenReady?.();const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data,error}=await supabase.from("editor_templates").select("id,format_id,name,description,payload,sort_order,version").eq("tool_type","services").eq("is_published",true).order("sort_order").order("updated_at",{ascending:false});if(error)throw error;cloudPickerTemplates=data||[];renderTemplatePicker()}catch(error){console.warn("Editor templates",error)}
-  }
+  const visiblePickerTemplates = () => pickerTemplates;
   function pickerPreview(format, index) {
     if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>Serveis i preus</strong><i>Massatges</i><i>Tractaments</i><i>Rituals</i></span>`;
     return `<span class="template-preview template-variant-${index}"><span class="template-kicker">HANOI SPA</span><strong>${index === 1 ? "Tarifes" : "Serveis i preus"}</strong><span class="template-rule"></span><span class="template-columns"><i><b>Massatges</b><small>Relaxant <em>65 €</em></small><small>Teixit profund <em>85 €</em></small></i><i><b>Tractaments</b><small>Facial exprés <em>45 €</em></small><small>Ritual orgànic <em>95 €</em></small></i></span></span>`;
@@ -1750,6 +1741,7 @@
     $("#pickerTitle").textContent = `Tria un disseny per a ${pickerFormatNames[selectedPickerFormat].toLowerCase()}`;
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
+    $("#formatGrid").classList.add("is-single-template");
     $("#formatGrid").innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}" data-picker-card="${index}" tabindex="0" aria-label="Personalitza el disseny ${escapeHtml(template.name)}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Personalitza</button></span></article>`).join("");
     $$('[data-picker-format]').forEach(button => button.addEventListener("click", () => { selectedPickerFormat = button.dataset.pickerFormat; renderTemplatePicker(); $("#formatGrid")?.animate?.([{ opacity: .35, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: "ease-out" }); }));
     $$('[data-picker-template]').forEach(button => button.addEventListener("click", () => applyPickerTemplate(selectedPickerFormat, Number(button.dataset.pickerTemplate))));
@@ -1768,7 +1760,6 @@
 
   window.openPriceEditor = openEditor;
   renderTemplatePicker();
-  loadCloudPickerTemplates();
   const requestedFormat = new URLSearchParams(location.search).get("format");
   if (L.formats.some(item => item.id === requestedFormat)) openEditor(requestedFormat);
   $("#formatGrid").addEventListener("click", event => {

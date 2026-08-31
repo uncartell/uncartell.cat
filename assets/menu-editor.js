@@ -1645,7 +1645,6 @@
   $("#customMenuBriefForm").addEventListener("submit", event => { event.preventDefault(); toast(L.briefSent); });
 
   let selectedPickerFormat = "mobile-interactive";
-  let cloudPickerTemplates = [];
   const pickerFormatNames = { "mobile-interactive": "Carta mòbil", "a3-landscape": "Revista", "a4-portrait": "Vins i postres", "a4-landscape": "Díptic", "a4-single-1": "Menú del dia" };
   const pickerFormatCopy = {
     "a4-single-1": { detail: "Una sola pàgina A4", icon: "single" },
@@ -1655,17 +1654,9 @@
     "mobile-interactive": { detail: "Web responsive per compartir amb QR", icon: "mobile" }
   };
   const pickerTemplates = [
-    { name: "Essencial", detail: "Neta, directa i fàcil de llegir.", accent: "#e5372a" },
-    { name: "Editorial", detail: "Jerarquia marcada i aire de revista.", accent: "#2e5b47" },
-    { name: "Càlida", detail: "Amable, equilibrada i contemporània.", accent: "#b45832" }
+    { name: "Plantilla genèrica", detail: "Una base neta i totalment editable.", accent: "#e5372a", blank: true }
   ];
-  const visiblePickerTemplates = format => {
-    const cloud = cloudPickerTemplates.filter(item => item.format_id === format).slice(0, 2).map(item => ({ id:item.id, name:item.name, detail:item.description || "Disseny preparat per Uncartell.", payload:item.payload, cloud:true }));
-    return cloud.length ? [...cloud, { name:"Comença de zero", detail:"Una base neta per crear la teva carta.", accent:"#e5372a", blank:true }] : pickerTemplates;
-  };
-  async function loadCloudPickerTemplates(){
-    try{await window.UncartellPlatform?.whenReady?.();const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data,error}=await supabase.from("editor_templates").select("id,format_id,name,description,payload,sort_order,version").eq("tool_type","menu").eq("is_published",true).order("sort_order").order("updated_at",{ascending:false});if(error)throw error;cloudPickerTemplates=data||[];renderTemplatePicker()}catch(error){console.warn("Editor templates",error)}
-  }
+  const visiblePickerTemplates = () => pickerTemplates;
   function pickerPreview(format, index) {
     if (format === "mobile-interactive") return `<span class="template-mobile template-variant-${index}"><span class="template-kicker">RESTAURANT L’OLIVERA</span><strong>La nostra carta</strong><i>Entrants</i><i>Principals</i><i>Postres</i></span>`;
     const title = format === "a4-single-1" ? "Menú del dia" : format === "a4-portrait" ? "Carta de vins" : format === "a4-landscape" ? "Menú de temporada" : "La nostra carta";
@@ -1700,7 +1691,7 @@
     const back = $("#pickerBack");
     if (!formats.some(format => format.id === selectedPickerFormat)) selectedPickerFormat = orderedFormats[0]?.id || formats[0]?.id;
     back.hidden = true;
-    $("#pickerStep").textContent = "3 DISSENYS";
+    $("#pickerStep").textContent = "1 DISSENY";
     $("#pickerTitle").textContent = `Tria un disseny per a ${pickerFormatNames[selectedPickerFormat].toLowerCase()}`;
     $("#pickerHelp").textContent = "Escull una base i adapta’n després els textos, colors i contingut.";
     tabs.hidden = false;
@@ -1711,6 +1702,7 @@
     const definition = formats.find(format => format.id === selectedPickerFormat);
     const locked = selectedPickerFormat === "mobile-interactive" && !entitlements.canCreateMobileMenu(state.plan);
     grid.hidden = false;
+    grid.classList.add("is-single-template");
     grid.innerHTML = visiblePickerTemplates(selectedPickerFormat).map((template, index) => `<article class="format-card format-option${locked ? " is-premium-locked" : ""}" data-format="${selectedPickerFormat}" data-picker-card="${index}" tabindex="0" aria-label="Personalitza el disseny ${escapeHtml(template.name)}"><span class="format-paper-wrap"><span class="format-paper ${selectedPickerFormat}">${pickerPreview(selectedPickerFormat, index)}</span></span>${locked ? '<span class="format-plan-badge">Premium</span>' : ""}<span class="format-copy"><h2>${escapeHtml(template.name)}</h2><p>${escapeHtml(template.detail)}</p><p class="format-meta">${escapeHtml(definition?.fold || "")}</p></span><span class="format-actions"><button type="button" data-picker-template="${index}">Personalitza</button></span></article>`).join("");
     $(".format-note").hidden = true;
     grid.animate?.([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 240, easing: "cubic-bezier(.2,.7,.2,1)" });
@@ -1730,7 +1722,6 @@
   }
 
   renderTemplatePicker();
-  loadCloudPickerTemplates();
   const requestedFormat = new URLSearchParams(window.location.search).get("format");
   if (requestedFormat && L.formats.some(format => format.id === requestedFormat)) {
     openEditor(requestedFormat);

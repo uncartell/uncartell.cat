@@ -7,4 +7,12 @@
 :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
 :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project):hover{border-color:#8e8a82!important;background:#f5f4f0!important}
 :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) .project-open-plan-badge{display:none!important}
-@media(max-width:720px){:is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro) h1{font-size:clamp(30px,9vw,40px)!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:21px!important;height:21px!important}}
+
+/* Keep the first catalogue control on the same grid line on all three pages. */
+.poster-catalog-heading + .poster-filters,
+.format-catalog-heading + .open-projects-cta + .format-tabs{
+  width:min(1180px,calc(100% - 48px))!important;
+  margin:28px auto 26px!important;
+}
+
+@media(max-width:720px){:is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro) h1{font-size:clamp(30px,9vw,40px)!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:21px!important;height:21px!important}.poster-catalog-heading + .poster-filters,.format-catalog-heading + .open-projects-cta + .format-tabs{width:calc(100% - 28px)!important;margin-top:28px!important}}
