@@ -174,3 +174,29 @@ body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .
     margin:22px auto 28px!important;
   }
 }
+
+/* One fixed anchor for the project action across every catalogue heading. */
+body :is(.poster-catalog-step,.format-landing .format-step)>
+:is(.poster-catalog-heading,.format-catalog-heading){
+  position:relative!important;
+  display:block!important;
+}
+body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro){
+  padding-right:230px!important;
+  box-sizing:border-box!important;
+}
+body :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){
+  position:absolute!important;
+  top:34px!important;
+  right:0!important;
+  margin:0!important;
+}
+@media(max-width:720px){
+  body :is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro){
+    padding-right:60px!important;
+  }
+  body :is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){
+    top:var(--catalog-heading-top)!important;
+    right:0!important;
+  }
+}
