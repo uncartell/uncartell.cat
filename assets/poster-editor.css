@@ -141,10 +141,10 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   content:"";
   position:absolute;
   right:16px;
-  bottom:-1px;
+  bottom:1px;
   left:16px;
-  height:3px;
-  border-radius:3px 3px 0 0;
+  height:2px;
+  border-radius:2px 2px 0 0;
   background:var(--green);
   opacity:0;
   transform:scaleX(.45);
@@ -228,9 +228,9 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
   color:var(--ink);
   transform:translateY(-3px);
 }
-.poster-category-icon{width:116px;height:96px;stroke-width:2.2}
+.poster-category-icon{width:116px;height:96px;stroke-width:2.15}
 .poster-category-icon .icon-main{stroke:#716d66!important}
-.poster-category-icon .icon-accent{stroke:var(--green)!important;stroke-width:2.7!important}
+.poster-category-icon .icon-accent{stroke:var(--green)!important;stroke-width:2.25!important}
 .poster-subcategory-tabs{border-top:0!important}
 @media(max-width:820px){
   .poster-catalog-step{padding-top:28px}
