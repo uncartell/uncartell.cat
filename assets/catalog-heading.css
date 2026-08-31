@@ -40,3 +40,69 @@
 }
 
 @media(max-width:720px){.poster-catalog-step{padding:0 0 80px!important}:is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro) h1{font-size:clamp(30px,9vw,40px)!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:21px!important;height:21px!important}.poster-catalog-heading + .poster-filters,.format-catalog-heading + .open-projects-cta + .format-tabs{width:calc(100% - 28px)!important;margin-top:28px!important}.poster-catalog-step>.poster-format-grid{width:calc(100% - 28px)!important;grid-template-columns:1fr!important;gap:18px!important}}
+
+/* Shared vertical rhythm for all three tool-selection catalogues. */
+:root{
+  --catalog-heading-top:52px;
+  --catalog-title-copy-gap:9px;
+  --catalog-copy-tabs-gap:36px;
+  --catalog-tabs-content-gap:28px;
+}
+.poster-catalog-step,
+.format-landing .format-step{
+  padding-top:0!important;
+}
+:is(.poster-catalog-step,.format-landing .format-step)>
+:is(.poster-catalog-heading,.format-catalog-heading){
+  margin:0 auto!important;
+  padding-top:var(--catalog-heading-top)!important;
+  padding-bottom:0!important;
+}
+:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro)>p{
+  margin-top:var(--catalog-title-copy-gap)!important;
+}
+:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){
+  margin-top:0!important;
+}
+.poster-catalog-heading+.poster-filters,
+.format-catalog-heading+.open-projects-cta+.format-tabs{
+  margin-top:var(--catalog-copy-tabs-gap)!important;
+  margin-bottom:var(--catalog-tabs-content-gap)!important;
+}
+.format-landing-menus .format-tabs.format-visual-tabs,
+.format-landing-prices .format-tabs.format-visual-tabs{
+  margin-top:var(--catalog-copy-tabs-gap)!important;
+  margin-bottom:var(--catalog-tabs-content-gap)!important;
+}
+.poster-catalog-step>.poster-format-grid{
+  margin-top:0!important;
+}
+
+@media (min-width:721px) and (max-width:980px){
+  :root{
+    --catalog-heading-top:48px;
+    --catalog-copy-tabs-gap:34px;
+  }
+}
+
+@media(max-width:720px){
+  :root{
+    --catalog-heading-top:32px;
+    --catalog-title-copy-gap:8px;
+    --catalog-copy-tabs-gap:28px;
+    --catalog-tabs-content-gap:24px;
+  }
+}
+
+/* Desktop category rails must never behave like an inner scrolling frame. */
+@media(min-width:621px){
+  .poster-category-tabs,
+  .poster-subcategory-tabs{
+    overflow:visible!important;
+    overscroll-behavior:auto!important;
+    touch-action:pan-y!important;
+  }
+  .poster-subcategory-tabs{
+    flex-wrap:wrap!important;
+  }
+}
