@@ -22,4 +22,20 @@
   margin:28px auto 26px!important;
 }
 
-@media(max-width:720px){.poster-catalog-step{padding:0 0 80px!important}:is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro) h1{font-size:clamp(30px,9vw,40px)!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:21px!important;height:21px!important}.poster-catalog-heading + .poster-filters,.format-catalog-heading + .open-projects-cta + .format-tabs{width:calc(100% - 28px)!important;margin-top:28px!important}}
+/* Keep the poster gallery inside the same column as its category tabs.
+   Four calmer columns on desktop prevent the printable previews from becoming
+   oversized after the catalogue frame was aligned with the other tools. */
+.poster-catalog-step > .poster-format-grid{
+  width:min(1180px,calc(100% - 48px))!important;
+  margin-inline:auto!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:24px!important;
+}
+
+@media(max-width:980px){
+  .poster-catalog-step > .poster-format-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:720px){.poster-catalog-step{padding:0 0 80px!important}:is(.poster-catalog-step,.format-landing .format-step)>:is(.poster-catalog-heading,.format-catalog-heading){grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}:is(.poster-catalog-heading .poster-catalog-intro,.format-catalog-heading .intro) h1{font-size:clamp(30px,9vw,40px)!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project){width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}:is(.poster-catalog-heading .catalog-open-project,.format-catalog-heading .format-open-project) svg{width:21px!important;height:21px!important}.poster-catalog-heading + .poster-filters,.format-catalog-heading + .open-projects-cta + .format-tabs{width:calc(100% - 28px)!important;margin-top:28px!important}.poster-catalog-step>.poster-format-grid{width:calc(100% - 28px)!important;grid-template-columns:1fr!important;gap:18px!important}}
