@@ -92,7 +92,7 @@
   const categoryIcons={
     'Més populars':'<path class="icon-main" d="M25 76V55h18v21M73 76V44h18v32"/><path class="icon-accent" d="M49 76V27h18v49"/>',
     'Horaris':'<circle class="icon-main" cx="58" cy="49" r="28"/><path class="icon-accent" d="M58 30v19l14 9"/>',
-    'Restauració':'<path class="icon-main" d="M31 21v19c0 7 5 11 12 11s12-4 12-11V21M43 21v56M82 21v56M82 21c-10 5-14 16-14 29h14"/><path class="icon-accent" d="M37 21v18M49 21v18"/>',
+    'Restauració':'<path class="icon-main" d="M31 21v19c0 7 5 11 12 11s12-4 12-11V21M37 21v18M43 21v56M49 21v18M82 21v56M82 21c-10 5-14 16-14 29h14"/><path class="icon-accent" d="M68 50h14"/>',
     'Comerç':'<path class="icon-main" d="M29 39h58l-5 38H34Z M37 48h42"/><path class="icon-accent" d="M43 39v-6c0-10 6-16 15-16s15 6 15 16v6"/>',
     'Altres':'<path class="icon-main" d="M31 51h46M54 28v46"/><path class="icon-accent" d="M78 23v20M68 33h20"/>'
   };
