@@ -413,9 +413,10 @@
       ? L.doubleSidedPages
       : state.pages.map((page, index) => index === 0 ? L.pages[0] : index === state.pages.length - 1 && page.role === "back" ? L.pages[3] : `${L.lang === "ca" ? "Pàgina" : "Página"} ${index}`);
     const tabs = labels.map((page, index) => `<button class="page-tab ${index === state.activePage ? "active" : ""}" type="button" data-page="${index}">${index + 1}. ${escapeHtml(page)}</button>`).join("");
-    const ultraControl = state.format === "a3-landscape" && state.pages.length === 4
+    const supportsUltraPages = state.format === "a3-landscape" || state.format === "a4-portrait";
+    const ultraControl = supportsUltraPages && state.pages.length === 4
       ? `<button class="ultra-pages-button ${state.plan === "ultra" ? "" : "locked"}" id="addUltraPages" type="button">${state.plan === "ultra" ? "＋" : '<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>'} ${escapeHtml(L.addUltraPages)}</button>`
-      : state.format === "a3-landscape" && state.pages.length > 4 ? `<button class="ultra-pages-button remove-pages-button" id="removeUltraPages" type="button">− ${escapeHtml(L.removeUltraPages)}</button>` : "";
+      : supportsUltraPages && state.pages.length > 4 ? `<button class="ultra-pages-button remove-pages-button" id="removeUltraPages" type="button">− ${escapeHtml(L.removeUltraPages)}</button>` : "";
     $("#pageTabs").innerHTML = tabs + ultraControl;
     $$(".page-tab").forEach(button => button.addEventListener("click", () => {
       state.activePage = Number(button.dataset.page);
@@ -1362,7 +1363,12 @@
     } else if (state.format === "a4-portrait" || state.format === "a4-landscape") {
       const postal = state.format === "a4-landscape";
       pageSize.textContent = `@page{size:A4 ${postal ? "landscape" : "portrait"};margin:0}`;
-      const imposedSheets = [[state.pages[3], state.pages[0]], [state.pages[1], state.pages[2]]];
+      const pages = [...state.pages];
+      while (pages.length % 4) pages.push(null);
+      const imposedSheets = [];
+      for (let left = 0, right = pages.length - 1; left < right; left += 2, right -= 2) {
+        imposedSheets.push([pages[right], pages[left]], [pages[left + 1], pages[right - 1]]);
+      }
       root.className = `print-document print-folded-imposition ${postal ? "print-postal-imposition" : "print-vertical-imposition"}`;
       root.innerHTML = imposedSheets.map(pair => `<section class="print-sheet"><div class="fold-guide"></div>${staticPageHtml(pair[0])}${staticPageHtml(pair[1])}</section>`).join("");
     } else if (state.format === "mobile-interactive") {
