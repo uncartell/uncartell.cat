@@ -88,15 +88,15 @@
     const used=catalog.find(item=>item.icon===key);if(used)return field(used,'title').toLocaleLowerCase();
     const dictionary=es?iconNamesEs:iconNamesCa;return key.replace(/([a-z])([A-Z])/g,'$1-$2').split('-').filter(Boolean).map(word=>dictionary[word.toLowerCase()]||word.toLowerCase()).join(' ')
   }
-  const catalogCategories=['Més populars','Horaris','Restauració','Comerç','Avisos i promocions'];
+  const catalogCategories=['Més populars','Horaris','Restauració','Comerç','Altres'];
   const categoryIcons={
-    'Més populars':'<path class="icon-main" d="m58 17 9.2 18.6 20.5 3-14.9 14.5 3.5 20.4L58 63.9 39.7 73.5l3.5-20.4-14.9-14.5 20.5-3Z"/><path class="icon-accent" d="M86 17v10M81 22h10"/>',
-    'Horaris':'<circle class="icon-main" cx="58" cy="47" r="29"/><path class="icon-main" d="M58 29v19l13 8"/><path class="icon-accent" d="M32 68 25 75"/>',
+    'Més populars':'<path class="icon-main" d="M24 76h68M29 76V52h17v24M70 76V42h17v34"/><path class="icon-accent" d="M50 76V25h17v51"/>',
+    'Horaris':'<circle class="icon-main" cx="58" cy="47" r="29"/><path class="icon-accent" d="M58 27v21l14 9"/>',
     'Restauració':'<path class="icon-main" d="M32 18v22c0 7 5 11 12 11s12-4 12-11V18M44 18v59M82 18v59M82 18c-10 5-14 16-14 30h14"/><path class="icon-accent" d="M27 77h60"/>',
-    'Comerç':'<path class="icon-main" d="M29 42v33h58V42M24 42l8-22h52l8 22M24 42c0 8 10 8 15 0 4 8 14 8 19 0 4 8 14 8 19 0 4 8 15 8 15 0M49 75V55h20v20"/><path class="icon-accent" d="M32 20h52"/>',
-    'Avisos i promocions':'<path class="icon-main" d="M58 15 91 75H25Z"/><path class="icon-accent" d="M58 35v21M58 65h.01"/>'
+    'Comerç':'<path class="icon-main" d="M29 35h58l-5 42H34Z"/><path class="icon-accent" d="M43 39v-8c0-10 6-16 15-16s15 6 15 16v8"/>',
+    'Altres':'<path class="icon-main" d="M25 48h66"/><path class="icon-accent" d="M58 15v66"/>'
   };
-  const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 116 96">${categoryIcons[name]||categoryIcons['Avisos i promocions']}</svg></span>`;
+  const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 116 96">${categoryIcons[name]||categoryIcons.Altres}</svg></span>`;
   const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
   const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|2x1/i;
   const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat/i;
