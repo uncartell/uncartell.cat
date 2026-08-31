@@ -1563,7 +1563,8 @@
       $("#formats").hidden = false;
       window.scrollTo({ top: 0, behavior: "smooth" });
     }));
-  $("#exportButton").addEventListener("click", () => {
+  $("#exportButton").addEventListener("click", event => {
+    event.stopPropagation();
     if (state.format === "mobile-interactive") {
       openMobilePublishModal(); return;
     }
