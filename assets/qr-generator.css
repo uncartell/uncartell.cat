@@ -549,3 +549,17 @@ body.uncartell-editor-active .qr-project-bar>.tool-header-actions>.qr-download-t
   html[lang="es"] .qr-project-bar [data-save-project]::after{content:"Guarda"}
   html[lang="es"] .qr-project-bar [data-open-projects]::after{content:"Abre"}
 }
+
+
+/* QR mobile controls and wider URL entry — 2026-08-31 */
+.qr-empty{width:min(1200px,100%)}
+.qr-empty-card{width:min(1080px,100%)}
+@media(max-width:620px){
+  body.uncartell-editor-active .qr-project-bar{grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important}
+  body.uncartell-editor-active .qr-project-bar>.qr-back-link{display:inline-flex!important;box-sizing:border-box;width:auto!important;min-width:54px!important;height:42px!important;min-height:42px!important;align-items:center!important;justify-content:center!important;gap:5px!important;margin:0!important;padding:0 9px!important;font-size:10px!important;line-height:1!important;transform:none!important}
+  body.uncartell-editor-active .qr-project-bar>.qr-back-link svg{display:block;width:15px!important;height:15px!important;margin:0!important}
+  body.uncartell-editor-active .qr-tool-rail button,body.uncartell-editor-active .qr-tool-rail button:hover,body.uncartell-editor-active .qr-tool-rail button:focus,body.uncartell-editor-active .qr-tool-rail button:focus-visible{border:0!important;outline:0!important;box-shadow:none!important}
+  body.uncartell-editor-active .qr-tool-rail button.active{border:0!important;background:var(--qr-accent)!important;color:var(--qr-ink)!important;outline:0!important;box-shadow:none!important}
+  .qr-empty,.qr-empty-card{width:100%}
+}
+@media(hover:none) and (pointer:coarse){body.uncartell-editor-active .qr-tool-rail button:not(.active):hover{background:transparent!important}}
