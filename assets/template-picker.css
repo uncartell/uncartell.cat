@@ -72,12 +72,14 @@
 /* Keep contextual badges fully visible inside the horizontally scrolling
    mobile tab rail. Negative positioning is clipped by overflow-x:auto. */
 @media(max-width:820px){
-  .format-landing-menus .format-visual-tab{
+  .format-landing-menus .format-visual-tab,
+  .format-landing-prices .format-visual-tab{
     min-height:150px!important;
     padding-top:18px!important;
   }
-  .format-landing-menus .format-tab-badges{
-    top:4px;
+  .format-landing-menus .format-tab-badges,
+  .format-landing-prices .format-tab-badges{
+    top:4px!important;
   }
 }
 
