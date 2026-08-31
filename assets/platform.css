@@ -848,3 +848,13 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
 .u-footer a:hover,.u-footer button:hover{color:var(--green)!important}
 .u-footer-brand .u-logo{color:#fff!important}
 .u-footer-brand p{color:#a9a59d!important}
+
+
+/* Mobile pricing modal alignment — 2026-08-31 */
+@media(max-width:760px){
+  .u-upgrade-modal{z-index:5000!important;align-items:flex-start!important;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important}
+  .u-upgrade-card{width:100%!important;max-height:calc(100dvh - 16px)!important;margin:0!important;padding:52px 14px 18px!important;overflow-y:auto!important;overscroll-behavior:contain}
+  .u-upgrade-card [data-upgrade-step="plans"]>h2{margin:0 auto!important;padding:0 22px;font-size:clamp(25px,7.4vw,31px)!important;line-height:1.02!important}
+  .u-plan-head,.u-upgrade-plans article>header{box-sizing:border-box;min-height:58px!important;align-items:center!important;padding:0 56px 0 18px!important;line-height:1.15!important}
+  .u-plan-head::after,.u-upgrade-plans article>header::after{top:50%!important;right:14px!important;bottom:auto!important;width:36px!important;height:36px!important;transform:translateY(-50%)!important;line-height:1!important}
+}
