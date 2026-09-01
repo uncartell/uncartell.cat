@@ -34,6 +34,15 @@
     canPublishMobileMenu: plan => plan === "premium" || plan === "ultra",
     canUploadMenuImages: plan => plan === "ultra" && FEATURES.ultraMenuImages && state.contentColumns === 2
   });
+  const hasUltraImageAccess = () => state.plan === "ultra" && FEATURES.ultraMenuImages;
+  const prepareImageInsertion = () => {
+    if (!hasUltraImageAccess()) { openPlanGate("Ultra"); return false; }
+    if (state.contentColumns === 2) return true;
+    const singleColumnOnly = state.format === "mobile-interactive" || state.format === "a4-portrait";
+    if (singleColumnOnly) { toast(L.contentImageHelp); return false; }
+    state.contentColumns = 2;
+    return true;
+  };
   const defaultBrandKit = () => ({ version: 2, businessName: "", logo: null, primary: "#e5372a", secondary: "#181614", font: "modern", footerText: L.lang === "ca" ? "uncartell.cat" : "uncartel.es", footerTextSet: false });
   const readBrandKit = () => {
     try {
@@ -464,13 +473,13 @@
   function renderBlockButtons() {
     const disabled = ["cover", "back", "mobile-home", "mobile-allergens"].includes(state.pages[state.activePage].role);
     $("#blockButtons").innerHTML = L.blockTypes.map(block => {
-      const ultraLocked = ["dish-image", "image"].includes(block.id) && !entitlements.canUploadMenuImages(state.plan);
+      const ultraLocked = ["dish-image", "image"].includes(block.id) && !hasUltraImageAccess();
       const crown = '<span class="block-plan-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z"/><path d="M6 19h12"/></svg>Ultra</span>';
       const symbol = ["dish-image", "image"].includes(block.id) ? editorImageIcon : escapeHtml(block.symbol);
       return `<button class="block-add${["dish-image", "image"].includes(block.id) ? " dish-image-add" : ""}${ultraLocked ? " ultra-locked" : ""}" type="button" data-add="${block.id}" draggable="${disabled ? "false" : "true"}" ${disabled ? "disabled" : ""}><span class="block-symbol">${symbol}</span>${escapeHtml(block.label)}${ultraLocked ? crown : ""}</button>`;
     }).join("");
     $$(".block-add").forEach(button => button.addEventListener("click", () => {
-      if (["dish-image", "image"].includes(button.dataset.add) && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
+      if (["dish-image", "image"].includes(button.dataset.add) && !prepareImageInsertion()) return;
       const block = makeBlock(button.dataset.add);
       const blocks = state.pages[state.activePage].blocks;
       const selectedIndex = blocks.findIndex(item => item.id === state.selectedBlock);
@@ -923,7 +932,7 @@
     }));
     $$('[data-context-type]', menu).forEach(button => button.addEventListener("click", event => {
       event.stopPropagation();
-      if (["dish-image", "image"].includes(button.dataset.contextType) && !entitlements.canUploadMenuImages(state.plan)) return openPlanGate("Ultra");
+      if (["dish-image", "image"].includes(button.dataset.contextType) && !prepareImageInsertion()) return;
       const panel = button.closest('[data-insert-menu]');
       const after = page.blocks.findIndex(item => item.id === panel.dataset.insertMenu);
       const source = page.blocks[after];
@@ -1001,7 +1010,7 @@
     const insertPaletteBlock = (event, targetId = null, targetColumn = null, placement = "before") => {
       const type = paletteType(event);
       if (!type) return false;
-      if (["dish-image", "image"].includes(type) && !entitlements.canUploadMenuImages(state.plan)) { openPlanGate("Ultra"); return true; }
+      if (["dish-image", "image"].includes(type) && !prepareImageInsertion()) return true;
       const block = makeBlock(type);
       if (targetColumn) block.column = Number(targetColumn);
       const targetIndex = targetId ? page.blocks.findIndex(item => item.id === targetId) : page.blocks.length;
