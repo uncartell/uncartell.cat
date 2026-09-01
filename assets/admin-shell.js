@@ -45,19 +45,24 @@
     const source=root.querySelector('[data-analytics-admin] .admin-metrics');
     const target=root.querySelector('[data-admin-overview-metrics]');
     if(source&&target&&source.children.length){
-      target.innerHTML=[...source.children].map(card=>`<article>${card.innerHTML}</article>`).join('');
+      const nextMetrics=[...source.children].map(card=>`<article>${card.innerHTML}</article>`).join('');
+      if(target.innerHTML!==nextMetrics)target.innerHTML=nextMetrics;
     }
     const audit=[...root.querySelectorAll('[data-system-admin] .admin-system-list>div')].slice(0,5);
     const activity=root.querySelector('[data-admin-overview-activity]');
     if(audit.length&&activity){
-      activity.innerHTML=audit.map(row=>{
+      const nextActivity=audit.map(row=>{
         const title=row.querySelector('strong')?.textContent||'Activitat administrativa';
         const date=row.querySelector('em')?.textContent||'';
         return `<div><i aria-hidden="true"></i><span>${escapeHtml(title)}</span><time>${escapeHtml(date)}</time></div>`;
       }).join('');
+      if(activity.innerHTML!==nextActivity)activity.innerHTML=nextActivity;
     }
   };
   const escapeHtml=value=>String(value).replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
-  new MutationObserver(syncOverview).observe(root,{childList:true,subtree:true});
+  const overviewObserver=new MutationObserver(syncOverview);
+  root.querySelectorAll('[data-analytics-admin],[data-system-admin]').forEach(source=>{
+    overviewObserver.observe(source,{childList:true,subtree:true});
+  });
   syncOverview();
 })();
