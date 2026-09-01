@@ -21,7 +21,9 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const uid = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-  const requestedPlan = new URLSearchParams(location.search).get("plan") || ({basic:"free",premium:"premium",ultra:"ultra"}[localStorage.getItem("uncartell-plan-v12") || "basic"]);
+  // The authenticated profile is the source of truth. Legacy ?plan= links must
+  // never downgrade a real Ultra account inside the production editor.
+  const requestedPlan = ({basic:"free",premium:"premium",ultra:"ultra"}[localStorage.getItem("uncartell-plan-v12") || "basic"]);
   const previewPlan = ["premium", "ultra"].includes(requestedPlan) ? requestedPlan : "free";
   // Ultra image blocks are a production entitlement. The explicit feature flag
   // remains available as an emergency kill switch, but production must not be
@@ -165,7 +167,7 @@
     renderAll();
   });
   window.UncartellPlatform?.whenReady?.().then(() => {
-    const globalPlan = window.UncartellPlatform.getPlan?.();
+    const globalPlan = window.UncartellPlatform.getEntitlementPlan?.() || window.UncartellPlatform.getPlan?.();
     const nextPlan = globalPlan === "basic" ? "free" : globalPlan;
     if (!["free", "premium", "ultra"].includes(nextPlan) || state.plan === nextPlan) return;
     state.plan = nextPlan;
@@ -191,6 +193,8 @@
     if (index < 0 || index >= history.length) return;
     historyIndex = index;
     state = JSON.parse(history[index]);
+    const entitlementPlan = window.UncartellPlatform?.getEntitlementPlan?.() || window.UncartellPlatform?.getPlan?.();
+    if (entitlementPlan) state.plan = entitlementPlan === "basic" ? "free" : entitlementPlan;
     if (state.lastAutoSavedAt) state.lastAutoSavedAt = new Date(state.lastAutoSavedAt);
     renderAll();
   }
