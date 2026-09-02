@@ -90,6 +90,10 @@ body>.site-header,body>#siteFooter{display:none!important}.poster-catalog-step{w
 .poster-catalog-heading .catalog-open-project:hover{border-color:#8e8a82!important;background:#f5f4f0!important}
 .poster-catalog-heading+.poster-filters{margin-top:0!important}
 @media(max-width:720px){.poster-catalog-step>.intro-row.poster-catalog-heading{grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}.poster-catalog-heading .poster-catalog-intro h1{font-size:clamp(30px,9vw,40px)!important}.poster-catalog-heading .catalog-open-project{width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}.poster-catalog-heading .catalog-open-project svg{width:21px;height:21px}}
+
+/* Match the floating action shell to the rounded inner controls. */
+.poster-catalog-step .poster-card-hover{border-radius:18px!important;box-shadow:none!important}
+.poster-catalog-step .poster-card-hover button{border-radius:13px!important;box-shadow:none!important}
 .custom-brief-success{margin-top:22px}
 .u-lang-es .poster-category-tabs button.active{border-color:var(--green)!important;background:var(--green)!important}.u-lang-es .poster-create-card{border-color:var(--green)!important;background:var(--green-soft)!important}.u-lang-es .poster-card-hover button:last-child{background:var(--green)!important}
 /* Catalan and Spanish use the same corporate green. */
