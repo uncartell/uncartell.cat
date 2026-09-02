@@ -720,6 +720,7 @@ body{background:#fff}.u-header{background:rgba(255,255,255,.96)}
 .u-testimonial blockquote{font-size:clamp(28px,3.4vw,52px);line-height:1.08;letter-spacing:-.035em;margin:24px 0 28px;max-width:850px}
 .u-testimonial-copy p{font-size:18px;color:var(--muted);margin:0}
 .u-testimonial-avatar{width:min(22vw,250px);aspect-ratio:1;border-radius:16px;background:linear-gradient(145deg,#e4ffe3,#73f172);display:grid;place-items:center;font-size:clamp(64px,9vw,130px);font-weight:800;transform:rotate(2deg)}
+.u-testimonial-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .u-testimonial-arrow{position:absolute;z-index:2;top:50%;width:72px;height:64px;transform:translateY(-50%);border:0;background:transparent;font-size:0;cursor:pointer;padding:0;color:var(--ink)}
 .u-testimonial-arrow:before{content:"";position:absolute;left:50%;top:50%;width:42px;height:2px;background:currentColor;transform:translate(-50%,-50%)}
 .u-testimonial-arrow:after{content:"";position:absolute;top:50%;width:15px;height:15px;border-top:2px solid currentColor;border-right:2px solid currentColor}
