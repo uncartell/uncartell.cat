@@ -271,3 +271,41 @@
   height:auto!important;
   overflow:visible!important;
 }
+
+/* Keep the complete card silhouette independent from its variable copy height.
+   Cropping belongs to the two visual sections, never to the outer card. */
+.format-landing .format-card.format-option,
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option:focus-within,
+.format-landing .format-card.format-option.is-current{
+  overflow:visible!important;
+  border:0!important;
+  border-radius:16px!important;
+}
+
+.format-landing .format-card.format-option::before{
+  z-index:20!important;
+  inset:0!important;
+  border:0!important;
+  border-radius:16px!important;
+  box-shadow:inset 0 0 0 1px #d9d5cc!important;
+}
+
+.format-landing .format-card.format-option:hover::before,
+.format-landing .format-card.format-option:focus-within::before{
+  box-shadow:inset 0 0 0 1px #aaa59b!important;
+}
+
+.format-landing .format-card>.format-paper-wrap,
+.format-landing .format-card>.format-card-media{
+  overflow:hidden!important;
+  border-radius:16px 16px 0 0!important;
+}
+
+.format-landing .format-card>.format-copy{
+  position:relative!important;
+  z-index:1!important;
+  padding-bottom:24px!important;
+  border-radius:0 0 16px 16px!important;
+  background:#fff!important;
+}
