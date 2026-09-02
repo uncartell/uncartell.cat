@@ -416,7 +416,7 @@
   }
   async function listUserProjects(toolType){
     await authReady;if(!supabaseClient||!currentUser)return [];
-    if(supportContext){const result=await callAdmin('support_list_projects',{token:readSupportSession()?.token,tool_type:toolType});return (result.rows||[]).map(row=>({...row.payload,id:row.id,name:row.name,created_at:row.created_at,updated_at:row.updated_at}))}
+    if(supportContext){const result=await callAdmin('support_list_projects',{support_token:readSupportSession()?.token,tool_type:toolType});return (result.rows||[]).map(row=>({...row.payload,id:row.id,name:row.name,created_at:row.created_at,updated_at:row.updated_at}))}
     const {data,error}=await supabaseClient.from('user_projects').select('id,name,payload,created_at,updated_at').eq('user_id',currentUser.id).eq('tool_type',toolType).order('updated_at',{ascending:false});
     if(error)throw error;return (data||[]).map(row=>({...row.payload,id:row.id,name:row.name,updated_at:row.updated_at}));
   }
@@ -424,7 +424,7 @@
     await authReady;if(!supabaseClient||!currentUser)throw new Error(words.authError);
     const payload=await persistUploadedData(project);const now=new Date().toISOString();
     const projectId=String(project.id||project.projectId||`${toolType}-${Date.now()}`);
-    if(supportContext){await callAdmin('support_save_project',{token:readSupportSession()?.token,tool_type:toolType,project:{...payload,id:projectId,name:String(project.name||'Projecte')}});return {...project,id:projectId,updated_at:now}}
+    if(supportContext){const result=await callAdmin('support_save_project',{support_token:readSupportSession()?.token,tool_type:toolType,locale:lang,project:{...payload,id:projectId,name:String(project.name||'Projecte')}});return {...project,id:projectId,updated_at:result?.updated_at||now}}
     const {error}=await supabaseClient.from('user_projects').upsert({id:projectId,user_id:currentUser.id,tool_type:toolType,locale:lang,name:String(project.name||'Projecte'),payload:{...payload,id:projectId},updated_at:now},{onConflict:'user_id,tool_type,id'});
     if(error)throw error;return {...project,updated_at:now};
   }
