@@ -309,3 +309,22 @@
   border-radius:0 0 16px 16px!important;
   background:#fff!important;
 }
+
+/* Chrome can rasterise a one-pixel inset shadow on the outer half-pixel at
+   100% zoom. Draw the final silhouette half a pixel inside the card instead. */
+.format-landing .format-card.format-option::after{
+  content:""!important;
+  position:absolute!important;
+  z-index:30!important;
+  inset:.5px!important;
+  box-sizing:border-box!important;
+  border:1px solid #d9d5cc!important;
+  border-radius:15.5px!important;
+  background:transparent!important;
+  pointer-events:none!important;
+}
+
+.format-landing .format-card.format-option:hover::after,
+.format-landing .format-card.format-option:focus-within::after{
+  border-color:#aaa59b!important;
+}
