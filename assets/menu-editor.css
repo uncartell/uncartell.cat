@@ -456,19 +456,25 @@ h1{font-size:clamp(38px,5vw,65px);letter-spacing:-.055em;line-height:.98;margin-
    La maqueta conserva aquesta geometria i només es redueix quan el visor
    disponible és més estret. */
 .canvas-stage>.menu-page.format-mobile-interactive{
-  width:min(100%,393px);
-  height:auto;
-  min-height:0;
-  max-height:none;
-  aspect-ratio:393/852;
+  width:393px;
+  min-width:393px;
+  max-width:393px;
+  height:852px;
+  min-height:852px;
+  max-height:852px;
+  aspect-ratio:auto;
   flex:none;
 }
-.canvas-stage>.menu-page.format-mobile-interactive .mobile-scroll-viewport{min-height:0}
+.canvas-stage>.menu-page.format-mobile-interactive .mobile-scroll-viewport{height:100%;min-height:0}
 @media(max-width:620px){
   .canvas-stage>.menu-page.format-mobile-interactive{
-    width:min(calc(100vw - 40px),393px)!important;
-    height:auto;
-    aspect-ratio:393/852;
+    width:393px!important;
+    min-width:393px!important;
+    max-width:393px!important;
+    height:852px!important;
+    min-height:852px!important;
+    max-height:852px!important;
+    aspect-ratio:auto;
   }
 }
 
