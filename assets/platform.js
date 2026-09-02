@@ -240,7 +240,7 @@
   const callAdmin=async(action,payload={})=>{const {data,error}=await supabaseClient.functions.invoke('admin-dashboard',{body:{action,...payload}});if(error)throw error;if(data?.error)throw new Error(data.error);return data};
   const endSupportSession=async()=>{const session=readSupportSession();try{if(session?.token&&supabaseClient)await callAdmin('stop_impersonation',{token:session.token})}catch(error){console.error(error)}sessionStorage.removeItem(supportSessionKey);location.href=`${base}/admin/`.replace(/\/+/g,'/')};
   const renderSupportBanner=()=>{document.querySelector('[data-support-banner]')?.remove();if(!supportContext)return;const banner=document.createElement('aside');banner.className='u-support-banner';banner.dataset.supportBanner='';banner.innerHTML=`<strong>${lang==='ca'?'Estàs navegant com':'Estás navegando como'} ${supportContext.email||supportContext.user_id}</strong><button type="button">${lang==='ca'?'Tornar a Admin':'Volver a Admin'}</button>`;banner.querySelector('button').addEventListener('click',endSupportSession);document.body.prepend(banner)};
-  const loadSupportContext=async()=>{const session=readSupportSession();if(!session?.token)return;try{supportContext=await callAdmin('support_context',{token:session.token});renderSupportBanner()}catch(error){console.error('Support session',error);sessionStorage.removeItem(supportSessionKey);supportContext=null}};
+  const loadSupportContext=async()=>{const session=readSupportSession();if(!session?.token)return;try{const result=await callAdmin('support_context',{token:session.token}),target=result?.user;if(!target?.id)throw new Error('Invalid support session');supportContext={...target,user_id:target.id,expires_at:result.expires_at};renderSupportBanner()}catch(error){console.error('Support session',error);sessionStorage.removeItem(supportSessionKey);supportContext=null}};
   let resolveAuthReady;
   const authReady=new Promise(resolve=>{resolveAuthReady=resolve});
   const showView=name=>{['login','reset','profile','invoices','delete'].forEach(v=>{const node=view(v);if(node)node.hidden=v!==name})};
@@ -416,7 +416,7 @@
   }
   async function listUserProjects(toolType){
     await authReady;if(!supabaseClient||!currentUser)return [];
-    if(supportContext){const result=await callAdmin('support_list_projects',{token:readSupportSession()?.token,tool_type:toolType});return result.rows||[]}
+    if(supportContext){const result=await callAdmin('support_list_projects',{token:readSupportSession()?.token,tool_type:toolType});return (result.rows||[]).map(row=>({...row.payload,id:row.id,name:row.name,created_at:row.created_at,updated_at:row.updated_at}))}
     const {data,error}=await supabaseClient.from('user_projects').select('id,name,payload,created_at,updated_at').eq('user_id',currentUser.id).eq('tool_type',toolType).order('updated_at',{ascending:false});
     if(error)throw error;return (data||[]).map(row=>({...row.payload,id:row.id,name:row.name,updated_at:row.updated_at}));
   }
