@@ -251,6 +251,20 @@
   align-self:start!important;
   grid-auto-rows:max-content!important;
 }
+.format-landing .format-card.format-option::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:8!important;
+  inset:0!important;
+  box-sizing:border-box!important;
+  border:1px solid #d9d5cc!important;
+  border-radius:inherit!important;
+  pointer-events:none!important;
+}
+.format-landing .format-card.format-option:hover::before,
+.format-landing .format-card.format-option:focus-within::before{
+  border-color:#aaa59b!important;
+}
 .format-landing .format-card>.format-copy{
   box-sizing:border-box!important;
   min-height:0!important;
