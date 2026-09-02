@@ -727,6 +727,34 @@
 .format-landing .format-card.is-premium-locked>.format-actions button{
   background:#fff!important;
 }
+
+/* Hover de catàleg: halo progressiu i CTA amb geometria coherent amb Cartells. */
+.format-landing .format-card>.format-actions{
+  background:radial-gradient(
+    ellipse 58% 42% at 50% 50%,
+    rgba(24,22,20,.16) 0%,
+    rgba(24,22,20,.08) 48%,
+    rgba(24,22,20,0) 100%
+  )!important;
+  backdrop-filter:none!important;
+}
+.format-landing .format-card>.format-actions button{
+  min-width:146px!important;
+  min-height:46px!important;
+  padding:0 22px!important;
+  border:5px solid var(--ink,#181614)!important;
+  border-radius:15px!important;
+  background:var(--green,#73f172)!important;
+  box-shadow:0 10px 24px rgba(24,22,20,.15)!important;
+}
+.format-landing .format-card>.format-actions button:hover{
+  background:#82f47f!important;
+  filter:none!important;
+  transform:translateY(-1px)!important;
+}
+.format-landing .format-card>.format-actions button:active{
+  transform:translateY(0)!important;
+}
 @media(max-width:760px){
   .format-landing .format-card>.format-actions{
     background:linear-gradient(transparent 58%,rgba(255,255,255,.55))!important;
@@ -752,25 +780,19 @@
 .format-landing .format-catalog-heading+.open-projects-cta+.format-tabs{margin-top:0!important}
 @media(max-width:720px){.format-landing .format-step>.intro-row.format-catalog-heading{grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}.format-landing .format-catalog-heading .intro h1{font-size:clamp(30px,9vw,40px)!important}.format-landing .format-catalog-heading .format-open-project{width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}.format-landing .format-catalog-heading .format-open-project svg{width:21px;height:21px}}
 
-
-/* Hover final 2026-09-02: halo progressiu i CTA coherent amb Cartells. */
-.format-landing .format-card>.format-actions{
-  background:radial-gradient(ellipse 58% 42% at 50% 50%,rgba(24,22,20,.16) 0%,rgba(24,22,20,.08) 48%,rgba(24,22,20,0) 100%)!important;
-  backdrop-filter:none!important;
-}
-.format-landing .format-card>.format-actions button{
-  min-width:146px!important;
-  min-height:46px!important;
-  padding:0 22px!important;
-  border:5px solid var(--ink,#181614)!important;
-  border-radius:15px!important;
-  background:var(--green,#73f172)!important;
-  color:var(--ink,#181614)!important;
-  box-shadow:0 10px 24px rgba(24,22,20,.15)!important;
-}
-.format-landing .format-card>.format-actions button:hover{
-  background:#82f47f!important;
-  filter:none!important;
-  transform:translateY(-1px)!important;
-}
-.format-landing .format-card>.format-actions button:active{transform:translateY(0)!important}
+/* Final authoritative template-card geometry. Keep this block last. */
+.format-landing .format-card.format-option,
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option.is-current{overflow:hidden!important;border-radius:14px!important;transform:none!important}
+.format-landing .format-card-media,
+.format-landing .format-paper-wrap{position:relative!important;isolation:isolate;overflow:hidden!important}
+.format-landing .format-card-media::after,
+.format-landing .format-paper-wrap::after{content:"";position:absolute;z-index:3;inset:-18%;background:radial-gradient(circle at 50% 52%,rgba(24,22,20,.17) 0 12%,rgba(24,22,20,.08) 35%,rgba(24,22,20,0) 68%);opacity:0;pointer-events:none;transition:opacity .16s ease}
+.format-landing .format-card:hover .format-card-media::after,
+.format-landing .format-card:focus-within .format-card-media::after,
+.format-landing .format-card:hover .format-paper-wrap::after,
+.format-landing .format-card:focus-within .format-paper-wrap::after{opacity:1}
+.format-landing .format-card>.format-actions{z-index:5!important;inset:0 0 auto 0!important;display:flex!important;width:100%!important;height:auto!important;aspect-ratio:1/1!important;align-items:center!important;justify-content:center!important;padding:0!important;background:transparent!important;backdrop-filter:none!important;box-shadow:none!important}
+.format-landing .format-card>.format-actions button{min-width:154px!important;min-height:48px!important;padding:0 23px!important;border:5px solid var(--ink,#181614)!important;border-radius:14px!important;background:var(--green,#73f172)!important;color:var(--ink,#181614)!important;box-shadow:0 10px 24px rgba(24,22,20,.14)!important}
+.format-landing .format-card>.format-actions button:hover{background:#82f47f!important;filter:none!important;transform:none!important}
+@media(max-width:760px){.format-landing .format-card>.format-actions{align-items:flex-end!important;padding-bottom:16px!important}.format-landing .format-card>.format-actions button{min-width:138px!important;min-height:42px!important}}
