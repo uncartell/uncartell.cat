@@ -28,7 +28,7 @@
     let active=homeIndex;
     const main=document.querySelector('main');
     const accent=payload.accent||'#73f172';
-    document.title=`${payload.name||slug} | ${lang==='es'?'uncartel.es':'uncartell.cat'}`;
+    document.title=`${payload.name||slug} | ${window.UncartellI18n?.market.domain||'uncartell.cat'}`;
     main.className=`u-public-document style-${escape(payload.style||'modern')}`;
     main.style.setProperty('--accent',accent);
     const show=index=>{

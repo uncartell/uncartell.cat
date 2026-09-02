@@ -1,16 +1,15 @@
 (()=>{
+  const i18n=window.UncartellI18n;
+  const localeConfig=i18n?.config;
   const requestedHost=location.hostname.replace(/^www\./,'');
   const requestedPath=location.pathname;
-  const spanishRequest=requestedHost==='uncartel.es'||document.documentElement.lang==='es'||/^\/es(?:\/|$)/.test(requestedPath);
-  if(spanishRequest){
-    const routeMap={
-      carteles:'cartells','cartas-y-menus':'cartes-i-menus','tablas-de-precios':'taules-de-preus','codigos-qr':'codis-qr',
-      planes:'plans','preguntas-frecuentes':'faqs',manifiesto:'manifest',contacto:'contacte','aviso-legal':'legal',privacidad:'privacitat'
-    };
-    const parts=requestedPath.replace(/^\/es(?:\/|$)/,'/').split('/').filter(Boolean);
-    if(parts[0]&&routeMap[parts[0]])parts[0]=routeMap[parts[0]];
-    const destination=`https://uncartell.cat/${parts.join('/')}${parts.length?'/':''}${location.search}${location.hash}`;
-    location.replace(destination);
+  // ES and IT are registered markets but remain deliberately unpublished.
+  // Until enabled centrally, any request uses the Catalan fallback without
+  // exposing a partially translated interface.
+  const requestedLocale=i18n?.requestedLocale||'ca';
+  if(requestedLocale!=='ca'&&!localeConfig?.isPublic(requestedLocale)&&['uncartel.es','uncartello.it'].includes(requestedHost)){
+    const routeKey=localeConfig?.routeKeyFromPath(requestedPath)||'home';
+    location.replace(`${localeConfig?.routeUrl(routeKey,'ca',{absolute:true})||'https://uncartell.cat/'}${location.search}${location.hash}`);
     return;
   }
   if(!document.querySelector('link[data-ui-shape-system]')){
@@ -36,20 +35,21 @@
     link.addEventListener('error',retry,{once:true});
     if(!link.sheet&&document.readyState!=='loading')retry();
   });
-  const lang='ca';
-  const localeRegistry=Object.freeze({ca:{enabled:true,fallback:'ca'},es:{enabled:false,fallback:'ca'},fr:{enabled:false,fallback:'ca'},it:{enabled:false,fallback:'ca'},de:{enabled:false,fallback:'ca'}});
-  window.UncartellI18n={locale:lang,locales:localeRegistry,fallback:'ca'};
+  const lang=i18n?.locale||'ca';
+  const localeRegistry=localeConfig?.locales||Object.freeze({ca:{enabled:true,public:true}});
   document.documentElement.classList.add(`u-lang-${lang}`);
   const host=location.hostname.replace(/^www\./,'');
   const canonicalHost=(()=>{try{return new URL(document.querySelector('link[rel="canonical"]')?.href||location.href).hostname.replace(/^www\./,'')}catch(_){return host}})();
-  const prod=['uncartell.cat','uncartel.es'].includes(host)||['uncartell.cat','uncartel.es'].includes(canonicalHost);
+  const prod=['uncartell.cat','uncartel.es','uncartello.it'].includes(host)||['uncartell.cat','uncartel.es','uncartello.it'].includes(canonicalHost);
   const base=prod?'':`/${lang}`;
   const route=slug=>`${base}/${slug}`.replace(/\/+/g,'/').replace(/([^/])$/,'$1/');
-  const cfg=lang==='ca'?{
+  const legacyCfg=lang==='ca'?{
     root:route(''),brand:'uncartell',tld:'cat',posters:'Cartells',postersPath:route('cartells'),menus:'Cartes i menús',menusPath:route('cartes-i-menus'),prices:'Taules de preus',pricesPath:route('taules-de-preus'),qr:'Codis QR',qrPath:route('codis-qr'),plans:'Plans',plansPath:route('plans'),account:'Compte',tools:'Eines',about:'Sobre nosaltres',legal:'Legal',posterCreator:'Creador de cartells',menuCreator:'Creador de cartes i menús',priceCreator:'Creador de taules de preus',qrCreator:'Creador de codis QR',faqs:'FAQs',manifest:'Manifest',contact:'Contacte',notice:'Avís legal',privacy:'Privacitat',cookies:'Cookies',settings:'Configura les cookies',downloads:'Descàrregues restants avui',unlimited:'Descàrregues il·limitades',alt:prod?'https://uncartel.es/':'/es/'
   }:{
     root:route(''),brand:'uncartel',tld:'es',posters:'Carteles',postersPath:route('carteles'),menus:'Cartas y menús',menusPath:route('cartas-y-menus'),prices:'Tablas de precios',pricesPath:route('tablas-de-precios'),qr:'Códigos QR',qrPath:route('codigos-qr'),plans:'Planes',plansPath:route('planes'),account:'Cuenta',tools:'Herramientas',about:'Sobre nosotros',legal:'Legal',posterCreator:'Creador de carteles',menuCreator:'Creador de cartas y menús',priceCreator:'Creador de tablas de precios',qrCreator:'Creador de códigos QR',faqs:'Preguntas frecuentes',manifest:'Manifiesto',contact:'Contacto',notice:'Aviso legal',privacy:'Privacidad',cookies:'Cookies',settings:'Configura las cookies',downloads:'Descargas restantes hoy',unlimited:'Descargas ilimitadas',alt:prod?'https://uncartell.cat/':'/ca/'
   };
+  const market=i18n?.market||{brandStem:legacyCfg.brand,tld:legacyCfg.tld,domain:`${legacyCfg.brand}.${legacyCfg.tld}`,email:lang==='ca'?'hola@uncartell.cat':'hola@uncartel.es'};
+  const cfg={...legacyCfg,brand:market.brandStem,tld:market.tld,root:i18n?.urlFor('home')||legacyCfg.root,postersPath:i18n?.urlFor('posters')||legacyCfg.postersPath,menusPath:i18n?.urlFor('menus')||legacyCfg.menusPath,pricesPath:i18n?.urlFor('prices')||legacyCfg.pricesPath,qrPath:i18n?.urlFor('qr')||legacyCfg.qrPath,plansPath:i18n?.urlFor('plans')||legacyCfg.plansPath};
   const words=lang==='ca'?{
     language:'Idioma',languageTitle:'Tria l’idioma',loginTitle:'Inicia sessió o registra’t',loginCopy:'Accedeix al teu compte per desar projectes i gestionar el pla.',google:'Continua amb Google',apple:'Continua amb Apple',email:'Continua amb correu',name:'El teu nom',emailField:'El teu correu',password:'Contrasenya',continue:'Inicia sessió',createAccount:'Crea el compte',newHere:'Encara no tens compte? Registra’t',alreadyAccount:'Ja tens compte? Inicia sessió',forgotPassword:'Has oblidat la contrasenya?',resetSent:'T’hem enviat un enllaç segur per restablir-la.',resetTitle:'Crea una contrasenya nova',newPassword:'Nova contrasenya',savePassword:'Desa la contrasenya',passwordUpdated:'Contrasenya actualitzada.',marketing:'Vull rebre novetats i avisos de noves eines.',back:'Torna enrere',profile:'El meu compte',hello:'Hola',plan:'Pla',manage:'Canvia de pla',logout:'Tanca la sessió',editName:'Edita el nom',saveName:'Desa el nom',invoices:'Factures',noInvoices:'Encara no hi ha factures.',backProfile:'Torna al perfil',delete:'Elimina el compte',deleteTitle:'Vols eliminar el compte?',deleteCopy:'Eliminarem el compte i totes les dades associades. Aquesta acció no es pot desfer.',cancel:'Cancel·la',confirmDelete:'Sí, elimina el compte',loading:'Connectant…',confirmMail:'Revisa el correu i confirma el compte per continuar.',authError:'No s’ha pogut iniciar la sessió.',invalidLogin:'El correu o la contrasenya no són correctes.',profileSaved:'Nom actualitzat.',formSending:'Enviant…',formError:'No s’ha pogut enviar. Torna-ho a provar.',cookieTitle:'Tu decideixes les cookies',cookieCopy:'Utilitzem elements necessaris perquè el web funcioni. Les cookies analítiques són opcionals i ara mateix no n’activem cap.',reject:'Rebutja opcionals',accept:'Accepta opcionals',configure:'Configura',necessary:'Necessàries',analytics:'Analítiques',save:'Desa la selecció',necessaryCopy:'Sessió, seguretat, preferències i descàrregues.',analyticsCopy:'Mesura agregada de l’ús. Actualment sense proveïdor actiu.'
   }:{
@@ -359,7 +359,7 @@
   document.querySelector('[data-cookie-reject]').addEventListener('click',()=>saveConsent(false));document.querySelector('[data-cookie-accept]').addEventListener('click',()=>saveConsent(true));document.querySelector('[data-cookie-configure]').addEventListener('click',()=>{document.querySelector('[data-cookie-summary]').hidden=true;document.querySelector('[data-cookie-panel]').hidden=false});document.querySelector('[data-cookie-save]').addEventListener('click',()=>saveConsent(document.querySelector('[data-analytics-consent]').checked));document.querySelector('[data-cookie-settings]')?.addEventListener('click',()=>{cookie.hidden=false;document.querySelector('[data-cookie-summary]').hidden=false;document.querySelector('[data-cookie-panel]').hidden=true});
 
   async function submitMailboxForm({type='contact',fields={},form}={}){
-    const mailbox=lang==='es'?'hola@uncartel.es':'hola@uncartell.cat',data=form?new FormData(form):new FormData();
+    const mailbox=market.email,data=form?new FormData(form):new FormData();
     Object.entries(fields).forEach(([key,value])=>data.set(key,String(value??'')));
     data.set('language',lang);data.set('source_domain',location.hostname);data.set('source_url',location.href);
     data.set('_subject',type==='studio'?(lang==='es'?'Nueva solicitud · uncartell studio':'Nova petició · uncartell studio'):type==='ultra'?(lang==='es'?'Interés en el plan Ultra':'Interès pel pla Ultra'):(lang==='es'?'Nuevo mensaje desde uncartel.es':'Nou missatge des d’uncartell.cat'));
