@@ -466,7 +466,7 @@ body:has(.plan-preview) .u-quota{bottom:74px}
 
 /* Imatges definitives de les eines: sense cap element flotant superposat. */
 .u-tool-visual:before,.u-tool-visual:after{display:none}.u-tool-visual>img{display:block;width:100%;height:100%;object-fit:cover}
-.u-support-banner{position:sticky;top:0;z-index:10020;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 20px;background:#171614;color:#fff;font-size:14px}.u-support-banner button{border:0;border-radius:999px;padding:7px 13px;background:#69ee70;color:#111;font:inherit;font-weight:800;cursor:pointer}
+.u-support-banner{position:fixed;left:50%;bottom:18px;z-index:10020;display:flex;align-items:center;justify-content:center;gap:12px;max-width:calc(100vw - 32px);padding:8px 9px 8px 14px;border:1px solid rgba(255,255,255,.16);border-radius:14px;background:#171614;color:#fff;font-size:13px;line-height:1.2;box-shadow:0 8px 28px rgba(24,22,20,.2);transform:translateX(-50%)}.u-support-banner strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.u-support-banner button{flex:0 0 auto;border:0;border-radius:9px;padding:7px 11px;background:#69ee70;color:#111;font:inherit;font-weight:800;cursor:pointer}.u-support-banner button:hover{background:#58df61}.u-support-banner button:focus-visible{outline:2px solid #fff;outline-offset:2px}@media(max-width:620px){.u-support-banner{right:12px;bottom:12px;left:12px;max-width:none;justify-content:space-between;transform:none}}
 
 /* 2026: capçalera i onboarding coherent amb la interfície d'edició. */
 .u-tutorial-launcher{display:none!important}
