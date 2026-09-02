@@ -751,3 +751,26 @@
 .format-landing .format-catalog-heading .format-open-project:hover{border-color:#8e8a82!important;background:#f5f4f0!important}
 .format-landing .format-catalog-heading+.open-projects-cta+.format-tabs{margin-top:0!important}
 @media(max-width:720px){.format-landing .format-step>.intro-row.format-catalog-heading{grid-template-columns:minmax(0,1fr) auto!important;width:calc(100% - 28px)!important;gap:12px!important;padding-top:24px!important}.format-landing .format-catalog-heading .intro h1{font-size:clamp(30px,9vw,40px)!important}.format-landing .format-catalog-heading .format-open-project{width:46px!important;min-width:46px!important;padding:0!important;font-size:0!important}.format-landing .format-catalog-heading .format-open-project svg{width:21px;height:21px}}
+
+
+/* Hover final 2026-09-02: halo progressiu i CTA coherent amb Cartells. */
+.format-landing .format-card>.format-actions{
+  background:radial-gradient(ellipse 58% 42% at 50% 50%,rgba(24,22,20,.16) 0%,rgba(24,22,20,.08) 48%,rgba(24,22,20,0) 100%)!important;
+  backdrop-filter:none!important;
+}
+.format-landing .format-card>.format-actions button{
+  min-width:146px!important;
+  min-height:46px!important;
+  padding:0 22px!important;
+  border:5px solid var(--ink,#181614)!important;
+  border-radius:15px!important;
+  background:var(--green,#73f172)!important;
+  color:var(--ink,#181614)!important;
+  box-shadow:0 10px 24px rgba(24,22,20,.15)!important;
+}
+.format-landing .format-card>.format-actions button:hover{
+  background:#82f47f!important;
+  filter:none!important;
+  transform:translateY(-1px)!important;
+}
+.format-landing .format-card>.format-actions button:active{transform:translateY(0)!important}
