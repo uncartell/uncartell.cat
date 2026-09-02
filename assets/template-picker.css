@@ -208,3 +208,29 @@
 .format-landing .format-step>.intro-row.format-catalog-heading + .open-projects-cta + .format-tabs{
   margin-top:22px!important;
 }
+
+/* Final hover treatment: keep the card quiet and let only the CTA appear. */
+.format-landing .format-card.format-option,
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option:focus-within,
+.format-landing .format-card.format-option.is-current{
+  overflow:hidden!important;
+  border-radius:16px!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+.format-landing .format-card-media::after,
+.format-landing .format-paper-wrap::after{display:none!important;content:none!important}
+.format-landing .format-card>.format-actions{
+  background:transparent!important;
+  backdrop-filter:none!important;
+  box-shadow:none!important;
+}
+.format-landing .format-card>.format-actions button,
+.format-landing .format-card>.format-actions button:hover,
+.format-landing .format-card>.format-actions button:active{
+  border-radius:18px!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+@media(max-width:820px){.format-landing .format-card>.format-actions{background:transparent!important}}
