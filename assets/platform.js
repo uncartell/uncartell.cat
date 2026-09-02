@@ -27,7 +27,7 @@
     document.head.append(catalogTabsStyles);
   }
   const platformStyles=document.querySelector('link[href*="/assets/platform.css"]');
-  if(platformStyles)platformStyles.href='/assets/platform.css?v=20260828-upgrade-benefits-link-1';
+  if(platformStyles)platformStyles.href='/assets/platform.css?v=support-pill-v2-20260902';
   // GitHub Pages can briefly return a stale/missing asset while a deployment is
   // propagating. Retry failed stylesheets once instead of leaving a naked page.
   document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{
@@ -238,7 +238,7 @@
   const supportSessionKey='uncartell_support_session';
   const readSupportSession=()=>{try{return JSON.parse(sessionStorage.getItem(supportSessionKey)||'null')}catch(_){return null}};
   const callAdmin=async(action,payload={})=>{const {data,error}=await supabaseClient.functions.invoke('admin-dashboard',{body:{action,...payload}});if(error)throw error;if(data?.error)throw new Error(data.error);return data};
-  const endSupportSession=async()=>{const session=readSupportSession();try{if(session?.token&&supabaseClient)await callAdmin('stop_impersonation',{support_token:session.token})}catch(error){console.error(error)}sessionStorage.removeItem(supportSessionKey);location.href=`${base}/admin/`.replace(/\/+/g,'/')};
+  const endSupportSession=async()=>{const session=readSupportSession();try{if(session?.token&&supabaseClient)await callAdmin('stop_impersonation',{support_token:session.token})}catch(error){console.error(error)}projectStores.forEach(storageKey=>localStorage.removeItem(storageKey));sessionStorage.removeItem(supportSessionKey);location.href=`${base}/admin/`.replace(/\/+/g,'/')};
   const renderSupportBanner=()=>{document.querySelector('[data-support-banner]')?.remove();if(!supportContext)return;const banner=document.createElement('aside');banner.className='u-support-banner';banner.dataset.supportBanner='';banner.innerHTML=`<strong>${lang==='ca'?'Estàs navegant com':'Estás navegando como'} ${supportContext.email||supportContext.user_id}</strong><button type="button">${lang==='ca'?'Tornar a Admin':'Volver a Admin'}</button>`;banner.querySelector('button').addEventListener('click',endSupportSession);document.body.prepend(banner)};
   const loadSupportContext=async()=>{const session=readSupportSession();if(!session?.token)return;try{const result=await callAdmin('support_context',{support_token:session.token}),target=result?.user;if(!target?.id)throw new Error('Invalid support session');supportContext={...target,user_id:target.id,expires_at:result.expires_at};renderSupportBanner()}catch(error){console.error('Support session',error);sessionStorage.removeItem(supportSessionKey);supportContext=null}};
   let resolveAuthReady;
@@ -440,8 +440,17 @@
     // Wait for that initialisation too, then read the authenticated cloud account.
     if(!supabaseClient)await new Promise(resolve=>window.addEventListener('uncartell:auth-ready',resolve,{once:true}));
     if(!currentUser)return [];
+    const cloud=await listUserProjects(toolType);
+    // Support mode is a read-through view of the impersonated account. Never
+    // merge the administrator's browser cache into that account: doing so
+    // leaks the admin's projects into every user visited from the dashboard.
+    if(supportContext){
+      const scoped=[...cloud].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
+      localStorage.setItem(storageKey,JSON.stringify(scoped));
+      window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:scoped}}));return scoped;
+    }
     let local=[];try{local=JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(_){local=[]}
-    const cloud=await listUserProjects(toolType),cloudIds=new Set(cloud.map(project=>String(project.id||project.projectId)));
+    const cloudIds=new Set(cloud.map(project=>String(project.id||project.projectId)));
     // Preserve projects created before cloud sync existed and migrate them to the
     // authenticated account. Cloud rows win when both sides contain the same id.
     const localOnly=local.filter(project=>!cloudIds.has(String(project.id||project.projectId)));
