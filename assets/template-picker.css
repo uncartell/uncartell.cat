@@ -328,3 +328,24 @@
 .format-landing .format-card.format-option:focus-within::after{
   border-color:#aaa59b!important;
 }
+
+/* Final card outline: one subtle system stroke only. Previous Chrome
+   workarounds drew two overlapping outlines and made the edge look heavy. */
+.format-landing .format-card.format-option,
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option:focus-within,
+.format-landing .format-card.format-option.is-current{
+  box-sizing:border-box!important;
+  border:1px solid #ddd9d1!important;
+}
+.format-landing .format-card.format-option:hover,
+.format-landing .format-card.format-option:focus-within{
+  border-color:#c9c4ba!important;
+}
+.format-landing .format-card.format-option::before,
+.format-landing .format-card.format-option::after{
+  content:none!important;
+  display:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
