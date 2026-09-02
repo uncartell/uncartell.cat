@@ -1156,10 +1156,12 @@
     menu.style.setProperty("--accent", paidPlan ? state.accent : "#e5372a");
     menu.style.setProperty("--text", paidPlan ? state.textColor : "#181614");
     const fitZoom = state.format?.startsWith("price-a3-") ? 1 : state.format === "a4-landscape" ? .92 : .72;
-    const mobileFitZoom = state.format === "a4-portrait" ? .72 : state.format === "a4-landscape" ? .78 : .58;
+    const mobileFitZoom = state.format === "mobile-interactive"
+      ? Math.min(.9, Math.max(.68, (window.innerWidth - 32) / 393))
+      : state.format === "a4-portrait" ? .72 : state.format === "a4-landscape" ? .78 : .58;
     menu.style.setProperty("--mobile-editor-zoom", String(mobileFitZoom * editorZoom));
-    menu.style.zoom = state.format === "mobile-interactive" ? "1" : window.innerWidth <= 820 ? String(mobileFitZoom * editorZoom) : String(fitZoom * editorZoom);
-    $(".zoom-controls").hidden = state.format === "mobile-interactive";
+    menu.style.zoom = state.format === "mobile-interactive" || window.innerWidth <= 820 ? String(mobileFitZoom * editorZoom) : String(fitZoom * editorZoom);
+    $(".zoom-controls").hidden = false;
     const mobileNav = () => state.format === "mobile-interactive" && state.activePage > 0 ? `<nav class="mobile-page-nav" aria-label="${escapeHtml(L.mobileNavigation || L.mobileHome)}">${state.activePage > 1 ? `<button class="mobile-nav-previous" type="button" data-mobile-page="${state.activePage - 1}" aria-label="${escapeHtml(L.previousPage || "Anterior")}"><svg viewBox="0 0 24 24"><path d="m5 15 7-7 7 7"/></svg></button>` : ""}${state.activePage < state.pages.length - 1 ? `<button class="mobile-nav-next" type="button" data-mobile-page="${state.activePage + 1}" aria-label="${escapeHtml(L.nextPage || "Següent")}"><svg viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></svg></button>` : ""}</nav>` : "";
     const mobileHomeButton = `<button class="mobile-home-button" type="button" data-mobile-page="0" aria-label="${escapeHtml(L.backToMenu || L.mobileHome)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></button>`;
     if (page.role === "mobile-home") {
