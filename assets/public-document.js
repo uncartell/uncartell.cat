@@ -15,6 +15,7 @@
   const renderBlock=block=>{
     if(block.type==='section')return `<h3>${escape(block.text)}</h3>`;
     if(block.type==='large-text')return `<p class="u-public-large-text">${escape(block.text)}</p>`;
+    if(block.type==='price')return `<p class="u-public-price">${escape(block.text)}</p>`;
     if(block.type==='separator')return '<hr>';
     if(block.type==='spacer-large')return '<div class="u-public-spacer"></div>';
     if(block.type==='note'||block.type==='text')return `<p class="u-public-note">${escape(block.text)}</p>`;

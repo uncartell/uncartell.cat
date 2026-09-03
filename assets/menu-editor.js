@@ -1,6 +1,7 @@
 (() => {
   const L = window.UNCARTELL_LOCALE;
-  if (!L.blockTypes.some(item => item.id === "large-text")) L.blockTypes.splice(Math.min(1, L.blockTypes.length), 0, { id: "large-text", label: L.lang === "ca" ? "Text gran" : "Texto grande", symbol: "Aa" });
+  if (!L.blockTypes.some(item => item.id === "large-text")) L.blockTypes.splice(Math.min(1, L.blockTypes.length), 0, { id: "large-text", label: L.lang === "ca" ? "Títol gran" : "Título grande", symbol: "Aa" });
+  if (!L.blockTypes.some(item => item.id === "price")) L.blockTypes.splice(Math.min(2, L.blockTypes.length), 0, { id: "price", label: L.lang === "ca" ? "Preu" : "Precio", symbol: "€" });
   if (!L.blockTypes.some(item => item.id === "image")) L.blockTypes.push({ id: "image", label: L.lang === "ca" ? "Bloc d’imatge" : "Bloque de imagen", symbol: "▧" });
   L.contentImage = L.lang === "ca" ? "Imatge" : "Imagen";
   L.chooseContentImage = L.lang === "ca" ? "Afegeix una imatge 16:9" : "Añade una imagen 16:9";
@@ -39,7 +40,8 @@
     const base = { id: uid(), type };
     if (type === "spacer-large") return { ...base, ...overrides };
     if (type === "section") return { ...base, text: L.defaults.section, ...overrides };
-    if (type === "large-text") return { ...base, text: L.lang === "ca" ? "Títol o preu" : "Título o precio", ...overrides };
+    if (type === "large-text") return { ...base, text: L.lang === "ca" ? "El teu títol" : "Tu título", ...overrides };
+    if (type === "price") return { ...base, text: "30 €", ...overrides };
     if (type === "dish" || type === "dish-image") return { ...base, name: L.defaults.dish, description: L.defaults.description, price: L.defaults.price, allergens: [], image: null, imagePosition: "above", ...overrides };
     if (type === "image") return { ...base, image: null, imageMeta: null, ...overrides };
     if (type === "separator") return { ...base, ...overrides };
@@ -730,7 +732,7 @@
     } else if (block.type === "image") {
       controls = `<div class="field dish-image-field"><span>${escapeHtml(L.contentImage)}</span><p>${escapeHtml(L.contentImageHelp)}</p>${block.image ? `<img src="${block.image}" alt=""><button id="removeDishImage" type="button">${escapeHtml(L.removeDishImage)}</button>` : `<label for="dishImageInput">${escapeHtml(L.chooseContentImage)}</label>`}<input id="dishImageInput" type="file" accept="image/png,image/jpeg,image/webp"></div>`;
     } else if (!["separator", "spacer-large"].includes(block.type)) {
-      controls = field(L.inspector.text, "text", block.text, !["section", "large-text"].includes(block.type));
+      controls = field(L.inspector.text, "text", block.text, !["section", "large-text", "price"].includes(block.type));
     }
     box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button><button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
     wireFields(block);
@@ -831,6 +833,7 @@
     const controls = contextualBlockControls(block);
     if (block.type === "section") return `<div class="menu-block section-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "section-text")}${controls}</div>`;
     if (block.type === "large-text") return `<div class="menu-block large-text-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "large-text-value")}${controls}</div>`;
+    if (block.type === "price") return `<div class="menu-block price-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "price-value")}${controls}</div>`;
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}${selected}" data-block="${block.id}">${dragHandle(block)}${block.type === "dish-image" ? (block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseDishImage)}</button>`) : ""}${editable("name", block.name, "dish-name")}${editable("price", block.price, "dish-price")}${editable("description", block.description, "dish-description", true)}${block.allergens.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}${controls}</div>`;
     if (block.type === "image") return `<div class="menu-block content-image-block${selected}" data-block="${block.id}">${dragHandle(block)}${block.image ? `<img src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseContentImage)}</button>`}${controls}</div>`;
     if (block.type === "separator") return `<div class="menu-block separator-block${selected}" data-block="${block.id}">${dragHandle(block)}${controls}</div>`;
@@ -1337,6 +1340,7 @@
   const staticBlockHtml = block => {
     if (block.type === "section") return `<div class="menu-block section-block"><span class="section-text">${escapeHtml(block.text)}</span></div>`;
     if (block.type === "large-text") return `<div class="menu-block large-text-block"><span class="large-text-value">${escapeHtml(block.text)}</span></div>`;
+    if (block.type === "price") return `<div class="menu-block price-block"><span class="price-value">${escapeHtml(block.text)}</span></div>`;
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}">${block.type === "dish-image" && block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : ""}<span class="dish-name${textLengthClass(block.name)}">${escapeHtml(block.name)}</span><span class="dish-price">${escapeHtml(block.price)}</span><span class="dish-description${textLengthClass(block.description)}">${escapeHtml(block.description)}</span>${block.allergens?.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}</div>`;
     if (block.type === "image") return block.image ? `<div class="menu-block content-image-block"><img src="${block.image}" alt=""></div>` : "";
     if (block.type === "separator") return `<div class="menu-block separator-block"></div>`;
