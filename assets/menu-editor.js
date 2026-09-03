@@ -7,6 +7,15 @@
   L.chooseContentImage = L.lang === "ca" ? "Afegeix una imatge 16:9" : "Añade una imagen 16:9";
   L.contentImageHelp = L.lang === "ca" ? "Disponible amb Ultra en composicions de dues columnes." : "Disponible con Ultra en composiciones de dos columnas.";
   const editorImageIcon = '<svg class="block-photo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m5.5 17 4.4-4.4 3.1 3.1 2.1-2.1 3.4 3.4"/></svg>';
+  const priceBadgeVariants = ["burst-solid", "oval-solid", "rect-solid", "burst-outline", "oval-outline", "rect-outline"];
+  const priceBadgeLabels = L.lang === "ca" ? ["Segell sòlid", "Oval sòlid", "Rectangle sòlid", "Segell de contorn", "Oval de contorn", "Rectangle de contorn"] : ["Sello sólido", "Óvalo sólido", "Rectángulo sólido", "Sello de contorno", "Óvalo de contorno", "Rectángulo de contorno"];
+  const normalizePriceBadgeVariant = value => priceBadgeVariants.includes(value) ? value : "rect-solid";
+  const priceBadgeShape = variant => {
+    const shape = normalizePriceBadgeVariant(variant).split("-")[0];
+    const body = shape === "burst" ? '<path d="M50,4c2,.7,4,2,6.2,2.2,3.6.2,6.3-3.8,9.5-4.8,4.5-1.5,7.8,4.8,12.1,4.8s6.9-3.1,9.9-2.7,5.4,5,8,7c2.8,2.1,8.1,0,11.4,1.3s2.9,7.7,4.7,10.6,8.2,5,7.8,9c-.3,3.5-5.4,6.1-6,10.1s1.3,8.9-2.8,10.8c-2.6,1.2-6.8.8-9,2.5s-3.3,7.6-6.6,9.2-7-.7-10.1-.3c-4.4.6-5.9,6.6-10.1,7.4s-6.2-2.1-8.9-2.6c-4.2-.8-6.8,3.2-10.4,4.7s-7.6-3.9-11.3-4.6-6.3,1.9-9,2.5c-4.8,1.1-6.6-4.8-9.8-6.9s-9.1.6-12.1-1.8-2.2-7.2-3.7-10-1.7-1.9-2.5-2.5c-2.1-1.7-6-3.7-5.4-6.9s4-5.1,5.3-7.7c2.2-4.3-1.6-11.2,4.3-13.2s7.5-.2,10.1-4.4,1.8-4.3,3.2-5.9c3.1-3.3,7.4-.6,11.3-.9s6.1-6.4,10.2-7.4,2.7.2,3.8.6Z"/>' : shape === "oval" ? '<ellipse cx="60.9" cy="37.4" rx="58.1" ry="35.8"/>' : '<rect x="3.4" y="3.2" width="114.4" height="68.5" rx="7" ry="7"/>';
+    return `<svg class="price-badge-shape" viewBox="0 0 121.2 74.3" aria-hidden="true">${body}</svg>`;
+  };
+  const nextPriceBadgeVariant = value => priceBadgeVariants[(priceBadgeVariants.indexOf(normalizePriceBadgeVariant(value)) + 1) % priceBadgeVariants.length];
   const projectStorageKey = `uncartell-menu-projects-preview-user-${L.lang}`;
   const brandKitStorageKey = "uncartell-brand-kit-preview-user";
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -41,7 +50,7 @@
     if (type === "spacer-large") return { ...base, ...overrides };
     if (type === "section") return { ...base, text: L.defaults.section, ...overrides };
     if (type === "large-text") return { ...base, text: L.lang === "ca" ? "El teu títol" : "Tu título", ...overrides };
-    if (type === "price") return { ...base, text: "30 €", ...overrides };
+    if (type === "price") return { ...base, text: "30 €", badgeVariant: "rect-solid", ...overrides };
     if (type === "dish" || type === "dish-image") return { ...base, name: L.defaults.dish, description: L.defaults.description, price: L.defaults.price, allergens: [], image: null, imagePosition: "above", ...overrides };
     if (type === "image") return { ...base, image: null, imageMeta: null, ...overrides };
     if (type === "separator") return { ...base, ...overrides };
@@ -734,7 +743,8 @@
     } else if (!["separator", "spacer-large"].includes(block.type)) {
       controls = field(L.inspector.text, "text", block.text, !["section", "large-text", "price"].includes(block.type));
     }
-    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button><button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
+    if (block.type === "price") controls += `<div class="field price-style-field"><span>${L.lang === "ca" ? "Forma del preu" : "Forma del precio"}</span><div class="price-style-picker" role="group">${priceBadgeVariants.map((variant, index) => `<button class="price-style-option${normalizePriceBadgeVariant(block.badgeVariant) === variant ? " active" : ""} ${variant.endsWith("outline") ? "is-outline" : "is-solid"}" type="button" data-price-variant="${variant}" aria-label="${priceBadgeLabels[index]}" title="${priceBadgeLabels[index]}">${priceBadgeShape(variant)}</button>`).join("")}</div></div>`;
+    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions${block.type === "price" ? " has-price-style" : ""}"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button>${block.type === "price" ? `<button class="price-cycle-button" type="button">${L.lang === "ca" ? "Canvia forma" : "Cambia forma"}</button>` : ""}<button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
     wireFields(block);
     $$("[data-allergen]", box).forEach(input => input.addEventListener("change", () => {
       block.allergens = $$("[data-allergen]:checked", box).map(item => item.dataset.allergen);
@@ -756,6 +766,8 @@
     });
     $("#swapDishImage", box)?.addEventListener("click", () => { block.imagePosition = block.imagePosition === "below" ? "above" : "below"; save(); renderInspector(); renderPage(); });
     $("#removeDishImage", box)?.addEventListener("click", () => { block.image = null; save(); renderInspector(); renderPage(); });
+    $$('[data-price-variant]', box).forEach(button => button.addEventListener("click", () => { block.badgeVariant = button.dataset.priceVariant; save(); renderInspector(); renderPage(); }));
+    $(".price-cycle-button", box)?.addEventListener("click", () => { block.badgeVariant = nextPriceBadgeVariant(block.badgeVariant); save(); renderInspector(); renderPage(); });
     $(".duplicate-block-button", box).addEventListener("click", () => {
       const index = page.blocks.findIndex(item => item.id === block.id);
       const copy = JSON.parse(JSON.stringify(block));
@@ -833,7 +845,7 @@
     const controls = contextualBlockControls(block);
     if (block.type === "section") return `<div class="menu-block section-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "section-text")}${controls}</div>`;
     if (block.type === "large-text") return `<div class="menu-block large-text-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "large-text-value")}${controls}</div>`;
-    if (block.type === "price") return `<div class="menu-block price-block${selected}" data-block="${block.id}">${dragHandle(block)}${editable("text", block.text, "price-value")}${controls}</div>`;
+    if (block.type === "price") { const variant = normalizePriceBadgeVariant(block.badgeVariant); return `<div class="menu-block price-block price-${variant} ${variant.endsWith("outline") ? "is-outline" : "is-solid"}${selected}" data-block="${block.id}"><button class="price-shape-hit" type="button" data-context-price-style="${block.id}" aria-label="${L.lang === "ca" ? "Canvia la forma" : "Cambia la forma"}">${priceBadgeShape(variant)}</button>${dragHandle(block)}${editable("text", block.text, "price-value")}<button class="block-context-price-style" type="button" data-context-price-style="${block.id}" aria-label="${L.lang === "ca" ? "Canvia la forma" : "Cambia la forma"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10l3 8-3 8H7l-3-8 3-8Z"/><path d="M9 12h6"/></svg></button>${controls}</div>`; }
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}${selected}" data-block="${block.id}">${dragHandle(block)}${block.type === "dish-image" ? (block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseDishImage)}</button>`) : ""}${editable("name", block.name, "dish-name")}${editable("price", block.price, "dish-price")}${editable("description", block.description, "dish-description", true)}${block.allergens.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}${controls}</div>`;
     if (block.type === "image") return `<div class="menu-block content-image-block${selected}" data-block="${block.id}">${dragHandle(block)}${block.image ? `<img src="${block.image}" alt="">` : `<button class="dish-photo-placeholder" type="button" data-choose-dish-image="${block.id}">${escapeHtml(L.chooseContentImage)}</button>`}${controls}</div>`;
     if (block.type === "separator") return `<div class="menu-block separator-block${selected}" data-block="${block.id}">${dragHandle(block)}${controls}</div>`;
@@ -905,6 +917,14 @@
       if (!block) return;
       const copy = JSON.parse(JSON.stringify(block)); copy.id = uid();
       tryInsertBlock(page, copy, page.blocks.findIndex(item => item.id === block.id) + 1);
+    }));
+    $$('[data-context-price-style]', menu).forEach(button => button.addEventListener("click", event => {
+      event.preventDefault(); event.stopPropagation();
+      const block = page.blocks.find(item => item.id === button.dataset.contextPriceStyle);
+      if (!block) return;
+      block.badgeVariant = nextPriceBadgeVariant(block.badgeVariant);
+      state.selectedBlock = block.id;
+      save(); renderInspector(); renderPage();
     }));
     $$('[data-context-add]', menu).forEach(button => button.addEventListener("click", event => {
       event.stopPropagation();
@@ -1340,7 +1360,7 @@
   const staticBlockHtml = block => {
     if (block.type === "section") return `<div class="menu-block section-block"><span class="section-text">${escapeHtml(block.text)}</span></div>`;
     if (block.type === "large-text") return `<div class="menu-block large-text-block"><span class="large-text-value">${escapeHtml(block.text)}</span></div>`;
-    if (block.type === "price") return `<div class="menu-block price-block"><span class="price-value">${escapeHtml(block.text)}</span></div>`;
+    if (block.type === "price") { const variant = normalizePriceBadgeVariant(block.badgeVariant); return `<div class="menu-block price-block price-${variant} ${variant.endsWith("outline") ? "is-outline" : "is-solid"}">${priceBadgeShape(variant)}<span class="price-value">${escapeHtml(block.text)}</span></div>`; }
     if (block.type === "dish" || block.type === "dish-image") return `<div class="menu-block dish-block${block.type === "dish-image" ? ` dish-with-image${block.imagePosition === "below" ? " image-below" : ""}` : ""}">${block.type === "dish-image" && block.image ? `<img class="dish-photo" src="${block.image}" alt="">` : ""}<span class="dish-name${textLengthClass(block.name)}">${escapeHtml(block.name)}</span><span class="dish-price">${escapeHtml(block.price)}</span><span class="dish-description${textLengthClass(block.description)}">${escapeHtml(block.description)}</span>${block.allergens?.length ? `<span class="allergen-icons">${block.allergens.map(allergenIcon).join("")}</span>` : ""}</div>`;
     if (block.type === "image") return block.image ? `<div class="menu-block content-image-block"><img src="${block.image}" alt=""></div>` : "";
     if (block.type === "separator") return `<div class="menu-block separator-block"></div>`;
