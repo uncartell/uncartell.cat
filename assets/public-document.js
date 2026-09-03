@@ -14,6 +14,7 @@
   const allergenIcon=(key,withLabel=false)=>{const label=allergenLabels[lang][key]||key;const drawing=key==='gluten'?glutenPath:(allergenPaths[key]||'<circle cx="12" cy="12" r="7"/>');return `<button type="button" class="u-public-allergen${withLabel?' has-visible-label':''}" title="${escape(label)}" aria-label="${escape(label)}" aria-expanded="false"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${drawing}</svg>${withLabel?`<span class="u-public-allergen-name">${escape(label)}</span>`:`<span class="u-public-allergen-tooltip" role="tooltip">${escape(label)}</span>`}</button>`};
   const renderBlock=block=>{
     if(block.type==='section')return `<h3>${escape(block.text)}</h3>`;
+    if(block.type==='large-text')return `<p class="u-public-large-text">${escape(block.text)}</p>`;
     if(block.type==='separator')return '<hr>';
     if(block.type==='spacer-large')return '<div class="u-public-spacer"></div>';
     if(block.type==='note'||block.type==='text')return `<p class="u-public-note">${escape(block.text)}</p>`;
