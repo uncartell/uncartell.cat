@@ -744,7 +744,7 @@
       controls = field(L.inspector.text, "text", block.text, !["section", "large-text", "price"].includes(block.type));
     }
     if (block.type === "price") controls += `<div class="field price-style-field"><span>${L.lang === "ca" ? "Forma del preu" : "Forma del precio"}</span><div class="price-style-picker" role="group">${priceBadgeVariants.map((variant, index) => `<button class="price-style-option${normalizePriceBadgeVariant(block.badgeVariant) === variant ? " active" : ""} ${variant.endsWith("outline") ? "is-outline" : "is-solid"}" type="button" data-price-variant="${variant}" aria-label="${priceBadgeLabels[index]}" title="${priceBadgeLabels[index]}">${priceBadgeShape(variant)}</button>`).join("")}</div></div>`;
-    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions${block.type === "price" ? " has-price-style" : ""}"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button>${block.type === "price" ? `<button class="price-cycle-button" type="button">${L.lang === "ca" ? "Canvia forma" : "Cambia forma"}</button>` : ""}<button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
+    box.innerHTML = `<div class="inspector-head"><strong>${L.inspector.selected}</strong><span class="inspector-type">${escapeHtml(typeLabel)}</span></div>${controls}<div class="block-item-actions${block.type === "price" ? " has-price-style" : ""}"><button class="duplicate-block-button" type="button">${escapeHtml(L.duplicateBlock)}</button><button class="delete-button" type="button">${L.inspector.delete}</button></div>`;
     wireFields(block);
     $$("[data-allergen]", box).forEach(input => input.addEventListener("change", () => {
       block.allergens = $$("[data-allergen]:checked", box).map(item => item.dataset.allergen);
@@ -767,7 +767,6 @@
     $("#swapDishImage", box)?.addEventListener("click", () => { block.imagePosition = block.imagePosition === "below" ? "above" : "below"; save(); renderInspector(); renderPage(); });
     $("#removeDishImage", box)?.addEventListener("click", () => { block.image = null; save(); renderInspector(); renderPage(); });
     $$('[data-price-variant]', box).forEach(button => button.addEventListener("click", () => { block.badgeVariant = button.dataset.priceVariant; save(); renderInspector(); renderPage(); }));
-    $(".price-cycle-button", box)?.addEventListener("click", () => { block.badgeVariant = nextPriceBadgeVariant(block.badgeVariant); save(); renderInspector(); renderPage(); });
     $(".duplicate-block-button", box).addEventListener("click", () => {
       const index = page.blocks.findIndex(item => item.id === block.id);
       const copy = JSON.parse(JSON.stringify(block));
