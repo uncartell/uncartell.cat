@@ -11,20 +11,20 @@
   // Route keys are stable product identifiers. Slugs are intentionally only
   // published in Catalan during the architecture phase.
   const ROUTES = Object.freeze({
-    home: Object.freeze({ ca: '/' }),
-    posters: Object.freeze({ ca: '/cartells/' }),
-    menus: Object.freeze({ ca: '/cartes-i-menus/' }),
-    prices: Object.freeze({ ca: '/taules-de-preus/' }),
-    qr: Object.freeze({ ca: '/codis-qr/' }),
-    plans: Object.freeze({ ca: '/plans/' }),
-    admin: Object.freeze({ ca: '/admin/' }),
-    faqs: Object.freeze({ ca: '/faqs/' }),
-    manifest: Object.freeze({ ca: '/manifest/' }),
-    contact: Object.freeze({ ca: '/contacte/' }),
-    legal: Object.freeze({ ca: '/legal/' }),
-    privacy: Object.freeze({ ca: '/privacitat/' }),
-    cookies: Object.freeze({ ca: '/cookies/' }),
-    publicQr: Object.freeze({ ca: '/qr/' })
+    home: Object.freeze({ ca: '/', es: '/es/', it: '/it/' }),
+    posters: Object.freeze({ ca: '/cartells/', es: '/es/carteles/', it: '/it/cartelli/' }),
+    menus: Object.freeze({ ca: '/cartes-i-menus/', es: '/es/cartas-y-menus/', it: '/it/menu-e-carte/' }),
+    prices: Object.freeze({ ca: '/taules-de-preus/', es: '/es/tablas-de-precios/', it: '/it/listini-prezzi/' }),
+    qr: Object.freeze({ ca: '/codis-qr/', es: '/es/codigos-qr/', it: '/it/codici-qr/' }),
+    plans: Object.freeze({ ca: '/plans/', es: '/es/planes/', it: '/it/piani/' }),
+    admin: Object.freeze({ ca: '/admin/', es: '/es/admin/', it: '/it/admin/' }),
+    faqs: Object.freeze({ ca: '/faqs/', es: '/es/preguntas-frecuentes/', it: '/it/domande-frequenti/' }),
+    manifest: Object.freeze({ ca: '/manifest/', es: '/es/manifiesto/', it: '/it/manifesto/' }),
+    contact: Object.freeze({ ca: '/contacte/', es: '/es/contacto/', it: '/it/contatti/' }),
+    legal: Object.freeze({ ca: '/legal/', es: '/es/aviso-legal/', it: '/it/note-legali/' }),
+    privacy: Object.freeze({ ca: '/privacitat/', es: '/es/privacidad/', it: '/it/privacy/' }),
+    cookies: Object.freeze({ ca: '/cookies/', es: '/es/cookies/', it: '/it/cookie/' }),
+    publicQr: Object.freeze({ ca: '/qr/', es: '/es/qr/', it: '/it/qr/' })
   });
 
   const HOST_LOCALES = Object.freeze({
@@ -35,6 +35,8 @@
 
   const cleanHost = value => String(value || '').toLowerCase().replace(/^www\./, '').split(':')[0];
   const requestedLocale = ({ hostname, documentLocale, pathname } = {}) => {
+    const previewLocale = String(global.UNCARTELL_PREVIEW_LOCALE || '').toLowerCase();
+    if (LOCALES[previewLocale]) return previewLocale;
     const hostLocale = HOST_LOCALES[cleanHost(hostname)];
     if (hostLocale) return hostLocale;
     const htmlLocale = String(documentLocale || '').toLowerCase().split('-')[0];
@@ -44,18 +46,26 @@
   };
   const resolveLocale = context => {
     const requested = requestedLocale(context);
+    if (global.UNCARTELL_PREVIEW_LOCALE && LOCALES[requested]) return requested;
     return LOCALES[requested]?.enabled ? requested : DEFAULT_LOCALE;
   };
   const routePath = (key, locale = DEFAULT_LOCALE) => ROUTES[key]?.[locale] || ROUTES[key]?.[DEFAULT_LOCALE] || '/';
   const routeUrl = (key, locale = DEFAULT_LOCALE, options = {}) => {
-    const target = LOCALES[locale]?.public ? locale : DEFAULT_LOCALE;
+    const isPreview = Boolean(global.UNCARTELL_PREVIEW_LOCALE);
+    const target = isPreview && LOCALES[locale] ? locale : (LOCALES[locale]?.public ? locale : DEFAULT_LOCALE);
     const path = routePath(key, target);
+    if (isPreview) return target === 'ca' ? `/ca${path}`.replace(/\/\/$/, '/') : path;
     if (options.absolute) return `https://${LOCALES[target].domain}${path}`;
     return path;
   };
   const routeKeyFromPath = pathname => {
-    const normalized = `/${String(pathname || '').split('?')[0].split('#')[0].replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/');
-    return Object.keys(ROUTES).find(key => Object.values(ROUTES[key]).includes(normalized)) || null;
+    const normalize = value => `/${String(value || '').split('?')[0].split('#')[0].replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/');
+    const normalized = normalize(pathname);
+    const direct = Object.keys(ROUTES).find(key => Object.values(ROUTES[key]).includes(normalized));
+    if (direct) return direct;
+    if (!global.UNCARTELL_PREVIEW_LOCALE) return null;
+    const stripped = normalize(String(pathname || '').replace(/^\/(?:ca|es|it)(?=\/|$)/i, '') || '/');
+    return Object.keys(ROUTES).find(key => ROUTES[key].ca === stripped) || null;
   };
 
   global.UncartellLocaleConfig = Object.freeze({
@@ -69,6 +79,6 @@
     routeUrl,
     routeKeyFromPath,
     market(locale = DEFAULT_LOCALE) { return LOCALES[locale] || LOCALES[DEFAULT_LOCALE]; },
-    isPublic(locale) { return Boolean(LOCALES[locale]?.public); }
+    isPublic(locale) { return Boolean(global.UNCARTELL_PREVIEW_LOCALE ? LOCALES[locale] : LOCALES[locale]?.public); }
   });
 })(window);
