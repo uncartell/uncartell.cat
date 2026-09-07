@@ -12,7 +12,7 @@
 
 /* L'accés superior a projectes no s'estira a tota l'amplada en mòbil. */
 @media(max-width:820px){.open-projects-cta{width:max-content;max-width:100%;align-self:flex-start}}
-html[lang="es"]{--green:#72A8F8}
+
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
