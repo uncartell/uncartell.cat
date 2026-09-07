@@ -27,7 +27,7 @@
     document.head.append(catalogTabsStyles);
   }
   const platformStyles=document.querySelector('link[href*="/assets/platform.css"]');
-  if(platformStyles)platformStyles.href='/assets/platform.css?v=support-pill-v2-20260902';
+  if(platformStyles)platformStyles.href='/assets/platform.css?v=language-selector-v1-20260907';
   // GitHub Pages can briefly return a stale/missing asset while a deployment is
   // propagating. Retry failed stylesheets once instead of leaving a naked page.
   document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{
@@ -43,12 +43,9 @@
   const host=location.hostname.replace(/^www\./,'');
   const canonicalHost=(()=>{try{return new URL(document.querySelector('link[rel="canonical"]')?.href||location.href).hostname.replace(/^www\./,'')}catch(_){return host}})();
   const prod=['uncartell.cat','uncartel.es','uncartello.it'].includes(host)||['uncartell.cat','uncartel.es','uncartello.it'].includes(canonicalHost);
-  // Some legacy tool pages still contain the former static CA/ES switcher in
-  // their HTML. Keep it out of the public UI while ES and IT remain dormant;
-  // localhost previews continue to use the shared, fully functional switcher.
-  if(prod&&!Object.entries(localeRegistry).some(([locale,entry])=>locale!=='ca'&&entry?.public)){
-    document.querySelectorAll('.language-wrap,.language-menu').forEach(element=>element.remove());
-  }
+  // Legacy pages still contain their former language switcher. The shared
+  // platform header replaces it with one consistent control on every page.
+  document.querySelectorAll('.language-wrap,.language-menu').forEach(element=>element.remove());
   const base=prod?'':`/${lang}`;
   const route=slug=>`${base}/${slug}`.replace(/\/+/g,'/').replace(/([^/])$/,'$1/');
   const legacyCfg=lang==='ca'?{
@@ -65,12 +62,31 @@
   };
   const icon=name=>({globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z"/>',user:'<circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6"/>',crown:'<path d="m3 7 4.5 4L12 4l4.5 7L21 7l-2 11H5Z"/><path d="M5 18h14"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',layers:'<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>',logout:'<path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h7v18h-7"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21h-4v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3.1 14H3v-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.5V3h4v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1v4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>'}[name]||'');
   const current=location.pathname.endsWith('/')?location.pathname:`${location.pathname}/`;
+  const languageNames={ca:'Català',es:'Español',it:'Italiano'};
+  const languageAria={ca:'Canvia d’idioma',es:'Cambiar idioma',it:'Cambia lingua'};
+  const languageSoon={ca:'Properament',es:'Próximamente',it:'Prossimamente'};
+  const languageOptions=Object.entries(localeRegistry).map(([locale])=>{
+    const available=locale===lang||localeConfig?.isPublic?.(locale);
+    const active=locale===lang;
+    const label=languageNames[locale]||locale.toUpperCase();
+    if(available){
+      const href=i18n?.localeSwitchUrl?.(locale)||localeConfig?.routeUrl?.(localeConfig?.routeKeyFromPath?.(location.pathname)||'home',locale)||'#';
+      return `<a href="${href}" role="menuitemradio" aria-checked="${active}" class="${active?'active':''}"><span>${label}</span>${active?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>':''}</a>`;
+    }
+    return `<button type="button" role="menuitemradio" aria-checked="false" disabled><span>${label}</span><small>${languageSoon[lang]||languageSoon.ca}</small></button>`;
+  }).join('');
+  const languageControl=`<div class="u-language-control"><button class="u-language-trigger u-icon-action" type="button" aria-label="${languageAria[lang]||languageAria.ca}" aria-haspopup="menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><div class="u-language-popover" role="menu" hidden>${languageOptions}</div></div>`;
   if(current===cfg.root){document.body.classList.add('u-home');const toolsSection=document.querySelector('.u-section');if(toolsSection)toolsSection.id='tools';const explore=document.querySelector('.u-hero .u-button.primary');if(explore)explore.href='#tools';document.querySelectorAll('.u-tool-link').forEach(link=>{link.innerHTML=link.textContent.replace(/\s*→\s*$/,'')+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'})}
   const header=document.querySelector('[data-platform-header]');
-  if(header)header.innerHTML=`<header class="u-header"><div class="u-shell u-header-inner"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><button class="u-mobile-toggle" aria-label="Menú" aria-controls="uNav" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><nav class="u-nav" id="uNav" aria-label="Menú principal"><button class="u-mobile-close" type="button" aria-label="Tanca el menú"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('close')}</svg></button><span class="u-mobile-nav-heading">Menú</span><a class="${current===cfg.postersPath?'active':''}" href="${cfg.postersPath}">${cfg.posters}</a><a class="${current===cfg.menusPath?'active':''}" href="${cfg.menusPath}">${cfg.menus}</a><a class="${current===cfg.pricesPath?'active':''}" href="${cfg.pricesPath}">${cfg.prices}</a><a class="${current===cfg.qrPath?'active':''}" href="${cfg.qrPath}">${cfg.qr}</a><a class="u-plans-link ${current===cfg.plansPath?'active':''}" href="${cfg.plansPath}"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${icon('crown')}</svg><span>${cfg.plans}</span></a><div class="u-mobile-nav-divider"></div><button class="u-icon-action" data-account aria-label="${cfg.account}"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('user')}</svg><span class="u-mobile-label">${cfg.account}</span></button><div class="u-mobile-nav-brand">${cfg.brand}<i>.</i>${cfg.tld}</div></nav></div></header><button class="u-mobile-backdrop" type="button" aria-label="Tanca el menú" hidden></button>`;
+  if(header)header.innerHTML=`<header class="u-header"><div class="u-shell u-header-inner"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><button class="u-mobile-toggle" aria-label="Menú" aria-controls="uNav" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><nav class="u-nav" id="uNav" aria-label="Menú principal"><button class="u-mobile-close" type="button" aria-label="Tanca el menú"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('close')}</svg></button><span class="u-mobile-nav-heading">Menú</span><a class="${current===cfg.postersPath?'active':''}" href="${cfg.postersPath}">${cfg.posters}</a><a class="${current===cfg.menusPath?'active':''}" href="${cfg.menusPath}">${cfg.menus}</a><a class="${current===cfg.pricesPath?'active':''}" href="${cfg.pricesPath}">${cfg.prices}</a><a class="${current===cfg.qrPath?'active':''}" href="${cfg.qrPath}">${cfg.qr}</a><a class="u-plans-link ${current===cfg.plansPath?'active':''}" href="${cfg.plansPath}"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${icon('crown')}</svg><span>${cfg.plans}</span></a>${languageControl}<div class="u-mobile-nav-divider"></div><button class="u-icon-action" data-account aria-label="${cfg.account}"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('user')}</svg><span class="u-mobile-label">${cfg.account}</span></button><div class="u-mobile-nav-brand">${cfg.brand}<i>.</i>${cfg.tld}</div></nav></div></header><button class="u-mobile-backdrop" type="button" aria-label="Tanca el menú" hidden></button>`;
   const footer=document.querySelector('[data-platform-footer]');
   if(footer)footer.innerHTML=`<footer class="u-footer"><div class="u-shell"><div class="u-footer-grid"><div class="u-footer-brand"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><p>© 2026</p></div><div><h3>${cfg.tools}</h3><a href="${cfg.postersPath}">${cfg.posterCreator}</a><a href="${cfg.menusPath}">${cfg.menuCreator}</a><a href="${cfg.pricesPath}">${cfg.priceCreator}</a><a href="${cfg.qrPath}">${cfg.qrCreator}</a></div><div><h3>${cfg.about}</h3><a href="${cfg.plansPath}">${cfg.plans}</a><a href="${route(lang==='ca'?'faqs':'preguntas-frecuentes')}">${cfg.faqs}</a><a href="${route(lang==='ca'?'manifest':'manifiesto')}">${cfg.manifest}</a><a href="${route(lang==='ca'?'contacte':'contacto')}">${cfg.contact}</a></div><div><h3>${cfg.legal}</h3><a href="${route(lang==='ca'?'legal':'aviso-legal')}">${cfg.notice}</a><a href="${route(lang==='ca'?'privacitat':'privacidad')}">${cfg.privacy}</a><a href="${route('cookies')}">${cfg.cookies}</a><button data-cookie-settings>${cfg.settings}</button></div></div></div></footer>`;
   const mobileNav=document.querySelector('#uNav'),mobileToggle=document.querySelector('.u-mobile-toggle'),mobileBackdrop=document.querySelector('.u-mobile-backdrop');
+  const languageTrigger=document.querySelector('.u-language-trigger'),languagePopover=document.querySelector('.u-language-popover');
+  const setLanguageMenu=open=>{if(!languageTrigger||!languagePopover)return;languagePopover.hidden=!open;languageTrigger.setAttribute('aria-expanded',String(open))};
+  languageTrigger?.addEventListener('click',event=>{event.stopPropagation();setLanguageMenu(languagePopover.hidden)});
+  languagePopover?.addEventListener('click',event=>{if(event.target.closest('a'))setLanguageMenu(false)});
+  document.addEventListener('click',event=>{if(!event.target.closest('.u-language-control'))setLanguageMenu(false)});
   const headerInner=document.querySelector('.u-header-inner');
   const syncMobileNavPortal=()=>{
     if(!mobileNav||!headerInner)return;
@@ -96,7 +112,7 @@
     }
     if(link||event.target.closest('[data-account]'))setMobileMenu(false);
   });
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileMenu(false)});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){setMobileMenu(false);setLanguageMenu(false);languageTrigger?.focus()}});
   addEventListener('resize',()=>{syncMobileNavPortal();if(!matchMedia('(max-width:980px)').matches)setMobileMenu(false)});
 
   const initToolOnboarding=()=>{

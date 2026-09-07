@@ -91,6 +91,25 @@
   @keyframes u-mobile-language-in{from{opacity:0;transform:translateY(-9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 }
 
+/* Selector d'idioma compartit: mateix component a desktop i mòbil. */
+.u-language-control{position:relative;display:flex;align-items:center}
+.u-language-trigger{background:#fff!important}
+.u-language-popover{position:absolute;top:calc(100% + 10px);right:0;z-index:1300;width:190px;padding:7px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 14px 34px rgba(24,22,20,.12)}
+.u-language-popover>a,.u-language-popover>button{box-sizing:border-box;width:100%;min-height:42px;display:flex;align-items:center;gap:10px;padding:0 11px;border:0;border-radius:9px;background:transparent;color:var(--ink);text-align:left;text-decoration:none;font:inherit;font-size:14px;font-weight:650;cursor:pointer}
+.u-language-popover>a:hover,.u-language-popover>a:focus-visible{background:#f0efeb;outline:2px solid var(--accent,var(--green));outline-offset:-2px}
+.u-language-popover>a.active{background:color-mix(in srgb,var(--accent,var(--green)) 20%,#fff)}
+.u-language-popover>a svg{width:17px;height:17px;margin-left:auto;fill:none;stroke:currentColor;stroke-width:2}
+.u-language-popover>button:disabled{color:var(--muted);opacity:1;cursor:default}
+.u-language-popover>button small{margin-left:auto;font-size:9px;font-weight:750;text-transform:uppercase;letter-spacing:.04em}
+
+@media(max-width:980px){
+  .u-language-control{display:block;width:100%}
+  .u-language-trigger{box-sizing:border-box;width:100%!important;height:auto!important;min-height:48px;display:flex!important;justify-content:flex-start!important;gap:14px;padding:0 14px!important;border-radius:12px!important}
+  .u-language-trigger .u-mobile-label{display:inline!important}
+  .u-language-popover{position:static;width:100%;margin-top:4px;box-shadow:none;border-radius:12px;background:#fafaf8}
+  .u-language-popover>a,.u-language-popover>button{min-height:46px}
+}
+
 /* Premium beta: make the 12-month trial duration explicit in the upgrade modal. */
 .u-upgrade-trial{display:block;margin:-10px 0 14px;color:var(--muted);font-size:12px;line-height:1.35}
 
