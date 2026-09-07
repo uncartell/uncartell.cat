@@ -82,3 +82,4 @@
     isPublic(locale) { return Boolean(global.UNCARTELL_PREVIEW_LOCALE ? LOCALES[locale] : LOCALES[locale]?.public); }
   });
 })(window);
+// Deployment trigger: GitHub Pages production rebuild 2026-09-07.
