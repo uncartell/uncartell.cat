@@ -43,6 +43,12 @@
   const host=location.hostname.replace(/^www\./,'');
   const canonicalHost=(()=>{try{return new URL(document.querySelector('link[rel="canonical"]')?.href||location.href).hostname.replace(/^www\./,'')}catch(_){return host}})();
   const prod=['uncartell.cat','uncartel.es','uncartello.it'].includes(host)||['uncartell.cat','uncartel.es','uncartello.it'].includes(canonicalHost);
+  // Some legacy tool pages still contain the former static CA/ES switcher in
+  // their HTML. Keep it out of the public UI while ES and IT remain dormant;
+  // localhost previews continue to use the shared, fully functional switcher.
+  if(prod&&!Object.entries(localeRegistry).some(([locale,entry])=>locale!=='ca'&&entry?.public)){
+    document.querySelectorAll('.language-wrap,.language-menu').forEach(element=>element.remove());
+  }
   const base=prod?'':`/${lang}`;
   const route=slug=>`${base}/${slug}`.replace(/\/+/g,'/').replace(/([^/])$/,'$1/');
   const legacyCfg=lang==='ca'?{
