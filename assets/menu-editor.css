@@ -4,7 +4,7 @@
   --shadow:0 20px 55px rgba(24,22,20,.12);
 }
 
-html[lang="es"]{--green:#72A8F8}
+
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
