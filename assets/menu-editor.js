@@ -1631,18 +1631,19 @@
   const mainNav = $("#mainNav");
   const mobileBackdrop = $("#mobileNavBackdrop");
   const setMobileMenu = open => {
-    mainNav.classList.toggle("mobile-open", open);
-    mobileBackdrop.classList.toggle("show", open);
-    $("#mobileMenuToggle").setAttribute("aria-expanded", open ? "true" : "false");
+    mainNav?.classList.toggle("mobile-open", open);
+    mobileBackdrop?.classList.toggle("show", open);
+    $("#mobileMenuToggle")?.setAttribute("aria-expanded", open ? "true" : "false");
   };
-  $("#mobileMenuToggle").addEventListener("click", () => setMobileMenu(true));
-  $("#mobileMenuClose").addEventListener("click", () => setMobileMenu(false));
-  mobileBackdrop.addEventListener("click", () => setMobileMenu(false));
-  $("#languageToggle").addEventListener("click", () => {
+  $("#mobileMenuToggle")?.addEventListener("click", () => setMobileMenu(true));
+  $("#mobileMenuClose")?.addEventListener("click", () => setMobileMenu(false));
+  mobileBackdrop?.addEventListener("click", () => setMobileMenu(false));
+  $("#languageToggle")?.addEventListener("click", () => {
     const menu = $("#languageMenu");
+    if (!menu) return;
     const open = !menu.classList.contains("show");
     menu.classList.toggle("show", open);
-    $("#languageToggle").setAttribute("aria-expanded", open ? "true" : "false");
+    $("#languageToggle")?.setAttribute("aria-expanded", open ? "true" : "false");
   });
 
   $$('[data-close-demo]').forEach(button => button.addEventListener("click", () => { $("#demoModal").hidden = true; }));
