@@ -134,7 +134,10 @@
   };
   const mountSelector = () => {
     const nav = document.querySelector('.u-nav');
-    if (!nav || nav.querySelector('[data-preview-locale-switcher]')) return;
+    // platform.js owns the production language control. The preview runtime
+    // only supplies a fallback on documents where that shared header is not
+    // available; mounting both produced two globe controls on hostname builds.
+    if (!nav || nav.querySelector('.u-language-control,[data-preview-locale-switcher]')) return;
     const wrapper = document.createElement('div');
     wrapper.className = 'u-preview-locale-switcher';
     wrapper.dataset.previewLocaleSwitcher = '';
