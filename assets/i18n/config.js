@@ -4,7 +4,7 @@
   const DEFAULT_LOCALE = 'ca';
   const LOCALES = Object.freeze({
     ca: Object.freeze({ locale: 'ca', languageTag: 'ca-ES', brand: 'Uncartell', brandStem: 'uncartell', tld: 'cat', domain: 'uncartell.cat', email: 'hola@uncartell.cat', enabled: true, public: true, indexable: true }),
-    es: Object.freeze({ locale: 'es', languageTag: 'es-ES', brand: 'Uncartel', brandStem: 'uncartel', tld: 'es', domain: 'uncartel.es', email: 'hola@uncartel.es', enabled: false, public: false, indexable: false }),
+    es: Object.freeze({ locale: 'es', languageTag: 'es-ES', brand: 'Uncartel', brandStem: 'uncartel', tld: 'es', domain: 'uncartel.es', email: 'hola@uncartel.es', enabled: true, public: true, indexable: true }),
     it: Object.freeze({ locale: 'it', languageTag: 'it-IT', brand: 'Uncartello', brandStem: 'uncartello', tld: 'it', domain: 'uncartello.it', email: 'hola@uncartello.it', enabled: false, public: false, indexable: false })
   });
 
@@ -53,8 +53,14 @@
   const routeUrl = (key, locale = DEFAULT_LOCALE, options = {}) => {
     const isPreview = Boolean(global.UNCARTELL_PREVIEW_LOCALE);
     const target = isPreview && LOCALES[locale] ? locale : (LOCALES[locale]?.public ? locale : DEFAULT_LOCALE);
-    const path = routePath(key, target);
+    let path = routePath(key, target);
     if (isPreview) return target === 'ca' ? `/ca${path}`.replace(/\/\/$/, '/') : path;
+    // On the definitive market domains the locale is encoded by the hostname,
+    // never by a visible /es or /it prefix. This must be resolved synchronously
+    // so the home receives its layout class before the first meaningful paint.
+    if (global.UNCARTELL_HOSTNAME_ROUTING && target !== 'ca') {
+      path = path.replace(new RegExp(`^/${target}(?=/|$)`), '') || '/';
+    }
     if (options.absolute) return `https://${LOCALES[target].domain}${path}`;
     return path;
   };
