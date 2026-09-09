@@ -55,13 +55,19 @@
     const target = isPreview && LOCALES[locale] ? locale : (LOCALES[locale]?.public ? locale : DEFAULT_LOCALE);
     let path = routePath(key, target);
     if (isPreview) return target === 'ca' ? `/ca${path}`.replace(/\/\/$/, '/') : path;
+    // Absolute locale switches point at the definitive market hostname. The
+    // hostname already identifies the locale, so internal build prefixes must
+    // never leak into the public URL (uncartel.es/es/, uncartello.it/it/, …).
+    if (options.absolute) {
+      path = path.replace(new RegExp(`^/${target}(?=/|$)`), '') || '/';
+      return `https://${LOCALES[target].domain}${path}`;
+    }
     // On the definitive market domains the locale is encoded by the hostname,
     // never by a visible /es or /it prefix. This must be resolved synchronously
     // so the home receives its layout class before the first meaningful paint.
     if (global.UNCARTELL_HOSTNAME_ROUTING && target !== 'ca') {
       path = path.replace(new RegExp(`^/${target}(?=/|$)`), '') || '/';
     }
-    if (options.absolute) return `https://${LOCALES[target].domain}${path}`;
     return path;
   };
   const routeKeyFromPath = pathname => {
@@ -69,6 +75,16 @@
     const normalized = normalize(pathname);
     const direct = Object.keys(ROUTES).find(key => Object.values(ROUTES[key]).includes(normalized));
     if (direct) return direct;
+    if (global.UNCARTELL_HOSTNAME_ROUTING) {
+      const hostLocale = HOST_LOCALES[cleanHost(global.location?.hostname)];
+      if (hostLocale) {
+        const marketRoute = Object.keys(ROUTES).find(key => {
+          const localizedPath = routePath(key, hostLocale).replace(new RegExp(`^/${hostLocale}(?=/|$)`), '') || '/';
+          return normalize(localizedPath) === normalized;
+        });
+        if (marketRoute) return marketRoute;
+      }
+    }
     if (!global.UNCARTELL_PREVIEW_LOCALE) return null;
     const stripped = normalize(String(pathname || '').replace(/^\/(?:ca|es|it)(?=\/|$)/i, '') || '/');
     return Object.keys(ROUTES).find(key => ROUTES[key].ca === stripped) || null;
