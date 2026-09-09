@@ -1,4 +1,6 @@
 (()=>{
+  if(window.__UNCARTELL_PLATFORM_INITIALIZED__)return;
+  window.__UNCARTELL_PLATFORM_INITIALIZED__=true;
   const i18n=window.UncartellI18n;
   const localeConfig=i18n?.config;
   const requestedHost=location.hostname.replace(/^www\./,'');
@@ -79,7 +81,7 @@
     }
     return `<button type="button" role="menuitemradio" aria-checked="false" disabled><span>${label}</span><small>${languageSoon[lang]||languageSoon.ca}</small></button>`;
   }).join('');
-  const languageControl=`<div class="u-language-control"><button class="u-language-trigger u-icon-action" type="button" aria-label="${languageAria[lang]||languageAria.ca}" aria-haspopup="menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><div class="u-language-popover" role="menu" hidden>${languageOptions}</div></div>`;
+  const languageControl=`<div class="u-language-control" data-language-selector="official"><button class="u-language-trigger u-icon-action" type="button" aria-label="${languageAria[lang]||languageAria.ca}" aria-haspopup="menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><div class="u-language-popover" role="menu" hidden>${languageOptions}</div></div>`;
   const isHomeRoute=localeConfig?.routeKeyFromPath?.(requestedPath)==='home';
   if(isHomeRoute){document.body.classList.add('u-home');const toolsSection=document.querySelector('.u-section');if(toolsSection)toolsSection.id='tools';const explore=document.querySelector('.u-hero .u-button.primary');if(explore)explore.href='#tools';document.querySelectorAll('.u-tool-link').forEach(link=>{link.innerHTML=link.textContent.replace(/\s*→\s*$/,'')+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'})}
   const header=document.querySelector('[data-platform-header]');
@@ -90,7 +92,20 @@
   const languageTrigger=document.querySelector('.u-language-trigger'),languagePopover=document.querySelector('.u-language-popover');
   const setLanguageMenu=open=>{if(!languageTrigger||!languagePopover)return;languagePopover.hidden=!open;languageTrigger.setAttribute('aria-expanded',String(open))};
   languageTrigger?.addEventListener('click',event=>{event.stopPropagation();setLanguageMenu(languagePopover.hidden)});
-  languagePopover?.addEventListener('click',event=>{if(event.target.closest('a'))setLanguageMenu(false)});
+  languagePopover?.addEventListener('click',event=>{
+    const languageLink=event.target.closest('a');
+    if(!languageLink)return;
+    // The locale switch crosses two different hosting origins (Cloudflare for
+    // ES, GitHub Pages for CA). Navigate explicitly so closing the mobile nav
+    // or popover can never consume the cross-origin link click.
+    if(!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
+      event.preventDefault();
+      const href=languageLink.href;
+      setLanguageMenu(false);
+      setMobileMenu(false);
+      location.assign(href);
+    }
+  });
   document.addEventListener('click',event=>{if(!event.target.closest('.u-language-control'))setLanguageMenu(false)});
   const headerInner=document.querySelector('.u-header-inner');
   const syncMobileNavPortal=()=>{
