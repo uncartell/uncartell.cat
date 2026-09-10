@@ -71,17 +71,29 @@
   const languageNames={ca:'Català',es:'Español',it:'Italiano'};
   const languageAria={ca:'Canvia d’idioma',es:'Cambiar idioma',it:'Cambia lingua'};
   const languageSoon={ca:'Properament',es:'Próximamente',it:'Prossimamente'};
+  const languageSwitchHref=locale=>{
+    if(window.UNCARTELL_HOSTNAME_ROUTING===true){
+      const routeKey=localeConfig?.routeKeyFromPath?.(location.pathname)||'home';
+      const internalPath=localeConfig?.routePath?.(routeKey,locale)||'/';
+      const publicPath=internalPath.replace(/^\/(?:ca|es|it)(?=\/|$)/,'')||'/';
+      const targetDomain=localeConfig?.market?.(locale)?.domain;
+      if(targetDomain)return `https://${targetDomain}${publicPath}${location.search}${location.hash}`;
+    }
+    return i18n?.localeSwitchUrl?.(locale)||localeConfig?.routeUrl?.(localeConfig?.routeKeyFromPath?.(location.pathname)||'home',locale)||'#';
+  };
   const languageOptions=Object.entries(localeRegistry).map(([locale])=>{
-    const available=locale===lang||localeConfig?.isPublic?.(locale);
+      const available=locale===lang||(window.UNCARTELL_HOSTNAME_ROUTING===true
+        ? Boolean(localeRegistry[locale]?.public)
+        : localeConfig?.isPublic?.(locale));
     const active=locale===lang;
     const label=languageNames[locale]||locale.toUpperCase();
     if(available){
-      const href=i18n?.localeSwitchUrl?.(locale)||localeConfig?.routeUrl?.(localeConfig?.routeKeyFromPath?.(location.pathname)||'home',locale)||'#';
-      return `<a href="${href}" role="menuitemradio" aria-checked="${active}" class="${active?'active':''}"><span>${label}</span>${active?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>':''}</a>`;
+      const href=languageSwitchHref(locale);
+      return `<a href="${href}"${active?' aria-current="page"':''} class="${active?'active':''}"><span>${label}</span>${active?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>':''}</a>`;
     }
-    return `<button type="button" role="menuitemradio" aria-checked="false" disabled><span>${label}</span><small>${languageSoon[lang]||languageSoon.ca}</small></button>`;
+    return `<button type="button" disabled><span>${label}</span><small>${languageSoon[lang]||languageSoon.ca}</small></button>`;
   }).join('');
-  const languageControl=`<div class="u-language-control" data-language-selector="official"><button class="u-language-trigger u-icon-action" type="button" aria-label="${languageAria[lang]||languageAria.ca}" aria-haspopup="menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><div class="u-language-popover" role="menu" hidden>${languageOptions}</div></div>`;
+  const languageControl=`<div class="u-language-control" data-language-selector="official"><button class="u-language-trigger u-icon-action" type="button" aria-label="${languageAria[lang]||languageAria.ca}" aria-haspopup="true" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${icon('globe')}</svg><span class="u-mobile-label">${words.language}</span></button><div class="u-language-popover" hidden>${languageOptions}</div></div>`;
   const isHomeRoute=localeConfig?.routeKeyFromPath?.(requestedPath)==='home';
   if(isHomeRoute){document.body.classList.add('u-home');const toolsSection=document.querySelector('.u-section');if(toolsSection)toolsSection.id='tools';const explore=document.querySelector('.u-hero .u-button.primary');if(explore)explore.href='#tools';document.querySelectorAll('.u-tool-link').forEach(link=>{link.innerHTML=link.textContent.replace(/\s*→\s*$/,'')+'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'})}
   const header=document.querySelector('[data-platform-header]');
@@ -90,21 +102,21 @@
   if(footer)footer.innerHTML=`<footer class="u-footer"><div class="u-shell"><div class="u-footer-grid"><div class="u-footer-brand"><a class="u-logo" href="${cfg.root}">${cfg.brand}<i>.</i>${cfg.tld}</a><p>© 2026</p></div><div><h3>${cfg.tools}</h3><a href="${cfg.postersPath}">${cfg.posterCreator}</a><a href="${cfg.menusPath}">${cfg.menuCreator}</a><a href="${cfg.pricesPath}">${cfg.priceCreator}</a><a href="${cfg.qrPath}">${cfg.qrCreator}</a></div><div><h3>${cfg.about}</h3><a href="${cfg.plansPath}">${cfg.plans}</a><a href="${cfg.faqsPath}">${cfg.faqs}</a><a href="${cfg.manifestPath}">${cfg.manifest}</a><a href="${cfg.contactPath}">${cfg.contact}</a></div><div><h3>${cfg.legal}</h3><a href="${cfg.noticePath}">${cfg.notice}</a><a href="${cfg.privacyPath}">${cfg.privacy}</a><a href="${cfg.cookiesPath}">${cfg.cookies}</a><button data-cookie-settings>${cfg.settings}</button></div></div></div></footer>`;
   const mobileNav=document.querySelector('#uNav'),mobileToggle=document.querySelector('.u-mobile-toggle'),mobileBackdrop=document.querySelector('.u-mobile-backdrop');
   const languageTrigger=document.querySelector('.u-language-trigger'),languagePopover=document.querySelector('.u-language-popover');
-  const setLanguageMenu=open=>{if(!languageTrigger||!languagePopover)return;languagePopover.hidden=!open;languageTrigger.setAttribute('aria-expanded',String(open))};
-  languageTrigger?.addEventListener('click',event=>{event.stopPropagation();setLanguageMenu(languagePopover.hidden)});
+  const setLanguageMenu=(open,{focusFirst=false}={})=>{
+    if(!languageTrigger||!languagePopover)return;
+    languagePopover.hidden=!open;
+    languageTrigger.setAttribute('aria-expanded',String(open));
+    if(open&&focusFirst)languagePopover.querySelector('a[href],button:not([disabled])')?.focus();
+  };
+  languageTrigger?.addEventListener('click',event=>{event.stopPropagation();setLanguageMenu(languagePopover.hidden,{focusFirst:true})});
   languagePopover?.addEventListener('click',event=>{
     const languageLink=event.target.closest('a');
     if(!languageLink)return;
-    // The locale switch crosses two different hosting origins (Cloudflare for
-    // ES, GitHub Pages for CA). Navigate explicitly so closing the mobile nav
-    // or popover can never consume the cross-origin link click.
-    if(!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
-      event.preventDefault();
-      const href=languageLink.href;
-      setLanguageMenu(false);
-      setMobileMenu(false);
-      location.assign(href);
-    }
+    // Keep the anchor's native navigation. The href already contains the
+    // definitive market hostname and localized route; intercepting the click
+    // made cross-origin ES → CA navigation unreliable in some browsers.
+    setLanguageMenu(false);
+    setMobileMenu(false);
   });
   document.addEventListener('click',event=>{if(!event.target.closest('.u-language-control'))setLanguageMenu(false)});
   const headerInner=document.querySelector('.u-header-inner');
@@ -382,9 +394,9 @@
   }
   function injectSupabase(){return new Promise((resolve,reject)=>{if(window.supabase)return resolve();const existing=document.querySelector('script[data-supabase-client]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const script=document.createElement('script');script.dataset.supabaseClient='';script.src='/assets/vendor-supabase.js?v=1';script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}
   async function initAuth(){
-    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr');const {data}=await supabaseClient.auth.getSession();if(data.session?.user){await loadSupportContext();await loadProfile(data.session.user)}window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser,support:supportContext}}));if(data.session?.user&&new URLSearchParams(location.search).get('reset')==='1'){modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')}else if(data.session?.user&&sessionStorage.getItem('uncartell-refresh-after-auth')==='1'){sessionStorage.removeItem('uncartell-refresh-after-auth');location.reload();return}supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'&&session?.user)setTimeout(()=>{currentUser=session.user;modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')},0);if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadSupportContext();await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user,support:supportContext}}))},0);if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;supportContext=null;sessionStorage.removeItem(supportSessionKey);setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}})}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
+    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr',{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'&&session?.user)setTimeout(()=>{currentUser=session.user;modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')},0);if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadSupportContext();await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user,support:supportContext}}))},0);if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;supportContext=null;sessionStorage.removeItem(supportSessionKey);setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}});const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session?.user){await loadSupportContext();await loadProfile(data.session.user)}window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser,support:supportContext}}));if(data.session?.user&&new URLSearchParams(location.search).get('reset')==='1'){modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')}}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
   }
-  document.querySelector('[data-auth-google]').addEventListener('click',async()=>{if(!supabaseClient)return;sessionStorage.setItem('uncartell-refresh-after-auth','1');feedback.textContent=words.loading;const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${location.origin}${location.pathname}${location.search}${location.hash}`}});if(error){sessionStorage.removeItem('uncartell-refresh-after-auth');feedback.textContent=error.message||words.authError}});
+  document.querySelector('[data-auth-google]').addEventListener('click',async()=>{if(!supabaseClient)return;feedback.textContent=words.loading;const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${location.origin}${location.pathname}${location.search}`}});if(error)feedback.textContent=error.message||words.authError});
   document.querySelector('[data-auth-form]').addEventListener('submit',async event=>{event.preventDefault();if(!supabaseClient)return;feedback.textContent=words.loading;const node=event.currentTarget,form=new FormData(node),email=String(form.get('email')||'').trim(),password=String(form.get('password')||''),name=String(form.get('name')||'').trim(),marketingConsent=form.get('marketing_consent')==='on',register=node.dataset.authMode==='register';const result=register?await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,marketing_consent:marketingConsent},emailRedirectTo:`${location.origin}${location.pathname}`}}):await supabaseClient.auth.signInWithPassword({email,password});if(result.error){feedback.textContent=register?(result.error.message||words.authError):words.invalidLogin;return}if(result.data.session){await loadProfile(result.data.user);location.reload()}else feedback.textContent=words.confirmMail});
   document.querySelector('[data-auth-logout]').addEventListener('click',async()=>{if(supabaseClient)await supabaseClient.auth.signOut();closeAccount();location.href=cfg.root});
   document.querySelector('[data-auth-delete]').addEventListener('click',()=>showView('delete'));
