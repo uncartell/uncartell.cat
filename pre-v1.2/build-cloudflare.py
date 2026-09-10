@@ -91,10 +91,10 @@ for locale in ("ca", "es", "it"):
         content = content.replace("</head>", marker + "</head>", 1)
         html.write_text(content)
 
-# Generate a clean sitemap for the active market domain and exclude
+# Generate clean sitemaps for the active market domains and exclude
 # admin/account surfaces.
 sitemap_excluded = {"admin", "ultra"}
-for locale in ("es",):
+for locale in ("ca", "es"):
     sitemap_urls = [
         public_url(locale, ca_slug)
         for ca_slug in ROUTES[locale]
@@ -170,7 +170,7 @@ export default {
         });
       }
       const publicHost = url.hostname.toLowerCase().replace(/^www\./, "");
-      if (publicHost === "uncartel.es") {
+      if (publicHost === "uncartell.cat" || publicHost === "uncartel.es") {
         return new Response(`User-agent: *\nAllow: /\nSitemap: https://${publicHost}/sitemap.xml\n`, {
           headers: { "content-type": "text/plain; charset=utf-8" }
         });
