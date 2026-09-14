@@ -5,7 +5,7 @@
   const LOCALES = Object.freeze({
     ca: Object.freeze({ locale: 'ca', languageTag: 'ca-ES', brand: 'Uncartell', brandStem: 'uncartell', tld: 'cat', domain: 'uncartell.cat', email: 'hola@uncartell.cat', enabled: true, public: true, indexable: true }),
     es: Object.freeze({ locale: 'es', languageTag: 'es-ES', brand: 'Uncartel', brandStem: 'uncartel', tld: 'es', domain: 'uncartel.es', email: 'hola@uncartel.es', enabled: true, public: true, indexable: true }),
-    it: Object.freeze({ locale: 'it', languageTag: 'it-IT', brand: 'Uncartello', brandStem: 'uncartello', tld: 'it', domain: 'uncartello.it', email: 'hola@uncartello.it', enabled: false, public: false, indexable: false })
+    it: Object.freeze({ locale: 'it', languageTag: 'it-IT', brand: 'Uncartello', brandStem: 'uncartello', tld: 'it', domain: 'uncartello.it', email: 'hola@uncartello.it', enabled: true, public: true, indexable: true })
   });
 
   // Route keys are stable product identifiers. Slugs are intentionally only

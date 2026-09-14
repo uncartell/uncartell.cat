@@ -56,9 +56,9 @@ def prepare_metadata(content, locale, ca_slug):
     content = replace_meta(content, "property", "og:description", localized_description)
     content = replace_meta(content, "property", "og:url", canonical)
     content = replace_meta(content, "property", "og:image", f"https://{DOMAINS[locale]}/og-uncartell-cat.jpg")
-    # CA and ES are active public market domains. IT remains private until its
-    # explicit launch checkpoint; Pages preview hosts are also blocked below.
-    robots = "index,follow,max-image-preview:large" if locale in {"ca", "es"} else "noindex,nofollow"
+    # All three market domains are public. The temporary Pages host remains
+    # blocked at the Worker layer below.
+    robots = "index,follow,max-image-preview:large"
     content = re.sub(
         r'<meta\s+name=["\']robots["\']\s+content=["\'].*?["\']\s*/?>',
         f'<meta name="robots" content="{robots}">', content, count=1, flags=re.I,
@@ -94,7 +94,7 @@ for locale in ("ca", "es", "it"):
 # Generate clean sitemaps for the active market domains and exclude
 # admin/account surfaces.
 sitemap_excluded = {"admin", "ultra"}
-for locale in ("ca", "es"):
+for locale in ("ca", "es", "it"):
     sitemap_urls = [
         public_url(locale, ca_slug)
         for ca_slug in ROUTES[locale]
@@ -170,7 +170,7 @@ export default {
         });
       }
       const publicHost = url.hostname.toLowerCase().replace(/^www\./, "");
-      if (publicHost === "uncartell.cat" || publicHost === "uncartel.es") {
+      if (publicHost === "uncartell.cat" || publicHost === "uncartel.es" || publicHost === "uncartello.it") {
         return new Response(`User-agent: *\nAllow: /\nSitemap: https://${publicHost}/sitemap.xml\n`, {
           headers: { "content-type": "text/plain; charset=utf-8" }
         });

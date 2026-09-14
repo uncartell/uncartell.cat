@@ -1,9 +1,11 @@
 (()=>{
-  const lang=document.documentElement.lang==='es'?'es':'ca';
+  const lang=['ca','es','it'].includes(document.documentElement.lang)?document.documentElement.lang:'ca';
   const T=lang==='ca'?{
     invalid:'Escriu un enllaç complet, per exemple https://exemple.cat',saved:'Projecte desat',generated:'QR generat correctament',copied:'QR copiat al porta-retalls',copyFail:'El navegador no permet copiar aquesta imatge',downloaded:'Fitxer preparat',opened:'Projecte obert',deleted:'Projecte eliminat',none:'Encara no tens cap projecte desat',open:'Obre',remove:'Elimina',savedAt:'Desat',printTitle:'Codi QR',fallbackName:'El meu codi QR'
-  }:{
+  }:lang==='es'?{
     invalid:'Escribe un enlace completo, por ejemplo https://ejemplo.es',saved:'Proyecto guardado',generated:'QR generado correctamente',copied:'QR copiado al portapapeles',copyFail:'El navegador no permite copiar esta imagen',downloaded:'Archivo preparado',opened:'Proyecto abierto',deleted:'Proyecto eliminado',none:'Todavía no tienes ningún proyecto guardado',open:'Abrir',remove:'Eliminar',savedAt:'Guardado',printTitle:'Código QR',fallbackName:'Mi código QR'
+  }:{
+    invalid:'Inserisci un link completo, per esempio https://esempio.it',saved:'Progetto salvato',generated:'QR generato correttamente',copied:'QR copiato negli appunti',copyFail:'Il browser non consente di copiare questa immagine',downloaded:'File pronto',opened:'Progetto aperto',deleted:'Progetto eliminato',none:'Non hai ancora progetti salvati',open:'Apri',remove:'Elimina',savedAt:'Salvato',printTitle:'Codice QR',fallbackName:'Il mio codice QR'
   };
   const $=(selector,root=document)=>root.querySelector(selector);
   const $$=(selector,root=document)=>[...root.querySelectorAll(selector)];
@@ -38,7 +40,8 @@
   window.QRGeneratorModal=QRGeneratorModal;
 
   if(!$('.qr-page'))return;
-  let state={id:uid(),url:'',foreground:'#181614',background:'#ffffff',level:'Q',watermark:lang==='ca'?'uncartell.cat':'uncartel.es',logo:'',dynamicId:'',publicUrl:'',destinationUpdatedAt:'',svg:'',name:$('[data-project-name]').value};
+  const marketDomain=lang==='ca'?'uncartell.cat':lang==='es'?'uncartel.es':'uncartello.it';
+  let state={id:uid(),url:'',foreground:'#181614',background:'#ffffff',level:'Q',watermark:marketDomain,logo:'',dynamicId:'',publicUrl:'',destinationUpdatedAt:'',svg:'',name:$('[data-project-name]').value};
   let hasUnsavedChanges=false;
   window.UncartellEditorHasUnsavedChanges=()=>hasUnsavedChanges;
   let plan=window.UncartellPlatform?.getPlan?.()||'basic',canPremium=plan==='premium'||plan==='ultra',canUltra=plan==='ultra';
@@ -110,7 +113,9 @@
       dynamicPromo.hidden=canPremium;
       dynamicPromo.setAttribute('role','button');
       dynamicPromo.setAttribute('tabindex','0');
-      dynamicPromo.innerHTML='<span><strong>QR dinàmics</strong><small>Canvia la destinació sense tornar-los a imprimir.</small></span><em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>Premium</em>';
+      dynamicPromo.innerHTML=lang==='ca'
+        ? '<span><strong>QR dinàmics</strong><small>Canvia la destinació sense tornar-los a imprimir.</small></span><em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>Premium</em>'
+        : '<span><strong>QR dinámicos</strong><small>Cambia el destino sin volver a imprimirlos.</small></span><em><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>Premium</em>';
       const openUpgrade=()=>window.UncartellPlatform?.openUpgradeModal?.();
       dynamicPromo.addEventListener('click',openUpgrade);
       dynamicPromo.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openUpgrade()}});

@@ -1,7 +1,11 @@
 (()=>{
   const posterStylesheet=document.querySelector('link[href*="/assets/poster-editor.css"]');
   if(posterStylesheet)posterStylesheet.href='/assets/poster-editor.css?v=20260831-category-icons-refined';
-  const es=document.documentElement.lang==='es';
+  const lang=['ca','es','it'].includes(document.documentElement.lang)?document.documentElement.lang:'ca';
+  const es=lang==='es',it=lang==='it';
+  const suffix={ca:'Ca',es:'Es',it:'It'}[lang];
+  const tr=(ca,esText,itText)=>lang==='es'?esText:lang==='it'?itText:ca;
+  const publicHost={ca:'uncartell.cat',es:'uncartel.es',it:'uncartello.it'}[lang];
   const seed=window.UncartellPosterSeed||{icons:{},catalog:[]};
   const CATALOG_KEY='uncartell-poster-catalog-v13';
   const ICON_KEY='uncartell-poster-icons-v13';
@@ -9,14 +13,15 @@
   const BRAND_KIT_KEY='uncartell-brand-kit-preview-user';
   const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
   const folderIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>';
-  qa('[data-open-poster-projects]').forEach((button,index)=>{button.innerHTML=index===0?`${es?'Abre un proyecto':'Obre un projecte'} ${folderIcon}`:`${folderIcon}${es?'Abre un proyecto':'Obre un projecte'}`;});
+  qa('[data-open-poster-projects]').forEach((button,index)=>{const label=tr('Obre un projecte','Abre un proyecto','Apri un progetto');button.innerHTML=index===0?`${label} ${folderIcon}`:`${folderIcon}${label}`;});
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))||fallback}catch(_){return fallback}};
   const defaultBrandKit=()=>({version:2,primary:'#e5372a',secondary:'#343434',logo:null,font:'modern'});
   const normalizeBrandKit=raw=>{const source=raw&&typeof raw==='object'?raw:{};return{...source,version:2,primary:source.primary||source.colorPrimary||source.primaryColor||'#e5372a',secondary:source.secondary||source.colorSecondary||source.secondaryColor||'#343434',logo:source.logo||source.logoData||null,font:source.font||source.style||'modern'}};
   const readBrandKit=()=>normalizeBrandKit(read(BRAND_KIT_KEY,defaultBrandKit()));
   const iconUpgradeMap=window.UncartellPosterIconMap||{};
   const upgradeIconItem=window.UncartellPosterIconUpgradeItem||(item=>iconUpgradeMap[item.icon]?{...item,icon:iconUpgradeMap[item.icon]}:item);
-  let catalog=read(CATALOG_KEY,seed.catalog).map(upgradeIconItem).filter(item=>item.active!==false).sort((a,b)=>a.order-b.order);
+  const posterContentSource=window.UncartellSystemContent?.getSource?.('posters')||'supabase';
+  let catalog=(posterContentSource==='local'?read(CATALOG_KEY,seed.catalog):[]).map(upgradeIconItem).filter(item=>item.active!==false).sort((a,b)=>a.order-b.order);
   const defaultHelpIcon=seed.icons['circle-help']||'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><path d="M12 18h.01"/>';
   let customIcons=read(ICON_KEY,{}),icons={...seed.icons,...customIcons,'circle-help':defaultHelpIcon};
   Object.assign(icons,{
@@ -30,7 +35,7 @@
   let plan=window.UncartellPlatform?.getPlan()||'basic';
   qa('[data-open-poster-projects]').forEach(button=>button.classList.toggle('is-plan-locked',plan!=='premium'&&plan!=='ultra'));
   const catalogPage=q('#posterCatalog'),editor=q('#posterEditor'),categoryNav=q('[data-categories]'),subcategoryNav=q('[data-subcategories]'),grid=q('[data-posters]');
-  const field=(item,name)=>item[`${name}${es?'Es':'Ca'}`]||item[`${name}Ca`]||'';
+  const field=(item,name)=>item[`${name}${suffix}`]||item[name]||item[`${name}Ca`]||'';
   const svgMarkup=key=>icons[key]?`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[key]}</svg>`:'';
   const iconMarkup=(key,image)=>image?`<img src="${image}" alt="">`:svgMarkup(key);
   function fitLegacyIconSvgs(scope=document){
@@ -97,32 +102,33 @@
     'Altres':'<path class="icon-main" d="M31 51h46M54 28v46"/><path class="icon-accent" d="M78 23v20M68 33h20"/>'
   };
   const categoryIcon=name=>`<span class="poster-category-visual" aria-hidden="true"><svg class="poster-category-icon" viewBox="0 0 116 96">${categoryIcons[name]||categoryIcons.Altres}</svg></span>`;
-  const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert'];
-  const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|2x1/i;
-  const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat/i;
+  const popularTitles=['Horari','Tancat per vacances','Prohibit fumar','Wifi','Lavabo','Entrada','Sortida','Rebaixes','Oferta','Pagament amb targeta','Sortida d\'emergència','Obert','Horario','Cerrado por vacaciones','Prohibido fumar','Baño','Salida','Rebajas','Pago con tarjeta','Salida de emergencia','Abierto','Orari','Chiuso per ferie','Vietato fumare','Wi-Fi','Servizi igienici','Ingresso','Uscita','Saldi','Offerta','Pagamento con carta','Uscita di emergenza','Aperto'];
+  const promotionPattern=/oferta|rebaixa|descompte|promoci|liquidaci|novetat|regal|percent|offerta|saldi|sconto|promozion|svendita|novità|regalo|2x1/i;
+  const noticePattern=/prohibit|obligatori|obligatòria|av[ií]s|precauci|atenci[oó]|no |nom[eé]s|fora de servei|emerg[eè]ncia|risc|tancat|vietat|obbligatori|attenzione|non |solo |fuori servizio|emergenza|rischio|chiuso/i;
   const categoryFor=item=>{
     const sourceCategory=normalizeSearch(field(item,'category'));
     const sourceSubcategory=normalizeSearch(field(item,'subcategory'));
     const title=field(item,'title');
     if(activeCategory==='Més populars')return popularTitles.some(value=>normalizeSearch(value)===normalizeSearch(title));
-    if(activeCategory==='Horaris')return sourceCategory==='horaris'||sourceSubcategory==='horaris';
-    if(activeCategory==='Restauració')return sourceCategory==='restauracio';
-    if(activeCategory==='Comerç')return sourceCategory==='comerc';
-    return sourceCategory==='seguretat'||noticePattern.test(normalizeSearch(`${title} ${field(item,'subtitle')}`))||promotionPattern.test(normalizeSearch(`${title} ${field(item,'subtitle')} ${field(item,'subcategory')}`))||!['restauracio','comerc','horaris'].includes(sourceCategory);
+    if(activeCategory==='Horaris')return ['horaris','horarios','orari'].includes(sourceCategory)||['horaris','horarios','orari'].includes(sourceSubcategory);
+    if(activeCategory==='Restauració')return ['restauracio','restauracion','ristorazione'].includes(sourceCategory);
+    if(activeCategory==='Comerç')return ['comerc','comercio','commercio'].includes(sourceCategory);
+    return ['seguretat','seguridad','sicurezza'].includes(sourceCategory)||noticePattern.test(normalizeSearch(`${title} ${field(item,'subtitle')}`))||promotionPattern.test(normalizeSearch(`${title} ${field(item,'subtitle')} ${field(item,'subcategory')}`))||!['restauracio','restauracion','ristorazione','comerc','comercio','commercio','horaris','horarios','orari'].includes(sourceCategory);
   };
   const categoryNames=()=>catalogCategories;
+  const categoryLabel=name=>({ca:{'Més populars':'Més populars','Horaris':'Horaris','Restauració':'Restauració','Comerç':'Comerç','Altres':'Altres'},es:{'Més populars':'Más populares','Horaris':'Horarios','Restauració':'Restauración','Comerç':'Comercio','Altres':'Otros'},it:{'Més populars':'Più popolari','Horaris':'Orari','Restauració':'Ristorazione','Comerç':'Commercio','Altres':'Altro'}}[lang][name]||name);
   const categoryItems=()=>catalog.filter(categoryFor);
   const subcategoryNames=()=>[...new Set(categoryItems().map(item=>field(item,'subcategory')))].filter(Boolean);
 
   const posterMetadata=item=>{
     const title=field(item,'title'),subtitle=field(item,'subtitle');
-    return {title,description:subtitle||'Cartell editable i llest per imprimir'};
+    return {title,description:subtitle||tr('Cartell editable i llest per imprimir','Cartel editable y listo para imprimir','Cartello modificabile e pronto per la stampa')};
   };
 
   function renderFilters(){
     const categories=categoryNames();
     if(!categories.includes(activeCategory)) activeCategory=categories[0]||'';
-    categoryNav.innerHTML=categories.map(name=>`<button class="${name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${name===activeCategory}">${categoryIcon(name)}<span>${escapeHtml(name)}</span></button>`).join('');
+    categoryNav.innerHTML=categories.map(name=>`<button class="${name===activeCategory?'active':''}" data-category="${escapeHtml(name)}" aria-pressed="${name===activeCategory}">${categoryIcon(name)}<span>${escapeHtml(categoryLabel(name))}</span></button>`).join('');
     subcategoryNav.hidden=false;
     const subs=subcategoryNames();
     if(activeCategory==='Més populars')activeSubcategory='';else if(!subs.includes(activeSubcategory)) activeSubcategory=subs[0]||'';
@@ -133,14 +139,14 @@
   }
   function posterPreview(item){
     const title=field(item,'title'),subtitle=field(item,'subtitle');
-    return `<div class="poster-repository-preview" style="--poster-color:${item.color||'#e5372a'}"><div class="poster-card-icon">${iconMarkup(item.icon,item.image)}</div><strong>${escapeHtml(title)}</strong>${subtitle?`<small>${escapeHtml(subtitle)}</small>`:''}<span class="u-watermark">${es?'uncartel.es':'uncartell.cat'}</span></div>`;
+    return `<div class="poster-repository-preview" style="--poster-color:${item.color||'#e5372a'}"><div class="poster-card-icon">${iconMarkup(item.icon,item.image)}</div><strong>${escapeHtml(title)}</strong>${subtitle?`<small>${escapeHtml(subtitle)}</small>`:''}<span class="u-watermark">${publicHost}</span></div>`;
   }
   function renderCards(){
     const filtered=categoryItems().filter(item=>!activeSubcategory||field(item,'subcategory')===activeSubcategory);
-    const create=`<article class="poster-repository-card poster-create-card" data-create-card><div class="poster-repository-preview"><div class="poster-card-icon poster-create-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><strong>${es?'CREA UN CARTEL':'CREA UN CARTELL'}</strong></div><div class="poster-card-info"><div><strong>${es?'Crear cartel':'Crea un cartell'}</strong><small>${es?'Cartel editable y listo para imprimir':'Cartell editable i llest per imprimir'}</small></div></div><div class="poster-card-hover poster-create-hover"><button type="button" data-create-customize>${es?'Personaliza':'Personalitza'}</button></div></article>`;
+    const create=`<article class="poster-repository-card poster-create-card" data-create-card><div class="poster-repository-preview"><div class="poster-card-icon poster-create-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><strong>${tr('CREA UN CARTELL','CREA UN CARTEL','CREA UN CARTELLO')}</strong></div><div class="poster-card-info"><div><strong>${tr('Crea un cartell','Crear cartel','Crea un cartello')}</strong><small>${tr('Cartell editable i llest per imprimir','Cartel editable y listo para imprimir','Cartello modificabile e pronto per la stampa')}</small></div></div><div class="poster-card-hover poster-create-hover"><button type="button" data-create-customize>${tr('Personalitza','Personaliza','Personalizza')}</button></div></article>`;
     if(!filtered.length){grid.innerHTML=create;return}
-    grid.innerHTML=create+filtered.map(item=>{const meta=posterMetadata(item);return `<article class="poster-repository-card" data-poster-id="${item.id}">${posterPreview(item)}<div class="poster-card-info"><div><strong>${escapeHtml(meta.title)}</strong><small>${escapeHtml(meta.description)}</small></div><ul aria-label="Formats"><li>A4</li><li>PDF</li><li>Editable</li></ul></div><div class="poster-card-hover"><button type="button" data-card-download="${item.id}">${es?'Descarga':'Descarrega'}</button><button type="button" data-card-customize="${item.id}">${es?'Personaliza':'Personalitza'}</button></div></article>`}).join('');fitLegacyIconSvgs(grid);
-    const createPoster=()=>openEditor({id:'new',titleCa:'El teu títol',titleEs:'Tu título',subtitleCa:'Afegeix un subtítol',subtitleEs:'Añade un subtítulo',icon:'search',color:'#e5372a'});q('[data-create-card]').onclick=createPoster;q('[data-create-customize]').onclick=event=>{event.stopPropagation();createPoster()};
+    grid.innerHTML=create+filtered.map(item=>{const meta=posterMetadata(item);return `<article class="poster-repository-card" data-poster-id="${item.id}">${posterPreview(item)}<div class="poster-card-info"><div><strong>${escapeHtml(meta.title)}</strong><small>${escapeHtml(meta.description)}</small></div><ul aria-label="${tr('Formats','Formatos','Formati')}"><li>A4</li><li>PDF</li><li>${tr('Editable','Editable','Modificabile')}</li></ul></div><div class="poster-card-hover"><button type="button" data-card-download="${item.id}">${tr('Descarrega','Descarga','Scarica')}</button><button type="button" data-card-customize="${item.id}">${tr('Personalitza','Personaliza','Personalizza')}</button></div></article>`}).join('');fitLegacyIconSvgs(grid);
+    const createPoster=()=>openEditor({id:'new',titleCa:'El teu títol',titleEs:'Tu título',titleIt:'Il tuo titolo',subtitleCa:'Afegeix un subtítol',subtitleEs:'Añade un subtítulo',subtitleIt:'Aggiungi un sottotitolo',icon:'search',color:'#e5372a'});q('[data-create-card]').onclick=createPoster;q('[data-create-customize]').onclick=event=>{event.stopPropagation();createPoster()};
     qa('[data-card-download]').forEach(button=>button.onclick=event=>{event.stopPropagation();openEditor(catalog.find(item=>item.id===button.dataset.cardDownload),true);openDownloadDialog()});
     qa('[data-card-customize]').forEach(button=>button.onclick=event=>{event.stopPropagation();openEditor(catalog.find(item=>item.id===button.dataset.cardCustomize))});
     qa('[data-poster-id]').forEach(card=>card.onclick=()=>openEditor(catalog.find(item=>item.id===card.dataset.posterId)));
@@ -148,7 +154,7 @@
   function openEditor(item,keepCatalog=false){
     const normalizedStyle=['classic','modern','elegant'].includes(item.style)?item.style:'modern';
     const normalizedFont=normalizedStyle==='classic'?'EB Garamond':normalizedStyle==='elegant'?'Georgia':'Helvetica Neue';
-    current={...item,primary:item.primary||item.color||'#e5372a',secondary:item.secondary||'#343434',font:item.font||normalizedFont,style:normalizedStyle,logo:item.logo||null,logoPosition:item.logoPosition||'center',footer:item.footer??(es?'uncartel.es':'uncartell.cat')};
+    current={...item,primary:item.primary||item.color||'#e5372a',secondary:item.secondary||'#343434',font:item.font||normalizedFont,style:normalizedStyle,logo:item.logo||null,logoPosition:item.logoPosition||'center',footer:item.footer??publicHost};
     const savedKit=readBrandKit();if(plan==='ultra')Object.assign(current,{primary:savedKit.primary||current.primary,secondary:savedKit.secondary||current.secondary,logo:savedKit.logo||current.logo});
     style=current.style;font=current.font;catalogPage.hidden=true;editor.hidden=false;
     q('[data-title]').value=field(current,'title');q('[data-subtitle]').value=field(current,'subtitle');q('[data-color-primary]').value=current.primary;q('[data-color-secondary]').value=current.secondary;const kitPrimary=q('[data-kit-primary]'),kitSecondary=q('[data-kit-secondary]');if(kitPrimary)kitPrimary.value=current.primary;if(kitSecondary)kitSecondary.value=current.secondary;q('[data-footer-text]').value=current.footer;q('#posterProjectName').value=current.name||field(current,'title');
@@ -261,7 +267,7 @@
     kit.addEventListener('click',requestUltra,true);
   }
   function setupProjectsDialog(){
-    document.body.insertAdjacentHTML('beforeend',`<div class="poster-projects-dialog" data-projects-dialog hidden><div class="poster-projects-card"><button class="poster-projects-close" data-projects-close aria-label="${es?'Cerrar':'Tanca'}">×</button><p class="panel-kicker">${es?'PROYECTOS':'PROJECTES'}</p><h2>${es?'Tus carteles guardados':'Els teus cartells desats'}</h2><p>${es?'Abre, duplica o elimina un proyecto.':'Obre, duplica o elimina un projecte.'}</p><div class="poster-projects-list" data-projects-list></div></div></div>`);
+    document.body.insertAdjacentHTML('beforeend',`<div class="poster-projects-dialog" data-projects-dialog hidden><div class="poster-projects-card"><button class="poster-projects-close" data-projects-close aria-label="${tr('Tanca','Cerrar','Chiudi')}">×</button><p class="panel-kicker">${tr('PROJECTES','PROYECTOS','PROGETTI')}</p><h2>${tr('Els teus cartells desats','Tus carteles guardados','I tuoi cartelli salvati')}</h2><p>${tr('Obre, duplica o elimina un projecte.','Abre, duplica o elimina un proyecto.','Apri, duplica o elimina un progetto.')}</p><div class="poster-projects-list" data-projects-list></div></div></div>`);
     q('[data-projects-close]').onclick=closeProjectsDialog;
     q('[data-projects-dialog]').onclick=event=>{if(event.target===q('[data-projects-dialog]'))closeProjectsDialog()};
   }
@@ -280,7 +286,7 @@
   function projectTitle(project){return project[`title${es?'Es':'Ca'}`]||project.title||project.name||''}
   function renderPosterProjects(){
     const projects=storedPosterProjects();
-    q('[data-projects-list]').innerHTML=projects.length?projects.map(project=>`<article class="poster-project-row"><div><strong>${escapeHtml(project.name||projectTitle(project)||(es?'Cartel sin título':'Cartell sense títol'))}</strong><small>${project.savedAt?new Date(project.savedAt).toLocaleDateString(es?'es-ES':'ca-ES'):''}</small></div><div class="poster-project-actions"><button type="button" data-project-open="${escapeHtml(project.projectId||project.id)}">${es?'Abrir':'Obre'}</button><button type="button" data-project-duplicate="${escapeHtml(project.projectId||project.id)}">${es?'Duplicar':'Duplica'}</button><button type="button" class="danger" data-project-delete="${escapeHtml(project.projectId||project.id)}">${es?'Eliminar':'Elimina'}</button></div></article>`).join(''):`<p class="poster-projects-empty">${es?'Todavía no tienes carteles guardados.':'Encara no tens cartells desats.'}</p>`;
+    q('[data-projects-list]').innerHTML=projects.length?projects.map(project=>`<article class="poster-project-row"><div><strong>${escapeHtml(project.name||projectTitle(project)||tr('Cartell sense títol','Cartel sin título','Cartello senza titolo'))}</strong><small>${project.savedAt?new Date(project.savedAt).toLocaleDateString({ca:'ca-ES',es:'es-ES',it:'it-IT'}[lang]):''}</small></div><div class="poster-project-actions"><button type="button" data-project-open="${escapeHtml(project.projectId||project.id)}">${tr('Obre','Abrir','Apri')}</button><button type="button" data-project-duplicate="${escapeHtml(project.projectId||project.id)}">${tr('Duplica','Duplicar','Duplica')}</button><button type="button" class="danger" data-project-delete="${escapeHtml(project.projectId||project.id)}">${tr('Elimina','Eliminar','Elimina')}</button></div></article>`).join(''):`<p class="poster-projects-empty">${tr('Encara no tens cartells desats.','Todavía no tienes carteles guardados.','Non hai ancora cartelli salvati.')}</p>`;
     qa('[data-project-open]').forEach(button=>button.onclick=()=>{const project=storedPosterProjects().find(item=>(item.projectId||item.id)===button.dataset.projectOpen);if(!project)return;closeProjectsDialog();openEditor(project)});
     qa('[data-project-duplicate]').forEach(button=>button.onclick=()=>{const projects=storedPosterProjects(),original=projects.find(item=>(item.projectId||item.id)===button.dataset.projectDuplicate);if(!original)return;const copy=JSON.parse(JSON.stringify(original));copy.projectId=`poster-${Date.now()}`;copy.id=copy.projectId;copy.name=`${original.name||projectTitle(original)} · ${es?'Copia':'Còpia'}`;copy.savedAt=Date.now();projects.unshift(copy);localStorage.setItem(PROJECT_KEY,JSON.stringify(projects.slice(0,30)));renderPosterProjects();toast(es?'Proyecto duplicado':'Projecte duplicat')});
     qa('[data-project-delete]').forEach(button=>button.onclick=()=>{const project=storedPosterProjects().find(item=>(item.projectId||item.id)===button.dataset.projectDelete);if(!project||!confirm(es?`¿Eliminar “${project.name||projectTitle(project)}”?`:`Vols eliminar “${project.name||projectTitle(project)}”?`))return;localStorage.setItem(PROJECT_KEY,JSON.stringify(storedPosterProjects().filter(item=>(item.projectId||item.id)!==button.dataset.projectDelete)));renderPosterProjects()});
@@ -299,5 +305,10 @@
   qa('[data-open-poster-projects]').forEach(button=>button.onclick=()=>{if(!paid()){window.UncartellPlatform?.openUpgradeModal?.();return}openProjectsDialog()});q('[data-download]').onclick=event=>{event.stopPropagation();openDownloadDialog()};
   window.addEventListener('uncartell:plan',event=>{plan=event.detail?.plan||window.UncartellPlatform?.getPlan?.()||'basic';applyPlan();updatePreview()});
   renderFilters();renderCards();
-  (async()=>{try{const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data:rows,error}=await supabase.from('poster_icon_overrides').select('payload');if(error||!rows?.length)return;const overrides=new Map(rows.map(row=>[row.payload.id,row.payload]));catalog=catalog.map(item=>upgradeItem(overrides.get(item.id)||item));for(const row of rows)if(!catalog.some(item=>item.id===row.payload.id)&&row.payload.active!==false)catalog.push(upgradeItem(row.payload));catalog=catalog.filter(item=>item.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));rows.forEach(({payload})=>{const title=`${payload.titleCa||''} ${payload.titleEs||''}`.toLowerCase();if(payload.customSvg&&!title.includes('ascensor')&&!title.includes('ascensor'))icons[payload.icon]=payload.customSvg.markup});localStorage.setItem(CATALOG_KEY,JSON.stringify(catalog));renderFilters();renderCards()}catch(error){console.warn('Icon cloud sync',error)}})();
+  window.UncartellSystemContent?.loadPosterCatalog(document.documentElement.lang||'ca').then(rows=>{
+    if(!rows)return;
+    catalog=rows.map(upgradeIconItem);
+    renderFilters();renderCards();
+  }).catch(error=>console.error('Poster template catalog',error));
+  if(window.UncartellSystemContent?.mode==='local')(async()=>{try{const supabase=window.UncartellPlatform?.getSupabase?.();if(!supabase)return;const {data:rows,error}=await supabase.from('poster_icon_overrides').select('payload');if(error||!rows?.length)return;const overrides=new Map(rows.map(row=>[row.payload.id,row.payload]));catalog=catalog.map(item=>upgradeItem(overrides.get(item.id)||item));for(const row of rows)if(!catalog.some(item=>item.id===row.payload.id)&&row.payload.active!==false)catalog.push(upgradeItem(row.payload));catalog=catalog.filter(item=>item.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));rows.forEach(({payload})=>{const title=`${payload.titleCa||''} ${payload.titleEs||''}`.toLowerCase();if(payload.customSvg&&!title.includes('ascensor'))icons[payload.icon]=payload.customSvg.markup});localStorage.setItem(CATALOG_KEY,JSON.stringify(catalog));renderFilters();renderCards()}catch(error){console.warn('Legacy icon cloud sync',error)}})();
 })();

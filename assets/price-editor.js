@@ -1723,7 +1723,7 @@
     "price-a3-portrait": { icon: "portrait" },
     "price-a3-landscape": { icon: "landscape" }
   };
-  const pickerTemplates = [
+  let pickerTemplates = [
     { name: "Plantilla genèrica", detail: "Una base neta i totalment editable.", accent: "#5b9e62", blank: true }
   ];
   const visiblePickerTemplates = () => pickerTemplates;
@@ -1777,6 +1777,11 @@
 
   window.openPriceEditor = openEditor;
   renderTemplatePicker();
+  window.UncartellSystemContent?.loadEditorTemplates('services',L.lang).then(rows=>{
+    if(!rows)return;
+    pickerTemplates=rows;
+    renderTemplatePicker();
+  }).catch(error=>{console.error('Editor template catalog',error);toast(L.genericError||'No s’han pogut carregar les plantilles.')});
   const requestedFormat = new URLSearchParams(location.search).get("format");
   if (L.formats.some(item => item.id === requestedFormat)) openEditor(requestedFormat);
   $("#formatGrid").addEventListener("click", event => {

@@ -1703,7 +1703,7 @@
     "a3-landscape": { detail: "Diverses pàgines, estil llibret", icon: "booklet" },
     "mobile-interactive": { detail: "Web responsive per compartir amb QR", icon: "mobile" }
   };
-  const pickerTemplates = [
+  let pickerTemplates = [
     { name: "Plantilla genèrica", detail: "Una base neta i totalment editable.", accent: "#e5372a", blank: true }
   ];
   const visiblePickerTemplates = () => pickerTemplates;
@@ -1772,6 +1772,11 @@
   }
 
   renderTemplatePicker();
+  window.UncartellSystemContent?.loadEditorTemplates('menu',L.lang).then(rows=>{
+    if(!rows)return;
+    pickerTemplates=rows;
+    renderTemplatePicker();
+  }).catch(error=>{console.error('Editor template catalog',error);toast(L.genericError||'No s’han pogut carregar les plantilles.')});
   const requestedFormat = new URLSearchParams(window.location.search).get("format");
   if (requestedFormat && L.formats.some(format => format.id === requestedFormat)) {
     openEditor(requestedFormat);
