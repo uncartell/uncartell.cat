@@ -56,9 +56,9 @@ def prepare_metadata(content, locale, ca_slug):
     content = replace_meta(content, "property", "og:description", localized_description)
     content = replace_meta(content, "property", "og:url", canonical)
     content = replace_meta(content, "property", "og:image", f"https://{DOMAINS[locale]}/og-uncartell-cat.jpg")
-    # All three market domains are public. The temporary Pages host remains
-    # blocked at the Worker layer below.
-    robots = "index,follow,max-image-preview:large"
+    # IT remains publicly reachable for QA but non-indexable until its final
+    # language and functional validation passes.
+    robots = "noindex,nofollow" if locale == "it" else "index,follow,max-image-preview:large"
     content = re.sub(
         r'<meta\s+name=["\']robots["\']\s+content=["\'].*?["\']\s*/?>',
         f'<meta name="robots" content="{robots}">', content, count=1, flags=re.I,
@@ -94,7 +94,7 @@ for locale in ("ca", "es", "it"):
 # Generate clean sitemaps for the active market domains and exclude
 # admin/account surfaces.
 sitemap_excluded = {"admin", "ultra"}
-for locale in ("ca", "es", "it"):
+for locale in ("ca", "es"):
     sitemap_urls = [
         public_url(locale, ca_slug)
         for ca_slug in ROUTES[locale]
@@ -105,6 +105,8 @@ for locale in ("ca", "es", "it"):
     sitemap += ''.join(f'  <url><loc>{escape(url)}</loc></url>\n' for url in sitemap_urls)
     sitemap += '</urlset>\n'
     (OUT / locale / "sitemap.xml").write_text(sitemap)
+
+(OUT / "it" / "sitemap.xml").unlink(missing_ok=True)
 
 (OUT / "robots.txt").write_text("User-agent: *\nDisallow: /\n")
 (OUT / "_headers").write_text(
@@ -170,7 +172,7 @@ export default {
         });
       }
       const publicHost = url.hostname.toLowerCase().replace(/^www\./, "");
-      if (publicHost === "uncartell.cat" || publicHost === "uncartel.es" || publicHost === "uncartello.it") {
+      if (publicHost === "uncartell.cat" || publicHost === "uncartel.es") {
         return new Response(`User-agent: *\nAllow: /\nSitemap: https://${publicHost}/sitemap.xml\n`, {
           headers: { "content-type": "text/plain; charset=utf-8" }
         });
@@ -187,7 +189,7 @@ export default {
     // This flag is switched only during the later public activation phase.
     // Keep only the temporary Pages hostname out of search engines. The
     // definitive custom domains must remain indexable once they are attached.
-    if (route.preview) headers.set("X-Robots-Tag", "noindex, nofollow");
+    if (route.preview || url.hostname.toLowerCase().replace(/^www\./, "") === "uncartello.it") headers.set("X-Robots-Tag", "noindex, nofollow");
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
 };

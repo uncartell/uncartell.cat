@@ -19,12 +19,20 @@
     document.documentElement.dataset[area==='posters'?'posterContentStatus':'editorTemplateStatus']=`${value.state}${value.count===null?'':`:${value.count}`}`;
   };
   const locale=value=>VALID_LOCALES.has(value)?value:'ca';
-  const query=async(table,columns)=>{
-    const platform=window.UncartellPlatform;
-    await platform?.whenReady?.();
-    const supabase=platform?.getSupabase?.();
-    if(!supabase)throw new Error('Supabase is not available');
-    const {data,error}=await supabase.from(table).select(columns);
+  const publicClient=async()=>{
+    const deadline=Date.now()+10000;
+    while(Date.now()<deadline){
+      const supabase=window.UncartellPlatform?.getSupabase?.();
+      if(supabase)return supabase;
+      await new Promise(resolve=>setTimeout(resolve,25));
+    }
+    throw new Error('Supabase public client is not available');
+  };
+  const query=async(table,columns,filters={})=>{
+    const supabase=await publicClient();
+    let request=supabase.from(table).select(columns);
+    Object.entries(filters).forEach(([column,value])=>{request=request.eq(column,value)});
+    const {data,error}=await request;
     if(error)throw error;
     return data||[];
   };
@@ -35,10 +43,10 @@
     publishStatus('posters',{source,state:'loading',count:null,locale:activeLocale});
     try{
       const [parents,translations,terms,termTranslations]=await Promise.all([
-        query('poster_templates','id,icon_key,custom_svg,primary_color,secondary_color,category_id,subcategory_id,required_plan,configuration,sort_order,is_featured,is_active'),
-        query('poster_template_translations','template_id,locale,title,subtitle,status'),
-        query('taxonomy_terms','id,kind,sort_order,is_active'),
-        query('taxonomy_term_translations','term_id,locale,label,status')
+        query('poster_templates','id,icon_key,custom_svg,primary_color,secondary_color,category_id,subcategory_id,required_plan,configuration,sort_order,is_featured,is_active',{is_active:true}),
+        query('poster_template_translations','template_id,locale,title,subtitle,status',{locale:activeLocale,status:'published'}),
+        query('taxonomy_terms','id,kind,sort_order,is_active',{is_active:true}),
+        query('taxonomy_term_translations','term_id,locale,label,status',{locale:activeLocale,status:'published'})
       ]);
       const copy=new Map(translations.filter(row=>row.locale===activeLocale&&row.status==='published').map(row=>[row.template_id,row]));
       const labels=new Map(termTranslations.filter(row=>row.locale===activeLocale&&row.status==='published').map(row=>[row.term_id,row.label]));
