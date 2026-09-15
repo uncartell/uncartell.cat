@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parent
 # copy of the current `main` branch.
 SOURCE = ROOT / "current-source"
 OUT = ROOT / "localized-preview"
-PREVIEW_ASSET_VERSION = "italian-runtime-qa-20260915-v15"
+PREVIEW_ASSET_VERSION = "logo-home-click-root-20260915-v20"
 
 REQUIRED_CURRENT_FILES = (
     "index.html",
