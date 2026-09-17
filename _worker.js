@@ -20,6 +20,12 @@ function isPagesPreview(hostname) {
   return hostname === "uncartell-cat.pages.dev" || hostname.endsWith(".uncartell-cat.pages.dev");
 }
 
+function needsPublicTrailingSlash(pathname, hostname) {
+  if (isPagesPreview(hostname) || pathname === "/" || pathname.endsWith("/")) return false;
+  if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) return false;
+  return !pathname.split("/").pop().includes(".");
+}
+
 function localePath(pathname, hostname) {
   const preview = isPagesPreview(hostname);
   if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) {
@@ -45,8 +51,16 @@ function localePath(pathname, hostname) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const route = localePath(url.pathname, url.hostname.toLowerCase());
+    const hostname = url.hostname.toLowerCase();
+    const route = localePath(url.pathname, hostname);
     if (route.blocked) return new Response("Not found", { status: 404 });
+
+    // Normalize the public URL before rewriting it to /ca, /es or /it.
+    // Otherwise Pages exposes the internal locale directory in its redirect.
+    if (needsPublicTrailingSlash(url.pathname, hostname)) {
+      url.pathname = `${url.pathname}/`;
+      return Response.redirect(url.toString(), 308);
+    }
 
     if (url.pathname === "/robots.txt") {
       if (route.preview) {
