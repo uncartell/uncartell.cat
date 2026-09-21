@@ -479,9 +479,14 @@
     if(!segment||!domain)throw new Error(words.publishError||'La publicació no s’ha confirmat.');
     return new URL(`/${segment}/${encodeURIComponent(String(slug))}/`,`https://${domain}`).href;
   }
+  function publishedQrPath(){
+    if(!['uncartell.cat','uncartel.es','uncartello.it'].includes(requestedHost))return cfg.qrPath;
+    const localizedPath=localeConfig?.routePath?.('qr',lang)||cfg.qrPath;
+    return localizedPath.replace(/^\/(?:ca|es|it)(?=\/|$)/,'')||'/';
+  }
   function publishedQrUrl(publicUrl,name=''){
     if(!validPublicUrl(publicUrl))throw new Error(words.publishError||'La publicació no s’ha confirmat.');
-    const target=new URL(cfg.qrPath,location.origin);
+    const target=new URL(publishedQrPath(),location.origin);
     target.searchParams.set('url',publicUrl);
     target.searchParams.set('source','publication');
     target.searchParams.set('generate','1');
@@ -602,6 +607,6 @@
     if(currentProfile?.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date())return 'premium';
     return getPlan();
   }
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,publicDocumentUrl,publishedQrUrl,openQrForPublishedUrl,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,downloadFormatAccess,canDownloadFormat(format){return downloadFormatAccess(format).allowed},canDownload(){return getEntitlementPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getEntitlementPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,getEntitlementPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,publicDocumentUrl,publishedQrPath,publishedQrUrl,openQrForPublishedUrl,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,downloadFormatAccess,canDownloadFormat(format){return downloadFormatAccess(format).allowed},canDownload(){return getEntitlementPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getEntitlementPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,getEntitlementPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();

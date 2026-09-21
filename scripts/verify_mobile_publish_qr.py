@@ -23,8 +23,14 @@ EXPECTED_CHANGED = {
     "assets/poster-editor.css",
     "assets/posters.js",
     "ca/cartells/index.html",
+    "ca/cartes-i-menus/index.html",
+    "ca/taules-de-preus/index.html",
     "es/carteles/index.html",
+    "es/cartas-y-menus/index.html",
+    "es/tablas-de-precios/index.html",
     "it/cartelli/index.html",
+    "it/menu-e-carte/index.html",
+    "it/listini-prezzi/index.html",
 }
 RELEASE_BASELINE = "ceb222efdcdcd1ef16ef6ef622eb407abc5142e0"
 
@@ -61,6 +67,8 @@ def main() -> int:
     require(platform, "target.searchParams.set('url',publicUrl)", "encoded URL handoff")
     require(platform, "target.searchParams.set('source','publication')", "publication handoff marker")
     require(platform, "openQrForPublishedUrl", "central navigation helper")
+    require(platform, "function publishedQrPath()", "public QR route helper")
+    require(platform, "localizedPath.replace(/^\\/(?:ca|es|it)(?=\\/|$)/,'')", "public locale-prefix removal")
     require(menu, "openQrForPublishedUrl(published.url,state.projectName||slug)", "menu button wiring")
     require(prices, "openQrForPublishedUrl(published.url,state.projectName||slug)", "price button wiring")
     require(qr, "incomingParams.get('source')==='publication'", "generator publication detection")
