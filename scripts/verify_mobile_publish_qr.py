@@ -22,6 +22,9 @@ EXPECTED_CHANGED = {
     # poster-watermark card correction in the same binary artifact.
     "assets/poster-editor.css",
     "assets/posters.js",
+    "ca/cartells/index.html",
+    "es/carteles/index.html",
+    "it/cartelli/index.html",
 }
 RELEASE_BASELINE = "ceb222efdcdcd1ef16ef6ef622eb407abc5142e0"
 
