@@ -464,6 +464,34 @@
     if(value&&typeof value==='object')return Object.fromEntries(await Promise.all(Object.entries(value).map(async([key,item])=>[key,await persistUploadedData(item)])));
     return value;
   }
+  const publicDocumentSegments={
+    ca:{menu:'carta',services:'serveis'},
+    es:{menu:'carta',services:'servicios'},
+    // Public-document routing currently uses the shared `servicios` segment
+    // for Italian service lists too. Keep that existing contract here.
+    it:{menu:'carta',services:'servicios'}
+  };
+  const validPublicUrl=value=>{try{return ['http:','https:'].includes(new URL(value).protocol)}catch(_){return false}};
+  function publicDocumentUrl(kind,slug,locale=lang){
+    const targetLocale=publicDocumentSegments[locale]?locale:'ca';
+    const segment=publicDocumentSegments[targetLocale][kind];
+    const domain=localeConfig?.market?.(targetLocale)?.domain||market.domain;
+    if(!segment||!domain)throw new Error(words.publishError||'La publicació no s’ha confirmat.');
+    return new URL(`/${segment}/${encodeURIComponent(String(slug))}/`,`https://${domain}`).href;
+  }
+  function publishedQrUrl(publicUrl,name=''){
+    if(!validPublicUrl(publicUrl))throw new Error(words.publishError||'La publicació no s’ha confirmat.');
+    const target=new URL(cfg.qrPath,location.origin);
+    target.searchParams.set('url',publicUrl);
+    target.searchParams.set('source','publication');
+    target.searchParams.set('generate','1');
+    target.searchParams.set('save','1');
+    if(name)target.searchParams.set('name',name);
+    return target.href;
+  }
+  function openQrForPublishedUrl(publicUrl,name=''){
+    location.assign(publishedQrUrl(publicUrl,name));
+  }
   async function publishDocument({kind,slug,payload}){
     await authReady;
     if(!supabaseClient||!currentUser)throw new Error(words.authError);
@@ -478,7 +506,8 @@
     const {data:verified,error:verifyError}=await supabaseClient.rpc('get_public_document',{p_locale:lang,p_kind:kind,p_slug:slug});
     if(verifyError)throw verifyError;
     if(!(Array.isArray(verified)?verified.length:verified))throw new Error(words.publishError||'La publicació no s’ha confirmat.');
-    return {...published,url:`${location.origin}/${kind==='menu'?'carta':(lang==='ca'?'serveis':'servicios')}/${slug}/`};
+    const returnedUrl=published.public_url||published.url;
+    return {...published,url:validPublicUrl(returnedUrl)?returnedUrl:publicDocumentUrl(kind,slug)};
   }
   async function checkDocumentSlug(kind,slug){
     await authReady;
@@ -573,6 +602,6 @@
     if(currentProfile?.plan==='premium'&&currentProfile.premium_until&&new Date(currentProfile.premium_until)>new Date())return 'premium';
     return getPlan();
   }
-  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,downloadFormatAccess,canDownloadFormat(format){return downloadFormatAccess(format).allowed},canDownload(){return getEntitlementPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getEntitlementPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,getEntitlementPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
+  window.UncartellPlatform={lang,cfg,words,getQuota:()=>quota,getUser:()=>supportContext?{id:supportContext.user_id,email:supportContext.email}:currentUser,getProfile:()=>supportContext||currentProfile,getSupportContext:()=>supportContext,getSupabase:()=>supabaseClient,whenReady:()=>authReady,submitMailboxForm,publishDocument,publicDocumentUrl,publishedQrUrl,openQrForPublishedUrl,checkDocumentSlug,deletePublishedDocument,listUserProjects,saveUserProject,deleteUserProject,syncProjectStore,downloadFormatAccess,canDownloadFormat(format){return downloadFormatAccess(format).allowed},canDownload(){return getEntitlementPlan()!=='basic'||remainingDownloads()>0},consumeDownload(options={}){if(getEntitlementPlan()==='basic'){if(remainingDownloads()<=0){openUpgradeModal();return false}quota.count=Math.min(max,quota.count+1);localStorage.setItem(quotaKey,JSON.stringify(quota));renderQuota()}if(options.reload!==false)location.reload();return true},getPlan,getEntitlementPlan,setPlan,openAccount,openUpgradeModal,requestBasicDowngrade,activatePremium,async switchToBasic(){if(supportContext)throw new Error('Action disabled during support impersonation');if(currentUser&&supabaseClient){const {error}=await supabaseClient.rpc('switch_to_basic');if(error)throw error}setPlan('basic')}};
   setPlan(getPlan());renderQuota();initAuth();
 })();
