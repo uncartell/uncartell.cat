@@ -18,7 +18,12 @@ EXPECTED_CHANGED = {
     "assets/menu-editor.js",
     "assets/price-editor.js",
     "assets/qr-generator.js",
+    # The production release also includes the independently validated
+    # poster-watermark card correction in the same binary artifact.
+    "assets/poster-editor.css",
+    "assets/posters.js",
 }
+RELEASE_BASELINE = "ceb222efdcdcd1ef16ef6ef622eb407abc5142e0"
 
 
 def decode(data: bytes) -> dict[str, bytes]:
@@ -38,7 +43,7 @@ def require(text: str, fragment: str, label: str) -> None:
 
 def main() -> int:
     candidate = decode((ROOT / ARTIFACT).read_bytes())
-    baseline = decode(git_file("HEAD", ARTIFACT))
+    baseline = decode(git_file(RELEASE_BASELINE, ARTIFACT))
     changed = {name for name in candidate.keys() | baseline.keys() if candidate.get(name) != baseline.get(name)}
     if changed != EXPECTED_CHANGED:
         raise AssertionError(f"Unexpected extracted diff: {sorted(changed)}")
