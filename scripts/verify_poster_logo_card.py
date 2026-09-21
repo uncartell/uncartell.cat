@@ -21,5 +21,9 @@ assert ".poster-logo-tool{position:relative;min-width:0;overflow:hidden;border:1
 assert ".poster-logo-badge{position:static;margin-left:auto}" in styles
 assert ".poster-logo-tool.is-locked .poster-logo-controls{opacity:.42;pointer-events:none}" in styles
 assert "grid-template-columns:repeat(3,minmax(0,1fr))" in styles
+assert "grid-template-columns:minmax(0,1fr) auto" in styles
+assert "font-size:11px!important" in styles
+assert "background:#181a1b!important" in styles
+assert ".poster-logo-tool.is-locked,.poster-footer-style-card.is-locked" in styles
 
 print("Verified boxed poster logo module with integrated Ultra badge")
