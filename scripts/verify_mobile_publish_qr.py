@@ -31,8 +31,14 @@ EXPECTED_CHANGED = {
     "es/cartas-y-menus/index.html",
     "es/tablas-de-precios/index.html",
     "it/cartelli/index.html",
+    "it/contatti/index.html",
+    "it/cookie/index.html",
+    "it/domande-frequenti/index.html",
     "it/menu-e-carte/index.html",
     "it/listini-prezzi/index.html",
+    "it/manifesto/index.html",
+    "it/note-legali/index.html",
+    "it/privacy/index.html",
 }
 RELEASE_BASELINE = "ceb222efdcdcd1ef16ef6ef622eb407abc5142e0"
 

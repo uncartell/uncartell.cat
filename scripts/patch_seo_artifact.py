@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "pre-v1.2/cloudflare-dist-upload-20260915-logo-home-v21-flat.bin"
 XOR_KEY = 0xA5
-EXPECTED_TITLES = {
+EXPECTED_RUNTIME_TITLES = {
     "ca/cartes-i-menus/index.html": "Creador de cartes i menús | uncartell.cat",
     "ca/taules-de-preus/index.html": "Creador de taules de preus | uncartell.cat",
     "es/cartas-y-menus/index.html": "Creador de cartas y menús | uncartel.es",
@@ -27,6 +27,15 @@ EXPECTED_TITLES = {
     "it/menu-e-carte/index.html": "Creatore di menu e carte | uncartello.it",
     "it/listini-prezzi/index.html": "Creatore di listini prezzi | uncartello.it",
 }
+EXPECTED_STATIC_TITLES = {
+    "it/contatti/index.html": "Contatti | uncartello.it",
+    "it/cookie/index.html": "Informativa sui cookie | uncartello.it",
+    "it/domande-frequenti/index.html": "Domande frequenti | uncartello.it",
+    "it/manifesto/index.html": "Manifesto | uncartello.it",
+    "it/note-legali/index.html": "Note legali | uncartello.it",
+    "it/privacy/index.html": "Informativa sulla privacy | uncartello.it",
+}
+EXPECTED_TITLES = EXPECTED_RUNTIME_TITLES | EXPECTED_STATIC_TITLES
 ALLOWED_CHANGES = set(EXPECTED_TITLES) | {"_worker.js"}
 
 
@@ -61,18 +70,20 @@ for relative_path, expected_title in EXPECTED_TITLES.items():
         html,
         f"og:title in {relative_path}",
     )
-    html = replace_once(
-        r'(window\.UNCARTELL_LOCALE\s*=\s*\{.*?"title":")[^"]*(")',
-        rf"\g<1>{expected_title}\g<2>",
-        html,
-        f"runtime title in {relative_path}",
-    )
+    if relative_path in EXPECTED_RUNTIME_TITLES:
+        html = replace_once(
+            r'(window\.UNCARTELL_LOCALE\s*=\s*\{.*?"title":")[^"]*(")',
+            rf"\g<1>{expected_title}\g<2>",
+            html,
+            f"runtime title in {relative_path}",
+        )
     updated[relative_path] = html.encode("utf-8")
 
 updated["_worker.js"] = (ROOT / "_worker.js").read_bytes()
 changed = {name for name in original if digest(original[name]) != digest(updated[name])}
-if changed != ALLOWED_CHANGES:
-    raise SystemExit(f"Unexpected archive changes: {sorted(changed ^ ALLOWED_CHANGES)}")
+unexpected = changed - ALLOWED_CHANGES
+if unexpected:
+    raise SystemExit(f"Unexpected archive changes: {sorted(unexpected)}")
 
 output = io.BytesIO()
 with zipfile.ZipFile(output, "w") as target:

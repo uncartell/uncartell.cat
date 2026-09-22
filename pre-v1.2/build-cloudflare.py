@@ -29,6 +29,12 @@ SEO_TITLES = {
     ("es", "taules-de-preus"): "Creador de tablas de precios | uncartel.es",
     ("it", "cartes-i-menus"): "Creatore di menu e carte | uncartello.it",
     ("it", "taules-de-preus"): "Creatore di listini prezzi | uncartello.it",
+    ("it", "contacte"): "Contatti | uncartello.it",
+    ("it", "cookies"): "Informativa sui cookie | uncartello.it",
+    ("it", "faqs"): "Domande frequenti | uncartello.it",
+    ("it", "manifest"): "Manifesto | uncartello.it",
+    ("it", "legal"): "Note legali | uncartello.it",
+    ("it", "privacitat"): "Informativa sulla privacy | uncartello.it",
 }
 ROUTES = {
     "ca": {"": "", "cartells": "cartells", "cartes-i-menus": "cartes-i-menus", "taules-de-preus": "taules-de-preus", "codis-qr": "codis-qr", "plans": "plans", "ultra": "ultra", "faqs": "faqs", "manifest": "manifest", "contacte": "contacte", "legal": "legal", "privacitat": "privacitat", "cookies": "cookies", "admin": "admin"},
