@@ -32,12 +32,15 @@ POSTER_PAGES = (
 
 with zipfile.ZipFile(BytesIO(bytes(byte ^ 0xA5 for byte in PACKAGE.read_bytes()))) as bundle:
     styles = bundle.read("assets/poster-editor.css").decode()
+    posters = bundle.read("assets/posters.js").decode()
     tool_rail = bundle.read("assets/editor-tool-rail.js").decode()
     menu_editor = bundle.read("assets/menu-editor.js").decode()
 
     assert ".poster-kit-body input[type=file]{position:absolute" in styles
     assert ".poster-kit-body input{position:absolute" not in styles
     assert ".poster-logo-tool:not(.is-locked) .poster-logo-badge{display:none!important}" in styles
+    assert "projectName.value=unlocked&&current?(current.name||field(current,'title')):''" in posters
+    assert "projectName.value=unlocked?(current?.name||field(current,'title')):''" not in posters
     assert "if (addedControl) moveLogoControl(addedControl);" in tool_rail
     assert "logoHost.replaceChildren();" not in tool_rail
     assert "function logoInspector(page)" in menu_editor
