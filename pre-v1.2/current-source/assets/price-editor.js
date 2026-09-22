@@ -716,7 +716,8 @@
     }
     const block = page.blocks.find(item => item.id === state.selectedBlock);
     if (!block) {
-      box.innerHTML = `<p class="empty-inspector">${L.inspector.empty}</p>`;
+      box.innerHTML = `<p class="empty-inspector">${L.inspector.empty}</p>${logoInspector(page)}`;
+      wirePageLogo(page, box);
       return;
     }
     const typeLabel = L.blockTypes.find(item => item.id === block.type)?.label ?? block.type;
@@ -1182,7 +1183,7 @@
       menu.innerHTML = `<div class="back-content">${brandLogoMarkup(page, "back")}${editable("title", page.title, "back-title")}${editable("body", page.body, "back-body", true)}</div>${allergenLegend()}${brandedFooter(page)}${watermark()}`;
     } else {
       const priceHeader = state.format.startsWith("price-a3-") ? `<header class="price-list-header ${state.priceHeader?.image ? "has-image" : ""} text-${state.priceHeader?.textColor || "white"}" data-price-header role="button" tabindex="0" aria-label="${escapeHtml(L.lang === "ca" ? "Canvia la imatge de capçalera" : "Cambia la imagen de cabecera")}" ${state.priceHeader?.image ? `style="background-image:url('${state.priceHeader.image}')"` : ""}><span class="price-list-title inline-editable" data-inline-field="priceHeaderTitle" data-multiline="false" contenteditable="true" spellcheck="true">${priceHeaderTitleMarkup(state.priceHeader?.title || L.defaults.coverTitle)}</span><span class="price-header-edit-hint">${escapeHtml(L.lang === "ca" ? "Canvia la imatge" : "Cambia la imagen")}</span></header>` : "";
-      menu.innerHTML = `${priceHeader}${blocksLayout(page)}${page.showAllergenLegend ? allergenLegend() : ""}${brandedFooter(page)}${watermark()}`;
+      menu.innerHTML = `${priceHeader}${brandLogoMarkup(page)}${blocksLayout(page)}${page.showAllergenLegend ? allergenLegend() : ""}${brandedFooter(page)}${watermark()}`;
       $$("[data-block]", menu).forEach(node => node.addEventListener("click", () => {
         state.selectedBlock = node.dataset.block;
         renderInspector(); renderPage();
@@ -1372,7 +1373,7 @@
     else if (page.role === "mobile-section") content = `<div class="mobile-section-head" id="mobile-${escapeHtml(page.key)}"><a class="mobile-home-button" href="#mobile-home" aria-label="${escapeHtml(L.mobileHome)}"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></a><span>${escapeHtml(page.title)}</span></div>${blocksLayout(page, staticBlockHtml)}`;
     else if (page.role === "cover") content = `<div class="cover-content"><div class="cover-kicker">${escapeHtml(state.plan === "ultra" && state.brandKit.businessName ? state.brandKit.businessName : page.restaurant)}</div><div class="cover-title${textLengthClass(page.title)}">${escapeHtml(page.title)}</div><div class="cover-subtitle${textLengthClass(page.subtitle)}">${escapeHtml(page.subtitle)}</div><span class="cover-rule"></span>${brandLogoMarkup(page, page.side === "back" ? "back" : "cover", true)}</div>`;
     else if (page.role === "back") content = `<div class="back-content">${brandLogoMarkup(page, "back", true)}<div class="back-title${textLengthClass(page.title)}">${escapeHtml(page.title)}</div><div class="back-body${textLengthClass(page.body)}">${escapeHtml(page.body)}</div></div>${allergenLegend()}`;
-    else content = `${state.format.startsWith("price-a3-") ? `<header class="price-list-header ${state.priceHeader?.image ? "has-image" : ""} text-${state.priceHeader?.textColor || "white"}" ${state.priceHeader?.image ? `style="background-image:url('${state.priceHeader.image}')"` : ""}><div class="price-list-title">${priceHeaderTitleMarkup(state.priceHeader?.title || L.defaults.coverTitle)}</div></header>` : ""}${blocksLayout(page, staticBlockHtml)}${page.showAllergenLegend ? allergenLegend() : ""}`;
+    else content = `${state.format.startsWith("price-a3-") ? `<header class="price-list-header ${state.priceHeader?.image ? "has-image" : ""} text-${state.priceHeader?.textColor || "white"}" ${state.priceHeader?.image ? `style="background-image:url('${state.priceHeader.image}')"` : ""}><div class="price-list-title">${priceHeaderTitleMarkup(state.priceHeader?.title || L.defaults.coverTitle)}</div></header>` : ""}${brandLogoMarkup(page, "cover", true)}${blocksLayout(page, staticBlockHtml)}${page.showAllergenLegend ? allergenLegend() : ""}`;
     content += brandedFooter(page);
     const pageIndex = state.pages.indexOf(page);
     return `<div class="print-panel menu-page style-${state.style} format-${state.format} role-${page.role} ${state.plan === "ultra" ? "no-watermark" : ""}" style="--accent:${paid ? state.accent : "#e5372a"};--text:${paid ? state.textColor : "#181614"}">${content}${state.plan === "ultra" ? "" : watermark()}</div>`;
