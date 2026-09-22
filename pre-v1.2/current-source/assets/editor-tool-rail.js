@@ -256,14 +256,11 @@
     moveLogoControl(inspector?.querySelector('.page-logo-setting,.locked-logo-control'));
     if (inspector) new MutationObserver((mutations) => {
       let addedControl = null;
-      let hasAddedContent = false;
       mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
         if (node.nodeType !== 1) return;
-        hasAddedContent = true;
         addedControl ||= node.matches?.('.page-logo-setting,.locked-logo-control') ? node : node.querySelector?.('.page-logo-setting,.locked-logo-control');
       }));
       if (addedControl) moveLogoControl(addedControl);
-      else if (hasAddedContent) logoHost.replaceChildren();
     }).observe(inspector, { childList: true, subtree: true });
   };
 

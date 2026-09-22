@@ -7,7 +7,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "pre-v1.2/cloudflare-dist-upload-20260915-logo-home-v21-flat.bin"
 PAGES = ("ca/cartells/index.html", "es/carteles/index.html", "it/cartelli/index.html")
-CSS_VERSION = "/assets/poster-editor.css?v=poster-logo-card-20260921-v2"
+CSS_VERSION = "/assets/poster-editor.css?v=brand-kit-logo-ui-20260922-v1"
 JS_VERSION = "/assets/posters.js?v=poster-logo-card-20260921-v2"
 
 

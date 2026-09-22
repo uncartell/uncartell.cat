@@ -18,6 +18,7 @@ EXPECTED_CHANGED = {
     "assets/menu-editor.js",
     "assets/price-editor.js",
     "assets/qr-generator.js",
+    "assets/editor-tool-rail.js",
     # The production release also includes the independently validated
     # poster-watermark card correction in the same binary artifact.
     "assets/poster-editor.css",
