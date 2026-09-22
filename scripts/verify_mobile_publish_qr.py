@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = Path("pre-v1.2/cloudflare-dist-upload-20260915-logo-home-v21-flat.bin")
-EXPECTED_CHANGED = {
+EXPECTED_CHANGED_ASSETS = {
     "assets/platform.js",
     "assets/menu-editor.js",
     "assets/price-editor.js",
@@ -22,15 +22,6 @@ EXPECTED_CHANGED = {
     # poster-watermark card correction in the same binary artifact.
     "assets/poster-editor.css",
     "assets/posters.js",
-    "ca/cartells/index.html",
-    "ca/cartes-i-menus/index.html",
-    "ca/taules-de-preus/index.html",
-    "es/carteles/index.html",
-    "es/cartas-y-menus/index.html",
-    "es/tablas-de-precios/index.html",
-    "it/cartelli/index.html",
-    "it/menu-e-carte/index.html",
-    "it/listini-prezzi/index.html",
 }
 RELEASE_BASELINE = "ceb222efdcdcd1ef16ef6ef622eb407abc5142e0"
 
@@ -54,7 +45,12 @@ def main() -> int:
     candidate = decode((ROOT / ARTIFACT).read_bytes())
     baseline = decode(git_file(RELEASE_BASELINE, ARTIFACT))
     changed = {name for name in candidate.keys() | baseline.keys() if candidate.get(name) != baseline.get(name)}
-    if changed != EXPECTED_CHANGED:
+    platform_pages = {
+        name for name, content in candidate.items()
+        if name.endswith("index.html") and b"/assets/platform.js" in content
+    }
+    expected_changed = EXPECTED_CHANGED_ASSETS | platform_pages
+    if changed != expected_changed:
         raise AssertionError(f"Unexpected extracted diff: {sorted(changed)}")
 
     platform = candidate["assets/platform.js"].decode()

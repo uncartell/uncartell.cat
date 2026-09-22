@@ -6,7 +6,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "pre-v1.2/cloudflare-dist-upload-20260915-logo-home-v21-flat.bin"
-VERSION = "/assets/platform.js?v=published-qr-public-route-20260921-v1"
+VERSION = "/assets/platform.js?v=auth-exit-public-home-20260922-v1"
 PAGES = (
     "ca/cartes-i-menus/index.html",
     "ca/taules-de-preus/index.html",
