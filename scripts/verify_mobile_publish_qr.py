@@ -14,6 +14,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = Path("pre-v1.2/cloudflare-dist-upload-20260915-logo-home-v21-flat.bin")
 EXPECTED_CHANGED = {
+    "_worker.js",
     "assets/platform.js",
     "assets/menu-editor.js",
     "assets/price-editor.js",

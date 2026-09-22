@@ -20,6 +20,21 @@ function isPagesPreview(hostname) {
   return hostname === "uncartell-cat.pages.dev" || hostname.endsWith(".uncartell-cat.pages.dev");
 }
 
+function publicPathWithoutLocalePrefix(pathname, hostname) {
+  if (isPagesPreview(hostname)) return null;
+  const locale = HOST_LOCALE[hostname];
+  if (!locale) return null;
+  const match = pathname.match(/^\/(ca|es|it)(?=\/|$)(.*)$/);
+  if (!match || match[1] !== locale) return null;
+  return match[2] || "/";
+}
+
+function needsPublicTrailingSlash(pathname, hostname) {
+  if (isPagesPreview(hostname) || pathname === "/" || pathname.endsWith("/")) return false;
+  if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) return false;
+  return !pathname.split("/").pop().includes(".");
+}
+
 function localePath(pathname, hostname) {
   const preview = isPagesPreview(hostname);
   if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) {
@@ -45,8 +60,20 @@ function localePath(pathname, hostname) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const route = localePath(url.pathname, url.hostname.toLowerCase());
+    const hostname = url.hostname.toLowerCase();
+    const cleanPublicPath = publicPathWithoutLocalePrefix(url.pathname, hostname);
+    if (cleanPublicPath !== null) {
+      url.pathname = cleanPublicPath;
+      return Response.redirect(url.toString(), 308);
+    }
+
+    const route = localePath(url.pathname, hostname);
     if (route.blocked) return new Response("Not found", { status: 404 });
+
+    if (needsPublicTrailingSlash(url.pathname, hostname)) {
+      url.pathname = `${url.pathname}/`;
+      return Response.redirect(url.toString(), 308);
+    }
 
     if (url.pathname === "/robots.txt") {
       if (route.preview) {

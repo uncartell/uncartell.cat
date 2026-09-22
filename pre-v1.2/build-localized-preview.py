@@ -161,7 +161,8 @@ PREVIEW_CATALOGS["es"].update({
     "Avisa’m": "Avísame",
     "El teu correu": "Tu correo",
     "Envia": "Enviar",
-    "Cartes i menús — Proposta V1.2": "Tablas de precios | uncartel.es",
+    "Creador de cartes i menús | uncartell.cat": "Creador de cartas y menús | uncartel.es",
+    "Creador de taules de preus | uncartell.cat": "Creador de tablas de precios | uncartel.es",
     "Retrat de la Marta, comerciant": "Retrato de Marta, comerciante",
     "Retrat de la Júlia, cuinera": "Retrato de Júlia, cocinera",
     "Menú": "Menú",
@@ -243,6 +244,8 @@ PREVIEW_CATALOGS["es"].update({
 })
 
 PREVIEW_CATALOGS["it"].update({
+    "Creador de cartes i menús | uncartell.cat": "Creatore di menu e carte | uncartello.it",
+    "Creador de taules de preus | uncartell.cat": "Creatore di listini prezzi | uncartello.it",
     "Retrat de la Marta, comerciant": "Ritratto di Marta, commerciante",
     "Retrat de la Júlia, cuinera": "Ritratto di Júlia, cuoca",
     "Planes": "Piani", "Cuenta": "Account", "SOBRE NOSOTROS": "CHI SIAMO",

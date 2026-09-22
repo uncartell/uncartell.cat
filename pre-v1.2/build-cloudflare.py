@@ -22,6 +22,14 @@ META_DESCRIPTIONS = {
     "es": "Crea, personaliza y descarga carteles, cartas, menús, tarifas y códigos QR con un diseño claro y profesional.",
     "it": "Crea, personalizza e scarica cartelli, menu, listini prezzi e codici QR con un design chiaro e professionale.",
 }
+SEO_TITLES = {
+    ("ca", "cartes-i-menus"): "Creador de cartes i menús | uncartell.cat",
+    ("ca", "taules-de-preus"): "Creador de taules de preus | uncartell.cat",
+    ("es", "cartes-i-menus"): "Creador de cartas y menús | uncartel.es",
+    ("es", "taules-de-preus"): "Creador de tablas de precios | uncartel.es",
+    ("it", "cartes-i-menus"): "Creatore di menu e carte | uncartello.it",
+    ("it", "taules-de-preus"): "Creatore di listini prezzi | uncartello.it",
+}
 ROUTES = {
     "ca": {"": "", "cartells": "cartells", "cartes-i-menus": "cartes-i-menus", "taules-de-preus": "taules-de-preus", "codis-qr": "codis-qr", "plans": "plans", "ultra": "ultra", "faqs": "faqs", "manifest": "manifest", "contacte": "contacte", "legal": "legal", "privacitat": "privacitat", "cookies": "cookies", "admin": "admin"},
     "es": {"": "", "cartells": "carteles", "cartes-i-menus": "cartas-y-menus", "taules-de-preus": "tablas-de-precios", "codis-qr": "codigos-qr", "plans": "planes", "ultra": "ultra", "faqs": "preguntas-frecuentes", "manifest": "manifiesto", "contacte": "contacto", "legal": "aviso-legal", "privacitat": "privacidad", "cookies": "cookies", "admin": "admin"},
@@ -41,8 +49,16 @@ def prepare_metadata(content, locale, ca_slug):
     canonical = public_url(locale, ca_slug)
     title = re.search(r'<title>(.*?)</title>', content, re.I | re.S)
     description = re.search(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']', content, re.I | re.S)
-    localized_title = title.group(1).strip() if title else ""
+    localized_title = SEO_TITLES.get((locale, ca_slug), title.group(1).strip() if title else "")
     localized_description = META_DESCRIPTIONS.get(locale, description.group(1).strip() if description else "")
+    content = re.sub(r'<title>.*?</title>', f'<title>{localized_title}</title>', content, count=1, flags=re.I | re.S)
+    content = re.sub(
+        r'(window\.UNCARTELL_LOCALE\s*=\s*\{.*?"title":")[^"]*(")',
+        lambda match: match.group(1) + localized_title + match.group(2),
+        content,
+        count=1,
+        flags=re.S,
+    )
     content = replace_meta(content, "name", "description", localized_description)
     content = re.sub(r'<link\s+rel=["\']canonical["\'][^>]*>', f'<link rel="canonical" href="{canonical}">', content, count=1, flags=re.I)
     content = re.sub(r'<link\s+rel=["\']alternate["\'][^>]*>', '', content, flags=re.I)
@@ -133,6 +149,21 @@ function isPagesPreview(hostname) {
   return hostname === "uncartell-cat.pages.dev" || hostname.endsWith(".uncartell-cat.pages.dev");
 }
 
+function publicPathWithoutLocalePrefix(pathname, hostname) {
+  if (isPagesPreview(hostname)) return null;
+  const locale = HOST_LOCALE[hostname];
+  if (!locale) return null;
+  const match = pathname.match(/^\/(ca|es|it)(?=\/|$)(.*)$/);
+  if (!match || match[1] !== locale) return null;
+  return match[2] || "/";
+}
+
+function needsPublicTrailingSlash(pathname, hostname) {
+  if (isPagesPreview(hostname) || pathname === "/" || pathname.endsWith("/")) return false;
+  if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) return false;
+  return !pathname.split("/").pop().includes(".");
+}
+
 function localePath(pathname, hostname) {
   const preview = isPagesPreview(hostname);
   if (STATIC_PREFIXES.some(prefix => pathname.startsWith(prefix)) || STATIC_FILES.has(pathname)) {
@@ -158,8 +189,20 @@ function localePath(pathname, hostname) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const route = localePath(url.pathname, url.hostname.toLowerCase());
+    const hostname = url.hostname.toLowerCase();
+    const cleanPublicPath = publicPathWithoutLocalePrefix(url.pathname, hostname);
+    if (cleanPublicPath !== null) {
+      url.pathname = cleanPublicPath;
+      return Response.redirect(url.toString(), 308);
+    }
+
+    const route = localePath(url.pathname, hostname);
     if (route.blocked) return new Response("Not found", { status: 404 });
+
+    if (needsPublicTrailingSlash(url.pathname, hostname)) {
+      url.pathname = `${url.pathname}/`;
+      return Response.redirect(url.toString(), 308);
+    }
 
     if (url.pathname === "/robots.txt") {
       if (route.preview) {
