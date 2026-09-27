@@ -41,6 +41,16 @@ with zipfile.ZipFile(io.BytesIO(raw), "r") as source:
     files = {info.filename: source.read(info.filename) for info in infos}
 
 files[IMAGE_NAME] = IMAGE.read_bytes()
+worker = files["_worker.js"].decode("utf-8")
+static_entry = f'  "/{IMAGE_NAME}",'
+if static_entry not in worker:
+    worker = worker.replace(
+        '  "/manifest-taller.jpg", "/marti-ruiz.jpg", "/og-uncartell-cat.jpg",',
+        '  "/manifest-taller.jpg", "/marti-ruiz.jpg", "/og-uncartell-cat.jpg",\n'
+        + static_entry,
+        1,
+    )
+files["_worker.js"] = worker.encode("utf-8")
 pages = 0
 for name, data in list(files.items()):
     locale = name.split("/", 1)[0]
@@ -70,7 +80,8 @@ with zipfile.ZipFile(output, "w") as target:
     target.comment = comment
     for info in infos:
         target.writestr(info, files[info.filename])
-    target.writestr(IMAGE_NAME, files[IMAGE_NAME])
+    if IMAGE_NAME not in {info.filename for info in infos}:
+        target.writestr(IMAGE_NAME, files[IMAGE_NAME])
 
 ARTIFACT.write_bytes(decoded(output.getvalue()))
 print(f"Added {IMAGE_NAME} and updated {pages} localized HTML pages")

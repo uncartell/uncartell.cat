@@ -18,6 +18,7 @@ DOMAINS = {"ca": "uncartell.cat", "es": "uncartel.es", "it": "uncartello.it"}
 raw = bytes(value ^ 0xA5 for value in ARTIFACT.read_bytes())
 with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
     assert bundle.read(IMAGE_NAME) == IMAGE.read_bytes()
+    assert f'  "/{IMAGE_NAME}",' in bundle.read("_worker.js").decode("utf-8")
     checked = 0
     for name in bundle.namelist():
         locale = name.split("/", 1)[0]
