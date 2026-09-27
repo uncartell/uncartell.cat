@@ -10,6 +10,25 @@
     es: { brand: 'Uncartel', tld: 'es', domain: 'uncartel.es' },
     it: { brand: 'Uncartello', tld: 'it', domain: 'uncartello.it' }
   }[locale];
+  const textState = new WeakMap();
+  const attributeState = new WeakMap();
+  const initializedEditable = new WeakSet();
+  const debug = global.__UNCARTELL_I18N_PERF = {
+    locale,
+    initialPasses: 0,
+    incrementalPasses: 0,
+    nodesVisited: 0,
+    writes: 0,
+    observerCallbacks: 0,
+    observerRecords: 0,
+    observerAddedNodes: 0,
+    totalMs: 0,
+    longestMs: 0
+  };
+  const debugEnabled = new URLSearchParams(location.search).has('i18n-debug');
+  const syncDebug = () => {
+    if (debugEnabled) document.documentElement.dataset.i18nPerf = JSON.stringify(debug);
+  };
 
   const localeLabels = { ca: 'Català', es: 'Español', it: 'Italiano' };
   const previewRoutes = {
@@ -23,7 +42,7 @@
     cookies:{ca:'cookies',es:'cookies',it:'cookie'}, admin:{ca:'admin',es:'admin',it:'admin'}
   };
   const protectedElement = node => node?.parentElement?.closest(
-    'input,textarea,select,[data-user-content],[data-project-content],[data-no-preview-translate]'
+    'input,textarea,select,[contenteditable="true"],[data-user-content],[data-project-content],[data-no-preview-translate]'
   );
   const translate = value => {
     const raw = String(value || '');
@@ -37,34 +56,54 @@
     return trimmed ? raw.replace(trimmed, output) : raw;
   };
   const translateTextNode = node => {
+    debug.nodesVisited += 1;
     if (node.nodeType !== Node.TEXT_NODE || protectedElement(node)) return;
-    const localized = translate(node.nodeValue);
-    if (localized !== node.nodeValue) node.nodeValue = localized;
+    const current = node.nodeValue;
+    const previous = textState.get(node);
+    // MutationObserver also reports our own characterData writes.  Treat the
+    // last output as terminal instead of feeding it back into the dictionary;
+    // catalogues can legitimately contain reverse mappings such as ca↔es.
+    if (previous && current === previous.output) return;
+    const localized = translate(current);
+    textState.set(node, { source: current, output: localized });
+    if (localized !== current) {
+      debug.writes += 1;
+      node.nodeValue = localized;
+    }
+  };
+  const translateAttribute = (element, attribute) => {
+    if (!element.hasAttribute(attribute)) return;
+    const current = element.getAttribute(attribute);
+    let elementState = attributeState.get(element);
+    if (!elementState) {
+      elementState = new Map();
+      attributeState.set(element, elementState);
+    }
+    const previous = elementState.get(attribute);
+    if (previous && current === previous.output) return;
+    const localized = translate(current);
+    elementState.set(attribute, { source: current, output: localized });
+    if (localized !== current) {
+      debug.writes += 1;
+      element.setAttribute(attribute, localized);
+    }
   };
   const translateElement = element => {
+    debug.nodesVisited += 1;
     if (!(element instanceof Element) || element.closest('[data-user-content],[data-project-content]')) return;
     if (element.matches('input,textarea')) {
-      ['aria-label', 'title', 'placeholder', 'alt'].forEach(attribute => {
-        if (!element.hasAttribute(attribute)) return;
-        const current = element.getAttribute(attribute);
-        const localized = translate(current);
-        if (localized !== current) element.setAttribute(attribute, localized);
-      });
+      ['aria-label', 'title', 'placeholder', 'alt'].forEach(attribute => translateAttribute(element, attribute));
       return;
     }
     if (element.matches('[contenteditable="true"]')) {
-      if (element.dataset.previewI18nInitialized) return;
-      element.childNodes.forEach(translateTextNode);
-      element.dataset.previewI18nInitialized = 'true';
+      if (initializedEditable.has(element)) return;
+      // Editable text is document content. Defaults are already localized in
+      // UNCARTELL_LOCALE; never run free-form user input through the catalogue.
+      initializedEditable.add(element);
       return;
     }
     if (element.closest('[contenteditable="true"]')) return;
-    ['aria-label', 'title', 'placeholder', 'alt'].forEach(attribute => {
-      if (!element.hasAttribute(attribute)) return;
-      const current = element.getAttribute(attribute);
-      const localized = translate(current);
-      if (localized !== current) element.setAttribute(attribute, localized);
-    });
+    ['aria-label', 'title', 'placeholder', 'alt'].forEach(attribute => translateAttribute(element, attribute));
     element.childNodes.forEach(translateTextNode);
   };
   const translateTree = root => {
@@ -96,21 +135,31 @@
       })
     )?.[0] || null;
   };
-  const localizeLinks = root => {
+  const localizeLink = link => {
     const hostnameMode = global.UNCARTELL_HOSTNAME_ROUTING === true;
-    root.querySelectorAll?.('a[href^="/"]').forEach(link => {
-      const url = new URL(link.getAttribute('href'), location.origin);
-      const routeKey = routeKeyFor(url.pathname);
-      if (!routeKey) return;
-      const slug = previewRoutes[routeKey]?.[locale];
-      const pathname = slug === undefined
-        ? url.pathname
-        : (hostnameMode ? `/${slug ? `${slug}/` : ''}` : `/${locale}/${slug ? `${slug}/` : ''}`);
-      const localized = `${pathname}${url.search}${url.hash}`;
-      if (link.getAttribute('href') !== localized) link.setAttribute('href', localized);
-    });
+    const url = new URL(link.getAttribute('href'), location.origin);
+    const routeKey = routeKeyFor(url.pathname);
+    if (!routeKey) return;
+    const slug = previewRoutes[routeKey]?.[locale];
+    const pathname = slug === undefined
+      ? url.pathname
+      : (hostnameMode ? `/${slug ? `${slug}/` : ''}` : `/${locale}/${slug ? `${slug}/` : ''}`);
+    const localized = `${pathname}${url.search}${url.hash}`;
+    if (link.getAttribute('href') !== localized) link.setAttribute('href', localized);
   };
-  const run = () => {
+  const localizeLinks = root => {
+    if (root instanceof Element && root.matches('a[href^="/"]')) localizeLink(root);
+    root.querySelectorAll?.('a[href^="/"]').forEach(localizeLink);
+  };
+  const measure = callback => {
+    const started = performance.now();
+    callback();
+    const duration = performance.now() - started;
+    debug.totalMs += duration;
+    debug.longestMs = Math.max(debug.longestMs, duration);
+  };
+  const runInitial = () => measure(() => {
+    debug.initialPasses += 1;
     document.documentElement.lang = locale;
     document.documentElement.dataset.locale = locale;
     localizeLinks(document);
@@ -126,23 +175,35 @@
     } catch (error) {
       console.error('[localized-preview] Translation overlay failed', error);
     }
-  };
+  });
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run, { once: true });
-  else run();
-
-  // La plataforma comparteix alguns components que s'hidraten després del DOMContentLoaded
-  // (header, footer, comptador i modals). Fem passades curtes i acotades perquè el preview
-  // local també localitzi aquests nodes sense observar canvis de text indefinidament.
-  requestAnimationFrame(run);
-  setTimeout(run, 120);
-  setTimeout(run, 600);
+  const initialize = () => { runInitial(); syncDebug(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
+  else initialize();
 
   new MutationObserver(records => {
-    records.forEach(record => {
-      if (record.type === 'characterData') translateTextNode(record.target);
-      record.addedNodes.forEach(translateTree);
+    debug.observerCallbacks += 1;
+    debug.observerRecords += records.length;
+    measure(() => {
+      const changedText = new Set();
+      const added = new Set();
+      records.forEach(record => {
+        if (record.type === 'characterData') changedText.add(record.target);
+        record.addedNodes.forEach(node => added.add(node));
+      });
+      debug.observerAddedNodes += added.size;
+      changedText.forEach(translateTextNode);
+      // If a complete subtree was inserted, descendant records do not need a
+      // second traversal in the same observer delivery.
+      const roots = [...added].filter(node =>
+        ![...added].some(candidate => candidate !== node && candidate.nodeType === Node.ELEMENT_NODE && candidate.contains(node))
+      );
+      roots.forEach(root => {
+        debug.incrementalPasses += 1;
+        translateTree(root);
+        localizeLinks(root);
+      });
     });
-    localizeLinks(document);
+    syncDebug();
   }).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
 })(window);

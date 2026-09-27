@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / "current-source"
 OUT = ROOT / "localized-preview"
 PREVIEW_ASSET_VERSION = "logo-home-click-root-20260915-v20"
+I18N_RUNTIME_VERSION = "i18n-perf-20260927-v3"
 
 REQUIRED_CURRENT_FILES = (
     "index.html",
@@ -426,11 +427,17 @@ def inject(html, locale):
                 return f'href={quote}{localized_paths[source_pathname]}{path[len(source_pathname):]}{quote}'
         return match.group(0)
     html = re.sub(r'href=(["\'])(/[^"\']*)\1', local_href, html)
-    scripts = (
-        '<script src="/assets/i18n/preview-es.js"></script>'
-        '<script src="/assets/i18n/preview-it.js"></script>'
-        '<script src="/assets/i18n/preview-runtime.js"></script>'
-    )
+    # The Catalan fallback is shared. Load only the active market dictionaries;
+    # downloading ES and IT together adds transfer/parsing work and makes it
+    # easier for one market's catalogue to affect another one.
+    for code in ('es', 'it'):
+        if code != locale:
+            html = re.sub(
+                rf'<script\s+src="/assets/i18n/{code}\.js[^\"]*"\s*></script>',
+                '', html, flags=re.I,
+            )
+    active_preview = '' if locale == 'ca' else f'<script src="/assets/i18n/preview-{locale}.js?v={I18N_RUNTIME_VERSION}"></script>'
+    scripts = active_preview + f'<script src="/assets/i18n/preview-runtime.js?v={I18N_RUNTIME_VERSION}"></script>'
     html = html.replace('</body>', scripts + '</body>', 1)
     return html
 
