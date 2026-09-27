@@ -28,6 +28,20 @@ EXPECTED_STATIC = {
     "it/privacy/index.html": "Informativa sulla privacy | uncartello.it",
 }
 EXPECTED = EXPECTED_RUNTIME | EXPECTED_STATIC
+EXPECTED_DESCRIPTIONS = {
+    "ca/cartells/index.html": "Crea i personalitza cartells amb plantilles editables i descarrega el resultat preparat per imprimir.",
+    "ca/cartes-i-menus/index.html": "Crea cartes i menús amb plantilles editables, personalitza el contingut i prepara'ls per imprimir o compartir.",
+    "ca/taules-de-preus/index.html": "Crea taules de preus i tarifes editables, personalitza el disseny i prepara-les per imprimir o compartir.",
+    "ca/codis-qr/index.html": "Converteix una adreça web en un codi QR personalitzable i descarrega'l preparat per imprimir o compartir.",
+    "es/carteles/index.html": "Crea y personaliza carteles con plantillas editables y descarga el resultado preparado para imprimir.",
+    "es/cartas-y-menus/index.html": "Crea cartas y menús con plantillas editables, personaliza el contenido y prepáralos para imprimir o compartir.",
+    "es/tablas-de-precios/index.html": "Crea tablas de precios y tarifas editables, personaliza el diseño y prepáralas para imprimir o compartir.",
+    "es/codigos-qr/index.html": "Convierte una dirección web en un código QR personalizable y descárgalo preparado para imprimir o compartir.",
+    "it/cartelli/index.html": "Crea e personalizza cartelli con modelli modificabili e scarica il risultato pronto da stampare.",
+    "it/menu-e-carte/index.html": "Crea menu e carte con modelli modificabili, personalizza i contenuti e preparali per la stampa o la condivisione.",
+    "it/listini-prezzi/index.html": "Crea listini prezzi modificabili, personalizza il design e preparali per la stampa o la condivisione.",
+    "it/codici-qr/index.html": "Trasforma un indirizzo web in un codice QR personalizzabile e scaricalo pronto da stampare o condividere.",
+}
 
 
 def extract(pattern: str, text: str, label: str) -> str:
@@ -45,6 +59,11 @@ with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
         if relative_path in EXPECTED_RUNTIME:
             assert extract(r'window\.UNCARTELL_LOCALE\s*=.*?"title":"([^"]+)"', html, "runtime title") == expected_title
 
+    for relative_path, expected_description in EXPECTED_DESCRIPTIONS.items():
+        html = bundle.read(relative_path).decode("utf-8")
+        assert extract(r'<meta name="description" content="([^"]+)"', html, "description") == expected_description
+        assert extract(r'<meta property="og:description" content="([^"]+)"', html, "og:description") == expected_description
+
     worker = bundle.read("_worker.js").decode("utf-8")
     for marker in (
         "function publicPathWithoutLocalePrefix(pathname, hostname)",
@@ -53,4 +72,4 @@ with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
     ):
         assert marker in worker, marker
 
-print(f"Verified {len(EXPECTED)} metadata pages and the Pages Worker")
+print(f"Verified {len(EXPECTED)} titles, {len(EXPECTED_DESCRIPTIONS)} descriptions and the Pages Worker")
