@@ -31,6 +31,20 @@ META_DESCRIPTIONS = {
     "es": "Crea, personaliza y descarga carteles, cartas, menús, tarifas y códigos QR con un diseño claro y profesional.",
     "it": "Crea, personalizza e scarica cartelli, menu, listini prezzi e codici QR con un design chiaro e professionale.",
 }
+TOOL_META_DESCRIPTIONS = {
+    ("ca", "cartells"): "Crea i personalitza cartells amb plantilles editables i descarrega el resultat preparat per imprimir.",
+    ("ca", "cartes-i-menus"): "Crea cartes i menús amb plantilles editables, personalitza el contingut i prepara'ls per imprimir o compartir.",
+    ("ca", "taules-de-preus"): "Crea taules de preus i tarifes editables, personalitza el disseny i prepara-les per imprimir o compartir.",
+    ("ca", "codis-qr"): "Converteix una adreça web en un codi QR personalitzable i descarrega'l preparat per imprimir o compartir.",
+    ("es", "cartells"): "Crea y personaliza carteles con plantillas editables y descarga el resultado preparado para imprimir.",
+    ("es", "cartes-i-menus"): "Crea cartas y menús con plantillas editables, personaliza el contenido y prepáralos para imprimir o compartir.",
+    ("es", "taules-de-preus"): "Crea listas de precios editables, personaliza el diseño y prepáralas para imprimir o compartir.",
+    ("es", "codis-qr"): "Convierte una dirección web en un código QR personalizable y descárgalo preparado para imprimir o compartir.",
+    ("it", "cartells"): "Crea e personalizza cartelli con modelli modificabili e scarica il risultato pronto da stampare.",
+    ("it", "cartes-i-menus"): "Crea menu e carte con modelli modificabili, personalizza i contenuti e preparali per la stampa o la condivisione.",
+    ("it", "taules-de-preus"): "Crea un listino prezzi modificabile, personalizza il design e preparalo per la stampa o la condivisione.",
+    ("it", "codis-qr"): "Trasforma un indirizzo web in un codice QR personalizzabile e scaricalo pronto da stampare o condividere.",
+}
 SEO_TITLES = {
     ("ca", "cartes-i-menus"): "Creador de cartes i menús | uncartell.cat",
     ("ca", "taules-de-preus"): "Creador de taules de preus | uncartell.cat",
@@ -72,7 +86,10 @@ def prepare_metadata(content, locale, ca_slug):
     title = re.search(r'<title>(.*?)</title>', content, re.I | re.S)
     description = re.search(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']', content, re.I | re.S)
     localized_title = SEO_TITLES.get((locale, ca_slug), title.group(1).strip() if title else "")
-    localized_description = META_DESCRIPTIONS.get(locale, description.group(1).strip() if description else "")
+    localized_description = TOOL_META_DESCRIPTIONS.get(
+        (locale, ca_slug),
+        META_DESCRIPTIONS.get(locale, description.group(1).strip() if description else ""),
+    )
     content = re.sub(r'<title>.*?</title>', f'<title>{localized_title}</title>', content, count=1, flags=re.I | re.S)
     content = re.sub(
         r'(window\.UNCARTELL_LOCALE\s*=\s*\{.*?"title":")[^"]*(")',

@@ -3,8 +3,8 @@
 
 Cloudflare's configured build decodes this XOR-obfuscated ZIP.  The historical
 source rebuild is currently incomplete, so this script deliberately changes
-only the six localized HTML entries and the Worker while preserving every
-other archive entry byte-for-byte after extraction.
+only the allowlisted localized HTML entries while preserving every other
+archive entry byte-for-byte after extraction.
 """
 
 from __future__ import annotations
@@ -36,7 +36,21 @@ EXPECTED_STATIC_TITLES = {
     "it/privacy/index.html": "Informativa sulla privacy | uncartello.it",
 }
 EXPECTED_TITLES = EXPECTED_RUNTIME_TITLES | EXPECTED_STATIC_TITLES
-ALLOWED_CHANGES = set(EXPECTED_TITLES) | {"_worker.js"}
+EXPECTED_DESCRIPTIONS = {
+    "ca/cartells/index.html": "Crea i personalitza cartells amb plantilles editables i descarrega el resultat preparat per imprimir.",
+    "ca/cartes-i-menus/index.html": "Crea cartes i menús amb plantilles editables, personalitza el contingut i prepara'ls per imprimir o compartir.",
+    "ca/taules-de-preus/index.html": "Crea taules de preus i tarifes editables, personalitza el disseny i prepara-les per imprimir o compartir.",
+    "ca/codis-qr/index.html": "Converteix una adreça web en un codi QR personalitzable i descarrega'l preparat per imprimir o compartir.",
+    "es/carteles/index.html": "Crea y personaliza carteles con plantillas editables y descarga el resultado preparado para imprimir.",
+    "es/cartas-y-menus/index.html": "Crea cartas y menús con plantillas editables, personaliza el contenido y prepáralos para imprimir o compartir.",
+    "es/tablas-de-precios/index.html": "Crea listas de precios editables, personaliza el diseño y prepáralas para imprimir o compartir.",
+    "es/codigos-qr/index.html": "Convierte una dirección web en un código QR personalizable y descárgalo preparado para imprimir o compartir.",
+    "it/cartelli/index.html": "Crea e personalizza cartelli con modelli modificabili e scarica il risultato pronto da stampare.",
+    "it/menu-e-carte/index.html": "Crea menu e carte con modelli modificabili, personalizza i contenuti e preparali per la stampa o la condivisione.",
+    "it/listini-prezzi/index.html": "Crea un listino prezzi modificabile, personalizza il design e preparalo per la stampa o la condivisione.",
+    "it/codici-qr/index.html": "Trasforma un indirizzo web in un codice QR personalizzabile e scaricalo pronto da stampare o condividere.",
+}
+ALLOWED_CHANGES = set(EXPECTED_TITLES) | set(EXPECTED_DESCRIPTIONS)
 
 
 def decoded(data: bytes) -> bytes:
@@ -79,7 +93,22 @@ for relative_path, expected_title in EXPECTED_TITLES.items():
         )
     updated[relative_path] = html.encode("utf-8")
 
-updated["_worker.js"] = (ROOT / "_worker.js").read_bytes()
+for relative_path, expected_description in EXPECTED_DESCRIPTIONS.items():
+    html = updated[relative_path].decode("utf-8")
+    html = replace_once(
+        r'(<meta\s+name="description"\s+content=")[^"]*(")',
+        rf"\g<1>{expected_description}\g<2>",
+        html,
+        f"description in {relative_path}",
+    )
+    html = replace_once(
+        r'(<meta\s+property="og:description"\s+content=")[^"]*(")',
+        rf"\g<1>{expected_description}\g<2>",
+        html,
+        f"og:description in {relative_path}",
+    )
+    updated[relative_path] = html.encode("utf-8")
+
 changed = {name for name in original if digest(original[name]) != digest(updated[name])}
 unexpected = changed - ALLOWED_CHANGES
 if unexpected:
