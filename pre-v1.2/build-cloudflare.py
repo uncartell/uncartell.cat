@@ -11,13 +11,22 @@ OUT = ROOT / "cloudflare-dist"
 PUBLIC_ROOT_FILES = (
     "404.html", "apple-touch-icon.png", "favicon.ico", "favicon.svg",
     "favicon-96x96.png", "manifest-taller.jpg", "marti-ruiz.jpg",
-    "og-uncartell-cat.jpg", "profile-ca.png", "profile-es.png",
+    "og-uncartell-cat.jpg", "og-uncartell-collage-20260927.jpg",
+    "profile-ca.png", "profile-es.png",
     "site.webmanifest", "web-app-manifest-192x192.png",
     "web-app-manifest-512x512.png",
 )
 
 DOMAINS = {"ca": "uncartell.cat", "es": "uncartel.es", "it": "uncartello.it"}
 OG_LOCALES = {"ca": "ca_ES", "es": "es_ES", "it": "it_IT"}
+OG_IMAGE = "og-uncartell-collage-20260927.jpg"
+OG_IMAGE_WIDTH = "1448"
+OG_IMAGE_HEIGHT = "1086"
+OG_IMAGE_ALT = {
+    "ca": "Cartells personalitzables impresos sobre una taula de fusta",
+    "es": "Carteles personalizables impresos sobre una mesa de madera",
+    "it": "Cartelli personalizzabili stampati su un tavolo di legno",
+}
 META_DESCRIPTIONS = {
     "es": "Crea, personaliza y descarga carteles, cartas, menús, tarifas y códigos QR con un diseño claro y profesional.",
     "it": "Crea, personalizza e scarica cartelli, menu, listini prezzi e codici QR con un design chiaro e professionale.",
@@ -50,6 +59,13 @@ def replace_meta(content, attribute, key, value):
     pattern = rf'(<meta\s+{attribute}=["\']{re.escape(key)}["\']\s+content=["\'])(.*?)(["\'])'
     return re.sub(pattern, lambda match: match.group(1) + value + match.group(3), content, count=1, flags=re.I)
 
+def upsert_meta(content, attribute, key, value, anchor):
+    pattern = rf'<meta\s+{attribute}=["\']{re.escape(key)}["\']\s+content=["\'].*?["\']\s*/?>'
+    tag = f'<meta {attribute}="{key}" content="{value}">'
+    if re.search(pattern, content, re.I):
+        return re.sub(pattern, tag, content, count=1, flags=re.I)
+    return content.replace(anchor, anchor + tag, 1)
+
 def prepare_metadata(content, locale, ca_slug):
     """Make the generated locale document self-consistent before first paint."""
     canonical = public_url(locale, ca_slug)
@@ -77,7 +93,18 @@ def prepare_metadata(content, locale, ca_slug):
     content = replace_meta(content, "property", "og:title", localized_title)
     content = replace_meta(content, "property", "og:description", localized_description)
     content = replace_meta(content, "property", "og:url", canonical)
-    content = replace_meta(content, "property", "og:image", f"https://{DOMAINS[locale]}/og-uncartell-cat.jpg")
+    image_url = f"https://{DOMAINS[locale]}/{OG_IMAGE}"
+    content = replace_meta(content, "property", "og:image", image_url)
+    image_anchor = f'<meta property="og:image" content="{image_url}">'
+    for key, value in (
+        ("og:image:type", "image/jpeg"),
+        ("og:image:width", OG_IMAGE_WIDTH),
+        ("og:image:height", OG_IMAGE_HEIGHT),
+        ("og:image:alt", OG_IMAGE_ALT[locale]),
+    ):
+        content = upsert_meta(content, "property", key, value, image_anchor)
+    content = upsert_meta(content, "name", "twitter:image", image_url, image_anchor)
+    content = upsert_meta(content, "name", "twitter:image:alt", OG_IMAGE_ALT[locale], image_anchor)
     robots = "index,follow,max-image-preview:large"
     content = re.sub(
         r'<meta\s+name=["\']robots["\']\s+content=["\'].*?["\']\s*/?>',
@@ -148,6 +175,7 @@ const STATIC_FILES = new Set([
   "/apple-touch-icon.png", "/site.webmanifest",
   "/web-app-manifest-192x192.png", "/web-app-manifest-512x512.png",
   "/manifest-taller.jpg", "/marti-ruiz.jpg", "/og-uncartell-cat.jpg",
+  "/og-uncartell-collage-20260927.jpg",
   "/profile-ca.png", "/profile-es.png"
 ]);
 
