@@ -394,7 +394,7 @@
   }
   function injectSupabase(){return new Promise((resolve,reject)=>{if(window.supabase)return resolve();const existing=document.querySelector('script[data-supabase-client]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const script=document.createElement('script');script.dataset.supabaseClient='';script.src='/assets/vendor-supabase.js?v=1';script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}
   async function initAuth(){
-    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr',{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'&&session?.user)setTimeout(()=>{currentUser=session.user;modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')},0);if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadSupportContext();await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user,support:supportContext}}))},0);if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;supportContext=null;sessionStorage.removeItem(supportSessionKey);setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}});const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session?.user){await loadSupportContext();await loadProfile(data.session.user)}window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser,support:supportContext}}));if(data.session?.user&&new URLSearchParams(location.search).get('reset')==='1'){modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')}}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
+    try{await injectSupabase();supabaseClient=window.supabase.createClient('https://glaqcsvbnuowabsovvto.supabase.co','sb_publishable_eUW2gqRN00HJRFyhJugmeQ_ahplHxkr',{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'&&session?.user)setTimeout(()=>{currentUser=session.user;modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')},0);if(event==='SIGNED_IN'&&session?.user)setTimeout(async()=>{await loadSupportContext();await loadProfile(session.user);window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:session.user,support:supportContext}}))},0);if(event==='SIGNED_OUT'){projectStores.forEach(storageKey=>localStorage.removeItem(storageKey));currentUser=null;currentProfile=null;supportContext=null;sessionStorage.removeItem(supportSessionKey);setPlan('basic');showView('login');window.dispatchEvent(new CustomEvent('uncartell:auth-change',{detail:{event,user:null}}))}});const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session?.user){await loadSupportContext();await loadProfile(data.session.user)}window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:currentUser,support:supportContext}}));if(data.session?.user&&new URLSearchParams(location.search).get('reset')==='1'){modal.hidden=false;document.body.classList.add('u-modal-open');showView('reset')}}catch(error){console.error('Auth init',error);window.dispatchEvent(new CustomEvent('uncartell:auth-ready',{detail:{user:null,error:true}}))}finally{resolveAuthReady?.()}
   }
   document.querySelector('[data-auth-google]').addEventListener('click',async()=>{if(!supabaseClient)return;feedback.textContent=words.loading;const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${location.origin}${location.pathname}${location.search}`}});if(error)feedback.textContent=error.message||words.authError});
   document.querySelector('[data-auth-form]').addEventListener('submit',async event=>{event.preventDefault();if(!supabaseClient)return;feedback.textContent=words.loading;const node=event.currentTarget,form=new FormData(node),email=String(form.get('email')||'').trim(),password=String(form.get('password')||''),name=String(form.get('name')||'').trim(),marketingConsent=form.get('marketing_consent')==='on',register=node.dataset.authMode==='register';const result=register?await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,marketing_consent:marketingConsent},emailRedirectTo:`${location.origin}${location.pathname}`}}):await supabaseClient.auth.signInWithPassword({email,password});if(result.error){feedback.textContent=register?(result.error.message||words.authError):words.invalidLogin;return}if(result.data.session){await loadProfile(result.data.user);location.reload()}else feedback.textContent=words.confirmMail});
@@ -497,26 +497,14 @@
     if(!supabaseClient)await new Promise(resolve=>window.addEventListener('uncartell:auth-ready',resolve,{once:true}));
     if(!currentUser)return [];
     const cloud=await listUserProjects(toolType);
-    // Support mode is a read-through view of the impersonated account. Never
-    // merge the administrator's browser cache into that account: doing so
-    // leaks the admin's projects into every user visited from the dashboard.
-    if(supportContext){
-      const scoped=[...cloud].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
-      localStorage.setItem(storageKey,JSON.stringify(scoped));
-      window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:scoped}}));return scoped;
-    }
-    let local=[];try{local=JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(_){local=[]}
-    const cloudIds=new Set(cloud.map(project=>String(project.id||project.projectId)));
-    // Preserve projects created before cloud sync existed and migrate them to the
-    // authenticated account. Cloud rows win when both sides contain the same id.
-    const localOnly=local.filter(project=>!cloudIds.has(String(project.id||project.projectId)));
-    if(localOnly.length)await Promise.all(localOnly.map(project=>saveUserProject(toolType,project)));
-    const refreshed=localOnly.length?await listUserProjects(toolType):cloud;
-    const merged=[...refreshed].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
-    localStorage.setItem(storageKey,JSON.stringify(merged));
-    window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:merged}}));return merged;
+    // This historical key is shared by every account using the browser. It is
+    // only a disposable rendering cache: never merge or upload its contents
+    // when another account signs in. Supabase/RLS is the source of truth.
+    const scoped=[...cloud].sort((a,b)=>new Date(b.updated_at||b.savedAt||0)-new Date(a.updated_at||a.savedAt||0));
+    localStorage.setItem(storageKey,JSON.stringify(scoped));
+    window.dispatchEvent(new CustomEvent('uncartell:projects-synced',{detail:{toolType,projects:scoped}}));return scoped;
   }
-  window.addEventListener('uncartell:auth-change',event=>{if(event.detail?.user)projectStores.forEach((key,type)=>syncProjectStore(type,key).catch(console.error))});
+  window.addEventListener('uncartell:auth-change',event=>{if(event.detail?.user)projectStores.forEach((key,type)=>syncProjectStore(type,key).catch(console.error));else projectStores.forEach(key=>localStorage.removeItem(key))});
   // Every plan-gated control opens the same upgrade journey, including
   // controls that editors render after platform initialisation.
   document.addEventListener('click',event=>{
