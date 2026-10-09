@@ -72,6 +72,10 @@
   $$('[data-foreground],[data-background],[data-watermark]').forEach(input=>input.addEventListener('input',()=>{hasUnsavedChanges=true;if(state.svg)generate({quiet:true})}));
   const incomingParams=new URLSearchParams(location.search),incoming=incomingParams.get('url');
   if(incoming&&validUrl(incoming)){
+    // The publication hand-off is a one-shot action. Remove it from the
+    // address bar before OAuth or an account change can replay the save for a
+    // different user in the same browser.
+    if(incomingParams.get('generate')==='1'||incomingParams.get('save')==='1')history.replaceState(null,'',`${location.pathname}${location.hash}`);
     urlInputs.forEach(input=>input.value=incoming);state.url=incoming;
     const incomingName=incomingParams.get('name');
     if(incomingName){state.name=incomingName;$('[data-project-name]').value=incomingName}

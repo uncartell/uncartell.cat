@@ -23,8 +23,9 @@ for source in SOURCES:
     assert "saveUserProject(toolType,project)" not in sync, source
     assert "localOnly" not in sync, source
     assert "cloudIds" not in sync, source
-    assert "projectStores.forEach(storageKey=>localStorage.removeItem(storageKey))" in text, source
-    assert "else projectStores.forEach(key=>localStorage.removeItem(key))" in text, source
+    assert "projectStoreOwnerKey=storageKey=>`${storageKey}:owner`" in text, source
+    assert "if(localStorage.getItem(ownerKey)!==storeOwner)localStorage.removeItem(storageKey)" in text, source
+    assert "projectStores.forEach(clearProjectStore)" in text, source
 
 print("Verified account-isolated project cache sync and logout cleanup")
 
@@ -39,6 +40,19 @@ assert "localStorage.setItem(storageKey,JSON.stringify(scoped))" in sync
 assert "saveUserProject(toolType,project)" not in sync
 assert "localOnly" not in sync
 assert "cloudIds" not in sync
-assert "projectStores.forEach(storageKey=>localStorage.removeItem(storageKey))" in deployed
-assert "else projectStores.forEach(key=>localStorage.removeItem(key))" in deployed
+assert "projectStoreOwnerKey=storageKey=>`${storageKey}:owner`" in deployed
+assert "if(localStorage.getItem(ownerKey)!==storeOwner)localStorage.removeItem(storageKey)" in deployed
+assert "projectStores.forEach(clearProjectStore)" in deployed
 print("Verified isolated project cache in the Pages artifact")
+
+for source in (
+    ROOT / "assets/qr-generator.js",
+    ROOT / "pre-v1.2/current-source/assets/qr-generator.js",
+):
+    text = source.read_text()
+    assert "history.replaceState(null,'',`${location.pathname}${location.hash}`)" in text, source
+
+with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
+    qr = bundle.read("assets/qr-generator.js").decode()
+assert "history.replaceState(null,'',`${location.pathname}${location.hash}`)" in qr
+print("Verified one-shot QR publication hand-off in sources and Pages artifact")
